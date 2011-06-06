@@ -1,0 +1,101 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h4>DELETE CONFIRM:</h4>
+            <table class="display stylized" id="delcatalog">
+                <thead>
+                    <tr>
+                        <th width="5%"><input name="select_deselect" value="1" type="checkbox"></th>
+                        <th>Title</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    <?
+                    if (is_array($this->catalogGuid))
+                    {
+                        $i = 1;
+                        foreach ($this->catalogGuid as $guid) :
+                    ?>
+
+                    <tr id="row_<?=$guid;?>">
+                        <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$guid;?>' class="check_me"></td>
+                        <td>
+                            <div>
+                            <?
+							$rowset = App_Model_Show_Catalog::show()->getCatalogByGuid($guid);
+							if ($rowset['profileGuid'] == 'kutu_doc') {
+								?><strong>File</strong>&nbsp;&raquo;&nbsp;<?=$this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;								
+							}
+							else 
+							{
+								echo $this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;
+							}
+                            ?>
+                            <?//=$this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;?>
+                            <?
+                            $bpm = new Pandamp_Core_Hol_Relation();
+                            $aData = $bpm->getFiles($guid);
+                            if (count($aData) > 0) :
+                            ?>
+                            <div class="listingDetails">
+                                <div class="pad">
+                                    <b>Additional information</b>
+                                    <ul>
+                                        <? foreach ($aData as $data) { ?>
+                                        <li style="list-style:none;">
+                                            <?=$this->GetCatalogDocType($data->itemGuid); ?>&nbsp;
+                                            <a href="#"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a>&nbsp;
+                                            <?=$this->GetCatalogDocSize($data->itemGuid); ?>
+                                        </li>
+                                        <? } ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            <? endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <? $i++; endforeach; ?>
+
+                    <? } ?>
+                    <tr>
+                        <td colspan="2">
+                            <select id="ws" name="ws">
+                                <option value="withselected">With selected:</option>
+                                <option value="delete">Delete</option>
+                                <option value="recycle">Recycle</option>
+                            </select>&nbsp;<a href="javascript:history.back();">Back</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdown','misc','dms');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+

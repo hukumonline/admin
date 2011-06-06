@@ -1,0 +1,88 @@
+<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/datepicker/datetimepicker.js"></script>
+<link href="<?=$this->cdn('scripts');?>/hol/datepicker/rfnet.css" type="text/css" rel="stylesheet" />
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/<?=$this->currentNode;?>">Back to Folder</a>
+            <fieldset>
+                <legend>Location:</legend>
+                <?=$this->widget2->render();?>
+            </fieldset>
+            <form id="catalogInputForm" name="catalogInputForm" method="POST">
+                <fieldset>
+                    <legend>Adding New Catalog</legend>
+                    <table width="100%">
+                        <?php
+                        foreach ($this->aRenderedAttributes['baseForm'] as $a)
+                        {
+                        ?>
+                        <tr>
+                            <td width="200"><?=$a['description']; ?></td>
+                            <td><?=$a['form']; ?></td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
+                    </table>
+                    <table width="100%">
+                        <?php
+                        foreach ($this->aRenderedAttributes['attributeForm'] as $a)
+                        {
+                        ?>
+                        <tr>
+                            <td width="200"><?=$a['description']; ?></td>
+                            <td><?=$a['form']; ?></td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
+                    </table>
+                    <input type="submit" name="save" id="save" value="Save" class="btn btn-blue big" />
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+<script type="text/javascript">
+setTimeout(function()
+{
+    var message = "<?echo $this->message;?>";
+    if(message!="")
+    {
+        alert (message);
+    }
+
+    $("#catalogInputForm").validate({
+        rules: {
+            fixedTitle: "required"
+        },
+        messages: {
+            fixedTitle: "Enter Title"
+        }
+    });
+    
+});
+</script>

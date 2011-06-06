@@ -1,0 +1,15 @@
+<div class="content-box">
+    <header style="cursor: s-resize;">
+        <h3>Manage Catalog</h3>
+    </header>
+    <section>
+        <dl>
+            <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/edit/guid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>"><abbr>Edit</abbr></a></dd>
+            <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/uploader/new/relatedGuid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>"><abbr>Upload Document(s)</abbr></a></dd>
+            <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/relation/search/relatedGuid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>"><abbr>Add Relation(s)</abbr></a></dd>
+            <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/copy-folder/guid/<?=$this->catalogGuid;?>"><abbr>Copy to Folder(s)</abbr></a></dd>
+            <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/move-folder/guid/<?=$this->catalogGuid;?>"><abbr>Move to Folder(s)</abbr></a></dd>
+            <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/delete-confirm/guid/<?=$this->catalogGuid;?>"><abbr>Delete</abbr></a></dd>
+        </dl>
+    </section>
+</div>

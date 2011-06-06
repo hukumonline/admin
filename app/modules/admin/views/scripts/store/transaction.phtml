@@ -1,0 +1,81 @@
+<div class="width7">
+    <div class="wrapper">
+
+        <form id="frmSearch" name="frmSearch" method="post">
+            <fieldset>
+                <legend>Transaction</legend>
+            <p>
+                <label>Status : </label><input id="sStatus" name="sStatus" size=10 value="<?=$this->sStatus;?>">
+                <label>Username : </label<input id="sUsername" name="sUsername" size=10 value="<?=$this->sUsername;?>">
+                <label>Date min : </label><input type="date" id="fdate" name="fdate" value="<?=$this->fdate;?>"/>
+                <label>Date max : </label><input type="date" id="ldate" name="ldate" value="<?=$this->ldate;?>"/>
+                <input type="hidden" id="limit" name="limit" value="10">
+                <input type="hidden" id="offset" name="offset" value="<?=$this->offset;?>">
+                <input class="btn btn-green big" value="Search" type="submit">
+            </p>
+            </fieldset>
+        </form>
+
+        <table class="display stylized" id="transaction">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Description</th>
+                    <th>Payment Method</th>
+                    <th>Purchasing Date</th>
+                    <th>Modified Date</th>
+                    <th>Order Status</th>
+                    <th>Total Price</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <? $i=$this->offset+1; foreach($this->rows as $row): ?>
+                <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
+                    <td><?=$i?></td>
+                    <td>
+                        User ID : <?=$row->userId;?><br />
+                        Invoice : <?=$row->invoiceNumber;?><br />
+                        Name    : <?=$row->fullName;?><br />
+                        Company : <?=$row->company;?><br />&nbsp;
+                    </td>
+                    <td><?=$row->paymentMethod;?></td>
+                    <td class="center"><?=strftime("%Y-%m-%d", strtotime($row->datePurchased));?></td>
+                    <td><?=(!empty($row->lastModified))?strftime("%Y-%m-%d",strtotime($row->lastModified)):'undefined';?></td>
+                    <td><?=$row->ordersStatus;?></td>
+                    <td><?=$row->orderTotal;?></td>
+                    <td><?=$row->countTotal;?></td>
+                    <td>
+                       <a href="<? echo $this->url(array('controller'=>'store',
+                            'action'=>'editOrder', 'id'=>$row->orderId));?>">edit</a>
+                       <a href="<? echo $this->url(array('controller'=>'store',
+                            'action'=>'trdetail', 'id'=>$row->orderId));?>">detail</a>
+                       <? if($row->orderStatus == 3){?>
+                       <a href="<? echo $this->url(array('controller'=>'store',
+                            'action'=>'refund', 'id'=>$row->orderId));?>">refund</a>
+                       <?}?>
+                    </td>
+                </tr>
+                <? $i++; endforeach;?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No</th>
+                    <th>Description</th>
+                    <th>Payment Method</th>
+                    <th>Purchasing Date</th>
+                    <th>Modified Date</th>
+                    <th>Order Status</th>
+                    <th>Total Price</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+
+
+        <div class="clear">&nbsp;</div>
+
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<link rel="stylesheet" type="text/css" href="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.css" />
+<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/_lib/css.js"></script>
+<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.js"></script>
+<script>
+$(document).ready(function() {
+    $("#mtf").tree({
+          data  : {
+            type  : "json",
+            url   : "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/folder/getchildreninjson",
+            async : true,
+            async_data : function (NODE) { return { id : $(NODE).attr("id") || 0, my_param : "my_value" } }
+          },
+            callback    : {
+                    onselect    : function(NODE,TREE_OBJ) {
+                        $("#targetNodeTitle").val(TREE_OBJ.selected.text());
+                        $("#targetNode").val(TREE_OBJ.selected.attr("id"));
+                    }
+            },
+            cookies : { prefix : "treeCategories", opts : { path : '/' }}
+        });
+
+
+    var message = "<?=$this->message;?>";
+    if(message!="")
+    {
+        alert (message);
+    }
+    $("#lkSetAsRoot").click(function()
+    {
+        $("#targetNodeTitle").val("ROOT");
+        $("#targetNode").val('root');
+        return false;
+    });
+
+});
+
+</script>
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/<?=$this->backToNode;?>">Back to Folder</a>
+        </div>
+    </div>
+    <div class="colgroup leading">
+        <div class="column width3 first">
+            <h4>Choose Folders</h4>
+            <div id="mtf" class="demo"></div>
+        </div>
+        <div class="column width3">
+            <fieldset>
+                <legend>You will move the following folders:</legend>
+                <strong><?=$this->folderTitle;?></strong>
+            </fieldset>
+            <form id="frmMoveToFolder" method="post">
+		<fieldset>
+                    <legend>Selected Target Folder</legend>
+                    <p>
+                        <label for="targetNode">Target Folder</label>
+                        <input type="text" id="targetNodeTitle" name="targetNodeTitle" value="">
+                        <input type="hidden" id="targetNode" name="targetNode" value="">
+                        <input type="hidden" id="guid" name="guid" value="<?=$this->guid;?>">
+                        <input type="hidden" id="backToNode" name="backToNode" value="<?=$this->backToNode;?>">
+                    </p>
+                    <p>
+                        <label for="Save">&nbsp;</label>
+                        <input class="btn btn-blue big" type="submit" value="Save"/> &nbsp; <a href="#" id="lkSetAsRoot">Set as ROOT</a>
+                    </p>
+		</fieldset>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+

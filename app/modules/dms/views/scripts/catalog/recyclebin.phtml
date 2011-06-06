@@ -1,0 +1,112 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h4>RECYCLE BIN:</h4>
+            <table class="display stylized" id="delcatalog">
+                <thead>
+                    <tr>
+                        <th width="5%"><input name="select_deselect" value="1" type="checkbox"></th>
+                        <th>Title</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    <?
+                        $i = 1;
+                        foreach ($this->rowset as $row) :
+                    ?>
+
+                    <tr id="row_<?=$guid;?>">
+                        <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$row->guid;?>' class="check_me"></td>
+                        <td>
+                            <div>
+                            <?=$this->getCatalogTitle($row->guid,'fixedTitle');?> :<?=$row->guid;?>
+                            <?
+                            $bpm = new Pandamp_Core_Hol_Relation();
+                            $aData = $bpm->getFiles($row->guid);
+                            if (count($aData) > 0) :
+                            ?>
+                            <div class="listingDetails">
+                                <div class="pad">
+                                    <b>Additional information</b>
+                                    <ul>
+                                        <? foreach ($aData as $data) { ?>
+                                        <li style="list-style:none;">
+                                            <?=$this->GetCatalogDocType($data->itemGuid); ?>&nbsp;
+                                            <a href="#"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a>&nbsp;
+                                            <?=$this->GetCatalogDocSize($data->itemGuid); ?>
+                                        </li>
+                                        <? } ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            <? endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <? $i++; endforeach; ?>
+
+                    <tr>
+                        <td colspan="2">
+                            <select id="ws" name="ws">
+                                <option value="withselected">With selected:</option>
+                                <option value="delete">Delete</option>
+                                <option value="restore">Restore</option>
+                            </select>
+                       		<div id="display_status" style="display:none;">
+                       			<br>Pilih status:&nbsp;
+                       			<?
+								require_once(CONFIG_PATH.'/master-status.php');
+								$aStatus = MasterStatus::getPublishingStatus();
+								$defaultValue = 99;
+								?>
+		                    	<select id="sta" name="sta">
+								<?php foreach($aStatus as $val => $label) {?>
+									<option value="<?php echo $val;?>" 
+										<?php 
+											if(isset($defaultValue) && $defaultValue != '')
+											{
+												if($val == $defaultValue) echo 'selected';
+											}
+										?>
+										>
+										<?php echo $label;?>
+									</option>
+								<?php }?>
+		                    	</select>
+		                    	<input type="button" id="go" value="Restore" class="btn"><br>
+                       		</div>     
+                            &nbsp;<a href="javascript:history.back();">Back</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdown','misc','dms');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+

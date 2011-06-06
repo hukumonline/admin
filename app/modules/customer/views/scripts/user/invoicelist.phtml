@@ -1,0 +1,97 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <h3>User Management: Invoice</h3>
+            <div class="align-right">
+                <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/invoice/new/id/<?=$this->user['kopel'];?>" class="btn"><span class="icon icon-add">&nbsp;</span>Add New</a>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="box box-success" id="message"></div>
+            <table class="display stylized" id="userinvoicelist">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Date Out</th>
+                        <th>Paid Date</th>
+                        <th>Expr. Date</th>
+                        <th class="ta-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?
+                    $i=1; foreach($this->userInvoiceList as $row):
+                    ?>
+                    <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$row['invoiceId'];?>">
+                        <td><?=$row['isPaid'];?></td>
+                        <td><?=$row['price'];?></td>
+                        <td><?=$row['discount'];?></td>
+                        <td><?=date('d.m.y',strtotime($row['invoiceOutDate']));?></td>
+                        <td>
+                        <?
+                        if ($row['invoiceConfirmDate'] == "0000-00-00") 
+                        	$icd = "-";
+                        else
+                        	$icd = date('d.m.y',strtotime($row['invoiceConfirmDate']));
+                        	
+                        echo $icd;
+                        ?>
+                        </td>
+                        <td><?=date('d.m.y',strtotime($row['expirationDate']));?></td>
+                        <td>
+                            <? 
+                                if ($this->isAllowed('membership','all'))
+                                {
+                            ?>
+                                    <input type="button" name="confirm" value="Confirm" id="<?=$row['invoiceId'];?>" class="form-button" />&nbsp;
+                                    <input type="button" name="delete_invoice" value="Delete" id="<?=$row['invoiceId'];?>" class="form-button" />&nbsp;
+                                    <input type="button" name="renew" value="Renewable" id="<?=$row['invoiceId'];?>" class="form-button" />
+
+                                <? } else { ?>
+
+                                    <input type="button" name="confirm" value="Edit" disabled class="form-button" />&nbsp;
+                                    <input type="button" name="delete_invoice" value="Delete" disabled class="form-button" />&nbsp;
+                                    <input type="button" name="renew" value="Reset" disabled class="form-button" />
+
+                                <? } ?>
+
+                        </td>
+                    </tr>
+                    <? $i++; endforeach;?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                    	<td colspan="10">
+                    	&raquo;&nbsp;<a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/user/list" title="Users List"">Back</a>
+                    	</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?//=$this->action('approval','user','customer');?>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+</aside>
+<!-- End of Right column/section -->

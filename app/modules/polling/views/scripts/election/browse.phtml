@@ -1,0 +1,42 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h5>Hukumonline Polling</h5>
+            <section>
+                <ul>
+                <? foreach($this->rowPoll as $row) { ?>
+                    <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/polling/election/whos/id/<?=$row->guid; ?>"><?=$row->title; ?></a></li>
+                <? } ?>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div><br>
+    <div id="showDiv1" style="width:100%;text-align:center;">
+    <?=$this->action('browse','manager','agenda');?>
+    </div>
+    <?=$this->action('view','manager','polling');?>
+</aside>
+<!-- End of Right column/section -->
+

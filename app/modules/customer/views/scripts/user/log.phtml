@@ -1,0 +1,74 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <h3>User Management: Log</h3>
+            <div class="box box-success" id="message"></div>
+            <table class="display stylized" id="userlog">
+                <thead>
+                    <tr>
+                        <th width="5%"><input name="select_deselect" value="1" type="checkbox"></th>
+                        <th>Ip</th>
+                        <th>Login</th>
+                        <th>Last Login</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    <?
+                        $i = 1;
+                        foreach ($this->userLog as $log) :
+                    ?>
+
+                    <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$log->user_access_log_id;?>">
+                        <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$log->user_access_log_id;?>' class="check_me"></td>
+                        <td><?=$log->user_ip;?></td>
+                        <td><?=strftime('%d-%m-%Y %H:%M:%S',strtotime($log->login));?></td>
+                        <td><?
+                        if (($log->lastlogin == "0000-00-00 00:00:00") || ($log->lastlogin == "")) {
+                        	$ll = '-';
+                        }	      
+                        else 
+                        {
+                        	$ll = strftime('%d-%m-%Y %H:%M:%S',strtotime($log->lastlogin));
+                        }
+                        
+                        echo $ll;
+                        ?>
+                    	</td>
+                    </tr>
+
+                    <? $i++; endforeach; ?>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <select id="ulog" name="ulog">
+                                <option value="withselected">With selected:</option>
+                                <option value="deletelog">Delete</option>
+                            </select>&nbsp;<a href="javascript:history.back();">Back</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+

@@ -1,0 +1,83 @@
+<? if (count($this->aData) > 0) { ?>
+<fieldset>
+    <legend>DOWNLOADABLE FILE(s)</legend>
+    <table class="display stylized" id="catalog">
+    <thead>
+        <tr>
+            <th><input name="select_deselect" value="1" type="checkbox"></th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Size</th>
+        </tr>
+    </thead>
+	<tbody>
+	<? foreach ($this->aData as $data) { ?>
+	<tr id="row_<?=$data->itemGuid;?>">
+		<td width="5%"><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$data->itemGuid;?>' class="check_me"></td>
+		<td width="5%"><?=$this->GetCatalogDocType($data->itemGuid); ?></td>
+		<td><a href="#"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a></td>
+		<td><?=$this->GetCatalogDocSize($data->itemGuid); ?></td>
+	</tr>
+	<? } ?>
+    <tr>
+        <td colspan="4">
+            <select id="uof" name="uof">
+                <option value="withselected">With selected:</option>
+                <option value="delete">Delete</option>
+                <option value="edit">Edit</option>
+            </select>
+        </td>
+    </tr>
+	</tbody>    
+    </table>
+</fieldset>
+<div style="display:none;">
+	<a href="#" class="nyroModal" id="d1">Edit Uploaded File(s)</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+                $('#uof').change(function(){
+                     checkValues = new Array();
+                     a=0;
+                     $("input.check_me:checked").each(function(){
+                         checkValues[a]=$(this).val();
+                         a++;
+                     });
+
+                    if ($("#uof").val() == "edit")
+                    {
+                        if(checkValues.length==0)
+                        {
+                            alert('NO CATALOG SELECTED');
+                            $("#uof").val("withselected");
+                            return false;
+                        }
+                        else
+                        {
+                        	
+							//var sHref = '<?//=ROOT_URL;?>/<?//=$this->getLanguage();?>/dms/catalog/detail/guid/<?//=$this->catalogGuid;?>/node/<?//=$this->folderGuid;?>#editupload';
+							var sHref = '<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/editdocument/guid/'+checkValues+'/relatedGuid/<?=$this->catalogGuid;?>#editupload';
+							$('#d1').attr('href',sHref);
+							if(this.value != '')
+								$('#d1').click();
+								
+								
+										                        	
+
+                        }
+
+
+                    }
+					else if ($("#uof").val() == "delete")
+					{
+						window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/delete-confirm/guid/"+checkValues;
+					}
+                    
+					return false;
+                });
+                
+    	
+    });
+</script>
+
+<? } ?>

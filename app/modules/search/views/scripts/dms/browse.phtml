@@ -1,0 +1,83 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3>
+            <h5>Search Result: <?=$this->totalItems;?> Record(s)</h5>
+            <form id="frmCatalogs" name="frmCatalogs">
+                <table class="display stylized" id="catalog">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Title</th>
+                            <th>Section</th>
+                            <th>Published</th>
+                            <th>Created on</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <? $x=$this->sOffset+1; for($i=0; $i<$this->numberOfRows;$i++) { ?>
+                        <tr>
+                            <td><?=$x?></td>
+                            <td>
+                                <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$this->data[$i][0];?>/node/<?=$this->data[$i][2];?>" title="publishedDate: <?=$this->data[$i][8];?>"><?php try {echo $this->data[$i][1];} catch (Exception $e) {echo 'No-Title';}?></a>
+                                <br><small>by: <?=$this->data[$i][5];?></small>
+                            </td>
+                            <td><abbr><?=$this->data[$i][3];?></abbr></td>
+                            <td>
+                            <?
+							if (($this->data[$i][9] == 99) || ($this->data[$i][3] == 1))
+								$status = "publish_g";
+							else 
+								$status = "publish_x";
+                            ?>
+                            
+                                <div class="ta-center">
+                                    <img src="<?=$this->cdn('images');?>/<?=$status;?>.png">
+                                </div>
+
+                            </td>
+                            <td>
+                                <?=$this->data[$i][4];?><br>
+                                <small>modifiedBy: <?=$this->data[$i][7];?></small>
+                            </td>
+                        </tr>
+                    <? $x++; } ?>
+                    </tbody>
+                </table>
+            </form>
+            <table width='100%'>
+            <tr>
+                <td align=right><div id='catalogSearchPagination' class="pagination"></div></td>
+            </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <? if ($this->totalItems > 0) { ?>
+        <?=$this->action('fprofile','widgets_search','search',array('query'=>$this->query));?>
+        <?=$this->action('fclinic','widgets_search','search',array('query'=>$this->query));?>
+        <?=$this->action('fhold','widgets_search','search',array('query'=>$this->query));?>
+        <?=$this->action('fcreate','widgets_search','search',array('query'=>$this->query));?>
+    <? } ?>
+</aside>
+<!-- End of Right column/section -->
+

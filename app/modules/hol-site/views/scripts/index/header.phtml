@@ -1,0 +1,56 @@
+<div class="unit">
+    <div class="container">
+        <div id="header" class="unit horizontal-center layout on-3 columns">
+            <div class="fixed column kiri">
+                <h1 class="logo"><a href="<?=$this->baseUrl();?>">Hukumonline.com</a></h1>
+            </div>
+            <div class="fixed column tengah">
+                <div id="userpanel">
+                    <ul>
+                        <li class="username clearfix">
+                            <form action="https://www.kemana.com/customer/account/loginPost/" method="post" id="form-mini-login">
+                                <input name="login[username]" value="Email" size="10" class="mini-login" type="text">
+                                <input value="Password" name="password" size="12" class="mini-login" onclick="if(this.value=='Password')value='';" onblur="if(this.value=='')value='Password';" type="text">
+                                <input value="" name="login[password]" size="12" class="mini-login" style="display: none;" type="password">
+                                <input value="Sign In" class="mini-login" type="submit">
+                            </form>
+                        </li>
+                        <li class="clearfix">
+                            <span class="left"><div class="account">User baru? <a href="https://www.kemana.com/customer/account/create/">Daftar di sini</a>.</div></span>
+                            <span class="right"><a href="http://www.kemana.com/customer-service" title="Help"><strong>Bantuan</strong></a></span>
+                        </li>
+                        <li class="cart clearfix">
+                            <img src="<?=$this->baseUrl();?>/resources/images/cart.jpg" height="14" width="16">
+                            <span class="left">:&nbsp;&nbsp;<a href="http://www.kemana.com/checkout/cart/" title="2 items" class="uline">0</a> item</span>
+                            <!--<span class="right"><a href="http://www.kemana.com/checkout/cart/" title="Checkout" class="checkout"><span class="guide">Checkout</span></a></span>-->
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fixed column kanan">
+                <div class="ka">
+                    <div class="headerMenu">
+                        <ul>
+                            <li><a href="http://en1.hukumonline.com">en.hukumonline.com</a></li>
+                            <li>|</li>
+                            <li><a href="http://hukumpedia.com">hukumpedia.com</a></li>
+                            <li>|</li>
+                            <li><a href="http://forum.hukumonline.com">forum.hukumonline.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="kb">
+                    <ul id="headerMenu_b">
+                        <li><a href="<?=$this->baseUrl();?>/faqs">FAQs</a></li>
+                        <li><a href="<?=$this->baseUrl();?>/direktori">Direktori</a></li>
+                        <li><a href="<?=$this->baseUrl();?>/talks">Talks</a></li>
+                        <li><a href="<?=$this->baseUrl();?>/klinik">Klinik</a></li>
+                        <li><a href="<?=$this->baseUrl();?>/pusatdata">Pusat Data</a></li>
+                        <li><a href="<?=$this->baseUrl();?>/warta">Berita</a></li>
+                        <li><a href="<?=$this->baseUrl();?>">Awal</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

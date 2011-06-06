@@ -1,0 +1,52 @@
+<? if ($this->numberOfRows > 0) { ?>
+<table class="full" id="gal">
+    <tbody>
+        <tr>
+            <td colspan="4">
+                <fieldset>
+                    <legend>DOWNLOADABLE IMAGE(s)</legend>
+                </fieldset>
+            </td>
+        </tr>
+        <? for ($i = 0; $i < $this->rows; $i++) { ?>
+        <tr>
+            <? for ($j = 0; $j < $this->columns; $j++) { ?>
+            <td>
+                <?=$this->aData[$i + ($j * $this->rows)][0]; ?><br/>
+                <small>title:</small>&nbsp;<abbr><?=$this->aData[$i + ($j * $this->rows)][1]; ?></abbr><br/>
+                <small>size:</small>&nbsp;<?=$this->aData[$i + ($j * $this->rows)][2]; ?><br/>
+                <small>delete:</small>&nbsp;<a href="javascript:;" onclick="remove('<?=$this->aData[$i + ($j * $this->rows)][3];?>', '<?=$this->aData[$i + ($j * $this->rows)][4];?>', 'RELATED_IMAGE');return false;"><?=$this->aData[$i + ($j * $this->rows)][3]; ?></a>
+            </td>
+            <? } ?>
+        </tr>
+        <? } ?>
+    </tbody>
+</table>
+<script type="text/javascript">
+    function displayLoad()
+    {
+        $("#gal").fadeIn(900,0);
+        $("#gal").html("<img src='<?=$this->cdn('images');?>/bigLoader.gif' />");
+    }
+    function hideLoad()
+    {
+        $("#gal").fadeOut('slow');
+    }
+    function remove(itemGuid, relatedGuid, relateAs)
+    {
+        $.ajax({
+            type:"post"
+            ,url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/relation/delete"
+            ,data: "itemGuid="+ itemGuid + "&relatedGuid="+ relatedGuid +"&relateAs="+ relateAs
+            ,beforeSend: function()
+            {
+                displayLoad();
+            }
+            ,success: function()
+            {
+                $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->folderGuid;?>",hideLoad());
+            }
+        });
+    }
+</script>
+<? } ?>

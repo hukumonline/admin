@@ -1,0 +1,83 @@
+/**** Styles for Event Calender ****/
+
+.calendar {
+
+    /** configure the width **/
+    margin:0px;
+    padding:0px;
+    text-align:center;
+}
+
+.main_tittle {
+    color: #646D6D;
+    font-size: 10px;
+    text-align: left;
+    padding-left: 10px;
+    font-weight: bold;
+    padding-right: 10px;
+    padding-top: -10px;
+}
+
+.calendar th {
+    font-weight: bold;
+    height: 20px;
+}
+
+.calendar .header {
+    font-weight: bold;
+    height: 24px;
+    text-align:center;
+}
+
+.calendar .footer {
+    font-weight: bold;
+    font-size:0.8em;
+    color: #FFFFFF;
+    width:100%;
+    text-align:center;
+}
+
+.calendar a, .calendar a:link, .calendar a:hover {
+    font-size:10px;
+    font-weight: bold;
+    text-decoration: underline;
+    color: #000000;
+}
+
+.calendar a.headerNav, .calendar a:link.headerNav, .calendar a:hover.headerNav {
+    color: #ffffff;
+}
+
+.calendar a.footerNav, .calendar a:link.footerNav {
+    width: 100%;
+    color: #333333;
+    text-decoration: none;
+}
+.calendar a:hover.footerNav{
+    color:#B79C00;
+    text-decoration: underline;
+}
+
+/**** color and size of calendar cells.  ****/
+.day_cell		{ background-color:#EDECD8; height:22px; width: 200px; text-align:center; }
+.dayval_cell		{ background-color:#D4C9EF; height:22px; width: 200px; text-align:center;}
+.empty_day_cell		{ background-color:#EEEEEE; height:22px; width: 200px; }
+.today_cell		{ background-color:#FFD700; height:22px; width: 200px; text-align:center;}
+
+/**** day number in upper left corner of each cell ****/
+.day_number		{ font-size:10px; font-family:verdana, arial, helvetica; color:#000 }
+
+/**** title_txt is the text for each post on main page ****/
+.title_txt		{ font-size:10px; color:#000 }
+.title_txt A:link	{ color:#00F; text-decoration:underline }
+.title_txt A:active	{ color:#00F; text-decoration:underline }
+.title_txt A:visited	{ color:#00F; text-decoration:underline }
+.title_txt A:hover	{ color:#00F; text-decoration:underline }
+
+/**** time line under title text when event time given ****/
+.time_str		{ font-size:9px; }
+
+/**** column headers or days of the week ****/
+.column_header		{ background-color:#2663E2; color:#FFFFFF; font-weight:bold; text-align:center; }
+
+/**** End of event calender style ****/

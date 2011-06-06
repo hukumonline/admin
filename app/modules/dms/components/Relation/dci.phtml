@@ -1,0 +1,84 @@
+<? if (sizeof($this->allThumbs) !== 0) : ?>
+<table cellspacing="2" cellpadding="0" class="full" id="gal">
+    <tbody>
+        <tr>
+            <td colspan="4">
+                <fieldset>
+                    <legend>DOWNLOADABLE IMAGE(s)</legend>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <?
+            $n=1;
+            $end = min(($this->page * $this->perPage), sizeof($this->allThumbs));
+            for ($i = (($this->page - 1) * $this->perPage);  $i < $end; $i++) :
+            ?>
+            <td class="ta-center">
+                <table border="0" cellspacing="1" cellpadding="0">
+                    <tr>
+                        <td>
+                            <div style="cursor: pointer;" id="gvID<?=$i;?>">
+                                <a href="<?=$this->sdir;?>/<?=$this->allThumbs[$i];?>">
+                                    <img src="<?=$this->sdir;?>/<?=$this->allThumbs[$i];?>" /><br>
+                                </a>
+                                <?
+                                $ext = explode(".",$this->allThumbs[$i]);
+                                $ext = strtolower(array_pop($ext));
+                                $th = str_replace(array('tn_','.'.$ext), "", $this->allThumbs[$i])
+                                ?>
+                                <div style="top:-16px;opacity:0.75;">
+                                    <small><?=$this->getCatalogTitle($th,'fixedTitle');?></small><br>
+                                    <small>delete:</small>&nbsp;<a href="javascript:;" onclick="remove('<?=$th;?>', '<?=$this->catalogGuid;?>', 'RELATED_IMAGE');return false;"><?=$th;?></a>
+                                </div><br/>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                
+            </td>
+            <?
+            if (($n % 4) == 0 && ($n != $this->perPage)) {
+            ?>
+                </tr>
+                <tr align='center'>
+            <?
+            }
+            $n++;
+            endfor;
+            ?>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    function displayLoad()
+    {
+        $("#gal").fadeIn(900,0);
+        $("#gal").html("<img src='<?=$this->cdn('images');?>/bigLoader.gif' />");
+    }
+    function hideLoad()
+    {
+        $("#gal").fadeOut('slow');
+    }
+    function remove(itemGuid, relatedGuid, relateAs)
+    {
+        if(confirm ('Are you sure ?')) {
+        $.ajax({
+            type:"post"
+            ,url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/relation/delete"
+            ,data: "itemGuid="+ itemGuid + "&relatedGuid="+ relatedGuid +"&relateAs="+ relateAs
+            ,beforeSend: function()
+            {
+                displayLoad();
+            }
+            ,success: function()
+            {
+                $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->folderGuid;?>",hideLoad());
+            }
+        });
+        }
+
+        return false;
+    }
+</script>
+<? endif; ?>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CMS Hukumonline</title>
+        <link href="<?=$this->cdn('styles')?>/favicon.ico" rel="shortcut icon" type="image/ico" />
+        <link href="<?=$this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.4.2.min.js,hol/jquery/dataTables/jquery.dataTables.min.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/datepicker/jquery.datepick.pack.js" ></script>
+        
+        <!-- Internet Explorer Fixes -->
+        <!--[if IE]>
+
+        <link rel="stylesheet" type="text/css" media="all" href="<?=$this->cdn('styles')?>/ie.css"/>
+
+        <script src="<?=$this->cdn('scripts')?>/hol/html5.js"></script>
+
+        <![endif]-->
+        <!--Upgrade MSIE5.5-7 to be compatible with MSIE8: http://ie7-js.googlecode.com/svn/version/2.1(beta3)/IE8.js -->
+        <!--[if lt IE 8]>
+
+        <script src="<?=$this->cdn('scripts')?>/hol/IE8.js"></script>
+
+        <![endif]-->
+
+        <style type="text/css">
+            #message {
+                display: none;
+            }
+        </style>
+
+        <script type="text/javascript">
+        	var oTable;
+            $(document).ready(function(){
+                
+               Administry.setup();
+                
+               Administry.dateInput('#fdate');
+               Administry.dateInput('#ldate');
+               Administry.dateInput('#lastModified');
+               Administry.dateInput('#datePurchased');
+               Administry.dateInput('#dof');
+
+               oTable = $('#orderstatus').dataTable();
+               
+               $('#nsiapaypayment').dataTable();
+               $('#transaction').dataTable();
+               $('#confirm').dataTable();
+
+                $('.delete').live('click', function(){
+                    var queryString = $(this).attr('href');
+                    qString = queryString.split('/');
+
+                    var removeId = qString[5];
+
+                    if (confirm("Are you sure?")) {
+                        $.post('<?=ROOT_URL;?>'+queryString,function(){
+                            $('#row_'+removeId).fadeOut("slow");
+                            $('#message').fadeIn("slow", function(){
+                                $(this).html("Row "+removeId+" Deleted Successfully").delay(2000).fadeOut(1000);
+                                oTable.fnDraw();
+                            });
+                        }
+                    )
+                    }
+
+                    return false;
+                });
+
+            });
+        </script>
+    </head>
+    <body>
+        <?= $this->render("header-store.phtml"); ?>
+
+        <!-- Page content -->
+        <div id="page">
+            <!-- Wrapper -->
+            <div class="wrapper">
+                <!-- Left column/section -->
+                <section class="column first">
+
+                    <h3>.:Hukumonline Store:.</h3>
+
+                    <div class="width8">
+                        <div class="wrapper">
+                            <nav>
+                                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Dashboard</a> .
+                                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store/order">Orders</a> .
+                                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store/transaction">Transaction</a> .
+                                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store/nsiapayPayment">NSIAPay Transaction</a> .
+                                <a href="">Paypal Transaction</a> .
+                                <a href="">Postpaid Users</a> .
+                                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store/confirm">Payment Confirmation</a> .
+                                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store/paymentsetting">Payment Setting</a> 
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="clear" style="padding-top:10px;">&nbsp;</div>
+                    <?=$this->layout()->content;?>
+                </section>
+                <!-- End of Left column/section -->
+            </div>
+            <!-- End of Wrapper -->
+        </div>
+        <!-- End of Page content -->
+
+	<!-- Page footer -->
+	<footer id="bottom">
+            <div class="wrapper">
+                <nav>
+                    <a href="#">Dashboard</a> ·
+                    <a href="#">Content</a> ·
+                    <a href="#">Reports</a> ·
+                    <a href="#">Users</a> ·
+                    <a href="#">Media</a> ·
+                    <a href="#">Events</a> ·
+                    <a href="#">Newsletter</a> ·
+                    <a href="#">Settings</a>
+                </nav>
+                <p>.:CMS Hukumonline:.</p>
+            </div>
+	</footer>
+	<!-- End of Page footer -->
+
+	<!-- Animated footer -->
+	<footer id="animated">
+		<ul>
+			<li><a href="#">Dashboard</a></li>
+			<li><a href="#">Content</a></li>
+			<li><a href="#">Reports</a></li>
+			<li><a href="#">Users</a></li>
+			<li><a href="#">Media</a></li>
+			<li><a href="#">Events</a></li>
+			<li><a href="#">Newsletter</a></li>
+			<li><a href="#">Settings</a></li>
+		</ul>
+	</footer>
+	<!-- End of Animated footer -->
+
+	<!-- Scroll to top link -->
+	<a style="display: none;" id="totop">^ scroll to top</a>
+        <script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/administry.js"></script>
+    </body>
+</html>

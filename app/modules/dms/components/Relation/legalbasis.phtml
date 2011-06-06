@@ -1,0 +1,12 @@
+<? if (count($this->rowsetLegalBasic) > 0) { ?>
+<fieldset>
+    <legend>LEGAL BASIS</legend>
+    <ul id="dhline">
+        <? foreach ($this->rowsetLegalBasic as $data) { ?>
+        <li>
+            <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search/catalog/detail/guid/<?=$data->itemGuid;?>/node/<?=$this->folderGuid; ?>"><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></a>
+        </li>
+        <? } ?>
+    </ul>
+</fieldset>
+<? } ?>

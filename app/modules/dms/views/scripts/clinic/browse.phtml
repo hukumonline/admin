@@ -1,0 +1,145 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <?=$this->slideMenu->render();?>
+            <fieldset>
+                <legend>Navigation</legend>
+                <?=$this->widget2->render();?>
+            </fieldset>
+            <fieldset>
+                <legend>Data Center</legend>
+                <?=$this->widget1->render();?>
+            </fieldset>
+            <h5>Number of Catalogs: <?=$this->totalItems;?> Record(s)</h5>
+            <form id="frmCatalogs" name="frmCatalogs" method="post">
+                <div class="align-left">
+                Sort By:
+                <select id="sort" name="sort">
+                    <option value="title">Title</option>
+                    <option value="publishedDate">Published Date</option>
+                    <option value="createdDate">Created Date</option>
+                </select>
+                <select id="sortBy" name="sortBy">
+                    <option value="asc">Ascending</option>
+                    <option value="desc" selected>Descending</option>
+                </select>
+                </div>
+                <div class="align-right">
+                <select id="ws" name="ws">
+                    <option value="withselected">With selected:</option>
+                    <option value="delete">Delete</option>
+                    <option value="edit">Edit</option>
+                    <option value="copy">Copy</option>
+                    <option value="move">Move</option>
+                    <option value="recycle">Recycle</option>
+                </select>
+                </div>
+                <div style="display:none"></div>
+                <table class="display stylized" id="catalog">
+                    <thead>
+                        <tr>
+                            <th><input name="select_deselect" value="1" type="checkbox"></th>
+                            <th>Title</th>
+                            <th>Section</th>
+                            <th>Published</th>
+                            <th>Created on</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <? //foreach ($this->hits->response->docs as $hit) { ?>
+                    <? 
+                    $now = date('Y-m-d H:i:s');
+                    foreach ($this->hits as $hit) { 
+                    $rowUser = App_Model_Show_User::show()->getUserByName($hit['createdBy']);
+                    ?>
+                        <tr>
+                            <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$hit['guid'];?>' class="check_me"></td>
+                            <td>
+                                <? if($hit['profile'] == 'kutu_doc'){?>
+                                    <a href="<?=ROOT_URL;?>/browser/downloadfile/guid/<?=$hit['guid'];?>"><div class="searchResultTitle">File: <?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle').' ['.$hit['guid'].']';} catch (Exception $e) {echo '';}?></div></a>
+                                <? } else { ?>
+                                    <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit['guid'];?>/node/<?=$this->currentNode;?>" title="<?=$rowUser['email'];?>"><?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle');} catch (Exception $e) {echo 'No-Title';}?></a>
+                                <? } ?>
+                                    <br><small>id:<?=$hit['guid'];?> - by: <?=$hit['createdBy'];?>&nbsp;<span class="subtitle"><?=$hit['publishedDate'];?></span></small>
+                            </td>
+                            <td><?=$hit['profileGuid'];?></td>
+                            <td>
+                                <?
+//                                $t = str_replace("Z", "", $hit['publishedDate']);
+//                                $d = explode("T", $t);
+//                                $publishedDate = $d[0].' '.$d[1];
+//
+//                                $et = str_replace("Z", "", $hit['expiredDate']);
+//                                $ed = explode("T", $et);
+//                                $expiredDate = $ed[0].' '.$ed[1];
+//                                if ($expiredDate == "1999-12-31 00:00:00") $expiredDate = '0000-00-00 00:00:00';
+
+                                if ($now <= $hit['publishedDate'] && $hit['status'] == 99) {
+                                    $status = "publish_y";
+                                    $ht = "Published, but is Pending";
+                                }
+				else if (($now <= $hit['expiredDate'] || $hit['expiredDate'] == '0000-00-00 00:00:00') && $hit['status'] == 99) {
+                                    $status = "publish_g";
+                                    $ht = "Published and is Current";
+				}
+				else if ($now > $hit['expiredDate'] && $hit['status'] == 99) {
+                                    $status = "publish_r";
+                                    $ht = "Published, but has Expired";
+				}
+				else if ($hit['status'] == 0) {
+                                    $status = "publish_x";
+                                    $ht = "Not Published";
+				}
+				else if ($hit['status'] == -1) {
+                                    $status = "disabled";
+                                    $ht = "Archived";
+				}
+                                ?>
+
+                                <div class="ta-center" title="<?=$ht;?>">
+                                    <img src="<?=$this->cdn('images');?>/<?=$status;?>.png">
+                                </div>
+                            </td>
+                            <td nowrap>
+                                <?=date('d.m.y H:i:s',strtotime($hit['createdDate']));?><br>
+                                <small>modifiedBy: <?=$hit['modifiedBy'];?></small>
+                            </td>
+                        </tr>
+                    <? } ?>
+                    </tbody>
+                </table>
+            </form>
+            <table width='100%'>
+            <tr>
+                <td align=right><div id='catalogPagination' class="pagination"></div></td>
+            </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdown','misc','dms',array('node'=>$this->currentNode));?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+

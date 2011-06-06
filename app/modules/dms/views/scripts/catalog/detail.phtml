@@ -1,0 +1,117 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3>
+            <fieldset>
+                <legend>Navigation</legend>
+                <?=$this->widget2->render();?>
+            </fieldset>
+            <fieldset>
+                <legend>Data Center</legend>
+                <h4><?=$this->catalogTitle;?></h4>
+                <h6><?=$this->catalogSubTitle;?></h6>
+                <p>
+                    <label for="price">Price:</label>
+                    <?=$this->rowCatalog['price'];?>
+                </p>
+                <hr>
+                <?=$this->widget1->render();?>
+            </fieldset>
+            <?//=$this->widgetImageFiles->render();?>
+
+            <div class="ta-center">
+                <div id="galleryLoading"></div>
+                <div id="content"></div>
+            </div>
+
+            <?
+            $configGallery = new Zend_Session_Namespace("cfg");
+            if (sizeof($configGallery->allThumbs) > $configGallery->perPage) {
+            ?>
+
+            <table width="800px;">
+                <tr>
+                    <td>
+                        <ul id="pagination">
+                            <? for ($j = 1; $j <= ceil(sizeof($configGallery->allThumbs) / $configGallery->perPage); $j++) { ?>
+                            <li id="<?=$j;?>"><?=$j;?></li>
+                            <? } ?>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+
+            <? } ?>
+
+            <?=$this->widgetFiles->render();?>
+            <?=$this->widgetHistory->render();?>
+            <?=$this->widgetLegalBasis->render();?>
+            <?=$this->widgetImplementingRegulation->render();?>
+            <?=$this->widget3->render();?>
+            <?=$this->widget4->render();?>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <?=$this->action('rightdown','catalog','dms',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode));?>
+    <?=$this->action('view','manager','comment',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode));?>
+    
+</aside>
+<!-- End of Right column/section -->
+
+<script type="text/javascript">
+$(document).ready(function(){
+    function displayLoad()
+    {
+        $("#galleryLoading").fadeIn(900,0);
+        $("#galleryLoading").html("<img src='<?=$this->cdn('images');?>/bigLoader.gif' />");
+    }
+    function hideLoad()
+    {
+        $("#galleryLoading").fadeOut('slow');
+    }
+
+    //Default Starting Page Results
+    $("#pagination li:first").css({'color' : '#FF0084'}).css({'border' : 'none'});
+
+    displayLoad();
+    $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>",hideLoad());
+    //Pagination Click
+    $("#pagination li").click(function(){
+
+            displayLoad();
+
+            //CSS Styles
+            $("#pagination li")
+            .css({'border' : 'solid #dddddd 1px'})
+            .css({'color' : '#0063DC'});
+
+            $(this)
+            .css({'color' : '#FF0084'})
+            .css({'border' : 'none'});
+
+            //Loading Data
+            var pageNum = this.id;
+
+            $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>/page/" + pageNum,hideLoad());
+    });
+});
+</script>

@@ -1,0 +1,89 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <a href="javascript:history.back();">Back to Folder</a>
+            <fieldset>
+                <legend>Location:</legend>
+                <?=$this->widget2->render();?>
+            </fieldset>
+            <form id="frmEditFolder" method="post">
+                <fieldset>
+                    <legend>Folder Info</legend>
+                    <p>
+                        <label class="required" for="title">Folder Title</label><br>
+                        <input id="title" name="title" class="required half" value="<?=$this->row->title;?>" />
+                    </p>
+                    <p>
+                        <label for="description">Description</label><br>
+                        <textarea id="description" name="description" class="medium" cols=35 rows="1"><?=$this->row->description;?></textarea>
+                    </p>
+                    <p>
+                        <label for="viewOrder">Menu View Order</label><br>
+                        <input id="viewOrder" name="viewOrder" class="half" value="<?=$this->row->viewOrder;?>" />
+                    </p>
+                    <p>
+                        <label for="cmsParams">Cms Parameters</label><br>
+                        <?
+                        $prm = Zend_Json::decode($this->row->cmsParams);
+                        ?>
+                        <input id="cmsParams" name="cmsParams" class="half" value="<?=$prm['st'];?>" />
+                    </p>
+                    <p>
+                        <label for="typeoffolder">Type of Folder</label><br>
+                        <select name="tof" id="tof" class="required">
+                            <option value="">Choose:</option>
+                            <option value="cms">Berita</option>
+                            <option value="dms">Peraturan</option>
+                            <option value="eventcalendar">Project</option>
+                            <option value="klinik">Klinik</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="membership">Membership</option>
+                            <option value="menu">Menu</option>
+                        </select>
+                    </p>
+                    <p>
+                        <input type="hidden" id="node" name="node" value="<?=$this->currentNode;?>">
+                        <input type="submit" value="Save" class="btn btn-blue big" />
+                    </p>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#tof").val('<?=$this->row->type;?>');
+    var message = "<?echo $this->message;?>";
+    if(message!="")
+    {
+        alert (message);
+    }
+
+    $("#frmEditFolder").validate();
+
+});
+</script>

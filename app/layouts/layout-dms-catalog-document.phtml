@@ -1,0 +1,32 @@
+<?=$this->doctype();?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CMS Hukumonline</title>
+        <link href="<?=$this->cdn('styles')?>/favicon.ico" rel="shortcut icon" type="image/ico" />
+        <link href="<?=$this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/style.css" media="screen" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/form/jquery.form.js,hol/jquery/nyroModal/jquery.nyroModal.pack.js" ></script>
+        
+        <!-- Internet Explorer Fixes -->
+        <!--[if IE]>
+
+        <link rel="stylesheet" type="text/css" media="all" href="<?=$this->cdn('styles')?>/ie.css"/>
+
+        <script src="<?=$this->cdn('scripts')?>/hol/html5.js"></script>
+
+        <![endif]-->
+        <!--Upgrade MSIE5.5-7 to be compatible with MSIE8: http://ie7-js.googlecode.com/svn/version/2.1(beta3)/IE8.js -->
+        <!--[if lt IE 8]>
+
+        <script src="<?=$this->cdn('scripts')?>/hol/IE8.js"></script>
+
+        <![endif]-->
+
+    </head>
+    <body>
+
+        <?=$this->layout()->content;?>
+
+    </body>
+</html>

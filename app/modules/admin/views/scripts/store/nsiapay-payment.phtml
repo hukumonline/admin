@@ -1,0 +1,55 @@
+<div class="width7">
+    <div class="wrapper">
+        <table class="display stylized" id="nsiapaypayment">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Description</th>
+                    <th>Payment Method</th>
+                    <th>Purchasing Date</th>
+                    <th>Modified Date</th>
+                    <th>Order Status</th>
+                    <th>Total Price</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <? $i=$this->offset+1; foreach($this->rows as $row): ?>
+                <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
+                    <td><?=$i?></td>
+                    <td>
+                        User ID : <?=$row->userId;?><br />
+                        Invoice : <?=$row->invoiceNumber;?><br />
+                        Name    : <?=$row->fullName;?><br />
+                        Company : <?=$row->company;?><br />&nbsp;
+                    </td>
+                    <td><?=$row->paymentMethod;?></td>
+                    <td class="center"><?=strftime("%Y-%m-%d",strtotime($row->datePurchased));?></td>
+                    <td><?=(!empty($row->lastModified))?strftime("%Y-%m-%d",strtotime($row->lastModified)):'undefined';?></td>
+                    <td><?=$row->ordersStatus;?></td>
+                    <td><?=$row->orderTotal;?></td>
+                    <td><?=$row->countTotal;?></td>
+                    <td class="center">
+                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'editOrder', 'id'=>$row->orderId));?>">edit</a>
+                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'trdetail', 'id'=>$row->orderId));?>">detail</a>
+                    </td>
+                </tr>
+                <? $i++; endforeach;?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No</th>
+                    <th>Description</th>
+                    <th>Payment Method</th>
+                    <th>Purchasing Date</th>
+                    <th>Modified Date</th>
+                    <th>Order Status</th>
+                    <th>Total Price</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

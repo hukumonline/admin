@@ -1,0 +1,48 @@
+<div class="align-left">
+    <div id="title2">
+        Agenda
+    </div>
+</div>
+<div class="align-right">
+    &raquo;&nbsp;<a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/calendar/event/postmessage" title="Create New Event"">Add Event</a>
+</div>
+<div class="clear">&nbsp;</div>
+<hr>
+<table class="full">
+    <tbody>
+<tr>
+	<td align="center">
+	<?=$this->select_calender ?>
+	</td>
+</tr>
+</tbody>
+</table>
+<div class="clear">&nbsp;</div>
+<script>
+$(document).ready(function(){
+
+    hcl = function(href)
+    {
+        $('#showDiv1').load(href,function(response, status, xhr){
+            switch(xhr.status)
+            {
+                case 500:
+                    alert("SSO failure: The server responded with a 406 status: 'Not attached'");
+                    window.location.reload();
+                    break;
+                case 401:
+                    alert("Your Session has expired please login again");
+                    window.location.reload();
+                    break;
+                case 400:
+                    alert("Invalid Server function call please login and try again");
+                    window.location.reload();
+                    break;
+            }
+        });
+
+    }
+
+
+});
+</script>

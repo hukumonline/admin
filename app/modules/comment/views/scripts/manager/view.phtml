@@ -1,0 +1,12 @@
+<? if ($this->numOfRows > 0) : ?>
+<div class="content-box">
+    <header style="cursor: s-resize;">
+        <h3>Comment</h3>
+    </header>
+    <section>
+        <dl>
+            <dd><a href="http://www.hukumonline.com/berita/baca/<?=$this->catalogGuid;?>/<?=$this->getCatalogShortTitle($this->catalogGuid);?>#comments" target="_blank"><abbr><?=$this->sumComment;?></abbr></a></dd>
+        </dl>
+    </section>
+</div>
+<? endif; ?>

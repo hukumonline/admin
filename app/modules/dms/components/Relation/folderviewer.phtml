@@ -1,0 +1,49 @@
+<? if (count($this->rowsetFolder) > 0) { ?>
+<div id="content_rfolder">
+<fieldset>
+    <legend>RELATED FOLDERS</legend>
+    <ul id="dhline" style="list-style:none;">
+        <? foreach ($this->rowsetFolder as $row) { ?>
+        <li>
+            <? if($row->guid==$this->folderGuid) { ?>
+            <img src="<?=$this->cdn('images'); ?>/page_right.gif">
+            <? } ?>
+            <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/<?=$row->guid;?>"><?=$row->title; ?></a>
+            - [<?=$row->guid;?>]&nbsp;<a href="javascript:;" onclick="remfol('<?=$this->catalogGuid;?>', '<?=$row->guid;?>');return false;">Remove</a>
+        </li>
+        <? } ?>
+    </ul>
+</fieldset>
+</div>
+<script type="text/javascript">
+    function displayLoad()
+    {
+        $("#dhline").fadeIn(900,0);
+        $("#dhline").html("<img src='<?=$this->cdn('images');?>/wait.gif' />");
+    }
+    function hideLoad()
+    {
+        $("#dhline").fadeOut('slow');
+    }
+    function remfol(guid, folderGuid)
+    {
+        if(confirm ('Are you sure ?')) {
+        $.ajax({
+            type:"post"
+            ,url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/catalog/remove-from-folder"
+            ,data: "guid=" + guid + "&folderGuid=" + folderGuid
+            ,beforeSend: function()
+            {
+                displayLoad();
+            }
+            ,success: function(response)
+            {
+            	$("#content_rfolder").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/render-folder/guid/<?=$this->catalogGuid;?>/node/<?=$this->folderGuid;?>",hideLoad());
+            }
+        });
+        }
+
+        return false;
+    }
+</script>
+<? } ?>

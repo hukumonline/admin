@@ -1,0 +1,369 @@
+<?=$this->doctype();?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CMS Hukumonline</title>
+        <link href="<?=$this->cdn('styles')?>/favicon.ico" rel="shortcut icon" type="image/ico" />
+        <link href="<?=$this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/style.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/calender.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/jquerycssmenu.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/pagination.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/jquery-ui-1.8.7.custom.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?=$this->cdn('styles')?>/adm/jquery-ui-timepicker.css?v=0.0.8" media="screen" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.3.2.min.js,adm/jquery/menu/jquerycssmenu.js,hol/jquery/jquery.cookie.js,hol/jquery/timepicker/jquery.ui.core.js,hol/jquery/wysiwyg/jquery.wysiwyg.min.js,hol/jquery/timepicker/jquery.ui.timepicker-0.0.8.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/paging/jquery.pagination.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/datepicker/jquery.datepick.pack.js,hol/jquery/nyroModal/jquery.nyroModal.pack.js" ></script>
+
+        <!-- Internet Explorer Fixes -->
+        <!--[if IE]>
+
+        <link rel="stylesheet" type="text/css" media="all" href="<?=$this->cdn('styles')?>/ie.css"/>
+
+        <script src="<?=$this->cdn('scripts')?>/hol/html5.js"></script>
+
+        <![endif]-->
+        <!--Upgrade MSIE5.5-7 to be compatible with MSIE8: http://ie7-js.googlecode.com/svn/version/2.1(beta3)/IE8.js -->
+        <!--[if lt IE 8]>
+
+        <script src="<?=$this->cdn('scripts')?>/hol/IE8.js"></script>
+
+        <![endif]-->
+
+        <!--[if lte IE 7]>
+        <style type="text/css">
+        html .jquerycssmenu{height: 1%;} /*Holly Hack for IE7 and below*/
+        </style>
+        <![endif]-->
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("a[title], div[title], span[title]").tipTip();
+
+                var isFirstTime = 1;
+
+                var myPageIndex = 0;
+                var itemsPerPage = <?=$this->itemsPerPage;?>;
+                var currentOffset = <?=$this->offset;?>;
+                var limit = <?=$this->limit;?>;
+                var currentNode = "<?=$this->currentNode;?>";
+                var totalItems = <?=$this->totalItems;?>;
+                var sort = "<?=$this->sort;?>";
+                var sortBy = "<?=$this->sortBy;?>";
+                var withSelected = "<?=$this->withSelected;?>";
+
+                var tmpCurrentPageIndex = currentOffset/itemsPerPage;
+
+                $("#catalogPagination").pagination(totalItems,
+                {items_per_page:itemsPerPage, callback:handlePaginationClick, current_page:tmpCurrentPageIndex}
+                );
+
+                function handlePaginationClick(new_page_index, pagination_container)
+                {
+                    if(!isFirstTime)
+                    {
+                        myPageIndex = new_page_index;
+                        var nextOffset = (itemsPerPage * myPageIndex);
+
+                        var url = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/"+currentNode+"/offset/"+nextOffset+"/limit/"+limit+"/sort/"+sort+"/by/"+sortBy;
+                        window.location = url;
+                    }
+                    isFirstTime = 0;
+                    return false;
+                }
+
+                $("input[name=select_deselect]").click(function(){
+                     var checked_status = this.checked;
+                     $("input[class=check_me]").each(function(){
+                         this.checked = checked_status;
+                     });
+                });
+
+                $("#ws").val(withSelected);
+                $("#sort").val(sort);
+                $("#sortBy").val(sortBy);
+                $('#sort').change(function() {
+                    var order = $("#sort").val();
+                    var orderBy = $("#sortBy").val();
+                    var url = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/"+currentNode+"/offset/"+currentOffset+"/limit/"+limit+"/sort/"+order+"/by/"+orderBy;
+                    window.location = url;
+
+                });
+                $('#sortBy').change(function() {
+                    var order = $("#sort").val();
+                    var orderBy = $("#sortBy").val();
+                    var url = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/"+currentNode+"/offset/"+currentOffset+"/limit/"+limit+"/sort/"+order+"/by/"+orderBy;
+                    window.location = url;
+
+                });
+
+                $('#ws').change(function(){
+                    checkValues = new Array();
+                    a=0;
+                    $("input.check_me:checked").each(function(){
+                        checkValues[a]=$(this).val();
+                        a++;
+                    });
+
+                    if(checkValues.length==0)
+                    {
+                        alert('NO CATALOG SELECTED');
+                        $("#ws").val(withSelected);
+                        return false;
+                    }
+
+                    if ($("#ws").val() == "delete")
+                    {
+                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/delete-confirm/guid/"+checkValues;
+                    }
+                    else if ($("#ws").val() == "copy")
+                    {
+                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/copy-folder/guid/"+checkValues;
+                    }
+                    else if ($("#ws").val() == "move")
+                    {
+                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/move-folder/sourceNode/"+currentNode+"/guid/"+checkValues;
+                    }
+                    else if ($("#ws").val() == "edit")
+                    {
+                        if(checkValues.length!=1)
+                        {
+                            alert('Just select one Catalog to edit');
+                        }
+                        else
+                        {
+                            if(checkValues[0]=="root")
+                                alert('Can not edit ROOT folder.')
+                            else
+                                window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/edit/guid/"+checkValues+"/node/"+currentNode;
+                        }
+                    }
+                    
+                    return false;
+                });
+
+                $("#linkEditFolder").click(function(){
+                    var aGuid = getCheckedCheckBox("frmFolders");
+                    if(aGuid.length!=1) {
+                        alert('You must select ONE Folder to edit');
+                        return false;
+                    }
+                    else
+                    {
+                        if(aGuid[0]=="root")
+                            alert('Can not edit ROOT folder.')
+                        else
+                            window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/folder/edit/guid/"+aGuid[0]+"/node/"+currentNode;
+                    }
+
+                });
+                $("#linkDeleteFolder").click(function(){
+                    var aGuid = getCheckedCheckBox("frmFolders");
+
+                    var listGuid = '';
+                    for (var i = 0; i < aGuid.length; i++){
+                             listGuid += "/guid/" + aGuid[i] ;
+                          }
+                    if(aGuid.length==0)
+                    {
+                        alert('NO FOLDERS SELECTED');
+                        return false;
+                    }
+                    else
+                    {
+                        if(confirm ('Are you sure you want to delete these '+ aGuid.length +' folder(s)?'))
+                        {
+                            window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/folder/delete"+listGuid;
+                        }
+                    }
+
+                    return false;
+
+                });
+                $("#linkForceDeleteFolder").click(function(){
+                    var aGuid = getCheckedCheckBox("frmFolders");
+
+                    var listGuid = '';
+                    for (var i = 0; i < aGuid.length; i++){
+                        listGuid += "/guid/" + aGuid[i] ;
+                    }
+                    if(aGuid.length==0)
+                    {
+                        alert('NO FOLDERS SELECTED');
+                        return false;
+                    }
+                    else
+                    {
+                        if(confirm ('Are you sure you want to delete these '+ aGuid.length +' folder(s) and its contents?'))
+                        {
+                            window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/folder/forcedelete"+listGuid;
+                        }
+                    }
+
+                    return false;
+
+                });
+                $("#linkMoveFolder").click(function(){
+                    var aGuid = getCheckedCheckBox("frmFolders");
+                    for (var i = 0; i < aGuid.length; i++){
+                        if(aGuid[i]==currentNode && aGuid.length>1)
+                        {
+                            alert('You can not move current folder with some of its sub folders.');
+                            return false;
+                        }
+                    }
+                    var listGuid = '';
+                    for (var i = 0; i < aGuid.length; i++){
+                        listGuid += "/guid/" + aGuid[i] ;
+                    }
+                    if(aGuid.length==0)
+                            listGuid += "/guid/" + currentNode ;
+                    window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/folder/move"+listGuid+"/backToNode/"+currentNode;
+
+                });
+                $("#linkCopyFolder").click(function(){
+                    var aGuid = getCheckedCheckBox("frmFolders");
+                    for (var i = 0; i < aGuid.length; i++){
+                        if(aGuid[i]==currentNode && aGuid.length>1)
+                        {
+                            alert('You can not move current folder with some of its sub folders.');
+                            return false;
+                        }
+                    }
+                    var listGuid = '';
+                    for (var i = 0; i < aGuid.length; i++){
+                        listGuid += "/guid/" + aGuid[i] ;
+                    }
+                    if(aGuid.length==0)
+                            listGuid += "/guid/" + currentNode ;
+                    window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/folder/copy"+listGuid+"/backToNode/"+currentNode;
+
+                });
+
+
+
+                $("#frmProfile").validate({
+                    rules:{
+                        profile:"required"
+                    }
+                    ,messages:{
+                        profile:"<br>This field is required"
+                    }
+                    ,submitHandler: function(form) {
+                        var profile = $("#profile").val();
+                        var node = $("#folderGuid").val();
+
+                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/new/profile/"+profile+"/node/"+node;
+                        return false;
+                    }
+                });
+
+                getCheckedCheckBox = function (elementId)
+                {
+                    var content = [];
+                    var aGuid = new Array();
+                    var iCount=0;
+                    $('#' + elementId + ' input').each(function(){
+                        var el = $(this);
+                        if ( (el.attr('type').toLowerCase() == 'radio'))
+                        {
+                            if ( this.checked )
+                            {
+                                content.push([
+                                        '"', el.attr('name'), '": ',
+                                        'value="', ( this.value ), '"',
+                                        ( this.disabled ? ', disabled' : '' )
+                                ].join(''));
+                                aGuid[iCount]=this.value;
+                                iCount++;
+                            }
+                        }
+                        else
+                        {
+                            content.push([
+                                    '"', el.attr('name') + ' '+el.attr('value'), '": ',
+                                    ( this.checked ? 'checked' : 'not checked' ),
+                                    ( this.disabled ? ', disabled' : '' )
+                            ].join(''));
+                            if ( this.checked )
+                            {
+                                aGuid[iCount]=el.attr('value');
+                                iCount++;
+                            }
+                        }
+
+                    });
+                    return aGuid;
+                }
+
+
+                Administry.dateInput('#datepick');
+
+               $('#timepicker_inline_7').timepicker({
+                   altField: '#timepicker_alt',
+                   defaultTime: '<?=date('h:i')?>'
+               });
+                
+               $('#timepicker_inline_8').timepicker({
+                   altField: '#timepicker_alt_end',
+                   defaultTime: '<?=date('h:i')?>'
+               });
+               
+
+            });
+
+
+        </script>
+
+    </head>
+    <body>
+        <?= $this->render("header-pusatdata.phtml"); ?>
+
+	<!-- Page content -->
+	<div id="page">
+		<!-- Wrapper -->
+		<div class="wrapper">
+
+                    <?=$this->layout()->content;?>
+
+		</div>
+		<!-- End of Wrapper -->
+	</div>
+	<!-- End of Page content -->
+
+	<!-- Page footer -->
+	<footer id="bottom">
+            <div class="wrapper">
+                <nav>
+                    <a href="#">Dashboard</a> ·
+                    <a href="#">Content</a> ·
+                    <a href="#">Reports</a> ·
+                    <a href="#">Users</a> ·
+                    <a href="#">Media</a> ·
+                    <a href="#">Events</a> ·
+                    <a href="#">Newsletter</a> ·
+                    <a href="#">Settings</a>
+                </nav>
+                <p>.:CMS Hukumonline:.</p>
+            </div>
+	</footer>
+	<!-- End of Page footer -->
+
+	<!-- Animated footer -->
+	<footer id="animated">
+		<ul>
+			<li><a href="#">Dashboard</a></li>
+			<li><a href="#">Content</a></li>
+			<li><a href="#">Reports</a></li>
+			<li><a href="#">Users</a></li>
+			<li><a href="#">Media</a></li>
+			<li><a href="#">Events</a></li>
+			<li><a href="#">Newsletter</a></li>
+			<li><a href="#">Settings</a></li>
+		</ul>
+	</footer>
+	<!-- End of Animated footer -->
+        
+	<!-- Scroll to top link -->
+	<a style="display: none;" id="totop">^ scroll to top</a>
+        <script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/administry.js"></script>
+    </body>
+</html>

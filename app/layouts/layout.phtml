@@ -1,0 +1,14 @@
+<?=$this->doctype();?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <?=$this->headTitle();?>
+        <?=$this->headMeta();?>
+        <?=$this->headLink();?>
+        <?=$this->headScript();?>
+    </head>
+    <body>
+        <?=$this->render('header.phtml');?>
+        <?=$this->layout()->content;?>
+        <?=$this->render('footer.phtml');?>
+    </body>
+</html>

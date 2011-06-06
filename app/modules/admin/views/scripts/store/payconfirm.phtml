@@ -1,0 +1,217 @@
+<form id="payconfirm" name="payconfirm">
+<fieldset>
+<legend>ORDER</legend>
+<table class="no-style full">
+<?foreach($this->rowset as $row) :?>
+<tr>
+	<td><abbr>No.Pesanan:</abbr></td>
+	<td><?=$row['orderId'];?></td>
+</tr>
+<tr>
+	<td><abbr>No. Faktur:</abbr></td>
+	<td><?=$row['invoiceNumber'];?></td>
+</tr>
+<tr>
+	<td><abbr>Kode Pelanggan:</abbr></td>
+	<td><?=$row['userId'];?></td>
+</tr>
+<tr>
+	<td>NPWP:</td>
+	<td><?=$row['taxNumber'];?></td>
+</tr>
+<tr>
+	<td>Nama Perusahaan:</td>
+	<td><?=$row['taxCompany'];?></td>
+</tr>
+<tr>
+	<td>Alamat Penagihan:</td>
+	<td><?=$row['taxAddress'];?></td>
+</tr>
+<tr>
+	<td>Kota:</td>
+	<td><?=$row['taxCity'];?></td>
+</tr>
+<tr>
+	<td>Kodepos:</td>
+	<td><?=$row['taxCity'];?></td>
+</tr>
+<tr>
+	<td>Propinsi:</td>
+	<td>
+	<?
+	$modelState = new App_Model_Db_Table_State();
+	$rowState = $modelState->find($row['taxProvince'])->current();
+	if ($rowState) {
+		$state = $rowState->pname;
+	}
+	else 
+	{
+		$state = "-";
+	}
+	
+	echo $state;
+	?>
+	</td>
+</tr>
+<tr>
+	<td>Negara</td>
+	<td>
+	<?
+		$config = new Zend_Config_Xml(CONFIG_PATH.'/countries.xml','countries');
+		$aCountries = array();
+		foreach($config->get('country') as $country)
+		{
+			if ($country->alpha2 == $row['taxCountryId']) {
+				$arr = $country->name;
+			}
+		}
+		echo $arr;
+	?>
+	</td>
+</tr>
+<tr>
+	<td>Telepon:</td>
+	<td><?=$row['telephone'];?></td>
+</tr>
+<tr>
+	<td><abbr>Metode Pembayaran</abbr></td>
+	<td><?=$row['paymentMethod'];?></td>
+</tr>
+<tr>
+	<td>Terakhir di modifikasi</td>
+	<td><?=(!($row['lastModified']=="0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($row['lastModified'])):'undefined'; ?></td>
+</tr>
+<tr>
+	<td>Tanggal pembelian</td>
+	<td><?=(!($row['datePurchased']))?strftime("%d-%m-%Y",strtotime($row['datePurchased'])):'undefined'; ?></td>
+</tr>
+<tr>
+	<td><abbr>Status Pesanan</abbr></td>
+	<td><?=$row['ordersStatus'];?></td>
+</tr>
+<tr>
+	<td>Pesanan selesai tanggal</td>
+	<td><?=(!($row['dateOrderFinished']=="0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($row['dateOrderFinished'])):'undefined'; ?></td>
+</tr>
+<tr>
+	<td>Mata Uang</td>
+	<td><?=$row['currency'];?></td>
+</tr>
+<tr>
+	<td>Total Pesanan</td>
+	<td><?=$row['orderTotal'];?></td>
+</tr>
+<tr>
+	<td>Alamat IP:</td>
+	<td><?=$row['ipAddress'];?></td>
+</tr>
+<tr>
+	<td>Tanggal Pembayaran:</td>
+	<td><?=strftime("%d-%m-%Y",strtotime($this->Paid)); ?></td>
+</tr>
+<?endforeach;?>
+</table>
+<input type="hidden" name="id" value="<?=$this->id;?>">
+</fieldset>
+<fieldset>
+<legend>DETAIL</legend>
+<table class="no-style full">
+<thead>
+	<th>No</th>
+	<th>Item ID</th>
+	<th>Nama</th>
+	<th>Harga</th>
+	<th>Total</th>
+	<th>Tax</th>
+	<th>Qty</th>
+</thead>
+<tbody>
+<?$i =1; foreach($this->rowsetDetail as $rowDetail): ?>
+<tr>
+	<td><?=$i;?></td>
+	<td><?=$rowDetail['itemId'];?></td>
+	<td><?=$rowDetail['documentName'];?></td>
+	<td><?=number_format($rowDetail['price'],2);?></td>
+	<td><?=number_format($rowDetail['finalPrice'],2);?></td>
+	<td><?=number_format($rowDetail['tax'],2); ?> %</td>
+	<td><?=$rowDetail['qty']; ?></td>
+</tr>
+<? $i++; endforeach; ?>
+</tbody>
+</table>
+</fieldset>
+<div class="box box-success" id="message"></div>
+<fieldset>
+<legend>SEJARAH KONFIRMASI PEMBAYARAN</legend>
+<table class="no-style full">
+<thead>
+	<th>No</th>
+	<th>Tanggal</th>
+	<th>Metode</th>
+	<th>Tujuan</th>
+	<th>Nama</th>
+	<th>Jumlah</th>
+	<th>Catatan</th>
+	<th colspan="2">Extra</th>
+</thead>
+<tbody>
+<?$i=1;foreach($this->rowsetConfirm as $rowConfirm) :?>
+<tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$rowConfirm['id'];?>">
+	<td><?=$i?></td>
+	<td><?=Pandamp_Lib_Formater::get_date($rowConfirm->paymentDate);?></td>
+	<td><?=$rowConfirm->paymentMethod;?></td>
+	<td><?=$rowConfirm->destinationAccount;?></td>
+	<td>
+	<?=$rowConfirm->senderAccount;?><br/>
+	<?=$rowConfirm->senderAccountName;?><br/>
+	<?=$rowConfirm->bankName;?><br/>
+	</td>
+	<td>
+	<?=number_format($rowConfirm->amount,2);?>
+	</td>
+	<td><?=$rowConfirm->note;?></td>
+	<?
+	if($rowConfirm->confirmed == 0){
+		$col = "green";
+		$ext = "Unconfirmed";
+	}else{
+		$col = "red";
+		$ext = "Rejected";
+	}
+	?>
+	<td><b><font color="<?=$col?>"><?=$ext?></font></b></td>
+	<td>
+<a class="success" href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 
+            'action'=>'payconfirmyes', 'id'=>$this->idOrder),'segwact');?>">
+            Accept [Confirm] </a>&nbsp;  
+<a class="error" href="<? echo $this->url(array('controller'=>'store', 
+            'action'=>'payconfirmno', 'method'=>$rowConfirm->paymentMethod, 'id'=>$this->idOrder ));?>">Reject </a> &nbsp;
+<a class="notice" href="#" id="<?=$rowConfirm->id;?>">Delete</a>
+	</td>
+</tr>
+<?$i++; endforeach;?>
+</tbody>
+</table>
+</fieldset>
+<p style="z-index:1;overflow:hidden;">
+<input type="button" value="Kembali" class="btn" onclick="javascript:history.back();" />
+</p><br/>
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".notice").live('click',function(){
+		if (confirm("Are you sure?")) {
+			var iId = $(this).attr('id');
+            $.post('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/store/deleteconfirm/id/'+iId,function(){
+                $('#row_'+iId).fadeOut("slow");
+                $('#message').fadeIn("slow", function(){
+                    $(this).html("Row "+iId+" Deleted Successfully").delay(2000).fadeOut(1000);
+                });
+            })
+			
+		}
+		return false;
+	});
+});
+</script>

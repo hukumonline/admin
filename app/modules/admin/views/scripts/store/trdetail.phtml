@@ -1,0 +1,190 @@
+<fieldset>
+<legend>TRANSAKSI</legend>
+<div class="width8" align="right">
+    <form style="z-index:1;overflow:hidden;">
+    <input class="btn btn-green big" type="button" value="Back" onclick="javascript:history.back();" />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    </form>
+</div>
+<div class="clear">&nbsp;</div>
+<? foreach($this->listOrder as $value): ?>
+<div class="colgroup">
+	<div class="column width2 first">No. Pesanan</div>
+	<div class="column width2"><?=$value['orderId'];?></div>
+	<div class="column width2">No. Faktur</div>
+	<div class="column width2"><?=$value['invoiceNumber'];?></div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Kode Pelanggan</div>
+	<div class="column width2"><?=$value['userId'];?></div>
+	<div class="column width2">NPWP</div>
+	<div class="column width2"><?=$value['taxNumber'];?>&nbsp;</div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Perusahaan</div>
+	<div class="column width2"><?=$value['taxCompany'];?>&nbsp;</div>
+	<div class="column width2">Alamat Penagihan</div>
+	<div class="column width2"><?=$value['taxAddress'];?>&nbsp;</div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Kota</div>
+	<div class="column width2"><?=$value['taxCity'];?>&nbsp;</div>
+	<div class="column width2">Kodepos</div>
+	<div class="column width2"><?=$value['taxZip'];?>&nbsp;</div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Propinsi</div>
+	<div class="column width2">
+	<?
+	$modelState = new App_Model_Db_Table_State();
+	$rowState = $modelState->find($value['taxProvince'])->current();
+	if ($rowState) {
+		$state = $rowState->pname;
+	}
+	else 
+	{
+		$state = "";
+	}
+	echo $state;
+	?>&nbsp;
+	</div>
+	<div class="column width2">Negara</div>
+	<div class="column width2">
+	<?
+	$config = new Zend_Config_Xml(CONFIG_PATH.'/countries.xml','countries');
+	$aCountries = array();
+	foreach($config->get('country') as $country)
+	{
+		if ($country->alpha2 == $value['taxCountryId']) {
+			$arr = $country->name;
+		}
+	}
+	echo $arr;
+	?>&nbsp;
+	</div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Telp.</div>
+	<div class="column width2"><?=$value['taxPhone'];?>&nbsp;</div>
+	<div class="column width2">Metode Pembayaran</div>
+	<div class="column width2"><?=$value['paymentMethod'];?></div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Catatan</div>
+	<div class="column width2"><?=$value['paymentMethodNote'];?>&nbsp;</div>
+	<div class="column width2">Terakhir dimodifikasi</div>
+	<div class="column width2"><?=(!($value['lastModified'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['lastModified'])):'undefined'; ?></div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Tanggal Pembelian</div>
+	<div class="column width2"><?=(!($value['datePurchased'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['datePurchased'])):'undefined'; ?></div>
+	<div class="column width2">Status Pesanan</div>
+	<div class="column width2"><?=$value['orderStatus'];?></div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Tanggal Penyelesaian Pesanan</div>
+	<div class="column width2"><?=(!($value['dateOrderFinished'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['dateOrderFinished'])):'undefined'; ?></div>
+	<div class="column width2">Mata Uang</div>
+	<div class="column width2"><?=$value['currency'];?></div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Total Pesanan</div>
+	<div class="column width2"><?=$value['orderTotal'];?></div>
+	<div class="column width2">Potongan Pajak</div>
+	<div class="column width2"><?=$value['orderTax'];?></div>
+	
+	<div class="clear">&nbsp;</div>
+	
+	<div class="column width2 first">Alamat IP</div>
+	<div class="column width2"><?=$value['ipAddress'];?></div>
+	<div class="column width2">Tanggal Pembayaran</div>
+	<div class="column width2"><?=(!($value['paymentDate'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['paymentDate'])):'undefined'; ?></div>
+	
+</div>
+<? endforeach; ?>
+</fieldset>
+<fieldset>
+<legend>DETAIL</legend>
+<table class="no-style full">
+<thead>
+	<th>No</th>
+	<th>Item ID</th>
+	<th>Nama</th>
+	<th>Harga</th>
+	<th>Total</th>
+	<th>Tax</th>
+	<th>Qty</th>
+</thead>
+<tbody>
+<?$i =1; foreach($this->listOrderDetail as $rowDetail): ?>
+<tr>
+	<td><?=$i;?></td>
+	<td><?=$rowDetail['itemId'];?></td>
+	<td><?=$rowDetail['documentName'];?></td>
+	<td><?=number_format($rowDetail['price'],2);?></td>
+	<td><?=number_format($rowDetail['finalPrice'],2);?></td>
+	<td><?=number_format($rowDetail['tax'],2); ?> %</td>
+	<td><?=$rowDetail['qty']; ?></td>
+</tr>
+<? $i++; endforeach; ?>
+</tbody>
+</table>
+
+</fieldset>
+<fieldset>
+<legend>SEJARAH PESANAN</legend>
+<table class="no-style full">
+<thead>
+	<th>No</th>
+	<th>Tanggal</th>
+	<th>Status</th>
+	<th>Catatan</th>
+</thead>
+<tbody>
+<? $i=1; foreach($this->rowsetHistory as $valueHistory): ?>
+<tr>
+	<td><?=$i;?></td>
+	<td><?=strftime("%d-%m-%Y",strtotime($valueHistory['dateCreated'])); ?></td>
+	<td>
+	<?
+	$modelOrderStatus = new App_Model_Db_Table_OrderStatus();
+	$rowOrderStatus = $modelOrderStatus->find($valueHistory['orderStatusId'])->current();
+	echo $rowOrderStatus->ordersStatus;
+	?>
+	</td>
+	<td><?=$valueHistory['note'];?></td>
+</tr>
+<? $i++; endforeach; ?>
+</tbody>
+</table>
+</fieldset>
+<fieldset>
+<legend>SEJARAH PESANAN dengan NSIAPAY</legend>
+<table class="no-style full">
+<thead>
+	<th>No</th>
+	<th>Tanggal Mulai Pembayaran</th>
+	<th>s/d</th>
+	<th>Status</th>
+</thead>
+<tbody>
+<? $i=1; foreach($this->rowsetNsiapay as $valueNsiapay): ?>
+<tr>
+	<td><?=$i;?></td>
+	<td><?=strftime("%d-%m-%Y",strtotime($valueNsiapay['starttime'])); ?></td>
+	<td><?=(!($valueNsiapay['finishtime'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($valueNsiapay['finishtime'])):'undefined'; ?></td>
+	<td><?=$valueNsiapay['status'];?></td>
+</tr>
+<? $i++; endforeach; ?>
+</tbody>
+</table>
+</fieldset>

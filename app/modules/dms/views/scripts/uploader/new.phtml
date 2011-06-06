@@ -1,0 +1,133 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
+            <fieldset>
+                <legend>Location:</legend>
+                <?=$this->widget2->render();?>
+            </fieldset>
+            <fieldset>
+                <legend>From Catalog:</legend>
+                <h4><?=$this->catalogTitle;?></h4>
+                <h6><?=$this->catalogSubTitle;?></h6>
+            </fieldset>
+            <div id="uploaderSpinner" style="color:red; display:none;"><img src="<?=$this->cdn('images');?>/index.gif" border="0"> Sending Request</div>
+            <form id="FileUploadForm" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Upload Management</legend>
+                </fieldset>
+                <p>
+                    <label for='uploadedFile1'>Upload File</label><br>
+                    <input type='file' name='uploadedFile1' id='uploadedFile1' size='50' />
+                </p>
+                <p class='row1'>
+                    <label for='fixedTitle1'>Title</label><br>
+                    <textarea name="fixedTitle1" id="fixedTitle1" cols="50" rows="1" class="medium"></textarea>
+                </p>
+                <p>
+                    <label for='fixedType1'>Type</label><br>
+                    <select name='fixedType1'>
+                        <option value='file' selected>File</option>
+                        <option value='image'>Image</option>
+                        <option value='video'>Video</option>
+                    </select>
+                </p>
+                <input type='hidden' name='profileGuid' id='profileGuid' value='kutu_doc'>
+                <input type='hidden' name='relatedGuid' id='relatedGuid' value='<?=$this->relatedGuid; ?>'>
+
+                <input type="hidden" name="id" id="id" value="2">
+
+                <div id="nameFields"></div><br>
+
+                <p><a href="javascript:;" onClick="addFormField(); return false;">Tambah upload</a></p>
+                <p style="z-index:1;overflow:hidden;">
+                    <input value="Save" type="submit" class="form-button" />
+                    <input type="button" name="cancel" id="cancel" value="Cancel" onclick="javascript:history.back();" class="form-button" />
+                </p>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+<script type="text/javascript">
+
+    var options = {
+        type:'post',
+        url: '<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/fileuploader/save',
+        beforeSubmit: prepareData,
+        success: showResponse
+    };
+    $('#FileUploadForm').ajaxForm(options);
+    function prepareData()
+    {
+        $('#uploaderSpinner').show();
+    }
+    function showResponse(responseText, statusText)
+    {
+        alert('status: ' + statusText + '\n\nresponseText: \n' + responseText +
+            '\n\nThe output div should have already been updated with the responseText.');
+
+        $('#uploaderSpinner').hide();
+    }
+
+    function addFormField() {
+            var id = document.getElementById("id").value;
+            $("#nameFields").append("<table id='row" + id + "'>"+
+            "<tbody>"+
+            "<tr>"+
+                    "<td colspan='2'><hr></td>"+
+            "</tr>"+
+            "<tr>"+
+                    "<td width='20%'><label for='uploadedFile" + id + "'>Upload File</label></td>"+
+                    "<td><input type='file' name='uploadedFile" + id + "' id='uploadedFile" + id + "' size='50'/></td>"+
+            "</tr>"+
+            "<tr class='row" + id + "'></tr>"+
+            "<tr>"+
+                    "<td width='20%'><label for='fixedTitle" + id + "'>Title</label></td>"+
+                    "<td><textarea name='fixedTitle" + id + "' id='fixedTitle" + id + "' cols='50' rows='1'/></textarea></td>"+
+            "</tr>"+
+            "<tr>"+
+                    "<td width='20%'><label for='fixedType" + id + "'>Type</label></td>"+
+                    "<td>"+
+                    "<select name='fixedType" + id + "'><option value='file' selected>File</option><option value='image'>Image</option><option value='video'>Video</option></select>"+
+                    "</td>"+
+            "</tr>"+
+            "<tr>"+
+                    "<td><a href='#' onClick='removeFormField(\"#row" + id + "\"); return false;'>Remove</a></td>"+
+            "</tr>"+
+            "<tr class='error" + id + "'></tr><br/>"+
+            "</tbody>"+
+            "</table>");
+
+            id = (id - 1) + 2;
+            document.getElementById("id").value = id;
+    }
+
+    function removeFormField(id) {
+        $(id).remove();
+    }
+
+
+
+</script>

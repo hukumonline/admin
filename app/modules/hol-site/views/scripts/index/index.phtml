@@ -1,0 +1,35 @@
+<div class="unit horizontal-center layout on-2 columns">
+    <div class="fixed column" style="width:305px;text-align: center;">
+    <form>
+        <input size="25" class="inputText" name="keyword" id="keyword" onblur="blur_text('masukkan kata kunci','keyword');" onfocus="focus_text('masukkan kata kunci','keyword');" value="masukkan kata kunci" type="text">
+        <select name="search">
+            <option>--- Pilih ---</option>
+            <option value="artikel">Artikel</option>
+            <option value="klinik">Klinik</option>
+            <option value="peraturan">Peraturan</option>
+        </select>
+        <input name="submit" value="Cari" class="searchbutton" type="submit">
+    </form>
+    </div>
+    <div class="fixed column columns on-2" style="width:690px;">
+        <div class="container">
+            <div class="fixed column" style="width:650px;">
+                <?=$this->action('aktual','widgets_content','hol-site');?>
+            </div>
+            <div class="fixed column">
+                <a href="<?=$this->baseUrl(); ?>/warta/aktual">index</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="unit horizontal-center layout on-3 columns" style="padding-top:5px;">
+    <div class="fixed column" style="width: 260px;">
+        <?=$this->action('pusatdata','widgets_content','hol-site');?>
+    </div>
+    <div class="fixed column" style="width: 215px;padding-left: 5px;">
+        <?=$this->action('klinik','widgets_content','hol-site');?>
+    </div>
+    <div class="fixed column" style="width: 495px;padding-left: 5px;">
+        <?=$this->action('utama','widgets_content','hol-site');?>
+    </div>
+</div>

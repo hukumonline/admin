@@ -1,0 +1,74 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h5>Hukumonline Comment</h5>
+            <div class="box box-success" id="message"></div>
+            <table class="display stylized" id="holcomment">
+                <thead>
+                    <th>No</th>
+                    <th>Comment</th>
+                    <th>Created on</th>
+                    <th>Status</th>
+                </thead>
+                <tbody>
+
+                    <? $i=$this->offset+1; foreach ($this->commentList as $comment) { ?>
+                    <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$comment->id;?>">
+                        <td><?=$i;?></td>
+                        <td>
+                            <a href="http://www.hukumonline.com/berita/baca/<?=$comment->object_id;?>/<?=$this->getCatalogShortTitle($comment->object_id);?>#comments" title="<?=$comment->email;?>" target="_blank"><?=$comment->title;?></a>
+                            <br><small>id:<?=$comment->id;?> - by: <?=$comment->name;?></small>
+                            <br><?=$comment->comment;?>
+                            <br><a href="<?=$comment->id;?>" class="delete">delete</a>
+                        </td>
+                        <td><?=Pandamp_Lib_Formater::get_date($comment->date);?>
+                        <br><small>ip:<?=$comment->ip;?></small>
+                        </td>
+                        <td nowrap>
+                        <? if ($comment->published == 99) { ?>
+                            
+                            <a href="<?=$comment->id;?>/st/0" class="status">Active</a>
+                            
+                        <? } else { ?>
+                            
+                            <a href="<?=$comment->id;?>/st/1" class="status">Not Active</a>
+                        
+                        <? } ?>
+                        </td>
+                    </tr>
+                    <? $i++; } ?>
+
+                </tbody>
+            </table>
+            <table width='100%'>
+            <tr>
+                <td align=right><div id='commentPagination' class="pagination"></div></td>
+            </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div><br>
+</aside>
+<!-- End of Right column/section -->
+

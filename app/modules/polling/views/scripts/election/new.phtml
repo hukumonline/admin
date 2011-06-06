@@ -1,0 +1,73 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h5>Hukumonline Polling</h5>
+            
+            <? if (isset($this->message)): ?>
+            <div class="box box-info">
+                <?= $this->message; ?>
+            </div>
+            <? endif; ?>
+
+            <form id="insert-polling" method="post" action="">
+                <fieldset>
+                    <legend>Add New</legend>
+                    <p>
+                        <label for="title">Title:</label><br/>
+                        <input type="text" name="title" size="55">
+                    </p>
+                    <p>
+                        <label for="options">Options:</label><br/>
+                    </p>
+                    <p><a href="#" onClick="addFormField(); return false;">Add</a></p>
+                    <div id="divTxt"></div><br>
+                    <p style="z-index:1;overflow:hidden;">
+                        <input type="hidden" name="id" id="id" value="1">
+                        <input type="submit" value="Save" class="btn">&nbsp;<input type="button" name="cancel" id="cancel" value="Cancel" class="btn">
+                    </p>
+                </fieldset>
+            </form>
+            
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div><br>
+    <div id="showDiv1" style="width:100%;text-align:center;">
+    <?=$this->action('browse','manager','agenda');?>
+    </div>
+    <?=$this->action('view','manager','polling');?>
+</aside>
+<!-- End of Right column/section -->
+
+<script>
+function addFormField() {
+    var id = document.getElementById("id").value;
+    $("#divTxt").append("<label id='row" + id + "' for='txt" + id + "'>Field " + id + " <input type='text' size='60' name='polloption" + id + "' id='polloption" + id + "'> <a href='#' onClick='removeFormField(\"#row" + id + "\"); return false;'>Remove</a><br>");
+    id = (id - 1) + 2;
+    document.getElementById("id").value = id;
+}
+function removeFormField(id) {
+    $(id).remove();
+}
+
+</script>

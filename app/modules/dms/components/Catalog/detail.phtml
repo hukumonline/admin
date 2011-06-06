@@ -1,0 +1,37 @@
+<table width="100%">
+    <tr>
+        <td class="ta-left">
+            <table>
+                <? foreach ($this->aAttribute as $row) { ?>
+                <? if ((!in_array($row['value'],array('no-info','-','in',''))) && (!in_array($row['name'],array('Billing')))) { ?>
+                <tr valign="top">
+
+                    <?
+                    if ($this->rowCatalog->profileGuid == "kutu_putusan") {
+                    if (($row['name'] == "Title") || ($row['name'] == "Sub Title")) {
+                    ?>
+                        <td width="200">&nbsp;</td>
+                    <? } else { ?>
+                        <td width="200"><h6><?=$row['name'];?></h6></td>
+                    <? 
+                    }
+                    }
+                    else { ?>
+                        <td width="200"><h6><?=$row['name'];?></h6></td>
+                    <? } ?>
+
+                    <td width="10">&nbsp;</td>
+                    
+                    <? if (in_array($row['name'],array('Date','Tanggal Dibacakan','Tanggal berlaku'))) { ?>
+                    <td><?=strftime("%d %B %Y",strtotime($row['value']));?></td>
+                    <? } else if (in_array($row['name'],array('Name','Kategori Klinik','Mitra'))) { ?>
+                    <td><?=$this->getCatalogTitle($row['value'],'fixedTitle');?></td>
+                    <? } else { ?>
+                    <td><?=$row['value'];?></td>
+                    <? } ?>
+                </tr>
+                <? }} ?>
+            </table>
+        </td>
+    </tr>
+</table>

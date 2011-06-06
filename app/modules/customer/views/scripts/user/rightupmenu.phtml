@@ -1,0 +1,21 @@
+<header>
+    <h3>User Account</h3>
+</header>
+<dl class="first">
+    <dt><img alt="" src="<?=$this->cdn('images');?>/key.png" height="16" width="16"></dt>
+    <dd><a href="#"><?=$this->user['username'];?> (<?=$this->userGroup($this->user['packageId']);?>)</a></dd>
+    <dd class="last">
+        <ol>
+            <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/user/changepassword/id/<?=$this->user['kopel'];?>">Change Password</a></li>
+            <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/user/uploadphoto/id/<?=$this->user['kopel'];?>">Upload Photo</a></li>
+        </ol>
+    </dd>
+
+    <dt><img alt="" src="<?=$this->cdn('images');?>/user_go.png" height="16" width="16"></dt>
+    <dd>Last Login</dd>
+    <dd class="last"><?=$this->lastLogin($this->user['kopel']);?></dd>
+
+    <dt><img alt="" src="<?=$this->cdn('images');?>/help.png" height="16" width="16"></dt>
+    <dd><a href="#">Support</a></dd>
+    <dd class="last">Documentation and FAQ</dd>
+</dl>

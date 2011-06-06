@@ -1,0 +1,40 @@
+<? if (count($this->aData) > 0) : ?>
+<div class="content-box">
+    <header style="cursor: s-resize;">
+        <h3><img src="<?=$this->cdn('images');?>/information.png" alt="" />Berdasarkan Kategori</h3>
+    </header>
+    <section>
+        <form id="frmFcProfile" name="frmFcProfile" method="get" action="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/dms/browse">
+        <table class="no-style full">
+            <tbody>
+                <? for($i=0; $i<count($this->aData);$i++) : ?>
+                <tr>
+                    <td><a href="<?=$this->aData[$i][3];?>" id="fcProfile"><abbr><?=$this->aData[$i][0];?></abbr></a></td>
+                    <td class="ta-right"><?=$this->aData[$i][1];?></td>
+                </tr>
+                <? endfor; ?>
+            </tbody>
+        </table>
+        <input type="hidden" id="qProfile" name="q" />
+        <input type="hidden" id="sLimit" name="sLimit" value="25">
+        <input type="hidden" id="sOffset" name="sOffset" value="0">
+        </form>
+    </section>
+</div>
+<script>
+$(document).ready(function(){
+    $('#fcProfile').live('click', function(){
+        var iIdp = $(this).attr('href');
+        var qIP = '<?=$this->query.' profile:';?>' + iIdp;
+        $("#qProfile").val(qIP);
+        $("#frmFcProfile").submit();
+
+        return false;
+    });
+
+
+});
+</script>
+
+
+<? endif; ?>

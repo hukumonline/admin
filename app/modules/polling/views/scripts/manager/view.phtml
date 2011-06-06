@@ -1,0 +1,28 @@
+<div class="align-left">
+    <div style="font:bold 16px Georgia,Times New Roman,Times,serif;">Polling</div>
+</div>
+<div class="align-right">
+    &raquo;&nbsp;<a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/polling/election/browse/id/<?=$this->rowPoll['guid']; ?>">index</a>
+</div>
+<div class="clear">&nbsp;</div>
+<hr>
+<table class="no-style full" id="poll-container">
+    <tbody>
+        <tr>
+            <td><?=$this->rowPoll['title']; ?></td>
+        </tr>
+        <? foreach ($this->rowOpt as $row) { ?>
+        <tr>
+            <td>
+                &raquo;&nbsp;<?=$row['text']; ?>
+            </td>
+        </tr>
+        <? } ?>
+        <tr>
+            <td>
+                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/polling/election/whos/id/<?=$this->rowPoll['guid']; ?>" style="font-size:12px;" class="bb">Hasil Polling</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="clear">&nbsp;</div>

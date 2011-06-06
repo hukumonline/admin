@@ -1,0 +1,76 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h5>Hukumonline Events</h5>
+            <form id="frmEvent" method="post" action="">
+                <fieldset>
+                    <legend>Add New Event:</legend>
+                    <p>
+                        <label for="date">Date:</label><br>
+                        <input type="date" id="datepick" class="" value="" name="dateOfEvent"/>
+                    </p>
+                    <p>
+                        <label class="required" for="title">Title:</label><br>
+                        <input type="text" id="title" name="title" class="half" />
+                    </p>
+                    <p>
+                        <label for="wysiwyg">HTML editor:</label><br/>
+                        <textarea id="wysiwyg" class="full wysiwyg" name="text" rows="5" cols="47"></textarea>
+                    </p>
+                    <p>
+                        <label class="required" for="start">Start:</label><br/>
+                        <input type="text" style="width: 70px;" id="timepicker_1" name="starttime" value="" />
+                    </p>
+                    <p>
+                        <label class="required" for="end">End:</label><br/>
+                        <input type="text" style="width: 70px;" id="timepicker_2" name="endtime" value="" />
+                    </p>
+                    <p>
+                        <input type="submit" value="Continue" class="btn btn-blue big" />
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div><br>
+    <div id="showDiv1" style="width:100%;text-align:center;">
+    <?=$this->action('browse','manager','agenda');?>
+    <?//=$this->ajaxActionRenderer(ROOT_URL.'/'.$this->getLanguage().'/agenda/manager/browse');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+<script>
+$(document).ready(function(){
+    $("#frmEvent").validate({
+        rules: {
+            title: "required"
+            ,timepicker_alt: "required"
+            ,timepicker_alt_end: "required"
+        }
+    });
+
+
+});
+</script>
+

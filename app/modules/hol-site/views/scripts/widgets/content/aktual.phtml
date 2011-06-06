@@ -1,0 +1,19 @@
+<ul id="news">
+<?php
+
+foreach($this->rowset as $row)
+{
+?>
+	<li><a href="<?=$this->baseUrl(); ?>/berita/baca/<?=$row['guid']; ?>/<?=$row['shortTitle']; ?>" class='aktual'><?=$this->getCatalogAttribute($row['guid'],'fixedTitle') . ' ['.date("d/m",strtotime($row['createdDate'])) . ']';  ?></a></li>
+<?php
+}
+?>
+</ul>
+<script language="JavaScript">
+$(document).ready(
+	function()
+	{
+		$("#news").newsTicker();
+	}
+);
+</script>

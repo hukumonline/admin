@@ -1,0 +1,64 @@
+<div class="width7">
+    <div class="wrapper">
+
+        <form id="frmSearch" name="frmSearch" method="post">
+            <fieldset>
+                <legend>PAYMENT CONFIRMATION</legend>
+            <p>
+                <label>Status : </label><input id="sStatus" name="sStatus" size=10 value="<?=$this->sStatus;?>">
+                <label>Username : </label<input id="sUsername" name="sUsername" size=10 value="<?=$this->sUsername;?>">
+                <label>Date min : </label><input type="date" id="fdate" name="fdate" value="<?=$this->fdate;?>"/>
+                <label>Date max : </label><input type="date" id="ldate" name="ldate" value="<?=$this->ldate;?>"/>
+                <input type="hidden" id="limit" name="limit" value="10">
+                <input type="hidden" id="offset" name="offset" value="<?=$this->offset;?>">
+                <input class="btn btn-green big" value="Search" type="submit">
+            </p>
+            </fieldset>
+        </form>
+
+        <table class="display stylized" id="confirm">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>User</th>
+                    <th>Order</th>
+                    <th>Sender Detail</th>
+                    <th>Destination</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <? $i=$this->offset+1; foreach($this->rowset as $row): ?>
+                <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
+                    <td><?=$i?></td>
+                    <td>
+                        <?=$row['username'];?><br/>
+                        <?=$row['fullName'];?>&nbsp;<br/>
+                    </td>
+                    <td>
+                        Invoice : <?=$row['invoiceNumber'];?><br/>
+                        Total Order : <?=$row['orderTotal'];?> IDR<br/>
+                        method : <?=$row['paymentMethod'];?><br/>
+                    </td>
+                    <td>
+                        Acc. : <?=$row['senderAccount'];?><br/>
+                        Name : <?=$row['senderAccountName'];?><br/>
+                        Bank : <?=$row['bankName'];?><br/>
+                        Note : <?=$row['note'];?><br/>
+                    </td>
+                    <td>
+                        Acc. : <?=$row['destinationAccount'];?><br/>
+                        Transfer Amount : <?=$row['amount'];?><br/>
+                        Payment Date : <?=Pandamp_Lib_Formater::get_date($row['paymentDate']);?><br/>
+                    </td>
+                    <td><a href="<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'payconfirm', 'id'=>$row['orderId']),'segwact');?>">confirm</a></td>
+                </tr>
+                <? $i++; endforeach;?>
+            </tbody>
+        </table>
+
+
+        <div class="clear">&nbsp;</div>
+
+    </div>
+</div>

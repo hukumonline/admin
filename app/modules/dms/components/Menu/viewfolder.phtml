@@ -1,0 +1,33 @@
+<?php $tblCatalog = new App_Model_Db_Table_Folder(); ?>
+<form id="frmFolders" name="frmFolders" method="post">
+<h3><input type='checkbox' name='folderGuid' id='folderGuid' value='<?=$this->node;?>'>&nbsp;<?=$this->currentNodeTitle;?></h3>
+<hr>
+<?php if($this->numberOfFolders == 0){?>
+	No Sub-Folder(s)
+<?php }?>
+    <table width="100%"  border="0" cellspacing="6" cellpadding="6" bgcolor="">
+        <?php
+        for($i = 0; $i < $this->rows; $i++)
+                    {
+        ?>
+              <tr valign="top">
+              <?php
+              for($j = 0; $j < $this->columns; $j++) {
+                    if(isset($this->data[$i + ($j * $this->rows)][2]))
+                    {
+              ?>
+                        <td width="30" valign="top"><input type='checkbox' name='folderGuid' id='folderGuid' value='<?=$this->data[$i + ($j * $this->rows)][2];?>'></td>
+                        <td width="250" valign="top">
+                            <a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/explorer/browse/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?><span style="font-size:12px;"><patTemplate:var name="CATEGORYTITLE" default=""/></span></a>
+                            <br>
+                            <patTemplate:var name="DESCRIPTION" default=""/>
+                        </td>
+                        <td width="10">&nbsp;</td>
+                        <td width="">&nbsp;</td>
+                    <?php }} ?>
+              </tr>
+            <?php } ?>
+    </table>
+</form>
+<div class="borderBottom">&nbsp;</div>
+<div style="padding-top:1px"></div>

@@ -1,0 +1,52 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <h3>User Management: Group Associate</h3>
+            <? if (isset($this->message)): ?>
+            <div class="box box-info closeable">
+                <?= $this->message; ?><br/>
+            </div>
+            <? endif; ?>
+
+            <form id="associate" method="post" action="">
+                <fieldset>
+                    <legend>Upgrade - Downgrade Package</legend>
+                    <p>
+                        <label class="required" for="aro_groups">Package:</label><br>
+                        <select name="aro_groups" size="8"><?=$this->groupTree(array($this->user['packageId']));?></select>
+                    </p>
+                    <p>
+                        <input type="hidden" name="id" id="id" value="<?=$this->user['kopel'];?>">
+                        <input type="hidden" name="username" id="username" value="<?=$this->user['username'];?>">
+                        <input value="Change Package" type="submit" class="btn btn-blue" />
+                    </p>
+                </fieldset>
+                <div class="clear">&nbsp;</div>
+            </form>
+        </div>
+    </div>
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?//=$this->action('approval','user','customer');?>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+</aside>
+<!-- End of Right column/section -->

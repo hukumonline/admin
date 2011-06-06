@@ -1,0 +1,93 @@
+<link rel="stylesheet" type="text/css" href="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.css" />
+<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/_lib/css.js"></script>
+<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.js"></script>
+<script>
+$(document).ready(function() {
+    $("#mtf").tree({
+          data  : {
+            type  : "json",
+            url   : "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/folder/getchildreninjson",
+            async : true,
+            async_data : function (NODE) { return { id : $(NODE).attr("id") || 0, my_param : "my_value" } }
+          },
+            callback    : {
+                    onselect    : function(NODE,TREE_OBJ) {
+                        $("#targetNodeTitle").val(TREE_OBJ.selected.text());
+                        $("#targetNode").val(TREE_OBJ.selected.attr("id"));
+                    }
+            },
+            cookies : { prefix : "treeCategories", opts : { path : '/' }}
+        });
+
+
+    var message = "<?=$this->message;?>";
+    if(message!="")
+    {
+        alert (message);
+    }
+
+});
+
+</script>
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
+        </div>
+    </div>
+    <div class="colgroup leading">
+        <div class="column width3 first">
+            <h4>Choose Folders</h4>
+            <div id="mtf" class="demo"></div>
+        </div>
+        <div class="column width3">
+            <fieldset>
+                <legend>You will MOVE the following CATALOG:</legend>
+                <strong><?=$this->catalogTitle;?></strong>
+            </fieldset>
+            <form id="frmMoveToFolder" method="post">
+		<fieldset>
+                    <legend>Selected Target Folder</legend>
+                    <p>
+                        <label for="targetNode">Target Folder</label>
+                        <input type="text" id="targetNodeTitle" name="targetNodeTitle" value="">
+                        <input type="hidden" id="targetNode" name="targetNode" value="">
+                        <input type="hidden" id="sourceNode" name="sourceNode" value="<?=$this->sourceNode;?>">
+                        <input type="hidden" id="guid" name="guid" value="<?=$this->guid;?>">
+                    </p>
+                    <p>
+                        <label for="Save">&nbsp;</label>
+                        <input type="submit" value="Save" class="btn btn-blue big" />
+                    </p>
+		</fieldset>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <div class="content-box">
+        <?=$this->action('rightdown','misc','dms');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+

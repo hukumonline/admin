@@ -1,0 +1,19 @@
+<? if (count($this->aData) > 0) { ?>
+<fieldset>
+    <legend>HISTORY</legend>
+    <ul id="ppline">
+        <? foreach ($this->aData as $data) { ?>
+        <li>
+            <? if($data['node']==$this->catalogGuid) { ?>
+            <img src="<?=$this->cdn('images'); ?>/page_right.gif">
+            <? } ?>
+            <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search/catalog/detail/guid/<?=$data['node'];?>/node/<?=$this->folderGuid; ?>"><?=$data['title']; ?></a><br>
+            <?=$data['subTitle']; ?>
+            <? if ($data['description']) { ?>
+            <br><strong>Notes: </strong><?=$data['description']; ?>
+            <? } ?>
+        </li>
+        <? } ?>
+    </ul>
+</fieldset>
+<? } ?>

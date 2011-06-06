@@ -1,0 +1,24 @@
+<fieldset>
+<legend>PENGATURAN TOKO</legend>
+<table class="no-style full">
+<thead>
+	<th>No</th>
+	<th>ID</th>
+	<th>Value</th>
+	<th>Note</th>
+	<th>Aksi</th>
+</thead>
+<tbody>
+<? $i=1; foreach($this->rows as $row): ?>
+<tr>
+	<td><?=$i;?></td>
+	<td><?=$row->settingKey;?></td>
+	<td><?=$row->settingValue;?></td>
+	<td><?=htmlentities($row->note);?></td>
+	<td><a href="<? echo $this->url(array('controller'=>'store', 
+	'action'=>'editPaymentSetting', 'id'=>$row->settingId));?>">edit</a></td>
+</tr>
+<? $i++; endforeach;?>
+</tbody>
+</table>
+</fieldset>

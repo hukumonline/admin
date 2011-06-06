@@ -1,0 +1,106 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <h3>User Management: Upload Photo</h3>
+            <? if (isset($this->message)): ?>
+            <div class="box box-info closeable">
+                <?= $this->message; ?><br/>
+            </div>
+            <? endif; ?>
+
+            <form enctype="multipart/form-data" id="uploadphoto" method="post" action="">
+                <fieldset>
+                    <legend>Upload your photo</legend>
+                    <?
+                    $arraypictureformat = array("jpg", "jpeg", "gif");
+                    $txt_allowedformat = implode('; ', $arraypictureformat);
+                    
+				    $registry = Zend_Registry::getInstance();
+				    $config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+				    $cdn = $config->getOption('cdn');
+				    
+				    $sDir = $cdn['static']['dir']['photo'];
+                    //$sDir = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'photo';
+                    //$sDir2 = ROOT_URL.'/uploads/photo/';
+                    $sDir2 = $cdn['static']['url']['photo'].'/';
+                    $x = 0;
+                    foreach ($arraypictureformat as $key => $val) {
+                        if (is_file($sDir."/".$this->user['kopel'].".".$val)) {
+                            $myphoto = $sDir."/".$this->user['kopel'].".".$val;
+                            $myext = $val;
+                            $x = 1;
+                            break;
+                        }
+                    }
+                    if ($x == 1) {
+                            $myphotosize = getimagesize($myphoto);
+                            $dis = "";
+                            if (isset($myext) && is_file($sDir."/".$this->user['kopel'].".".$myext))
+                                    $txt_existence = "<img src=\"".$sDir2.$this->user['kopel'].".".$myext."\" width=".$myphotosize[0]." height=".$myphotosize[1]." />";
+
+                            //$txt_existence = "<img src=\"".ROOT_URL."/resources/img/gif/view.gif\" border=\"0\" onclick=\"javascript: window.open('".ROOT_URL."/admin/user/frame/pic/".$this->row->guid."/ext/".$myext."', 'PhotoFrame', 'width=".$myphotosize[0].", height=".$myphotosize[1].", toolbar=no, resizable=no, scrollbars=no, status=no, menubar=no, location=no, directories=no'); self.blur();\" />";
+                    }
+                    else
+                    {
+                            $dis = " disabled";
+                            $txt_existence = "<img src=\"".$this->cdn('images')."/gravatar-140.png\" border=\"0\" />";
+                    }
+                    ?>
+
+                    <p>
+                        <label for="opasswd"><?=$txt_existence; ?></label><br>
+                        <input type="checkbox" name="txt_erase"<?=$dis; ?> />&nbsp;Hapus<br>
+                        <input type="file" name="file_picture" size="25" />&nbsp;(opsional)
+                    </p>
+                    <p>
+                        <label for="size">Ukuran gambar lebar max. 200px dan tinggi max. 250px</label>
+                    </p>
+                    <p>
+                        <label for="format">Format foto yang diperkenankan: <?=$txt_allowedformat; ?></label><br>
+                    </p>
+                    <p>
+                        <input type="hidden" name="id" id="id" value="<?=$this->user['kopel'];?>">
+                        <input value="Upload" type="submit" class="btn btn-blue" />
+                    </p>
+                </fieldset>
+                <div class="clear">&nbsp;</div>
+            </form>
+        </div>
+    </div>
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?//=$this->action('approval','user','customer');?>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+    </div>
+    <div class="content-box">
+        <header style="cursor: s-resize;">
+                <h3>Others</h3>
+        </header>
+        <section>
+                <dl>
+                    <dt>Hmm..where's the log?</dt>
+                    <dd><a href="#"><abbr>Access Log</abbr></a></dd>
+                    <dt>Change group: Upgrade or Downgrade</dt>
+                    <dd><a href="#"><abbr>ASSOCIATE</abbr></a></dd>
+                    <dt>User Invoice, Renew or Create One</dt>
+                    <dd><a href="#"><abbr>Invoice</abbr></a></dd>
+                </dl>
+        </section>
+    </div>
+</aside>
+<!-- End of Right column/section -->

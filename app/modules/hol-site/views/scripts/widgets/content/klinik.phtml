@@ -1,0 +1,20 @@
+<div class="td_peraturan">
+    <div class="td_peraturan2">
+        <div style="float:left;">
+            <h1>Klinik Hukum</h1>
+        </div>
+        <div style="float:right;">
+                <a href="http://www.facebook.com/profile.php?id=100000049397040&ref=mf" target="_blank" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Facebook','','resources/ico/ico_fb.gif',1)"><img src="resources/ico/ico_fb.gif" style="margin-top:3px;" alt="Facebook" name="Facebook" width="20" height="20" border="0" id="Facebook" /></a>
+                <a href="http://www.twitter.com/klinikhukum" target="_blank" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Tiwtter','','resources/ico/ico_tw.gif',1)"><img src="resources/ico/ico_tw.gif" style="margin-top:3px;" alt="Twitter" name="Twitter" width="20" height="20" border="0" id="Twitter" /></a>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="klinikisi">
+    <?php for($i=0; $i<$this->numberOfRows;$i++) { ?>
+            <h2><a href="<?=$this->baseUrl(); ?>/klinik/detail/<?=$this->data[$i][3];?>" class="klinik"><?=$this->data[$i][0];?></a></h2>
+            <div class="author">[<?=$this->data[$i][4]; ?>]</div>
+            <p><?=Pandamp_Lib_Formater::string_limit_words($this->data[$i][1],20);?></p>
+    <?php } ?>
+    <p>[<a href="<?=$this->baseUrl(); ?>/klinik/terbaru" class="klinik_terbaru">index</a>]</p>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div id="topnav">
+    <?
+    $arraypictureformat = array("jpg", "jpeg", "gif");
+    $txt_allowedformat = implode('; ', $arraypictureformat);
+    $registry = Zend_Registry::getInstance();
+    $config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+    $cdn = $config->getOption('cdn');
+    
+    $sDir = $cdn['static']['dir']['photo'];
+    //$sDir = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'photo';
+    //$sDir2 = ROOT_URL.'/uploads/photo/';
+    $sDir2 = $cdn['static']['url']['photo'].'/';
+    $x = 0;
+    foreach ($arraypictureformat as $key => $val) {
+        if (is_file($sDir."/".$this->user->kopel.".".$val)) {
+            $myphoto = $sDir."/".$this->user->kopel.".".$val;
+            $myext = $val;
+            $x = 1;
+            break;
+        }
+    }
+    if ($x == 1) {
+        $myphotosize = getimagesize($myphoto);
+        $dis = "";
+        if (isset($myext) && is_file($sDir."/".$this->user->kopel.".".$myext))
+            $txt_existence = "<img src=\"".$sDir2.$this->user->kopel.".".$myext."\" class=\"avatar\" width=\"32\" height=\"32\" />";
+
+    }
+    else
+    {
+        $txt_existence = "<img src=\"".$this->cdn('images')."/user_32.png\" class=\"avatar\" border=\"0\" />";
+    }
+    ?>
+    <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/user/edit/id/<?=$this->user->kopel;?>"><?=$txt_existence; ?></a>
+    Logged in as <b><?=$this->userGroup($this->user->packageId);?></b>
+    <span>|</span> <a href="#">Settings</a>
+    <span>|</span> <a href="#" onclick="window.location='<?=$this->logout;?>';return false;">Logout</a><br>
+    <small>You have <a href="#" class="high"><b>1</b> new message!</a></small>
+</div>

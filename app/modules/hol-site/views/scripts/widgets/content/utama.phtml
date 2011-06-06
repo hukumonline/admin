@@ -1,0 +1,25 @@
+<div id="featured" >
+<ul class="ui-tabs-nav">
+    <li class="ui-tabs-nav-item ui-tabs-selected" id="nav-fragment-1"><a href="#fragment-1"><img src="resources/images/slider/image1-small.jpg" alt="" /></a></li>
+    <li class="ui-tabs-nav-item" id="nav-fragment-2"><a href="#fragment-2"><img src="resources/images/slider/image2-small.jpg" alt="" /></a></li>
+    <li class="ui-tabs-nav-item" id="nav-fragment-3"><a href="#fragment-3"><img src="resources/images/slider/image3-small.jpg" alt="" /></a></li>
+    <li class="ui-tabs-nav-item" id="nav-fragment-4"><a href="#fragment-4"><img src="resources/images/slider/image4-small.jpg" alt="" /></a></li>
+</ul>
+
+    <?php
+    $j=1;
+    for($i=0; $i<$this->numberOfRows;$i++) {
+        $guid = $this->data[$i][2];
+    ?>
+    <div id="fragment-<?=$j;?>" class="ui-tabs-panel ui-tabs-hide">
+        <img src="resources/images/slider/image1.jpg" alt="" />
+        <div class="info" >
+            <h2><a href="<?=$this->baseUrl(); ?>/berita/baca/<?=$guid; ?>/<?=$this->data[$i][3];?>"><?=$this->data[$i][0];?></a></h2>
+            <p><?=Pandamp_Lib_Formater::string_limit_words($this->data[$i][5],10);?></p>
+        </div>
+    </div>
+    <?php
+    $j++;
+    } ?>
+
+</div>

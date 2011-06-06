@@ -1,0 +1,47 @@
+<!-- Header -->
+<header id="top">
+    <div class="wrapper">
+        <!-- Title/Logo - can use text instead of image -->
+        <div id="title"><img src="<?=$this->cdn('images');?>/logo.png" alt="hukumonline" /><!--<span>CMS Hukumonline</span>--></div>
+        <!-- Top navigation -->
+        <?=$this->action('topnav','index','admin');?>
+        <!-- End of Top navigation -->
+        <!-- Main navigation -->
+        <nav id="menu">
+            <ul class="sf-menu sf-js-enabled sf-shadow">
+                <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
+                <li class="current"><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
+                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
+                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/customer/user/list">User</a></li>
+                <? if ($this->isAllowed('membership','all')) : ?>
+                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
+                <? endif; ?>
+                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search">Search</a></li>
+            </ul>
+        </nav>
+        <!-- End of Main navigation -->
+        <!-- Aside links -->
+        <aside>
+            <? if ($this->getLanguage() == "id") { ?>
+            <a href="<?=ROOT_URL;?>/en">English</a> &middot; <b>Indonesia</b>
+            <? } else { ?>
+            <b>English</b> &middot; <a href="<?=ROOT_URL;?>/id">Indonesia</a>
+            <? } ?>
+        </aside>
+        <!-- End of Aside links -->
+    </div>
+</header>
+<!-- End of Header -->
+<!-- Page title -->
+<div id="pagetitle">
+    <div class="wrapper">
+        <h1><?=$this->layout()->headerTitle;?></h1>
+        <!-- Quick search box -->
+        <form id="frmSearch" method="get" action="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/dms/browse">
+            <input class="" id="q" name="q" type="text" value="<?=$this->layout()->searchQuery;?>">
+            <input type="hidden" id="sLimit" name="sLimit" value="25">
+            <input type="hidden" id="sOffset" name="sOffset" value="<?=$this->sOffset;?>">
+        </form>
+    </div>
+</div>
+<!-- End of Page title -->
