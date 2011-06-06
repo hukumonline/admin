@@ -4,5 +4,12 @@ data/
 js+/
 resources+/
 uploads+/
+library/Apache/
+library/FCKeditor/
+library/Phpids/
+library/Tera-WURFL/
+library/adodb/
+library/ckeditor/
+library/phpgacl/
 .buildpath
 .project
