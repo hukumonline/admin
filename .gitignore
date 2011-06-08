@@ -11,5 +11,6 @@ library/Tera-WURFL/
 library/adodb/
 library/ckeditor/
 library/phpgacl/
+library/Pandamp/Controller/Action/Helper/Cdn.php
 .buildpath
 .project
