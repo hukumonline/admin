@@ -25,7 +25,7 @@ class Pandamp_Controller_Action_Helper_IsAllowed
         else 
         	$content = $itemGuid;
 
-        return $aclMan->isAllowed($username, $itemGuid, $action, $section);
+        return $aclMan->isAllowed($username, $content, $action, $section);
 
     }
 }
