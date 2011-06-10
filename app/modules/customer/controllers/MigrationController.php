@@ -39,11 +39,12 @@ class Customer_MigrationController extends Zend_Controller_Action
 
         echo $title.'<br>';
 
-        $groupId = 20;
+        $groupId = 11;
 
         require_once(CONFIG_PATH.'/master-status.php');
 
         $aroMap = App_Model_Show_Migration_AroGroupMapIn::show()->getObjectsByGroup($groupId);
+        print_r($aroMap);
         foreach ($aroMap as $value)
         {
             $ignoredUser = MasterStatus::ignoreUserMigration();
