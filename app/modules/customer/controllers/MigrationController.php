@@ -35,7 +35,7 @@ class Customer_MigrationController extends Zend_Controller_Action
          * 20 = dc_admin
          */
 
-        $title = "<h4>MIGRATION HUKUMONLINE INDONESIA</h4><hr/>";
+        $title = "<h4>MIGRASI HUKUMONLINE INDONESIA</h4><hr/>";
 
         echo $title.'<br>';
 
@@ -69,13 +69,10 @@ class Customer_MigrationController extends Zend_Controller_Action
 
                 list($ret, $body) = Pandamp_Lib_Remote::serverCmd('migrationUser', $rowUser);
 
-                /*
                 echo '<pre>';
                 print_r($body);
                 echo '</pre>';
                 die;
-                 * 
-                 */
 
                 switch ($ret)
                 {
