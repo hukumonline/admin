@@ -70,11 +70,14 @@ class Customer_MigrationController extends Zend_Controller_Action
                 $rowUser['packageId'] = $groupId;
 
                 list($ret, $body) = Pandamp_Lib_Remote::serverCmd('migrationUser', $rowUser);
-
+				
+                /*
                 echo '<pre>';
                 print_r($body);
                 echo '</pre>';
                 die;
+                *
+                */
 
                 switch ($ret)
                 {

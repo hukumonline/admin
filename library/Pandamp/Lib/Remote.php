@@ -15,7 +15,7 @@ class Pandamp_Lib_Remote
     	$registry = Zend_Registry::getInstance();
     	$config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
         $url = $config->getOption('service');
-echo $url['config']['account']['url'];
+
         $curl = curl_init($url['config']['account']['url'] . '?cmd=' . urlencode($cmd));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         //curl_setopt($curl, CURLOPT_COOKIE, "PHPSESSID=" . $this->getSessionId());
