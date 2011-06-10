@@ -28,6 +28,9 @@ class Dms_Menu_ViewFolder
 
         $columns = 4;
 
+		$acl = Pandamp_Acl::manager();
+		$aReturn = $acl->getUserGroupIds(Zend_Auth::getInstance()->getIdentity()->username);
+		
         $tblFolder = new App_Model_Db_Table_Folder();
         $rowsetFolder = App_Model_Show_Folder::show()->fetchChildren($parentGuid);
 
@@ -44,10 +47,31 @@ class Dms_Menu_ViewFolder
         $data = array();
         foreach ($rowsetFolder as $rowFolder)
         {
-            $data[$in][0] = $rowFolder['title'];
-            $data[$in][1] = $rowFolder['description'];
-            $data[$in][2] = $rowFolder['guid'];
-            $data[$in][3] = '';
+			if (($aReturn[1] == "Master") || ($aReturn[1] == "Super Admin"))
+				$content = 'all-access';
+			else 
+				$content = $rowFolder['type'];
+				
+			if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
+			{				
+				if ($rowFolder['title'] == "Kategori" || $rowFolder['title'] == "Peraturan" || $rowFolder['title'] == "Putusan")
+				{
+					$title = "<font color=red><b>".$rowFolder['title']."</b></font>";
+				}
+				else 
+				{
+					$title = $rowFolder['title'];
+				}
+				
+	            $data[$in][0] = $title;
+	            $data[$in][1] = $rowFolder['description'];
+	            $data[$in][2] = $rowFolder['guid'];
+	            $data[$in][3] = '';
+			}
+			else 
+			{
+				continue;
+			}
             $in++;
         }
 

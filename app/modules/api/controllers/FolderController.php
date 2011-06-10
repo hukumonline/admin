@@ -19,6 +19,9 @@ class Api_FolderController extends Zend_Controller_Action
         // So that the loading indicator is visible
         sleep(1);
 
+		$acl = Pandamp_Acl::manager();
+		$aReturn = $acl->getUserGroupIds(Zend_Auth::getInstance()->getIdentity()->username);
+		
         // The id of the node being opened
         $id = $_REQUEST["id"];
 
@@ -28,11 +31,35 @@ class Api_FolderController extends Zend_Controller_Action
             echo '['."\n";
             for($i=0;$i<count($rowset);$i++)
             {
-                if($i==(count($rowset)-1))
-                        echo "\t".'{ attributes: { id : "'.$rowset[$i]['guid'].'" }, state: "closed", data: "'.$rowset[$i]['title'].'" }'."\n";
-                    else
-                        echo "\t".'{ attributes: { id : "'.$rowset[$i]['guid'].'" }, state: "closed", data: "'.$rowset[$i]['title'].'" },'."\n";
+				if (($aReturn[1] == "Master") || ($aReturn[1] == "Super Admin"))
+					$content = 'all-access';
+				else 
+					$content = $rowFolder['type'];
 
+				if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
+				{																
+					if ($rowset[$i]['title'] == "Kategori" || $rowset[$i]['title'] == "Peraturan" || $rowset[$i]['title'] == "Putusan")
+					{
+						$title = "<font color=red><b>".$rowset[$i]['title']."</b></font>";
+					}
+					else 
+					{
+						$title = $rowset[$i]['title'];
+					}
+					
+	                if($i==(count($rowset)-1))
+	                {
+	                    $tree = "\t".'{ attributes: { id : "'.$rowset[$i]['guid'].'" }, state: "closed", data: "'.$title.'" }'."\n";
+	                } else {
+	                    $tree = "\t".'{ attributes: { id : "'.$rowset[$i]['guid'].'" }, state: "closed", data: "'.$title.'" },'."\n";
+	                }
+	                
+					echo $tree;
+				}
+				else 
+				{
+					continue;
+				}
             }
             echo ']'."\n";
         }
