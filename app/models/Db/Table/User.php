@@ -23,4 +23,16 @@ class App_Model_Db_Table_User extends Zend_Db_Table_Abstract
 
         parent::_setupDatabaseAdapter();
     }
+    public function insert(array $data)
+    {
+    	return parent::insert($data);
+    }
+    public function update(array $data, $where)
+    {
+    	return parent::update($data,$where);
+    }
+    public function delete($where)
+    {
+    	return parent::delete($where);
+    }
 }
