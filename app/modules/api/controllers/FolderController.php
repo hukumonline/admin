@@ -26,7 +26,7 @@ class Api_FolderController extends Zend_Controller_Action
 		print_r($aReturn);
 		echo '</pre>';
 		
-		if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
+		if ($acl->getPermissionsOnContent('', $aReturn[1], 'dms'))
 			echo 'ALLOWED';
 		else 
 			echo 'DENIED';
