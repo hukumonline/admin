@@ -15,6 +15,6 @@ class Pandamp_Controller_Action_Helper_GroupException
             $aReturn[$i] = $rowset[$i]['value'];
         }
         
-        return ($aReturn)? $aReturn : '';
+        return (isset($aReturn))? $aReturn : '';
     }
 }
