@@ -32,11 +32,12 @@ class Customer_UserController extends Zend_Controller_Action
         else
         {
             $this->_user = $auth->getIdentity();
+            
+            $this->_zl = Zend_Registry::get("Zend_Locale");
 
             $this->_acl = Pandamp_Acl::manager();
             if (!$this->_acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $this->_zl = Zend_Registry::get("Zend_Locale");
                 $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
             }
         }
