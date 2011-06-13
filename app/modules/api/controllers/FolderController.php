@@ -34,7 +34,7 @@ class Api_FolderController extends Zend_Controller_Action
 				if (($aReturn[1] == "Master") || ($aReturn[1] == "Super Admin"))
 					$content = 'all-access';
 				else 
-					$content = $rowFolder['type'];
+					$content = $rowset[$i]['type'];
 
 				if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
 				{																
