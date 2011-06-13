@@ -353,10 +353,12 @@ class Customer_UserController extends Zend_Controller_Action
     }
     function editAction()
     {
+    	/*
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
             $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
         }
+        */
 
         $this->_helper->layout->setLayout('layout-customer-credential');
 
