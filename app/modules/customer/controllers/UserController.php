@@ -415,7 +415,13 @@ class Customer_UserController extends Zend_Controller_Action
             );
 
             $modelUser = new App_Model_Db_Table_User();
-            $modelUser->update($data, "kopel='".$r->getParam('id')."'");
+            try {
+            	$modelUser->update($data, "kopel='".$r->getParam('id')."'");
+            }
+            catch (Exception $e)
+            {
+            	throw new Zend_Exception($e->getMessage());
+            }
 
             $this->view->data = $data;
             $this->view->message = "Data has been successfully saved.";
