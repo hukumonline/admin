@@ -22,6 +22,18 @@ class Api_FolderController extends Zend_Controller_Action
 		$acl = Pandamp_Acl::manager();
 		$aReturn = $acl->getUserGroupIds(Zend_Auth::getInstance()->getIdentity()->username);
 		
+		echo '<pre>';
+		print_r($aReturn);
+		echo '</pre>';
+		
+		if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
+			echo 'ALLOWED';
+		else 
+			echo 'DENIED';
+			
+		
+		die;
+		
         // The id of the node being opened
         $id = $_REQUEST["id"];
 
