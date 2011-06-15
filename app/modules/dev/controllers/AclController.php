@@ -13,17 +13,17 @@ class Dev_AclController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
         $acl = Pandamp_Acl::manager();
-//        if ($acl->isAllowed('pengguna1','membership','all'))
-//            echo 'ALLOWED';
-//        else
-//            echo 'NO ACCESS';
+        if ($acl->isAllowed('dedi','dms','create'))
+            echo 'ALLOWED';
+        else
+            echo 'NO ACCESS';
             
 
-		$aReturn = $acl->getUserGroupIds('pengguna1'); 
-		if ($acl->getPermissionsOnContent('', $aReturn[1], 'membership'))
-			echo 'ALLOWED';
-		else 
-			echo 'NO ACCESS';
+//		$aReturn = $acl->getUserGroupIds('pengguna1'); 
+//		if ($acl->getPermissionsOnContent('', $aReturn[1], 'membership'))
+//			echo 'ALLOWED';
+//		else 
+//			echo 'NO ACCESS';
 		
 		
     }
