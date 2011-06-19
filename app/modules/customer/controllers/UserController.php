@@ -504,8 +504,8 @@ class Customer_UserController extends Zend_Controller_Action
 
             $username = $r->getParam('username');
             $acl = Pandamp_Acl::manager();
-            $acl->deleteUser($username);
-            //$acl->removeUserFromGroup($username, $oldUser['packageId']);
+            //$acl->deleteUser($username);
+            $acl->removeUserFromGroup($username, $oldUser['packageId']);
 
             $groupName = App_Model_Show_AroGroup::show()->getUserGroup($newGroup);
             $acl->addUser($username,$groupName['name']);
