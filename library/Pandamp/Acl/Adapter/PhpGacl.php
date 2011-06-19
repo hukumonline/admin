@@ -377,7 +377,7 @@ class Pandamp_Acl_Adapter_PhpGacl
 					if($this->checkAcl("action",'create','user', $username, false,false))
 						return true;
 				case 'read':
-					if($this->checkAcl("action",'read','user', $username, false,false) || $acl->checkAcl("action",'update','user', $username, false,false))
+					if($this->checkAcl("action",'read','user', $username, false,false) || $this->checkAcl("action",'update','user', $username, false,false))
 						return true;
 				case 'update':
 					if($this->checkAcl("action",'update','user', $username, false,false))
