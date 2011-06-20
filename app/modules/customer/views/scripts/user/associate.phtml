@@ -30,7 +30,20 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?//=$this->action('approval','user','customer');?>
+        	<fieldset>
+        		<legend>ROLE</legend>
+        		<div class="box box-success" id="message"></div>
+        		<table class="no-style full">
+        		<tbody>
+        		<? for($i=0;$i<count($this->UserRoles);$i++) { ?>
+				<tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=str_replace(' ','_',$this->UserRoles[$i]);?>">
+					<td><abbr><?echo $this->UserRoles[$i];?></abbr></td>
+					<td><input type="button" name="delass" value="Delete" id="<?=$this->UserRoles[$i];?>/uname/<?=$this->user['username'];?>" class="form-button" /></td>
+				</tr>        		
+        		<? } ?>
+        		</tbody>
+        		</table>
+        	</fieldset>
         </div>
     </div>
 

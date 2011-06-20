@@ -105,8 +105,8 @@ class Pandamp_Acl_Adapter_PhpGacl
 	function removeUserFromGroup($username, $groupValue)
 	{
 		//must also assign group: everyone
-		$aroGroupId = $this->_aclEngine->get_group_id('everyone', 'everyone', 'aro');
-		$this->_aclEngine->del_group_object($aroGroupId, 'user', $username, $group_type='ARO');
+		//$aroGroupId = $this->_aclEngine->get_group_id('everyone', 'everyone', 'aro');
+		//$this->_aclEngine->del_group_object($aroGroupId, 'user', $username, $group_type='ARO');
 		
 		if(!empty($groupValue))
 		{

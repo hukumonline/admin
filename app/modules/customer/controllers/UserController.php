@@ -456,6 +456,19 @@ class Customer_UserController extends Zend_Controller_Action
             $this->view->user = $user;
             $this->view->identity = $this->_user;
     }
+    function delassAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $id = $this->_getParam("id");
+        $username = $this->_getParam("uname");
+
+        $acl = Pandamp_Acl::manager();
+        $aclId = $acl->getGroupIds($id);
+        
+        $acl->removeUserFromGroup($username, $id);
+    }
     function associateAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
@@ -514,6 +527,10 @@ class Customer_UserController extends Zend_Controller_Action
             $this->view->message = "Package was sucessfully changed.";
         }
 
+        $acl = Pandamp_Acl::manager();
+        $role = $acl->getUserGroupIds($this->_user->username);print_r($role);
+        
+        $this->view->UserRoles = $role;
 
         $id = $this->_getParam("id");
         $user = App_Model_Show_User::show()->getUserById($id);
