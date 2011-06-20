@@ -18,21 +18,19 @@ class Api_FolderController extends Zend_Controller_Action
 
         // So that the loading indicator is visible
         sleep(1);
+        
+        $acl = Pandamp_Acl::manager();
 
-		$acl = Pandamp_Acl::manager();
-		$aReturn = $acl->getUserGroupIds(Zend_Auth::getInstance()->getIdentity()->username);
-		
-		echo '<pre>';
-		print_r($aReturn);
-		echo '</pre>';
-		
-		if ($acl->getPermissionsOnContent('', $aReturn[1], 'dms'))
-			echo 'ALLOWED';
-		else 
-			echo 'DENIED';
-			
-		
-		die;
+        $auth = Zend_Auth::getInstance();
+        if (!$auth->hasIdentity()) {
+            echo "You aren't login";
+        }
+        
+        $packageId = $auth->getIdentity()->packageId;
+        
+        $username = $auth->getIdentity()->username;
+
+		$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($packageId);
 		
         // The id of the node being opened
         $id = $_REQUEST["id"];
@@ -43,12 +41,12 @@ class Api_FolderController extends Zend_Controller_Action
             echo '['."\n";
             for($i=0;$i<count($rowset);$i++)
             {
-				if (($aReturn[1] == "Master") || ($aReturn[1] == "Super Admin"))
+				if (($aReturn['name'] == "Master") || ($aReturn['name'] == "Super Admin"))
 					$content = 'all-access';
 				else 
 					$content = $rowset[$i]['type'];
 
-				if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
+				if ($acl->getPermissionsOnContent('', $aReturn['name'], $content))
 				{																
 					if ($rowset[$i]['title'] == "Kategori" || $rowset[$i]['title'] == "Peraturan" || $rowset[$i]['title'] == "Putusan")
 					{

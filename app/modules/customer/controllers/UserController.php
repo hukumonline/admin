@@ -38,7 +38,7 @@ class Customer_UserController extends Zend_Controller_Action
             $this->_acl = Pandamp_Acl::manager();
             if (!$this->_acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
+                //$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
             }
         }
     }
@@ -505,11 +505,11 @@ class Customer_UserController extends Zend_Controller_Action
             $username = $r->getParam('username');
             $acl = Pandamp_Acl::manager();
             //$acl->deleteUser($username);
-            $acl->removeUserFromGroup($username, $oldUser['packageId']);
+            //$acl->removeUserFromGroup($username, $oldUser['packageId']);
 
             $groupName = App_Model_Show_AroGroup::show()->getUserGroup($newGroup);
-            $acl->addUser($username,$groupName['name']);
-            //$acl->addUserToGroup($username, $groupName['name']);
+            //$acl->addUser($username,$groupName['name']);
+            $acl->addUserToGroup($username, $groupName['name']);
 
             $this->view->message = "Package was sucessfully changed.";
         }

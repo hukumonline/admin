@@ -51,7 +51,8 @@ class Customer_AccountController extends Zend_Controller_Action
 			//echo '<pre>';
 			//print_r($aReturn);
 			//echo '</pre>';
-			$acl->addUser($value['username'],$aReturn[3]);
+			//$acl->addUser($value['username'],$aReturn[3]);
+			$acl->addUserToGroup($value['username'], $aReturn[3]);
 			
 			$formater = new Pandamp_Core_Hol_User();
 			
