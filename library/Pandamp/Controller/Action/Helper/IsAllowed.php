@@ -19,8 +19,9 @@ class Pandamp_Controller_Action_Helper_IsAllowed
         $front = Zend_Controller_Front::getInstance();
         $aclMan = $front->getParam('bootstrap')->getResource('acl');
         
-        $aReturn = $aclMan->getUserGroupIds($username);
-        if (($aReturn[1] == "Master") || ($aReturn[1] == "Super Admin"))
+        $aReturn = App_Model_Show_AroGroup::show()->getUserGroup($auth->getIdentity()->packageId);
+        
+        if (($aReturn['name'] == "Master") || ($aReturn['name'] == "Super Admin"))
         	$content = 'all-access';
         else 
         	$content = $itemGuid;

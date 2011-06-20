@@ -8,6 +8,7 @@
 class Admin_AclController extends Zend_Controller_Action
 {
     protected $_user;
+    protected $_zl;
 
     function  preDispatch()
     {
@@ -32,23 +33,28 @@ class Admin_AclController extends Zend_Controller_Action
         else
         {
             $this->_user = $auth->getIdentity();
+            
+            $zl = Zend_Registry::get("Zend_Locale");
+            
+            $this->_zl = $zl;
 
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $zl = Zend_Registry::get("Zend_Locale");
-                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
             }
         }
     }
     public function indexAction()
     {
+    	/*
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
             $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
         }
 
         $this->_helper->layout()->headerTitle = "Access Control Management";
+        */
     }
     public function headerAction()
     {

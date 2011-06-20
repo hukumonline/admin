@@ -13,7 +13,7 @@
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/customer/user/list">User</a></li>
-                <? if ($this->isAllowed('membership','all')) : ?>
+                <? if ($this->aclCheck('site','all')) : ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
                 <? endif; ?>
                 <li class="current"><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search">Search</a></li>

@@ -27,9 +27,19 @@ class Dms_Menu_ViewFolder
         $parentGuid = $this->_node;
 
         $columns = 4;
+        
+        $acl = Pandamp_Acl::manager();
 
-		$acl = Pandamp_Acl::manager();
-		$aReturn = $acl->getUserGroupIds(Zend_Auth::getInstance()->getIdentity()->username);
+        $auth = Zend_Auth::getInstance();
+        if (!$auth->hasIdentity()) {
+            echo "You aren't login";
+        }
+        
+        $packageId = $auth->getIdentity()->packageId;
+        
+        $username = $auth->getIdentity()->username;
+
+		$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($packageId);
 		
         $tblFolder = new App_Model_Db_Table_Folder();
         $rowsetFolder = App_Model_Show_Folder::show()->fetchChildren($parentGuid);
@@ -47,12 +57,12 @@ class Dms_Menu_ViewFolder
         $data = array();
         foreach ($rowsetFolder as $rowFolder)
         {
-			if (($aReturn[1] == "Master") || ($aReturn[1] == "Super Admin"))
+			if (($aReturn['name'] == "Master") || ($aReturn['name'] == "Super Admin"))
 				$content = 'all-access';
 			else 
 				$content = $rowFolder['type'];
 				
-			if ($acl->getPermissionsOnContent('', $aReturn[1], $content))
+			if ($acl->getPermissionsOnContent('', $aReturn['name'], $content))
 			{				
 				if ($rowFolder['title'] == "Kategori" || $rowFolder['title'] == "Peraturan" || $rowFolder['title'] == "Putusan")
 				{
