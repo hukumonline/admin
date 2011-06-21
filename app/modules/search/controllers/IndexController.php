@@ -32,7 +32,7 @@ class Search_IndexController extends Zend_Controller_Action
             $this->_user = $auth->getIdentity();
 
             $acl = Pandamp_Acl::manager();
-            if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
+            if (!$acl->checkAcl("action",'all','user', $this->_user->username, "content","all-access"))
             {
                 $zl = Zend_Registry::get("Zend_Locale");
                 $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
