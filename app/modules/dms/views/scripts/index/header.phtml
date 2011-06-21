@@ -16,8 +16,9 @@
                 <? } elseif ($this->isAllowed('membership','all')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/customer/user/list">User</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
-                <? } ?>
+                <? } elseif ($this->aclCheck('action','all','content','all-access')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search">Search</a></li>
+                <? } ?>
             </ul>
         </nav>
         <!-- End of Main navigation -->
