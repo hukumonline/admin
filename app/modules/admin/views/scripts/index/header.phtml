@@ -12,7 +12,7 @@
                 <li class="current"><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
                 <? if ($this->isAllowed('store','read')) { ?>
-                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
+                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Stores</a></li>
                 <? } else if ($this->isAllowed('membership','all')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/customer/user/list">User</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
