@@ -34,7 +34,8 @@ class Admin_StoreController extends Zend_Controller_Action
             $this->_user = $auth->getIdentity();
 
             $acl = Pandamp_Acl::manager();
-            if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
+            //if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
+            if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('store','read'))
             {
                 $zl = Zend_Registry::get("Zend_Locale");
                 $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
