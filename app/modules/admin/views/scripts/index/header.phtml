@@ -11,7 +11,9 @@
             <ul class="sf-menu sf-js-enabled sf-shadow">
                 <li class="current"><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
+                <? if ($this->isAllowed('membership','all')) : ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
+                <? endif; ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/customer/user/list">User</a></li>
                 <? if ($this->isAllowed('membership','all')) : ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
