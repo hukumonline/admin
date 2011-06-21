@@ -199,7 +199,7 @@ print_r($body.' code: '.$ret);
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
         $obj = new Pandamp_Crypt_Password();
-        echo $obj->decryptPassword('Az5SbVB8VzUFMgclVGEFa1E2A2ZVbVxuAj1ROA==');
+        echo $obj->decryptPassword('BTwENAA5A2QDOws+');
     }
     function generatePasswordAction()
     {

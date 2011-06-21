@@ -38,7 +38,7 @@ class Customer_UserController extends Zend_Controller_Action
             $this->_acl = Pandamp_Acl::manager();
             if (!$this->_acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                //$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
+                $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
             }
         }
     }
@@ -528,7 +528,7 @@ class Customer_UserController extends Zend_Controller_Action
         }
 
         $acl = Pandamp_Acl::manager();
-        $role = $acl->getUserGroupIds($this->_user->username);print_r($role);
+        $role = $acl->getUserGroupIds($this->_user->username);//print_r($role);
         
         $this->view->UserRoles = $role;
 
