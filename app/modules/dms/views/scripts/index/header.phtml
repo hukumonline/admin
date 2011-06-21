@@ -11,13 +11,12 @@
             <ul class="sf-menu sf-js-enabled sf-shadow">
                 <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
                 <li class="current"><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
-                <? if ($this->isAllowed('store','read')) : ?>
+                <? if ($this->isAllowed('store','read')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
-                <? endif; ?>
+                <? } elseif ($this->isAllowed('membership','all')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/customer/user/list">User</a></li>
-                <? if ($this->isAllowed('membership','all')) : ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
-                <? endif; ?>
+                <? } ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search">Search</a></li>
             </ul>
         </nav>
