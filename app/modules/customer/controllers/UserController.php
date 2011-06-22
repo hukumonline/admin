@@ -536,7 +536,7 @@ class Customer_UserController extends Zend_Controller_Action
         $user = App_Model_Show_User::show()->getUserById($id);
         if ($user) {
 	        $acl = Pandamp_Acl::manager();
-	        $role = $acl->getUserGroupIds($user['username']);//print_r($role);
+	        $role = $acl->getUserGroupIds($user['username']);print_r($role);
 	        
 	        $this->view->UserRoles = $role;
 	
