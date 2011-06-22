@@ -32,8 +32,8 @@
         <div class="column width6 first">
         	<fieldset>
         		<legend>ROLE</legend>
-        		<? if ($this->numberOfRoles !== 0) { ?>
         		<div class="box box-success" id="message"></div>
+        		<? if ($this->numberOfRoles > 0) { ?>
         		<table class="no-style full">
         		<tbody>
         		<? for($i=0;$i<count($this->UserRoles);$i++) { ?>
