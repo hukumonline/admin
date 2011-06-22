@@ -47,12 +47,13 @@ class Customer_AccountController extends Zend_Controller_Action
 			 * output: Array ( [0] => 15 [1] => 10 [2] => Super Administrator [3] => super_admin [4] => 10 [5] => 11 ) 
 			 */
 			$acl = Pandamp_Acl::manager();
-			$aReturn = $acl->getGroupData($value['aro_groups']);
+			//$aReturn = $acl->getGroupData($value['aro_groups']);
+			$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($value['aro_groups']);
 			//echo '<pre>';
 			//print_r($aReturn);
 			//echo '</pre>';
 			//$acl->addUser($value['username'],$aReturn[3]);
-			$acl->addUserToGroup($value['username'], $aReturn[3]);
+			$acl->addUserToGroup($value['username'], $aReturn['name']);
 			
 			$formater = new Pandamp_Core_Hol_User();
 			
@@ -66,7 +67,7 @@ class Customer_AccountController extends Zend_Controller_Action
 				
 				switch ($value['aro_groups'])
 				{
-					case 21: // individual
+					case 33: // individual
 						
 						$mailcontent = $formater->getMailContent('konfirmasi-email-individual');
 						$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
@@ -76,7 +77,7 @@ class Customer_AccountController extends Zend_Controller_Action
 						
 						break;
 						
-					case 18: // corporate
+					case 34: // corporate
 						
 						$mailcontent = $formater->getMailContent('konfirmasi-email-korporasi');
 						$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
@@ -89,7 +90,7 @@ class Customer_AccountController extends Zend_Controller_Action
 					default:
 						
 						$mailcontent = $formater->getMailContent('konfirmasi email gratis');
-						$m = $formater->_writeConfirmFreeEmail($mailcontent,$value['fullname'],$value['username'],$value['password'],base64_encode($id),$value['email'],$aReturn[3]);
+						$m = $formater->_writeConfirmFreeEmail($mailcontent,$value['fullname'],$value['username'],$value['password'],base64_encode($id),$value['email'],$aReturn['name']);
 						
 						break;
 				}
