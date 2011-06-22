@@ -64,7 +64,7 @@
                         <tr>
                             <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$hit['guid'];?>' class="check_me"></td>
                             <td>
-                                <? if($hit['profile'] == 'kutu_doc'){?>
+                                <? if($hit['profileGuid'] == 'kutu_doc'){?>
                                     <a href="<?=ROOT_URL;?>/browser/downloadfile/guid/<?=$hit['guid'];?>"><div class="searchResultTitle">File: <?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle').' ['.$hit['guid'].']';} catch (Exception $e) {echo '';}?></div></a>
                                 <? } else { ?>
                                     <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit['guid'];?>/node/<?=$this->currentNode;?>" title="<?=$rowUser['email'];?>"><?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle');} catch (Exception $e) {echo 'No-Title';}?></a>
