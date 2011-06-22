@@ -20,11 +20,11 @@ class App_Model_Show_Calendar extends App_Model_Db_DefaultAdapter
      */
     final private function  __construct()
     {
-        $zl = Zend_Registry::get("Zend_Locale");
-        if ($zl->getLanguage() == 'id')
+        //$zl = Zend_Registry::get("Zend_Locale");
+        //if ($zl->getLanguage() == 'id')
             self::$_db = Zend_Registry::get('db1');
-        else
-            self::$_db = Zend_Registry::get('db3');
+        //else
+            //self::$_db = Zend_Registry::get('db3');
     }
 
      /**
