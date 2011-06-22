@@ -88,6 +88,8 @@ class Pandamp_Acl_Adapter_PhpGacl
 	}
 	function addUserToGroup($username, $groupValue)
 	{
+		$result = $this->_aclEngine->add_object('user', $username, $username, 1, 0, 'aro');
+		
 		$aroGroupId = $this->_aclEngine->get_group_id($groupValue, $groupValue, 'aro');
 		return $this->_aclEngine->add_group_object($aroGroupId, 'user', $username, 'aro');
 	}
