@@ -539,6 +539,7 @@ class Customer_UserController extends Zend_Controller_Action
 	        $role = $acl->getUserGroupIds($user['username']);//print_r($role);
 	        
 	        $this->view->UserRoles = $role;
+	        $this->view->numberOfRoles = count($role);
 	
             $this->view->user = $user;
         }
