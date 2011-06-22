@@ -95,7 +95,10 @@
         <?=$this->action('sidebar','user','customer');?>
     </div><br/>
     <div id="showDiv1" style="width:100%;text-align:center;">
-    <?=$this->action('browse','manager','agenda');?>
+    <? if ($this->getLanguage() == "id") { 
+    $this->action('browse','manager','agenda'); 
+    }
+    ?>
     <?//=$this->ajaxActionRenderer(ROOT_URL.'/'.$this->getLanguage().'/agenda/manager/browse');?>
     </div>
     <?=$this->action('view','manager','polling');?>
