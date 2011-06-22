@@ -532,15 +532,16 @@ class Customer_UserController extends Zend_Controller_Action
             $this->view->message = "Package was sucessfully changed.";
         }
 
-        $acl = Pandamp_Acl::manager();
-        $role = $acl->getUserGroupIds($this->_user->username);//print_r($role);
-        
-        $this->view->UserRoles = $role;
-
         $id = $this->_getParam("id");
         $user = App_Model_Show_User::show()->getUserById($id);
-        if ($user)
+        if ($user) {
+	        $acl = Pandamp_Acl::manager();
+	        $role = $acl->getUserGroupIds($user['username']);//print_r($role);
+	        
+	        $this->view->UserRoles = $role;
+	
             $this->view->user = $user;
+        }
     }
     function rightupmenuAction()
     {
