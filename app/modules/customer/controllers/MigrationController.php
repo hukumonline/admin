@@ -59,9 +59,9 @@ class Customer_MigrationController extends Zend_Controller_Action
         
         foreach ($aroMap as $value)
         {
-			$modelUser = new App_Model_Db_Table_User();
-			$rowUser = $modelUser->fetchRow("username='".$value['name']."'");
-			if (!$rowUser) {
+//			$modelUser = new App_Model_Db_Table_User();
+//			$rowUser = $modelUser->fetchRow("username='".$value['name']."'");
+//			if (!$rowUser) {
             $ignoredUser = MasterStatus::ignoreUserMigration();
 
             if (!in_array($value['name'], $ignoredUser))
@@ -80,7 +80,46 @@ class Customer_MigrationController extends Zend_Controller_Action
 
                 $rowUser['packageId'] = $groupId;
 
-                list($ret, $body) = Pandamp_Lib_Remote::serverCmd('migrationUser', $rowUser);
+                //list($ret, $body) = Pandamp_Lib_Remote::serverCmd('migrationUser', $rowUser);
+                
+                $data = $this->transformMigrationUser($rowUser);
+				$modelUser = new App_Model_Db_Table_User();
+				$rowUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
+				if (!$rowUser) 
+				{
+					$result = $modelUser->insert($data);
+					
+					if ($result) {
+						
+						$this->updateKopel();
+						
+						$groupName = $this->getGroupName($rowUser['packageId']);
+						
+						//$acl = new Kutu_Acl_Adapter_Local();
+						$acl = Pandamp_Acl::manager();
+						//$acl->addUser($_POST['username'],$groupName);
+						$acl->addUserToGroup($rowUser['username'],$groupName);
+						
+                        $message = "
+                            <div class='box box-info closeable'>
+                            User&nbsp;:&nbsp;<abbr>".$rowUser['username']."</abbr> data has been successfully saved to local.
+                            </div><br>";
+						
+					}
+					else 
+					{
+                        $message = "
+                        <div class='box box-error'>ERROR</div>    
+                        <div class='box box-error-msg'>
+                        <ol>
+                        <li>User&nbsp;:&nbsp;<abbr>".$rowUser['username']."</abbr> data has failed saved to local.</li>
+                        </ol>
+                        </div><br>";
+						
+					}
+				
+	                echo $message;
+				}
 				
                 /*
                 echo '<pre>';
@@ -90,6 +129,7 @@ class Customer_MigrationController extends Zend_Controller_Action
                 *
                 */
 
+                /*
                 switch ($ret)
                 {
                     case 200:
@@ -107,8 +147,9 @@ class Customer_MigrationController extends Zend_Controller_Action
                         </ol>
                         </div><br>";
                 }
+                */
 
-                echo $message;
+//                echo $message;
                 
                 }
                 /*
@@ -124,7 +165,7 @@ class Customer_MigrationController extends Zend_Controller_Action
                 }
                 */
             }
-			}
+//			}
         }
     }
     protected function getUserGroupId($groupName)
@@ -151,4 +192,128 @@ class Customer_MigrationController extends Zend_Controller_Action
         // eg. output: admin
         return ($aReturn[1])? $aReturn[1] : '';
     }
+	function transformMigrationUser($value)
+	{
+		if (($value["birthday"] == "1970-01-01") || ($value["birthday"] == ""))
+		{
+			$birthday = "0000-00-00";
+		}
+		else
+		{
+			$birthday = $value["birthday"];
+		}
+		
+		$groupName = $this->getGroupName($_POST['packageId']);
+		
+		$acl = Pandamp_Acl::manager();
+		$groupId = $acl->getGroupIds($groupName);
+		
+		
+		$data = array(
+			 'kopel'			=> $this->generateKopel()
+			,'username'			=> $value['username']
+			,'password'			=> $value['password']
+			,'fullName'			=> ($value['fullName'])? $value['fullName'] : ''
+			,'birthday'			=> $birthday
+			,'phone'			=> ($value['phone'])? $value['phone'] : ''
+			,'fax'				=> ($value['fax'])? $value['fax'] : ''
+			,'gender'			=> $value['gender']
+			,'email'			=> $value['email']
+			,'company'			=> ($value['company'])? $value['company'] : ''
+			,'address'			=> ($value['address'])? $value['address'] : '' 
+			,'state'			=> 7
+			,'countryId'		=> 'ID'
+			,'newArticle'		=> $value['newArticle']
+			,'weeklyList'		=> $value['weeklyList']
+			,'monthlyList'		=> $value['monthlyList']
+			,'packageId'		=> $groupId
+			,'promotionId'		=> $value['promotionId']
+			,'educationId'		=> $value['educationId']
+			,'expenseId'		=> $value['expenseId']
+			,'paymentId'		=> $value['paymentId']
+			,'businessTypeId'	=> $value['businessTypeId']
+			,'periodeId'		=> $value['periodeId']
+			,'activationDate'	=> $value['activationDate']
+			,'isEmailSent'		=> $value['isEmailSent']
+			,'isEmailSentOver'	=> $value['isEmailSentOver']
+			,'createdDate'		=> $value['createdDate']
+			,'createdBy'		=> $value['createdBy']
+			,'modifiedDate'		=> ($value['updatedDate'])? $value['updatedDate'] : ''
+			,'modifiedBy'		=> ($value['updatedBy'])? $value['updatedBy'] : ''
+			,'isActive'			=> $value['isActive']
+			,'isContact'		=> $value['isContact']
+		);
+		
+		return $data;
+	}
+	protected function generateKopel()
+	{
+		$modelNumber = new Kutu_Core_Orm_Table_Number();
+        $rowset = $modelNumber->fetchRow();
+        $num = $rowset->user;
+		$totdigit = 5;
+		$num = strval($num);
+		$jumdigit = strlen($num);
+		$kopel = str_repeat("0",$totdigit-$jumdigit).$num;
+		
+		return $kopel;
+	}
+	protected function updateKopel()
+	{
+		$modelNumber = new Kutu_Core_Orm_Table_Number();
+		$rowset = $modelNumber->fetchRow();
+		$rowset->user = $rowset->user += 1;
+		$rowset->save();
+	}
+	protected function getGroupName($groupId)
+	{
+		if ($groupId == 11)
+		{
+			//$groupName = "Master";
+			//$groupName = "Super Admin";
+			$groupName = "Admin Ina";
+		}
+		else if ($groupId == 41) 
+		{
+			$groupName = "Clinic Admin";
+		}
+		else if ($groupId == 39) 
+		{
+			$groupName = "Marketing";
+		}
+		else if ($groupId == 36) 
+		{
+			$groupName = "Klanten";
+		}
+		else if ($groupId == 34) 
+		{
+			$groupName = "News Admin";
+		}
+		else if ($groupId == 40) 
+		{
+			$groupName = "HolProject";
+		}
+		else if ($groupId == 20) 
+		{
+			$groupName = "Dc Admin";
+		}
+		else if ($groupId == 21) 
+		{
+			$groupName = "Admin En";
+		}
+		else if ($groupId == 25) 
+		{
+			$groupName = "Free";
+		}
+		else if ($groupId == 26) 
+		{
+			$groupName = "Individual";
+		}
+		else if ($groupId == 27) 
+		{
+			$groupName = "Corporate";
+		}
+		
+		return $groupName;
+	}
 }
