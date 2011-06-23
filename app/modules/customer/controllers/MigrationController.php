@@ -34,13 +34,14 @@ class Customer_MigrationController extends Zend_Controller_Action
          * 40 = holproject
          * 20 = dc_admin
          * 26 = member_individual
+         * 27 = member_corporate
          */
 
         $title = "<h4>MIGRASI HUKUMONLINE INDONESIA</h4><hr/>";
 
         echo $title.'<br>';
 
-        $groupId = 26;
+        $groupId = 27;
 
         require_once(CONFIG_PATH.'/master-status.php');
 
@@ -65,6 +66,8 @@ class Customer_MigrationController extends Zend_Controller_Action
                 $getGroupId = $this->getUserGroupId($groupName);
                  * 
                  */
+                
+                if ($rowUser) {
 
                 $rowUser['packageId'] = $groupId;
 
@@ -97,6 +100,18 @@ class Customer_MigrationController extends Zend_Controller_Action
                 }
 
                 echo $message.'<br>';
+                
+                }
+                else 
+                {
+                	echo "
+                        <div class='box box-error'>ERROR</div>    
+                        <div class='box box-error-msg'>
+                        <ol>
+                        <li>User&nbsp;:&nbsp;<abbr>".$value['name']."</abbr> not active.</li>
+                        </ol>
+                        </div><br>";
+                }
             }
         }
     }
