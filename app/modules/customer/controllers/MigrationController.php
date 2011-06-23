@@ -7,7 +7,7 @@
  */
 class Customer_MigrationController extends Zend_Controller_Action
 {
-    function  preDispatch()
+    function preDispatch()
     {
     	Zend_Session::start();
     	
