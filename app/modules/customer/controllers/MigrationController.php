@@ -248,7 +248,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 	}
 	protected function generateKopel()
 	{
-		$modelNumber = new Kutu_Core_Orm_Table_Number();
+		$modelNumber = new App_Model_Db_Table_Number();
         $rowset = $modelNumber->fetchRow();
         $num = $rowset->user;
 		$totdigit = 5;
@@ -260,7 +260,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 	}
 	protected function updateKopel()
 	{
-		$modelNumber = new Kutu_Core_Orm_Table_Number();
+		$modelNumber = new App_Model_Db_Table_Number();
 		$rowset = $modelNumber->fetchRow();
 		$rowset->user = $rowset->user += 1;
 		$rowset->save();
