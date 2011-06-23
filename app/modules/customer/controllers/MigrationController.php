@@ -9,6 +9,8 @@ class Customer_MigrationController extends Zend_Controller_Action
 {
     function  preDispatch()
     {
+    	Zend_Session::start();
+    	
         $this->_helper->layout->setLayout('layout-customer-migration');
     }
     function inaAction()
