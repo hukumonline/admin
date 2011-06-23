@@ -204,10 +204,10 @@ class Customer_MigrationController extends Zend_Controller_Action
 		}
 		
 		$groupName = $this->getGroupName($value['packageId']);
-		echo $groupName;die;
+		
 		$acl = Pandamp_Acl::manager();
 		$groupId = $acl->getGroupIds($groupName);
-		
+		echo $groupId;die;
 		
 		$data = array(
 			 'kopel'			=> $this->generateKopel()
