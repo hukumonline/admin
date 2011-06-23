@@ -86,7 +86,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 				$modelUser = new App_Model_Db_Table_User();
 				$rowUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
 					$groupName = $this->getGroupName($rowUser['packageId']);
-					echo $data['packageId'];die;
+					echo $groupId;die;
 				if (!$rowUser) 
 				{
 					$result = $modelUser->insert($data);
