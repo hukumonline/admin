@@ -111,6 +111,7 @@ class Customer_MigrationController extends Zend_Controller_Action
                 echo $message;
                 
                 }
+                /*
                 else 
                 {
                 	echo "
@@ -121,6 +122,7 @@ class Customer_MigrationController extends Zend_Controller_Action
                         </ol>
                         </div><br>";
                 }
+                */
             }
 			}
         }
