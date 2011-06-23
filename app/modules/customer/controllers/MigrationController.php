@@ -87,6 +87,8 @@ class Customer_MigrationController extends Zend_Controller_Action
 				$rowUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
 				if (!$rowUser) 
 				{
+					$groupName = $this->getGroupName($rowUser['packageId']);
+					echo $groupName;die;
 					$result = $modelUser->insert($data);
 					
 					if ($result) {
@@ -207,7 +209,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 		
 		$acl = Pandamp_Acl::manager();
 		$groupId = $acl->getGroupIds($groupName);
-		echo $groupId;die;
+		
 		
 		$data = array(
 			 'kopel'			=> $this->generateKopel()
