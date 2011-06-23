@@ -57,7 +57,7 @@ class App_Model_Show_Migration_AroGroupMapIn extends App_Model_Db_DefaultAdapter
     public function getObjectsByGroup($groupId)
     {
         $configDb = Zend_Registry::get('db2');
-    	$row = $configDb->fetchAll("SELECT * FROM gacl_aro o, gacl_groups_aro_map gm  WHERE gm.group_id=".$groupId." AND gm.aro_id=o.id");
+    	$row = $configDb->fetchAll("SELECT * FROM gacl_aro o, gacl_groups_aro_map gm  WHERE gm.group_id=".$groupId." AND gm.aro_id=o.id LIMIT 0,5000");
 
     	return $row;
     }
