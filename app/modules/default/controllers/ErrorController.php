@@ -19,7 +19,7 @@ class ErrorController extends Zend_Controller_Action
         $mailer = new Zend_Mail();
         $session = new Zend_Session_Namespace();
         //$database = $bootstrap->getResource('db');
-        $database = Zend_Registry::get('db1');
+        $database = Zend_Registry::get('db2');
         $profiler = $database->getProfiler();
 
         $this->_notifier = new Application_Service_Notifier_Error(
