@@ -48,9 +48,12 @@ class Customer_MigrationController extends Zend_Controller_Action
 
         $aroMap = App_Model_Show_Migration_AroGroupMapIn::show()->getObjectsByGroup($groupId);
         
+        /*
         echo '<pre>';
         print_r($aroMap);
         echo '</pre>';
+        *
+        */
         
         foreach ($aroMap as $value)
         {
