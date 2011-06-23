@@ -202,8 +202,8 @@ class Customer_MigrationController extends Zend_Controller_Action
 		{
 			$birthday = $value["birthday"];
 		}
-		echo $value['packageId'];die;
-		$groupName = $this->getGroupName($_POST['packageId']);
+		
+		$groupName = $this->getGroupName($value['packageId']);
 		
 		$acl = Pandamp_Acl::manager();
 		$groupId = $acl->getGroupIds($groupName);
