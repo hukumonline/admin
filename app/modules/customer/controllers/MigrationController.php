@@ -202,7 +202,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 		{
 			$birthday = $value["birthday"];
 		}
-		
+		echo $value['packageId'];die;
 		$groupName = $this->getGroupName($_POST['packageId']);
 		
 		$acl = Pandamp_Acl::manager();
