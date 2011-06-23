@@ -93,7 +93,7 @@ class Customer_MigrationController extends Zend_Controller_Action
                         $message = "
                             <div class='box box-info closeable'>
                             User&nbsp;:&nbsp;<abbr>".$rowUser['username']."</abbr> data has been successfully saved to local.
-                            </div>";
+                            </div><br>";
                         break;
                     default:
                         $message = "
@@ -102,10 +102,10 @@ class Customer_MigrationController extends Zend_Controller_Action
                         <ol>
                         <li>User&nbsp;:&nbsp;<abbr>".$rowUser['username']."</abbr> data has failed saved to local.</li>
                         </ol>
-                        </div>";
+                        </div><br>";
                 }
 
-                echo $message.'<br>';
+                echo $message;
                 
                 }
                 else 
