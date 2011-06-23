@@ -85,7 +85,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 				$modelUser = new App_Model_Db_Table_User();
 				$rowUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
 				$groupName = $this->getGroupName($groupId);
-				echo $groupName.' -> '.$rowUser['username'];die;
+
 				if (!$rowUser) 
 				{
 	                $data = $this->transformMigrationUser($rowUser);
