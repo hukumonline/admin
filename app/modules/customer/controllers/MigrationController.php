@@ -33,13 +33,14 @@ class Customer_MigrationController extends Zend_Controller_Action
          * 34 = news_admin
          * 40 = holproject
          * 20 = dc_admin
+         * 26 = member_individual
          */
 
         $title = "<h4>MIGRASI HUKUMONLINE INDONESIA</h4><hr/>";
 
         echo $title.'<br>';
 
-        $groupId = 21;
+        $groupId = 26;
 
         require_once(CONFIG_PATH.'/master-status.php');
 
