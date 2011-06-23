@@ -83,10 +83,10 @@ class Customer_MigrationController extends Zend_Controller_Action
                 //list($ret, $body) = Pandamp_Lib_Remote::serverCmd('migrationUser', $rowUser);
                 
 				$modelUser = new App_Model_Db_Table_User();
-				$rowUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
+				$dUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
 				$groupName = $this->getGroupName($groupId);
 
-				if (!$rowUser) 
+				if (!$dUser) 
 				{
 	                $data = $this->transformMigrationUser($rowUser);
 					$result = $modelUser->insert($data);
