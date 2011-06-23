@@ -59,6 +59,9 @@ class Customer_MigrationController extends Zend_Controller_Action
         
         foreach ($aroMap as $value)
         {
+			$modelUser = new App_Model_Db_Table_User();
+			$rowUser = $modelUser->fetchRow("username='".$value['name']."'");
+			if (!$rowUser) {
             $ignoredUser = MasterStatus::ignoreUserMigration();
 
             if (!in_array($value['name'], $ignoredUser))
@@ -119,6 +122,7 @@ class Customer_MigrationController extends Zend_Controller_Action
                         </div><br>";
                 }
             }
+			}
         }
     }
     protected function getUserGroupId($groupName)
