@@ -82,20 +82,20 @@ class Customer_MigrationController extends Zend_Controller_Action
 
                 //list($ret, $body) = Pandamp_Lib_Remote::serverCmd('migrationUser', $rowUser);
                 
-                $data = $this->transformMigrationUser($rowUser);
 				$modelUser = new App_Model_Db_Table_User();
 				$rowUser = $modelUser->fetchRow("username='".$rowUser['username']."'");
-					$groupName = $this->getGroupName($rowUser['packageId']);
-					echo $groupId;die;
+				$groupName = $this->getGroupName($groupId);
+				echo $groupName.' '.$rowUser['username'];die;
 				if (!$rowUser) 
 				{
+	                $data = $this->transformMigrationUser($rowUser);
 					$result = $modelUser->insert($data);
 					
 					if ($result) {
 						
 						$this->updateKopel();
 						
-						$groupName = $this->getGroupName($rowUser['packageId']);
+						$groupName = $this->getGroupName($groupId);
 						
 						//$acl = new Kutu_Acl_Adapter_Local();
 						$acl = Pandamp_Acl::manager();
