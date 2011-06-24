@@ -313,7 +313,8 @@ class Customer_MigrationController extends Zend_Controller_Action
 		}
 		else if ($groupId == 27) 
 		{
-			$groupName = "Corporate";
+			//$groupName = "Corporate";
+			$groupName = "Ilb";
 		}
 		
 		return $groupName;
