@@ -272,8 +272,8 @@ class Customer_MigrationController extends Zend_Controller_Action
 		if ($groupId == 11)
 		{
 			//$groupName = "Master";
-			//$groupName = "Super Admin";
-			$groupName = "Admin Ina";
+			$groupName = "Super Admin";
+			//$groupName = "Admin Ina";
 		}
 		else if ($groupId == 41) 
 		{
