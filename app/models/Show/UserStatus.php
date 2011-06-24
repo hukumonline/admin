@@ -38,7 +38,7 @@ class App_Model_Show_UserStatus extends App_Model_Db_DefaultAdapter
     {
         $db = parent::_dbSelect();
         $select = $db->from('KutuUserStatus',array("accountStatusId","status"),"hid")
-                    ->where("accountStatusId=".$statusId);
+                    ->where("accountStatusId=?",$statusId);
 
         $result = parent::_getDefaultAdapter()->fetchRow($select);
 
