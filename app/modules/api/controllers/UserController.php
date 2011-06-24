@@ -17,7 +17,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
-		$rowset = $tblUser->fetchAll($q, 'fullName ASC', $limit, $start);
+		$rowset = $tblUser->fetchAll($q, 'kopel ASC', $limit, $start);
 		
 		if(count($rowset)==0)
 		{
