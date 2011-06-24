@@ -44,7 +44,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 
         echo $title.'<br>';
 
-        $groupId = 41;
+        $groupId = 42;
 
         require_once(CONFIG_PATH.'/master-status.php');
 
@@ -278,6 +278,10 @@ class Customer_MigrationController extends Zend_Controller_Action
 		else if ($groupId == 41) 
 		{
 			$groupName = "Clinic Admin";
+		}
+		else if ($groupId == 42) 
+		{
+			$groupName = "Clinic Editor";
 		}
 		else if ($groupId == 39) 
 		{
