@@ -41,7 +41,7 @@ class App_Model_Show_Migration_UserIn extends App_Model_Db_DefaultAdapter
     {
         $db = parent::_dbSelect();
     	$select = $db->from("KutuUser")
-                    ->where("username='".$username."' AND isActive=1");
+                    ->where("username='".$username."' AND isActive=1 AND email IS NOT NULL");
 
         /*
         $select = $select->__toString();
