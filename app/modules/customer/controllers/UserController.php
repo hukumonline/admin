@@ -133,7 +133,7 @@ class Customer_UserController extends Zend_Controller_Action
         $userList = App_Model_Show_User::show()->getUserList();
         
 		$a['totalCount'] = count($userList);
-		$limit = 5;
+		$limit = 25;
 		$a['limit'] = $limit;
 		
 		$this->view->aData = $a;
