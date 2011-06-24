@@ -1,0 +1,94 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <h3>User Management</h3>
+            <div class="box box-success" id="message"></div>
+            <table class="display stylized" id="usermanagement">
+                <thead>
+                    <tr>
+                        <th>Kopel</th>
+                        <th>Username</th>
+                        <th>Company</th>
+                        <th>Group</th>
+                        <th>Status</th>
+                        <th class="ta-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?
+                    $gEx = $this->groupException(11); // group:master di online pmg server
+                    $i=1; foreach($this->user as $row):
+                    ?>
+                    <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$row['kopel'];?>">
+                        <td><?=$row['kopel'];?></td>
+                        <td><?=$row['username'];?></td>
+                        <td><?=$row['company'];?></td>
+                        <td><?=$this->userGroup($row['packageId']);?></td>
+                        <td><?=$this->userStatus($row['periodeId']);?></td>
+                        <td>
+                            <!--
+                            if username is there in group Master and the current group login system is not Master
+                            then disable
+                            -->
+                            <? if ((in_array($row['username'], $gEx)) && ($this->userGroup($this->identity->packageId) !== "Master")) { ?>
+                            -
+                            <? 
+                            } else {
+                                if ($this->isAllowed('membership','all'))
+                                {
+                            ?>
+                                    <input type="button" name="edit" value="Edit" onclick="javascript: window.location.href='<?=$this->url(array('controller'=>'user','module'=>'customer','action'=>'edit','id'=>$row['kopel']));?>';" class="form-button" />&nbsp;
+                                    <input type="button" name="delete" value="Delete" id="<?=$row['kopel'];?>" class="form-button" />&nbsp;
+                                    <input type="button" name="reset" value="Reset" id="<?=$row['kopel'];?>" class="form-button" />
+
+                                <? } else { ?>
+
+                                    <input type="button" name="edit" value="Edit" disabled class="form-button" />&nbsp;
+                                    <input type="button" name="delete" value="Delete" disabled class="form-button" />&nbsp;
+                                    <input type="button" name="reset" value="Reset" disabled class="form-button" />
+
+                                <? } ?>
+
+                            <? } ?>
+                        </td>
+                    </tr>
+                    <? $i++; endforeach;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?//=$this->action('approval','user','customer');?>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <div class="content-box">
+        <header style="cursor: s-resize;">
+                <h3>Information</h3>
+        </header>
+        <section>
+                <dl>
+                    <dt>Register, It only takes a minute..</dt>
+                    <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/account/register"><abbr>REGISTER</abbr></a></dd>
+                    <dt>Lost or forgotten User Password</dt>
+                    <dd><a href="#"><abbr>Forgot Password?</abbr></a></dd>
+                </dl>
+        </section>
+    </div>
+</aside>
+<!-- End of Right column/section -->

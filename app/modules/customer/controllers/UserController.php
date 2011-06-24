@@ -105,7 +105,7 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->_redirect(ROOT_URL."/".$zl->getLanguage().'/customer/user/list');
     }
-    function listAction()
+    function _listAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
@@ -118,6 +118,30 @@ class Customer_UserController extends Zend_Controller_Action
         $this->view->user = $userList;
 
         $this->view->identity = $this->_user;
+    }
+    function listAction()
+    {
+        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+            $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
+        }
+        
+        $this->_helper->layout->setLayout('layout-customer-credential');
+        
+        $time_start = microtime(true);
+    	
+        $userList = App_Model_Show_User::show()->getUserList();
+        
+		$a['totalCount'] = count($userList);
+		$limit = 5;
+		$a['limit'] = $limit;
+		
+		$this->view->aData = $a;
+
+        $this->view->identity = $this->_user;
+        
+		$time_end = microtime(true);
+		$time = $time_end - $time_start;
     }
     function logAction()
     {

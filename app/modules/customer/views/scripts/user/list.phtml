@@ -5,58 +5,90 @@
         <div class="column width6 first">
             <h3>User Management</h3>
             <div class="box box-success" id="message"></div>
-            <table class="display stylized" id="usermanagement">
-                <thead>
-                    <tr>
-                        <th>Kopel</th>
-                        <th>Username</th>
-                        <th>Company</th>
-                        <th>Group</th>
-                        <th>Status</th>
-                        <th class="ta-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?
-                    $gEx = $this->groupException(11); // group:master di online pmg server
-                    $i=1; foreach($this->user as $row):
-                    ?>
-                    <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$row['kopel'];?>">
-                        <td><?=$row['kopel'];?></td>
-                        <td><?=$row['username'];?></td>
-                        <td><?=$row['company'];?></td>
-                        <td><?=$this->userGroup($row['packageId']);?></td>
-                        <td><?=$this->userStatus($row['periodeId']);?></td>
-                        <td>
-                            <!--
-                            if username is there in group Master and the current group login system is not Master
-                            then disable
-                            -->
-                            <? if ((in_array($row['username'], $gEx)) && ($this->userGroup($this->identity->packageId) !== "Master")) { ?>
-                            -
-                            <? 
-                            } else {
-                                if ($this->isAllowed('membership','all'))
-                                {
-                            ?>
-                                    <input type="button" name="edit" value="Edit" onclick="javascript: window.location.href='<?=$this->url(array('controller'=>'user','module'=>'customer','action'=>'edit','id'=>$row['kopel']));?>';" class="form-button" />&nbsp;
-                                    <input type="button" name="delete" value="Delete" id="<?=$row['kopel'];?>" class="form-button" />&nbsp;
-                                    <input type="button" name="reset" value="Reset" id="<?=$row['kopel'];?>" class="form-button" />
-
-                                <? } else { ?>
-
-                                    <input type="button" name="edit" value="Edit" disabled class="form-button" />&nbsp;
-                                    <input type="button" name="delete" value="Delete" disabled class="form-button" />&nbsp;
-                                    <input type="button" name="reset" value="Reset" disabled class="form-button" />
-
-                                <? } ?>
-
-                            <? } ?>
-                        </td>
-                    </tr>
-                    <? $i++; endforeach;?>
-                </tbody>
-            </table>
+			<input id="keywords" name="keywords"> &nbsp; <a href="#" id="linkDoSearch">Search</a>
+			<br>&nbsp;<br>
+			<fieldset>
+				<legend>Number of record(s): <? echo $this->aData['totalCount'];?></legend>
+			</fieldset>
+			<div id='catalogContent'>
+				
+			</div>
+			<table width='100%'>
+				<tr>
+					<td width=35%>&nbsp;</td>
+					<td align=right><div id='catalogPagination' class="pagination"></div></td>
+				</tr>
+			</table>
+            <script>
+            $(document).ready(function(){
+            	
+				var isFirstTime = 1;
+				
+				var myPageIndex = 0;
+				var currentEncodedQuery ='';
+				var itemsPerPage = <?php echo $this->aData['limit'];?>
+				
+				$("#catalogPagination").pagination(<?php echo $this->aData['totalCount'];?>, 
+				{items_per_page:itemsPerPage, callback:handlePaginationClick}
+				);
+				
+				function handlePaginationClick(new_page_index, pagination_container) 
+				{
+					
+					myPageIndex = new_page_index;
+					myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+					
+					if(true)
+					{
+						if($('#tblCatalogPager-'+myPageIndex).length==0)
+						{
+							//$('#message_box').show();
+							$.getJSON('<?=ROOT_URL;?>/id/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+						}
+						else
+							showCatalogContent();
+					}
+					return false;
+				}
+				function testJson(res)
+				{
+					size = res.catalogs.length;
+					var tblRow = "<a name='a-"+myPageIndex+"' ></a>"+'<div class="tblCatalogPager" id="tblCatalogPager-'+myPageIndex+'">';
+					tblRow += "<table class='display stylized'><thead><tr><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th>Status</th><th class='ta-center'>Action</th></tr></thead><tbody>"
+					+"<?$gEx = $this->groupException(11);$d=1;?>";
+					
+					
+					for(i=0;i<size;i++)
+					{
+						tblRow += 
+							"<tr id='row_"+res.catalogs[i].guid+"'>"
+							+"<td>"+res.catalogs[i].guid+"</td>"
+							+"</tr>";
+							
+							
+					}
+					tblRow += "</tbody></table></div>";
+					$(tblRow).appendTo("#catalogContent");
+					showCatalogContent();
+					//$('#message_box').fadeOut();
+					
+					
+				}
+				function showCatalogContent()
+				{
+					$('.tblCatalogPager').hide();
+					$('#tblCatalogPager-'+myPageIndex).show();
+					if(!isFirstTime)
+						//window.location.hash = '#a-'+myPageIndex;
+						Scroller.scroll();
+					isFirstTime = 0;
+				}
+				
+				
+            	
+            });
+            </script>
+			
         </div>
     </div>
 
