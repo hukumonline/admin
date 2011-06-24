@@ -91,7 +91,7 @@
 				function testCount()
 				{
 					var textKeywords = $("input#keywords").val();
-					var searchQuery = "concat(fullName) LIKE '%"+textKeywords+"%' OR username LIKE '%"+textKeywords+"' ";
+					var searchQuery = "fullName LIKE '%"+textKeywords+"%' OR username LIKE '%"+textKeywords+"' ";
 					var base64encoded = Base64.encode(searchQuery);
 					currentEncodedQuery = base64encoded;
 					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
