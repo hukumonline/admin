@@ -44,7 +44,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 
         echo $title.'<br>';
 
-        $groupId = 34;
+        $groupId = 11;
 
         require_once(CONFIG_PATH.'/master-status.php');
 
@@ -271,9 +271,9 @@ class Customer_MigrationController extends Zend_Controller_Action
 	{
 		if ($groupId == 11)
 		{
-			$groupName = "Master";
+			//$groupName = "Master";
 			//$groupName = "Super Admin";
-			//$groupName = "Admin Ina";
+			$groupName = "Admin Ina";
 		}
 		else if ($groupId == 41) 
 		{
