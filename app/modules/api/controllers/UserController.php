@@ -32,7 +32,7 @@ class Api_UserController extends Zend_Controller_Action
 			$ii=0;
 			foreach ($rowset as $row) 
 			{
-				$a['catalogs'][$ii]['guid']= $row->kopel;
+				$a['catalogs'][$ii]['kopel']= $row->kopel;
 				$a['catalogs'][$ii]['title']= $row->fullName;
 				$a['catalogs'][$ii]['subTitle']= $row->username; 
 				$a['catalogs'][$ii]['createdDate']= $row->createdDate;

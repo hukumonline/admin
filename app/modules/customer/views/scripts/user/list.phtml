@@ -43,7 +43,7 @@
 						if($('#tblCatalogPager-'+myPageIndex).length==0)
 						{
 							//$('#message_box').show();
-							$.getJSON('<?=ROOT_URL;?>/id/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+							$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
 						}
 						else
 							showCatalogContent();
@@ -55,14 +55,14 @@
 					size = res.catalogs.length;
 					var tblRow = "<a name='a-"+myPageIndex+"' ></a>"+'<div class="tblCatalogPager" id="tblCatalogPager-'+myPageIndex+'">';
 					tblRow += "<table class='display stylized'><thead><tr><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th>Status</th><th class='ta-center'>Action</th></tr></thead><tbody>"
-					+"<?$gEx = $this->groupException(11);$d=1;?>";
+					+"<?$gEx = $this->groupException(11);?>";
 					
 					
 					for(i=0;i<size;i++)
 					{
 						tblRow += 
-							"<tr id='row_"+res.catalogs[i].guid+"'>"
-							+"<td>"+res.catalogs[i].guid+"</td>"
+							"<tr id='row_"+res.catalogs[i].kopel+"'>"
+							+"<td>"+res.catalogs[i].kopel+"</td>"
 							+"</tr>";
 							
 							
