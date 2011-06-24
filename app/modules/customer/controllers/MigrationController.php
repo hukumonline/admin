@@ -44,7 +44,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 
         echo $title.'<br>';
 
-        $groupId = 40;
+        $groupId = 39;
 
         require_once(CONFIG_PATH.'/master-status.php');
 
