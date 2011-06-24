@@ -44,5 +44,22 @@ class Api_UserController extends Zend_Controller_Action
 		echo Zend_Json::encode($a);
 		die();
 	}
-	
+	public function countuserbyqueryAction()
+	{
+		$mainQuery = "SELECT count(*) as count from KutuUser where ";
+		
+		$r = $this->getRequest();
+		$q = ($r->getParam('q'))? $r->getParam('q') : '';
+		$q = base64_decode($q);
+		
+		$finalQuery = $mainQuery.$q;
+		$db = Zend_Registry::get('db2');
+		$query = $db->query($finalQuery);
+		//$db = Zend_Db_Table::getDefaultAdapter()->query($finalQuery);
+		
+		$row = $query->fetchAll(Zend_Db::FETCH_ASSOC);
+		//$row = $db->fetchAll(Zend_Db::FETCH_OBJ);
+		echo $row[0]['count'];
+		die();
+	}	
 }

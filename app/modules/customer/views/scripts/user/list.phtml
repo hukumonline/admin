@@ -8,7 +8,7 @@
 			<input id="keywords" name="keywords"> &nbsp; <a href="#" id="linkDoSearch">Search</a>
 			<br>&nbsp;<br>
 			<fieldset>
-				<legend>Number of record(s): <? echo $this->aData['totalCount'];?></legend>
+				<legend>Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span></legend>
 			</fieldset>
 			<div id='catalogContent'>
 				
@@ -82,6 +82,44 @@
 						//window.location.hash = '#a-'+myPageIndex;
 						Scroller.scroll();
 					isFirstTime = 0;
+				}
+				
+				$("#linkDoSearch").click(function(){ 
+					testCount();
+				});
+				
+				function testCount()
+				{
+					var textKeywords = $("input#keywords").val();
+					var searchQuery = "concat(fullName) LIKE '%"+textKeywords+"%' OR username LIKE '%"+textKeywords+"' ";
+					var base64encoded = Base64.encode(searchQuery);
+					currentEncodedQuery = base64encoded;
+					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
+				}
+				function callbackTestCount(res)
+				{
+					$("#numOfRecords").html(res);
+					$("#catalogPagination").pagination(res, 
+					{items_per_page:itemsPerPage, callback:handlePaginationClick}
+					);
+					testInitiateFirstPagingClick();
+				}
+				function testInitiateFirstPagingClick()
+				{
+					$("#catalogContent").html("");
+					myPageIndex = 0;
+					myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+					
+					if(true)
+					{
+						if($('#tblCatalogPager-'+myPageIndex).length==0)
+						{
+							//$('#message_box').show();
+							$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+						}
+						else
+							showCatalogContent();
+					}
 				}
 				
 				
