@@ -4,6 +4,7 @@ data/
 js+/
 resources+/
 uploads+/
+nbproject/
 library/Apache/
 library/FCKeditor/
 library/Phpids/
