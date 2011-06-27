@@ -5,12 +5,26 @@
 
 class Api_UserController extends Zend_Controller_Action
 {
+    protected $_user;
+    protected $_zl;
+    
+    function  preDispatch()
+    {
+        $auth = Zend_Auth::getInstance();
+
+        $this->_zl = Zend_Registry::get("Zend_Locale");
+        
+        if ($auth->hasIdentity()) {
+            $this->_user = $auth->getIdentity();
+        }
+    }
 	public function getalluserAction()
 	{
 		$this->_helper->layout()->disableLayout();
-		
+
+		$aColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId', 'action' );
+		            
 		$r = $this->getRequest();
-		$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
 		
 		$sEcho = ($r->getParam('sEcho'))? $r->getParam('sEcho') : 1;
 		$start = ($r->getParam('iDisplayStart'))? $r->getParam('iDisplayStart') : 0;
@@ -18,12 +32,28 @@ class Api_UserController extends Zend_Controller_Action
 		$orderBy = ($r->getParam('orderBy'))? $r->getParam('sortBy') : 'firstname';
 		$sortOrder = ($r->getParam('sortOrder'))? $r->getParam('sortOrder') : ' asc';
 		
+		$sWhere = "";
+		if ($r->getParam('sSearch'))
+		{
+			for ($i=0;$i<count($aColumns);$i++)
+			{
+				$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($r->getParam('sSearch'))."%' OR ";
+			}
+			
+			$sWhere = substr_replace($sWhere,"",-3);
+			
+		}
+		else 
+		{
+			$sWhere = "1=1";
+		}
+		
 		$tblUser = new App_Model_Db_Table_User();
-		//echo $q;die();
-		$rowset = $tblUser->fetchAll($q, 'kopel ASC', $limit, $start);
-		$rowset1 = $tblUser->fetchAll($q, 'kopel ASC');
+		
+		$rowset = $tblUser->fetchAll($sWhere, 'kopel ASC', $limit, $start);
+		$rowset1 = $tblUser->fetchAll($sWhere);
 
-                $nr = count($rowset1);
+       	$nr = count($rowset1);
 
 		$a = array(
                     'sEcho'=>$sEcho,
@@ -32,28 +62,53 @@ class Api_UserController extends Zend_Controller_Action
                     "aaData" => array()
                 );
 
-		if(count($rowset)==0)
+		if($nr==0)
 		{
-			$a['aaData'][0]['guid']= 'XXX';
-			$a['aaData'][0]['title']= "No Data";
-			$a['aaData'][0]['subTitle']= "";
-			$a['aaData'][0]['createdDate']= '';
-			$a['aaData'][0]['modifiedDate']= '';
+			
 		}
 		else 
 		{
-                        $aColumns = array( 'kopel', 'username', 'company', 'createdDate', 'modifiedDate' );
-			$ii=0;
                         
 			foreach ($rowset as $row) 
 			{
-                            $b = array();
-                            for ( $i=0 ; $i<count($aColumns) ; $i++ )
-                            {
-				$b[]= $row[ $aColumns[$i] ];
-                            }
+                $b = array();
+                for ( $i=0 ; $i<count($aColumns) ; $i++ )
+                {
+                	if ($aColumns[$i] == 'packageId')
+                	{
+                		$b[] = Pandamp_Controller_Action_Helper_UserGroup::userGroup($row[ $aColumns[$i] ]);
+                	}
+                	elseif ($aColumns[$i] == 'periodeId')
+                	{
+                		$b[] = Pandamp_Controller_Action_Helper_UserStatus::userStatus($row[ $aColumns[$i] ]);
+                	}
+                	elseif ($aColumns[$i] == 'action')
+                	{
+                		$btn="";
+                		$gEx = Pandamp_Controller_Action_Helper_GroupException::groupException(11);
+                		if ((in_array($row->username, $gEx)) && (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) !== "Master")) { 
+							$btn .= '-';            			
+                		}
+                		else 
+                		{
+                			if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all')) {
+                				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."';\" class=\"form-button\" />&nbsp";
+                			}
+                			else 
+                			{
+                				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" disabled class=\"form-button\" />&nbsp;";
+                			}
+                		}
+                		
+                		$b[] = $btn;
+                	}
+                	else 
+                	{
+						$b[]= $row[ $aColumns[$i] ];
+                	}
+		        }
 
-                            $a['aaData'][] = $b;
+				$a['aaData'][] = $b;
 				
 			}
 		}
