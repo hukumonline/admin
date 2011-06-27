@@ -12,16 +12,17 @@ class Api_UserController extends Zend_Controller_Action
 		$r = $this->getRequest();
 		$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
 		
-		$start = ($r->getParam('start'))? $r->getParam('start') : 0;
-		$limit = ($r->getParam('limit'))? $r->getParam('limit'): 0;
+		$start = ($r->getParam('iDisplayStart'))? $r->getParam('iDisplayStart') : 0;
+		$limit = ($r->getParam('iDisplayLength'))? $r->getParam('iDisplayLength'): 0;
 		$orderBy = ($r->getParam('orderBy'))? $r->getParam('sortBy') : 'firstname';
 		$sortOrder = ($r->getParam('sortOrder'))? $r->getParam('sortOrder') : ' asc';
 		
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
 		$rowset = $tblUser->fetchAll($q, 'kopel ASC', $limit, $start);
+		$rowset1 = $tblUser->fetchAll($q, 'kopel ASC');
 
-                $nr = count($rowset);
+                $nr = count($rowset1);
 
 		$a = array(
                     'sEcho'=>1,
@@ -40,7 +41,7 @@ class Api_UserController extends Zend_Controller_Action
 		}
 		else 
 		{
-                        $aColumns = array( 'kopel', 'fullName', 'username', 'createdDate', 'modifiedDate' );
+                        $aColumns = array( 'kopel', 'username', 'company', 'createdDate', 'modifiedDate' );
 			$ii=0;
                         
 			foreach ($rowset as $row) 
