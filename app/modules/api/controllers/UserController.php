@@ -93,10 +93,14 @@ class Api_UserController extends Zend_Controller_Action
                 		{
                 			if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all')) {
                 				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."';\" class=\"form-button\" />&nbsp";
+                				$btn .= "<input type=\"button\" name=\"delete\" value=\"Delete\" id=\"$row->kopel\" class=\"form-button\" />&nbsp";
+                				$btn .= "<input type=\"button\" name=\"reset\" value=\"Reset\" id=\"$row->kopel\" class=\"form-button\" />";
                 			}
                 			else 
                 			{
                 				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" disabled class=\"form-button\" />&nbsp;";
+                				$btn .= "<input type=\"button\" name=\"delete\" value=\"Delete\" disabled class=\"form-button\" />&nbsp;";
+                				$btn .= "<input type=\"button\" name=\"reset\" value=\"Reset\" disabled class=\"form-button\" />";
                 			}
                 		}
                 		
