@@ -19,7 +19,7 @@ class App_Model_Db_Table_User extends Zend_Db_Table_Abstract
     );
     protected function  _setupDatabaseAdapter()
     {
-        $this->_db = Zend_Registry::get('db2');
+        $this->_db = Zend_Registry::get('db1');
 
         parent::_setupDatabaseAdapter();
     }
