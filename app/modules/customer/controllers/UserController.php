@@ -105,7 +105,7 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->_redirect(ROOT_URL."/".$zl->getLanguage().'/customer/user/list');
     }
-    function listAction()
+    function __listAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
@@ -129,7 +129,7 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->view->identity = $this->_user;
     }
-    function __listAction()
+    function listAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {

@@ -18,7 +18,7 @@ class Api_UserController extends Zend_Controller_Action
             $this->_user = $auth->getIdentity();
         }
     }
-	public function getalluserAction()
+	public function __getalluserAction()
 	{
 		$this->_helper->layout()->disableLayout();
 
@@ -115,6 +115,50 @@ class Api_UserController extends Zend_Controller_Action
 
 				$a['aaData'][] = $b;
 				
+			}
+		}
+		
+		echo Zend_Json::encode($a);
+		die();
+	}
+	public function getalluserAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		//params: $folderGuid,$start,$limit,orderBy
+		
+		$r = $this->getRequest();
+		$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
+		
+		$start = ($r->getParam('start'))? $r->getParam('start') : 0;
+		$limit = ($r->getParam('limit'))? $r->getParam('limit'): 0;
+		$orderBy = ($r->getParam('orderBy'))? $r->getParam('sortBy') : 'firstname';
+		$sortOrder = ($r->getParam('sortOrder'))? $r->getParam('sortOrder') : ' asc';
+		
+		$a = array();
+		
+		$tblUser = new App_Model_Db_Table_User();
+		//echo $q;die();
+		$rowset = $tblUser->fetchAll($q, 'kopel ASC', $limit, $start);
+		
+		if(count($rowset)==0)
+		{
+			$a['users'][0]['kopel']= 'XXX';
+			$a['users'][0]['username']= "No Data";
+			$a['users'][0]['company']= "";
+			$a['users'][0]['packageId']= '';
+			$a['users'][0]['periodeId']= '';
+		}
+		else 
+		{
+			$ii=0;
+			foreach ($rowset as $row) 
+			{
+				$a['users'][$ii]['kopel']= $row->kopel;
+				$a['users'][$ii]['username']= $row->username;
+				$a['users'][$ii]['company']= $row->company; 
+				$a['users'][$ii]['packageId']= Pandamp_Controller_Action_Helper_UserGroup::userGroup($row->packageId);
+				$a['users'][$ii]['periodeId']= Pandamp_Controller_Action_Helper_UserStatus::userStatus($row->periodeId);
+				$ii++;
 			}
 		}
 		
