@@ -12,6 +12,7 @@ class Api_UserController extends Zend_Controller_Action
 		$r = $this->getRequest();
 		$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
 		
+		$sEcho = ($r->getParam('sEcho'))? $r->getParam('sEcho') : 1;
 		$start = ($r->getParam('iDisplayStart'))? $r->getParam('iDisplayStart') : 0;
 		$limit = ($r->getParam('iDisplayLength'))? $r->getParam('iDisplayLength'): 0;
 		$orderBy = ($r->getParam('orderBy'))? $r->getParam('sortBy') : 'firstname';
@@ -25,7 +26,7 @@ class Api_UserController extends Zend_Controller_Action
                 $nr = count($rowset1);
 
 		$a = array(
-                    'sEcho'=>1,
+                    'sEcho'=>$sEcho,
                     'iTotalRecords'=>$nr,
                     'iTotalDisplayRecords'=>$nr,
                     "aaData" => array()
