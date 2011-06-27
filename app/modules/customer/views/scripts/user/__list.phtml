@@ -1,0 +1,164 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <h3>User Management</h3>
+            <div class="box box-success" id="message"></div>
+			<input id="keywords" name="keywords"> &nbsp; <a href="#" id="linkDoSearch">Search</a>
+			<br>&nbsp;<br>
+			<fieldset>
+				<legend>Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span></legend>
+			</fieldset>
+			<div id='catalogContent'>
+				
+			</div>
+			<table width='100%'>
+				<tr>
+					<td width=35%>&nbsp;</td>
+					<td align=right><div id='catalogPagination' class="pagination"></div></td>
+				</tr>
+			</table>
+            <script>
+            $(document).ready(function(){
+            	
+				var isFirstTime = 1;
+				
+				var myPageIndex = 0;
+				var currentEncodedQuery ='';
+				var itemsPerPage = <?php echo $this->aData['limit'];?>
+				
+				$("#catalogPagination").pagination(<?php echo $this->aData['totalCount'];?>, 
+				{items_per_page:itemsPerPage, callback:handlePaginationClick}
+				);
+				
+				function handlePaginationClick(new_page_index, pagination_container) 
+				{
+					
+					myPageIndex = new_page_index;
+					myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+					
+					if(true)
+					{
+						if($('#tblCatalogPager-'+myPageIndex).length==0)
+						{
+							//$('#message_box').show();
+							$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+						}
+						else
+							showCatalogContent();
+					}
+					return false;
+				}
+				function testJson(res)
+				{
+					size = res.catalogs.length;
+					var tblRow = "<a name='a-"+myPageIndex+"' ></a>"+'<div class="tblCatalogPager" id="tblCatalogPager-'+myPageIndex+'">';
+					tblRow += "<table class='display stylized'><thead><tr><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th>Status</th><th class='ta-center'>Action</th></tr></thead><tbody>"
+					+"<?$gEx = $this->groupException(11);?>";
+					
+					
+					for(i=0;i<size;i++)
+					{
+						tblRow += 
+							"<tr id='row_"+res.catalogs[i].kopel+"'>"
+							+"<td>"+res.catalogs[i].kopel+"</td>"
+							+"</tr>";
+							
+							
+					}
+					tblRow += "</tbody></table></div>";
+					$(tblRow).appendTo("#catalogContent");
+					showCatalogContent();
+					//$('#message_box').fadeOut();
+					
+					
+				}
+				function showCatalogContent()
+				{
+					$('.tblCatalogPager').hide();
+					$('#tblCatalogPager-'+myPageIndex).show();
+					if(!isFirstTime)
+						//window.location.hash = '#a-'+myPageIndex;
+						Scroller.scroll();
+					isFirstTime = 0;
+				}
+				
+				$("#linkDoSearch").click(function(){ 
+					testCount();
+				});
+				
+				function testCount()
+				{
+					var textKeywords = $("input#keywords").val();
+					var searchQuery = "fullName LIKE '%"+textKeywords+"%' OR username LIKE '%"+textKeywords+"' ";
+					var base64encoded = Base64.encode(searchQuery);
+					currentEncodedQuery = base64encoded;
+					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
+				}
+				function callbackTestCount(res)
+				{
+					$("#numOfRecords").html(res);
+					$("#catalogPagination").pagination(res, 
+					{items_per_page:itemsPerPage, callback:handlePaginationClick}
+					);
+					testInitiateFirstPagingClick();
+				}
+				function testInitiateFirstPagingClick()
+				{
+					$("#catalogContent").html("");
+					myPageIndex = 0;
+					myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+					
+					if(true)
+					{
+						if($('#tblCatalogPager-'+myPageIndex).length==0)
+						{
+							//$('#message_box').show();
+							$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+						}
+						else
+							showCatalogContent();
+					}
+				}
+				
+				
+            	
+            });
+            </script>
+			
+        </div>
+    </div>
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?//=$this->action('approval','user','customer');?>
+        </div>
+    </div>
+
+
+    <div class="clear">&nbsp;</div>
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+    <div class="content-box">
+        <header style="cursor: s-resize;">
+                <h3>Information</h3>
+        </header>
+        <section>
+                <dl>
+                    <dt>Register, It only takes a minute..</dt>
+                    <dd><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/account/register"><abbr>REGISTER</abbr></a></dd>
+                    <dt>Lost or forgotten User Password</dt>
+                    <dd><a href="#"><abbr>Forgot Password?</abbr></a></dd>
+                </dl>
+        </section>
+    </div>
+</aside>
+<!-- End of Right column/section -->

@@ -1,4 +1,8 @@
 <?php
+
+// http://code.google.com/p/jquery-datatables-editable/
+// http://jquery-datatables-editable.googlecode.com/svn/trunk/delete-record.html
+
 class Api_UserController extends Zend_Controller_Action
 {
 	public function getalluserAction()
@@ -13,31 +17,42 @@ class Api_UserController extends Zend_Controller_Action
 		$orderBy = ($r->getParam('orderBy'))? $r->getParam('sortBy') : 'firstname';
 		$sortOrder = ($r->getParam('sortOrder'))? $r->getParam('sortOrder') : ' asc';
 		
-		$a = array();
-		
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
 		$rowset = $tblUser->fetchAll($q, 'kopel ASC', $limit, $start);
-		
+
+                $nr = count($rowset);
+
+		$a = array(
+                    'sEcho'=>1,
+                    'iTotalRecords'=>$nr,
+                    'iTotalDisplayRecords'=>$nr,
+                    "aaData" => array()
+                );
+
 		if(count($rowset)==0)
 		{
-			$a['catalogs'][0]['guid']= 'XXX';
-			$a['catalogs'][0]['title']= "No Data";
-			$a['catalogs'][0]['subTitle']= "";
-			$a['catalogs'][0]['createdDate']= '';
-			$a['catalogs'][0]['modifiedDate']= '';
+			$a['aaData'][0]['guid']= 'XXX';
+			$a['aaData'][0]['title']= "No Data";
+			$a['aaData'][0]['subTitle']= "";
+			$a['aaData'][0]['createdDate']= '';
+			$a['aaData'][0]['modifiedDate']= '';
 		}
 		else 
 		{
+                        $aColumns = array( 'kopel', 'fullName', 'username', 'createdDate', 'modifiedDate' );
 			$ii=0;
+                        
 			foreach ($rowset as $row) 
 			{
-				$a['catalogs'][$ii]['kopel']= $row->kopel;
-				$a['catalogs'][$ii]['title']= $row->fullName;
-				$a['catalogs'][$ii]['subTitle']= $row->username; 
-				$a['catalogs'][$ii]['createdDate']= $row->createdDate;
-				$a['catalogs'][$ii]['modifiedDate']= $row->modifiedDate;
-				$ii++;
+                            $b = array();
+                            for ( $i=0 ; $i<count($aColumns) ; $i++ )
+                            {
+				$b[]= $row[ $aColumns[$i] ];
+                            }
+
+                            $a['aaData'][] = $b;
+				
 			}
 		}
 		

@@ -105,6 +105,16 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->_redirect(ROOT_URL."/".$zl->getLanguage().'/customer/user/list');
     }
+    function listAction()
+    {
+        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+            $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
+        }
+
+        $this->_helper->layout->setLayout('layout-customer-credential');
+        
+    }
     function _listAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
@@ -119,7 +129,7 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->view->identity = $this->_user;
     }
-    function listAction()
+    function __listAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
