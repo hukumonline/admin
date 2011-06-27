@@ -156,8 +156,30 @@ class Api_UserController extends Zend_Controller_Action
 				$a['users'][$ii]['kopel']= $row->kopel;
 				$a['users'][$ii]['username']= $row->username;
 				$a['users'][$ii]['company']= $row->company; 
-				$a['users'][$ii]['packageId']= Pandamp_Controller_Action_Helper_UserGroup::userGroup($row->packageId);
-				$a['users'][$ii]['periodeId']= Pandamp_Controller_Action_Helper_UserStatus::userStatus($row->periodeId);
+				$a['users'][$ii]['group']= Pandamp_Controller_Action_Helper_UserGroup::userGroup($row->packageId);
+				$a['users'][$ii]['status']= Pandamp_Controller_Action_Helper_UserStatus::userStatus($row->periodeId);
+				
+        		$btn="";
+        		$gEx = Pandamp_Controller_Action_Helper_GroupException::groupException(11);
+        		if ((in_array($row->username, $gEx)) && (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) !== "Master")) { 
+					$btn .= '-';            			
+        		}
+        		else 
+        		{
+        			if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all')) {
+        				$btn .= "<a href=\"javascript:;\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."';\">edit</a>&nbsp";
+        				$btn .= "<a href=\"$row->kopel\" id=\"delete\">delete</a>&nbsp";
+        				$btn .= "<a href=\"$row->kopel\" id=\"reset\">reset</a>";
+        			}
+        			else 
+        			{
+        				$btn .= "Edit&nbsp;";
+        				$btn .= "Delete&nbsp;";
+        				$btn .= "Reset";
+        			}
+        		}
+				
+				$a['users'][$ii]['action']= $btn;
 				$ii++;
 			}
 		}
