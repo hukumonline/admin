@@ -23,6 +23,7 @@ class Api_UserController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 
 		$aColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId', 'action' );
+		$pColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId' );
 		            
 		$r = $this->getRequest();
 		
@@ -35,9 +36,9 @@ class Api_UserController extends Zend_Controller_Action
 		$sWhere = "";
 		if ($r->getParam('sSearch'))
 		{
-			for ($i=0;$i<count($aColumns);$i++)
+			for ($i=0;$i<count($pColumns);$i++)
 			{
-				$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($r->getParam('sSearch'))."%' OR ";
+				$sWhere .= $pColumns[$i]." LIKE '%".mysql_real_escape_string($r->getParam('sSearch'))."%' OR ";
 			}
 			
 			$sWhere = substr_replace($sWhere,"",-3);
