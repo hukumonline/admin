@@ -127,7 +127,26 @@ class Api_UserController extends Zend_Controller_Action
 		//params: $folderGuid,$start,$limit,orderBy
 		
 		$r = $this->getRequest();
-		$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
+		//$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
+		
+		$pColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId' );
+		
+		$sWhere = "";
+		if ($r->getParam('q'))
+		{
+			$q = base64_decode($r->getParam('q'));
+			for ($i=0;$i<count($pColumns);$i++)
+			{
+				$sWhere .= $pColumns[$i]." LIKE '%".mysql_real_escape_string($q)."%' OR ";
+			}
+			
+			$sWhere = substr_replace($sWhere,"",-3);
+			
+		}
+		else 
+		{
+			$sWhere = "1=1";
+		}
 		
 		$start = ($r->getParam('start'))? $r->getParam('start') : 0;
 		$limit = ($r->getParam('limit'))? $r->getParam('limit'): 0;
@@ -138,15 +157,15 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
-		$rowset = $tblUser->fetchAll($q, 'kopel ASC', $limit, $start);
+		$rowset = $tblUser->fetchAll($sWhere, 'kopel ASC', $limit, $start);
 		
 		if(count($rowset)==0)
 		{
 			$a['users'][0]['kopel']= 'XXX';
 			$a['users'][0]['username']= "No Data";
 			$a['users'][0]['company']= "";
-			$a['users'][0]['packageId']= '';
-			$a['users'][0]['periodeId']= '';
+			$a['users'][0]['group']= '';
+			$a['users'][0]['status']= '';
 		}
 		else 
 		{
@@ -167,9 +186,9 @@ class Api_UserController extends Zend_Controller_Action
         		else 
         		{
         			if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all')) {
-        				$btn .= "<a href=\"javascript:;\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."';\">edit</a>&nbsp";
-        				$btn .= "<a href=\"$row->kopel\" id=\"delete\">delete</a>&nbsp";
-        				$btn .= "<a href=\"$row->kopel\" id=\"reset\">reset</a>";
+        				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'\" class=\"form-button\">&nbsp";
+        				$btn .= "<input type=\"button\" name=\"delete\" value=\"Delete\" id=\"$row->kopel\" class=\"form-button\" />&nbsp";
+        				$btn .= "<input type=\"button\" name=\"reset\" value=\"Reset\" id=\"$row->kopel\" class=\"form-button\" />";
         			}
         			else 
         			{
@@ -192,10 +211,29 @@ class Api_UserController extends Zend_Controller_Action
 		$mainQuery = "SELECT count(*) as count from KutuUser where ";
 		
 		$r = $this->getRequest();
-		$q = ($r->getParam('q'))? $r->getParam('q') : '';
-		$q = base64_decode($q);
+		//$q = ($r->getParam('q'))? $r->getParam('q') : '';
+		//$q = base64_decode($q);
 		
-		$finalQuery = $mainQuery.$q;
+		$pColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId' );
+		
+		$sWhere = "";
+		if ($r->getParam('q'))
+		{
+			$q = base64_decode($r->getParam('q'));
+			for ($i=0;$i<count($pColumns);$i++)
+			{
+				$sWhere .= $pColumns[$i]." LIKE '%".mysql_real_escape_string($q)."%' OR ";
+			}
+			
+			$sWhere = substr_replace($sWhere,"",-3);
+			
+		}
+		else 
+		{
+			$sWhere = "1=1";
+		}
+		
+		$finalQuery = $mainQuery.$sWhere;
 		$db = Zend_Registry::get('db2');
 		$query = $db->query($finalQuery);
 		//$db = Zend_Db_Table::getDefaultAdapter()->query($finalQuery);

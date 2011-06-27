@@ -5,11 +5,12 @@
         <div class="column width6 first">
             <h3>User Management</h3>
             <div class="box box-success" id="message"></div>
-			<input id="keywords" name="keywords"> &nbsp; <a href="#" id="linkDoSearch">Search</a>
-			<br>&nbsp;<br>
-			<fieldset>
-				<legend>Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span></legend>
-			</fieldset>
+			<div class="align-right">
+			<input id="keywords" class="title" name="keywords">
+			</div>
+			<div class="align-left">
+			Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span>
+			</div>
 			<div id='catalogContent'>
 				
 			</div>
@@ -89,14 +90,14 @@
 					isFirstTime = 0;
 				}
 				
-				$("#linkDoSearch").click(function(){ 
+				$("#keywords").change(function(){ 
 					testCount();
 				});
 				
 				function testCount()
 				{
 					var textKeywords = $("input#keywords").val();
-					var searchQuery = "fullName LIKE '%"+textKeywords+"%' OR username LIKE '%"+textKeywords+"' ";
+					var searchQuery = textKeywords;
 					var base64encoded = Base64.encode(searchQuery);
 					currentEncodedQuery = base64encoded;
 					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
