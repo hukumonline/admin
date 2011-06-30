@@ -209,7 +209,7 @@ class Dev_FolderController extends Zend_Controller_Action
 			//$option = '<option value="'.$row->guid.'">'.$sTab.$row->title.'</option>';
 			//$option = '"'.$row->guid.'" :'.'"'.$sTab.$row->title.'",';
 			//$option = $sTab.$row->title;
-			$sGuid .= $this->_traverseFolder($row->guid, '', $level+1)."";
+			$sGuid .= $this->_traverseFolderType($row->guid, '', $level+1)."";
 		//echo $row->guid.'<br>';
 		echo 'Update '.$row->title.'<br>';
 		$tblFolder = new App_Model_Db_Table_Folder();
