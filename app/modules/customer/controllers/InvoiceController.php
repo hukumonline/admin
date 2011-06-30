@@ -71,7 +71,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				
 				if ($rowUser) 
 				{
-					if ($rowUser->packageId == 18 || $rowUser->packageId == 21)
+					if (in_array($rowUser->packageId,array(14,15,16,17,18)))
 					{
 						$rowInvoice->invoiceConfirmDate = date("Y-m-d");
 						$rowInvoice->isPaid = 'Y';
