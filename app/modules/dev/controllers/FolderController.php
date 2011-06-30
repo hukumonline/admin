@@ -8,7 +8,7 @@ class Dev_FolderController extends Zend_Controller_Action
 	function folderAction()
 	{
 		$this->_helper->viewRenderer->setNoRender(TRUE);
-		$traverse = $this->_traverseFolderType('lt47b42dd443c69','', 0);
+		$traverse = $this->_traverseFolderType('lt47b42dd443c69','', 0); // english site
 		print_r($traverse);
 	}
 	protected function _traverseFolder($folderGuid, $sGuid, $level)
@@ -214,7 +214,7 @@ class Dev_FolderController extends Zend_Controller_Action
 		echo 'Update '.$row->title.'<br>';
 		$tblFolder = new App_Model_Db_Table_Folder();
 		$rowFolder = $tblFolder->find($row->guid)->current();
-		$rowFolder->type = 'dms';
+		$rowFolder->type = 'cms-en';
 		$rowFolder->save();
 			//$sGuid .= $sTab.$row->title . '|<br>'. $this->_traverseFolder($row->guid, '', $level+1);
 		 
