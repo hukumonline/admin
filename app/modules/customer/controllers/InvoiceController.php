@@ -204,7 +204,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 	        $modelUser = new App_Model_Db_Table_User();
 	        $rowset = $modelUser->find($kopel)->current();
 	        
-	        if ($rowset->packageId == 18 or $rowset->packageId == 21)
+	        if (in_array($rowset->packageId,array(14,15,16,17,18)))
 	        {
 	        	$periodeId = 2;
 				// Get disc promo
