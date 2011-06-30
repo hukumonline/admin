@@ -22,6 +22,9 @@ class App_Model_Db_Table_Folder extends Zend_Db_Table_Abstract
     }
     public function fetchChildren($parentGuid)
     {
+    	echo '<pre>';
+    	print_r($this->_db);
+    	echo '</pre>';
     	if($parentGuid == 'root')
     	{
     		return $this->fetchAll("parentGuid=guid",'title ASC');
