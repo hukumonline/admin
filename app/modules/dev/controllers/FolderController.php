@@ -197,7 +197,7 @@ class Dev_FolderController extends Zend_Controller_Action
 		$rowSet = $tblFolder->fetchChildren($folderGuid);
 		$row = $tblFolder->find($folderGuid)->current();
 		$sGuid = '';
-		
+		print_r($rowSet);
 		//echo $level;
 		foreach($rowSet as $row)
 		{
