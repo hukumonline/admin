@@ -215,7 +215,7 @@ print_r($body.' code: '.$ret);
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     	
     	$modelUserCopy = new App_Model_Db_Table_Copy_User();
-    	$row = $modelUserCopy->fetchAll();
+    	$row = $modelUserCopy->fetchAll()->toArray();
     	
     	$modelUser = new App_Model_Db_Table_User();
     	$modelUser->insert($row);
