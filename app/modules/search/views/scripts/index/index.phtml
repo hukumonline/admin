@@ -11,7 +11,7 @@
             ?>
             <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3><br />
             <p>
-                <a href="javascript:;" id="indexing" class="btn">Indexing</a>
+                <a href="javascript:;" id="indx" class="btn">Indexing</a>
             </p><br>
             <p>
                 <label for="loadsolr">Load http://</label>
@@ -44,7 +44,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $("#status").hide();
-    $("#indexing").click(function(){
+    $("#indx").click(function(){
         $.ajax({
             url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/setting/cekstatus/format/json",
             type: 'POST',
