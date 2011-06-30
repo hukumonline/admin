@@ -26,7 +26,50 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 $("a[title], div[title], span[title]").tipTip();
-                
+                $("#status").hide();
+                $("#indexing").click(function(){
+                    $.ajax({
+                        url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/setting/cekstatus/format/json",
+                        type: 'POST',
+                        dataType: 'json',
+                        success:function(json){
+                            if( json.success == true ) {
+                                if (confirm("In order indexing to run properly, change website status into Offline.")) {
+                                    $.post('<?=ROOT_URL;?>/admin/setting/change-status/status/offline/format/json',function(){
+                                        $("#status").show().html("Loading ...");
+                                        $("iframe").src("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/manager/reindex", function(duration){
+                                            $("#status").blink("Loaded in " + duration + "ms");
+
+                                        }, {
+                                            timeout: $("#timeout").val(),
+                                            onTimeout: function() { $("#status").blink("Timed out!"); }
+                                          }
+                                        );
+                                    });
+                                }
+                                
+                            } else {
+                                if (confirm("Are you sure?")) {
+                                    $("#status").show().html("Loading ...");
+                                    $("iframe").src("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/manager/reindex", function(duration){
+                                        $("#status").blink("Loaded in " + duration + "ms");
+
+                                    }, {
+                                        timeout: $("#timeout").val(),
+                                        onTimeout: function() { $("#status").blink("Timed out!"); }
+                                      }
+                                    );
+                                }
+
+                            }
+                        }
+                    }
+                    );
+
+
+                    return false;
+                });
+
                 $('input#q').bind('keypress', function(e) {
                     if(e.keyCode==13){
                         // Enter pressed... do anything here...
@@ -37,6 +80,16 @@
                 });
 
             });
+
+            $.fn.blink = function(message) {
+              $(this).animate({opacity: 0.01}, 200, function() {
+                $(this).html(message).show(); $(this).animate({opacity:1}, 200, function() {
+                  $(this).animate({opacity: 0.1}, 200, function() {
+                    $(this).animate({opacity: 1}, 200)
+                  })
+                })
+              });
+            }
 
         </script>
 
