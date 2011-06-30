@@ -14,9 +14,12 @@ class App_Model_Db_Table_Folder extends Zend_Db_Table_Abstract
     {
         $zl = Zend_Registry::get('Zend_Locale');
         if ($zl->getLanguage() == 'id')
+        {die('1');
             $this->_db = Zend_Registry::get('db1');
-        else
+        } else {
             $this->_db = Zend_Registry::get('db3');
+        }
+        
         
         parent::_setupDatabaseAdapter();
     }
