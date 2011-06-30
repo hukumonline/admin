@@ -67,7 +67,7 @@ class Customer_AccountController extends Zend_Controller_Action
 				
 				switch ($value['aro_groups'])
 				{
-					case 33: // individual
+					case 14: // individual
 						
 						$mailcontent = $formater->getMailContent('konfirmasi-email-individual');
 						$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
@@ -77,7 +77,7 @@ class Customer_AccountController extends Zend_Controller_Action
 						
 						break;
 						
-					case 34: // corporate
+					case 15: // corporate
 						
 						$mailcontent = $formater->getMailContent('konfirmasi-email-korporasi');
 						$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
