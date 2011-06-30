@@ -210,6 +210,10 @@ print_r($body.' code: '.$ret);
     }
     function copydataAction()
     {
+    	$this->_helper->layout->setLayout('layout-customer-migration');
+    	
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	
     	$modelUserCopy = new App_Model_Db_Table_Copy_User();
     	$row = $modelUserCopy->fetchAll();
     	
