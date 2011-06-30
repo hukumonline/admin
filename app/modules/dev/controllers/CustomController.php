@@ -208,6 +208,14 @@ print_r($body.' code: '.$ret);
         
         echo $this->randompassowrd();
     }
+    function copydataAction()
+    {
+    	$modelUserCopy = new App_Model_Db_Table_Copy_User();
+    	$row = $modelUserCopy->fetchAll();
+    	
+    	$modelUser = new App_Model_Db_Table_User();
+    	$modelUser->insert($row);
+    }
     protected function randompassowrd($length = 8)
     {
         $password = "";
