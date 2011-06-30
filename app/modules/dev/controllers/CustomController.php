@@ -260,7 +260,7 @@ print_r($body.' code: '.$ret);
 	    	$rowUser->isActive			= $row->isActive;
 	    	$rowUser->isContact			= $row->isContact;
     		
-	    	$id = $rowUser->insert();
+	    	$id = $rowUser->save();
 	    	
     	}
     	
