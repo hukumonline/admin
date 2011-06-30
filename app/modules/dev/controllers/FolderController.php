@@ -8,7 +8,7 @@ class Dev_FolderController extends Zend_Controller_Action
 	function folderAction()
 	{
 		$this->_helper->viewRenderer->setNoRender(TRUE);
-		$traverse = $this->_traverseFolder_('lt4dc919d4046b3','', 0);
+		$traverse = $this->_traverseFolderType('lt47b42dd443c69','', 0);
 		print_r($traverse);
 	}
 	protected function _traverseFolder($folderGuid, $sGuid, $level)
@@ -191,4 +191,34 @@ class Dev_FolderController extends Zend_Controller_Action
 //			}
 //		}
 	}
+	protected function _traverseFolderType($folderGuid, $sGuid, $level)
+	{
+		$tblFolder = new App_Model_Db_Table_Folder();
+		$rowSet = $tblFolder->fetchChildren($folderGuid);
+		$row = $tblFolder->find($folderGuid)->current();
+		$sGuid = '';
+		
+		//echo $level;
+		foreach($rowSet as $row)
+		{
+			//$sTab = '<ul>';
+			//$sTab = '';
+			//for($i=0;$i<$level;$i++)
+				//$sTab .= '<li>';
+			
+			//$option = '<option value="'.$row->guid.'">'.$sTab.$row->title.'</option>';
+			//$option = '"'.$row->guid.'" :'.'"'.$sTab.$row->title.'",';
+			//$option = $sTab.$row->title;
+			$sGuid .= $this->_traverseFolder($row->guid, '', $level+1)."";
+		//echo $row->guid.'<br>';
+		echo 'Update '.$row->title.'<br>';
+		$tblFolder = new App_Model_Db_Table_Folder();
+		$rowFolder = $tblFolder->find($row->guid)->current();
+		$rowFolder->type = 'dms';
+		$rowFolder->save();
+			//$sGuid .= $sTab.$row->title . '|<br>'. $this->_traverseFolder($row->guid, '', $level+1);
+		 
+		}
+	}
+	
 }
