@@ -215,10 +215,55 @@ print_r($body.' code: '.$ret);
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     	
     	$modelUserCopy = new App_Model_Db_Table_Copy_User();
-    	$row = $modelUserCopy->fetchAll()->toArray();
+    	$rowset = $modelUserCopy->fetchAll();
     	
-    	$modelUser = new App_Model_Db_Table_User();
-    	$modelUser->insert($row);
+    	
+    	foreach ($rowset as $row)
+    	{
+	    	$modelUser = new App_Model_Db_Table_User();
+	    	$rowUser = $modelUser->fetchNew();
+	    	$rowUser->kopel				= $row->kopel;
+	    	$rowUser->username			= $row->username;
+	    	$rowUser->password			= $row->password;
+	    	$rowUser->fullName			= $row->fullName;
+	    	$rowUser->birthday			= $row->birthday;
+	    	$rowUser->phone				= $row->phone;
+	    	$rowUser->fax				= $row->fax;
+	    	$rowUser->gender			= $row->gender;
+	    	$rowUser->email				= $row->email;
+	    	$rowUser->openId			= $row->openId;
+	    	$rowUser->company			= $row->company;
+	    	$rowUser->address			= $row->address;
+	    	$rowUser->city				= $row->city;
+	    	$rowUser->state				= $row->state;
+	    	$rowUser->countryId			= $row->countryId;
+	    	$rowUser->zip				= $row->zip;
+	    	$rowUser->indexCol			= $row->indexCol;
+	    	$rowUser->picture			= $row->picture;
+	    	$rowUser->newArticle		= $row->newArticle;
+	    	$rowUser->weeklyList		= $row->weeklyList;
+	    	$rowUser->monthlyList		= $row->monthlyList;
+	    	$rowUser->packageId			= $row->packageId;
+	    	$rowUser->promotionId		= $row->promotionId;
+	    	$rowUser->educationId		= $row->educationId;
+	    	$rowUser->expenseId			= $row->expenseId;
+	    	$rowUser->paymentId			= $row->paymentId;
+	    	$rowUser->businessTypeId	= $row->businessTypeId;
+	    	$rowUser->periodeId			= $row->periodeId;
+	    	$rowUser->activationDate	= $row->activationDate;
+	    	$rowUser->isEmailSent		= $row->isEmailSent;
+	    	$rowUser->isEmailSentOver	= $row->isEmailSentOver;
+	    	$rowUser->createdDate		= $row->createdDate;
+	    	$rowUser->createdBy			= $row->createdBy;
+	    	$rowUser->modifiedDate		= $row->modifiedDate;
+	    	$rowUser->modifiedBy		= $row->modifiedBy; 
+	    	$rowUser->isActive			= $row->isActive;
+	    	$rowUser->isContact			= $row->isContact;
+    		
+	    	$id = $rowUser->insert();
+	    	
+    	}
+    	
     }
     protected function randompassowrd($length = 8)
     {
