@@ -8,7 +8,7 @@ class Dev_FolderController extends Zend_Controller_Action
 	function folderAction()
 	{
 		$this->_helper->viewRenderer->setNoRender(TRUE);
-		$traverse = $this->_traverseFolderType('lt47b42dd443c69','', 0); // english site
+		$traverse = $this->_traverseFolderType('lt479d45c246430','', 0); // english site
 		print_r($traverse);
 	}
 	protected function _traverseFolder($folderGuid, $sGuid, $level)
