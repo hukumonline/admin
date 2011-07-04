@@ -40,8 +40,7 @@ class Dms_BrowserController extends Zend_Controller_Action
 	{
     	$this->_helper->layout()->disableLayout();
     	$this->_helper->viewRenderer->setNoRender(TRUE);
-    	$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/dms/browser/forbidden');
-    	die();
+    	
     	$catalogGuid = $this->_getParam('guid');
     	$parentGuid = $this->_getParam('parent');
     	
@@ -145,7 +144,7 @@ class Dms_BrowserController extends Zend_Controller_Action
     	else 
     	{
     		$flagFileFound = false;
-    		$this->_forward('forbidden','browser','dms');
+    		$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/dms/browser/forbidden');
     	}		
 	}
 	function forbiddenAction() 	
