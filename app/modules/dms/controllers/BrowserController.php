@@ -3,6 +3,7 @@
 class Dms_BrowserController extends Zend_Controller_Action 
 {
     protected $_user;
+    protected $_zl;
 
     function  preDispatch()
     {
@@ -25,12 +26,13 @@ class Dms_BrowserController extends Zend_Controller_Action
         else
         {
             $this->_user = $auth->getIdentity();
-
+            
+            $this->_zl = Zend_Registry::get("Zend_Locale");
+            
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $zl = Zend_Registry::get("Zend_Locale");
-                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
             }
         }
     }
@@ -38,7 +40,8 @@ class Dms_BrowserController extends Zend_Controller_Action
 	{
     	$this->_helper->layout()->disableLayout();
     	$this->_helper->viewRenderer->setNoRender(TRUE);
-    	$this->_forward('forbidden','browser','dms');die();
+    	$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/dms/browser/forbidden');
+    	die();
     	$catalogGuid = $this->_getParam('guid');
     	$parentGuid = $this->_getParam('parent');
     	
