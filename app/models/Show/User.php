@@ -42,10 +42,12 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
     public function getUserQueue()
     {
         $db = parent::_dbSelect();
-        $select = $db->from('KutuUser','*','hid')
+        $select = $db->from('KutuUser')
                     ->where("isActive = 0");
 
-        $result = parent::_getDefaultAdapter()->fetchAll($select);
+		$conn = self::$_db;
+		                    
+        $result = $conn->fetchAll($select);
 
         return $result;
     }
@@ -63,20 +65,25 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
     public function getUserByName($username)
     {
         $db = parent::_dbSelect();
-        $select = $db->from('KutuUser','*','hid')
+        $select = $db->from('KutuUser')
                 ->where("username='".$username."'");
+                
+                
+		$conn = self::$_db;                
 
-        $result = parent::_getDefaultAdapter()->fetchRow($select);
+        $result = $conn->fetchRow($select);
 
         return $result;
     }
     public function getUserById($id)
     {
         $db = parent::_dbSelect();
-        $select = $db->from('KutuUser','*','hid')
+        $select = $db->from('KutuUser')
                 ->where("kopel='".$id."'");
 
-        $result = parent::_getDefaultAdapter()->fetchRow($select);
+		$conn = self::$_db;
+		                
+        $result = $conn->fetchRow($select);
 
         return $result;
     }

@@ -41,7 +41,7 @@ class App_Model_Show_AroGroup extends App_Model_Db_DefaultAdapter
     public function getUserGroup($packageId)
     {
         $db = parent::_dbSelect();
-        $select = $db->from('gacl_aro_groups','*','hid')
+        $select = $db->from('gacl_aro_groups')
                     ->where("id = $packageId");
                     
 		$conn = self::$_db;                    
