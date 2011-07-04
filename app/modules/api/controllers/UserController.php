@@ -133,7 +133,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$sWhere = "";
 		if ($r->getParam('q'))
-		{die('1');
+		{
 			$q = base64_decode($r->getParam('q'));
 			for ($i=0;$i<count($pColumns);$i++)
 			{
@@ -144,7 +144,7 @@ class Api_UserController extends Zend_Controller_Action
 			
 		}
 		else 
-		{die('2');
+		{
 			$sWhere = "1=1";
 		}
 		
@@ -158,7 +158,7 @@ class Api_UserController extends Zend_Controller_Action
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
 		$rowset = $tblUser->fetchAll($sWhere, 'kopel ASC', $limit, $start);
-		
+		echo count($rowset);die();
 		if(count($rowset)==0)
 		{
 			$a['users'][0]['kopel']= 'XXX';
