@@ -11,11 +11,16 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
      * class instance object
      */
     private static $_instance;
+    
+    private static $_db;
 
     /**
      * de-activate constructor
      */
-    final private function  __construct() {}
+    final private function  __construct() 
+    {
+    	self::$_db = Zend_Registry::get('db2');
+    }
 
      /**
       * de-activate object cloning
@@ -47,9 +52,11 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
     public function getUserList()
     {
         $db = parent::_dbSelect();
-        $select = $db->from('KutuUser','*','hid');
+        $select = $db->from('KutuUser');
+        
+        $conn = self::$_db;
 
-        $result = parent::_getDefaultAdapter()->fetchAll($select);
+        $result = $conn->fetchAll($select);
 
         return $result;
     }
