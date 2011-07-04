@@ -99,37 +99,37 @@ class Dms_BrowserController extends Zend_Controller_Action
 					$sDir3 = $cdn['static']['dir']['files']."/".$oname;
 					$sDir4 = $cdn['static']['dir']['files']."/".$parentGuid."/".$oname;
 					
-					if (@fopen($sDir1, "r"))
+					if(file_exists($sDir1))
 					{
 						$flagFileFound = true;
 						header("Content-type: $contentType");
 						header("Content-Disposition: attachment; filename=$oriName");
-						file_put_contents($oriName, file_get_contents($sDir1));
+						@readfile($sDir1);
 						die();
 					}
 					else 
-						if (@fopen($sDir2, "r"))
+						if(file_exists($sDir2))
 						{
 							$flagFileFound = true;
 							header("Content-type: $contentType");
 							header("Content-Disposition: attachment; filename=$oriName");
-							file_put_contents($oriName, file_get_contents($sDir2));
+							@readfile($sDir2);
 							die();
 						}
-						if (@fopen($sDir3, "r"))
+						if (file_exists($sDir3))
 						{
 							$flagFileFound = true;
 							header("Content-type: $contentType");
 							header("Content-Disposition: attachment; filename=$oriName");
-							file_put_contents($oriName, file_get_contents($sDir3));
+							@readfile($sDir3);
 							die();
 						}
-						if (@fopen($sDir4, "r"))
+						if (file_exists($sDir4))
 						{
 							$flagFileFound = true;
 							header("Content-type: $contentType");
 							header("Content-Disposition: attachment; filename=$oriName");
-							file_put_contents($oriName, file_get_contents($sDir4));
+							@readfile($sDir4);
 							die();
 						}
 						else 
