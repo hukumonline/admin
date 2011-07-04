@@ -11,11 +11,16 @@ class App_Model_Show_AroGroup extends App_Model_Db_DefaultAdapter
      * class instance object
      */
     private static $_instance;
+    
+    private static $_db;
 
     /**
      * de-activate constructor
      */
-    final private function  __construct() {}
+    final private function  __construct() 
+    {
+    	self::$_db = Zend_Registry::get('db2');
+    }
 
      /**
       * de-activate object cloning
@@ -38,8 +43,10 @@ class App_Model_Show_AroGroup extends App_Model_Db_DefaultAdapter
         $db = parent::_dbSelect();
         $select = $db->from('gacl_aro_groups','*','hid')
                     ->where("id = $packageId");
+                    
+		$conn = self::$_db;                    
 
-        $result = parent::_getDefaultAdapter()->fetchRow($select);
+        $result = $conn->fetchRow($select);
 
         return $result;
     }
