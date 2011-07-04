@@ -15,7 +15,7 @@
 	<tr id="row_<?=$data->itemGuid;?>">
 		<td width="5%"><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$data->itemGuid;?>' class="check_me"></td>
 		<td width="5%"><?=$this->GetCatalogDocType($data->itemGuid); ?></td>
-		<td><a href="#"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a></td>
+		<td><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/browser/download-file/guid/<?=$data->itemGuid;?>/parent/<?=$data->relatedGuid;?>"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a></td>
 		<td><?=$this->GetCatalogDocSize($data->itemGuid); ?></td>
 	</tr>
 	<? } ?>
