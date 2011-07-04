@@ -94,10 +94,10 @@ class Dms_BrowserController extends Zend_Controller_Action
 				if(!$flagFileFound)
 				{
 					$parentGuid = $rowRelatedItem->relatedGuid;
-					$sDir1 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$systemname;
-					$sDir2 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$parentGuid.DIRECTORY_SEPARATOR.$systemname;
-					$sDir3 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$oname;
-					$sDir4 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$parentGuid.DIRECTORY_SEPARATOR.$oname;
+					$sDir1 = $cdn['static']['dir']['files']."/".$systemname;
+					$sDir2 = $cdn['static']['dir']['files']."/".$parentGuid."/".$systemname;
+					$sDir3 = $cdn['static']['dir']['files']."/".$oname;
+					$sDir4 = $cdn['static']['dir']['files']."/".$parentGuid."/".$oname;
 					
 					if (@fopen($sDir1, "r"))
 					{
