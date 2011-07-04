@@ -16,4 +16,10 @@ class App_Model_Db_Table_Invoice extends Zend_Db_Table_Abstract
             'refColumns'    => array('kopel')
         )
     );
+    protected function  _setupDatabaseAdapter()
+    {
+        $this->_db = Zend_Registry::get('db2');
+
+        parent::_setupDatabaseAdapter();
+    }
 }
