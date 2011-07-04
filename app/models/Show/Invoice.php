@@ -11,11 +11,16 @@ class App_Model_Show_Invoice extends App_Model_Db_DefaultAdapter
      * class instance object
      */
     private static $_instance;
+    
+    private static $_db;
 
     /**
      * de-activate constructor
      */
-    final private function  __construct() {}
+    final private function  __construct() 
+    {
+    	self::$_db = Zend_Registry::get('db2');
+    }
 
      /**
       * de-activate object cloning
@@ -37,10 +42,12 @@ class App_Model_Show_Invoice extends App_Model_Db_DefaultAdapter
     public function getInvoiceById($id)
     {
         $db = parent::_dbSelect();
-        $select = $db->from('KutuUserInvoice','*','hid')
+        $select = $db->from('KutuUserInvoice')
                 ->where("uid='".$id."'");
+                
+		$conn = self::$_db;                
 
-        $result = parent::_getDefaultAdapter()->fetchAll($select);
+        $result = $conn->fetchAll($select);
 
         return $result;
     }
