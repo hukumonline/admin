@@ -14,4 +14,5 @@ class Admin_ErrorController extends Zend_Controller_Action
     function restrictedAction()
     {
     }
+    function temporaryAction() {}
 }
