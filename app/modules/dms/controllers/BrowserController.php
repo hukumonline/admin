@@ -1,0 +1,152 @@
+<?php
+
+class Dms_BrowserController extends Zend_Controller_Action 
+{
+    protected $_user;
+
+    function  preDispatch()
+    {
+        $auth = Zend_Auth::getInstance();
+
+		$identity = Pandamp_Application::getResource('identity');
+		
+        $sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+        $sReturn = base64_encode($sReturn);
+
+        //$sso = new Pandamp_Session_Remote();
+        //$user = $sso->getInfo();
+
+        if (!$auth->hasIdentity()) {
+            //$this->_forward('login','account','admin');
+			$loginUrl = $identity->loginUrl;
+			
+			$this->_redirect($loginUrl.'?returnTo='.$sReturn);     
+        }
+        else
+        {
+            $this->_user = $auth->getIdentity();
+
+            $acl = Pandamp_Acl::manager();
+            if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
+            {
+                $zl = Zend_Registry::get("Zend_Locale");
+                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+            }
+        }
+    }
+	function downloadFileAction()
+	{
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	
+    	$catalogGuid = $this->_getParam('guid');
+    	$parentGuid = $this->_getParam('parent');
+    	
+    	$tblCatalog = new App_Model_Db_Table_Catalog();
+    	$rowsetCatalog = $tblCatalog->find($catalogGuid);
+    	
+    	if(count($rowsetCatalog))
+    	{
+    		$auth = Zend_Auth::getInstance();
+    		if ($auth->hasIdentity())
+    		{
+    			$guidUser = $auth->getIdentity()->kopel;
+    		}
+    		
+    		$tblAsetSetting = new App_Model_Db_Table_AssetSetting();
+    		$rowAset = $tblAsetSetting->find($catalogGuid)->current();
+    		if ($rowAset)
+    		{
+    			$rowAset->valueInt = $rowAset->valueInt + 1;
+    		}
+    		else 
+    		{
+    			$rowAset = $tblAsetSetting->fetchNew();
+				$rowAset->guid = $catalogGuid;
+				$rowAset->application = "kutu_doc";
+				$rowAset->part = (isset($guidUser))? $guidUser : '';
+				$rowAset->valueType = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+				$rowAset->valueInt = 1;
+    		}
+    		
+    		$rowAset->save();
+    		
+    		$rowCatalog = $rowsetCatalog->current();
+    		$rowsetCatAtt = $rowCatalog->findDependentRowsetCatalogAttribute();
+    		
+	    	$contentType = $rowsetCatAtt->findByAttributeGuid('docMimeType')->value;
+			$filename = $systemname = $rowsetCatAtt->findByAttributeGuid('docSystemName')->value;
+			$oriName = $oname = $rowsetCatAtt->findByAttributeGuid('docOriginalName')->value;
+			
+			$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+			$rowsetRelatedItem = $tblRelatedItem->fetchAll("itemGuid='$catalogGuid' AND relateAs='RELATED_FILE'");
+			
+		    $registry = Zend_Registry::getInstance();
+		    $config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+		    $cdn = $config->getOption('cdn');
+		    
+			$flagFileFound = false;
+			
+			foreach($rowsetRelatedItem as $rowRelatedItem)
+			{
+				if(!$flagFileFound)
+				{
+					$parentGuid = $rowRelatedItem->relatedGuid;
+					$sDir1 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$systemname;
+					$sDir2 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$parentGuid.DIRECTORY_SEPARATOR.$systemname;
+					$sDir3 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$oname;
+					$sDir4 = $cdn['static']['dir']['files'].DIRECTORY_SEPARATOR.$parentGuid.DIRECTORY_SEPARATOR.$oname;
+					
+					if (@fopen($sDir1, "r"))
+					{
+						$flagFileFound = true;
+						header("Content-type: $contentType");
+						header("Content-Disposition: attachment; filename=$oriName");
+						file_put_contents($oriName, file_get_contents($sDir1));
+						die();
+					}
+					else 
+						if (@fopen($sDir2, "r"))
+						{
+							$flagFileFound = true;
+							header("Content-type: $contentType");
+							header("Content-Disposition: attachment; filename=$oriName");
+							file_put_contents($oriName, file_get_contents($sDir2));
+							die();
+						}
+						if (@fopen($sDir3, "r"))
+						{
+							$flagFileFound = true;
+							header("Content-type: $contentType");
+							header("Content-Disposition: attachment; filename=$oriName");
+							file_put_contents($oriName, file_get_contents($sDir3));
+							die();
+						}
+						if (@fopen($sDir4, "r"))
+						{
+							$flagFileFound = true;
+							header("Content-type: $contentType");
+							header("Content-Disposition: attachment; filename=$oriName");
+							file_put_contents($oriName, file_get_contents($sDir4));
+							die();
+						}
+						else 
+						{
+							$flagFileFound = false;
+							$this->_forward('forbidden','browser','hold');
+						}
+				}
+			}
+			
+    	}
+    	else 
+    	{
+    		$flagFileFound = false;
+    		$this->_forward('forbidden','browser','hold');
+    	}		
+	}
+	function forbiddenAction() 	
+	{
+		$this->_helper->layout->setLayout('administry');
+	}
+}
