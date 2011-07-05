@@ -54,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <? for($ii=0;$ii<$this->numberOfRows;$ii++) { $hit = $this->hits->response->docs[$ii]; ?>
+                    <? foreach ($this->hits->response->docs as $hit) { ?>
                         <tr>
                             <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$hit->id;?>' class="check_me"></td>
                             <td>
