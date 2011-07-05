@@ -16,7 +16,7 @@ class Pandamp_Controller_Action_Helper_Year
         } else {
             $year .= "<option value='' selected>Year:</option>";
         }
-        for ($i = date('Y', time()) - 17; $i > date('Y', time()) - 91; $i--) {
+        for ($i = date('Y', time()); $i > date('Y', time()) - 91; $i--) {
             if (($tyear) and ($i == $tyear)) {
                 continue;
             } else {
