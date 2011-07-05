@@ -73,13 +73,13 @@ class Dms_RelationController extends Zend_Controller_Action
         $this->_helper->layout()->headerTitle = "Catalog Management: Relation";
 
         $indexingEngine = Pandamp_Search::manager();
-echo $sQuery;
+
         if(empty($sQuery))
             $hits = $indexingEngine->find("fjkslfjdkfjls",$nOffset, $nLimit);
         else
             $hits = $indexingEngine->find($sQuery." -profile:kutu_doc",$nOffset, $nLimit);
 
-        $this->view->hits = $hits;
+        $this->view->hits = $hits;echo count($hits);
     }
     function newAction()
     {
