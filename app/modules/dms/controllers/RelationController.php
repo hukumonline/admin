@@ -73,7 +73,7 @@ class Dms_RelationController extends Zend_Controller_Action
         $this->_helper->layout()->headerTitle = "Catalog Management: Relation";
 
         $indexingEngine = Pandamp_Search::manager();
-
+echo $sQuery;
         if(empty($sQuery))
             $hits = $indexingEngine->find("fjkslfjdkfjls",$nOffset, $nLimit);
         else
