@@ -4,8 +4,6 @@ class Pandamp_Application_Resource_Indexing extends Zend_Application_Resource_Re
     public function init()
     {
         $sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-        $lang = extract($_GET);
-        print_r($lang);
 
         $options = array_change_key_case($this->getOptions(), CASE_LOWER);
 
@@ -16,13 +14,10 @@ class Pandamp_Application_Resource_Indexing extends Zend_Application_Resource_Re
 
                 $solrHost = $aWrite['host'];
                 $solrPort = $aWrite['port'];
-                if (strpos($sReturn,"id"))
-                    echo 'y';
+                if (strpos($sReturn,"en"))
+                    $solrHomeDir = $aWrite['dir2'];
                 else
-                    echo 'n';
-                    
-                    
-                    
+                    $solrHomeDir = $aWrite['dir1'];
 
                 Zend_Registry::set("Solr_WriteDir", $solrHost.':'.$solrPort.$solrHomeDir);
 
