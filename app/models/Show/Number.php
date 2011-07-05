@@ -6,11 +6,16 @@ class App_Model_Show_Number extends App_Model_Db_DefaultAdapter
 	 * class instance object
 	 */
 	private static $_instance;
+	
+	private static $_db;
 	 
 	/**
 	 * non-aktif-kan constructor
 	 */
-	final private function  __construct() {}
+	final private function  __construct() 
+	{
+		self::$_db = Zend_Registry::get('db2');
+	}
 	 
 	 /**
 	  * non-aktif-kan object cloning
@@ -35,9 +40,11 @@ class App_Model_Show_Number extends App_Model_Db_DefaultAdapter
 	public function getNumber()
 	{
 		$db = parent::_dbSelect();
-		$statement = $db->from('KutuNumber','*','hid');
+		$statement = $db->from('KutuNumber');
 		
-		$result = parent::_getDefaultAdapter()->fetchRow($statement);
+		$conn = self::$_db;
+		
+		$result = $conn->fetchRow($statement);
 		
 		return $result;
 	}
