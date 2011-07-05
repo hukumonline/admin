@@ -171,7 +171,7 @@ class Customer_AccountController extends Zend_Controller_Action
 		$num = strval($num);
 		$jumdigit = strlen($num);
 		$kopel = str_repeat("0",$totdigit-$jumdigit).$num;
-		
+		echo $kopel;die();
 		return $kopel;
 	}
 	protected function updateKopel()
