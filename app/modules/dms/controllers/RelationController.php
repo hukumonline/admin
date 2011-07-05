@@ -79,7 +79,12 @@ class Dms_RelationController extends Zend_Controller_Action
         else
             $hits = $indexingEngine->find($sQuery." -profile:kutu_doc",$nOffset, $nLimit);
 
-        $this->view->hits = $hits;print_r($hits);
+            
+            
+		$solrNumFound = count($hits->response->docs);
+		            
+        $this->view->hits = $hits;
+        $this->view->numberOfRows = $solrNumFound;
     }
     function newAction()
     {
