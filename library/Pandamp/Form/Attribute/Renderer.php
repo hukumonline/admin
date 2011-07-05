@@ -132,6 +132,7 @@ class Pandamp_Form_Attribute_Renderer
 				$view->value = $this->value;
 				
 				$view->setScriptPath(dirname(__FILE__));
+				$view->addHelperPath(APPLICATION_PATH . '/../library/Pandamp/Controller/Action/Helper', 'Pandamp_Controller_Action_Helper');
 				return $view->render('datetime.phtml');
 	        break;
 	        
