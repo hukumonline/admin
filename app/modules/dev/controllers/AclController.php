@@ -12,7 +12,8 @@ class Dev_AclController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
-//        $acl = Pandamp_Acl::manager();
+        $acl = Pandamp_Acl::manager();
+        
 //        if ($acl->isAllowed('dedi','dms','create'))
 //            echo 'ALLOWED';
 //        else
