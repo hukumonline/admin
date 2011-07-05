@@ -58,7 +58,7 @@ class Customer_AccountController extends Zend_Controller_Action
 			$formater = new Pandamp_Core_Hol_User();
 			
 			// Do you want Email Confirmation send?
-			if (($value['ec'] == 1))
+			if (isset($value['ec']) == 1)
 			{
 				//echo 'y';
 				
