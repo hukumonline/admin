@@ -4,8 +4,8 @@ class Pandamp_Application_Resource_Indexing extends Zend_Application_Resource_Re
     public function init()
     {
         $sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-        $lang = Zend_Controller_Front::getParam('lang','');
-        echo $lang;
+        $lang = extract($_GET);
+        print_r($lang);
 
         $options = array_change_key_case($this->getOptions(), CASE_LOWER);
 
