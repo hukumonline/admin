@@ -31,7 +31,7 @@ class Dms_BrowserController extends Zend_Controller_Action
             
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
-            {die('a');
+            {
                 $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
             }
         }
