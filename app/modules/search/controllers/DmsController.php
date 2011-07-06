@@ -33,7 +33,7 @@ class Search_DmsController extends Zend_Controller_Action
 
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
-            {
+            {die('s');
                 $zl = Zend_Registry::get("Zend_Locale");
                 $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
             }
