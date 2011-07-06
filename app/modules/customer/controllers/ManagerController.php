@@ -13,8 +13,8 @@ class Customer_ManagerController extends Zend_Controller_Action
     {
         $this->_conn = Zend_Db::factory('Pdo_Mysql', array(
              'host'     => 'localhost'
-            ,'username' => 'root'
-            ,'password' => ''
+            ,'username' => 'bulukumba'
+            ,'password' => 'mydreams'
             ,'dbname'   => 'hid'
         ));
         
