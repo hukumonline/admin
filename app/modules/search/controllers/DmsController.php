@@ -58,7 +58,7 @@ class Search_DmsController extends Zend_Controller_Action
             //$hits = $indexingEngine->find($query." -profile:kutu_doc;publishedDate desc",$sOffset, $sLimit);
             $hits = $indexingEngine->find($query." -profile:kutu_doc",$sOffset, $sLimit);
         }
-     print_r($hits);   
+        
         $solrNumFound = count($hits->response->docs);
 
         $content = 0;
