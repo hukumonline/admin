@@ -35,7 +35,7 @@ class Search_DmsController extends Zend_Controller_Action
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
                 $zl = Zend_Registry::get("Zend_Locale");
-                //$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
             }
         }
     }
