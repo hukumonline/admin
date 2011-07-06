@@ -37,11 +37,11 @@ class Search_DmsController extends Zend_Controller_Action
                 $zl = Zend_Registry::get("Zend_Locale");
                 $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
             }
-            die('a');
+            
         }
     }
     function browseAction()
-    {
+    {die('a');
         $r = $this->getRequest();
         $sOffset = $r->getParam('sOffset');
         $this->view->sOffset = $sOffset;
