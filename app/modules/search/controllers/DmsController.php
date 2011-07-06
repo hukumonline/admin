@@ -87,7 +87,7 @@ class Search_DmsController extends Zend_Controller_Action
 
                 $content++;
         }
-
+die('a');
         $num_rows = $solrNumFound;
 
         $this->view->query = $query;
