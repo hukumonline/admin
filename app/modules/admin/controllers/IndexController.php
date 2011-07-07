@@ -94,7 +94,7 @@ class Admin_IndexController extends Zend_Controller_Action
     }
     function headererrAction()
     {
-    	
+    	$this->view->user = $this->_user;
     }
     function topnavAction()
     {
