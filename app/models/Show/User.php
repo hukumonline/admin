@@ -44,7 +44,7 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
         $db = parent::_dbSelect();
         $select = $db->from('KutuUser')
                     ->where("isActive = 0")
-                    //->where("periodeId IN (1,2,5)")
+                    ->where("periodeId IN (1,2)")
                     ->order("kopel DESC");
 
 		$conn = self::$_db;
