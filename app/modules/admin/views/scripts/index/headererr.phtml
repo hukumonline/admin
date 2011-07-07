@@ -1,0 +1,34 @@
+<!-- Header -->
+<header id="top">
+    <div class="wrapper">
+        <!-- Title/Logo - can use text instead of image -->
+        <div id="title"><img src="<?=$this->cdn('images');?>/logo.png" alt="hukumonline" /><!--<span>CMS Hukumonline</span>--></div>
+        <!-- Top navigation -->
+        <?=$this->action('topnav','index','admin');?>
+        <!-- End of Top navigation -->
+        <!-- Main navigation -->
+        <nav id="menu">
+            <ul class="sf-menu sf-js-enabled sf-shadow">
+                <li class="current"><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
+            </ul>
+        </nav>
+        <!-- End of Main navigation -->
+        <!-- Aside links -->
+        <aside>
+            <? if ($this->getLanguage() == "id") { ?>
+            <a href="<?=ROOT_URL;?>/en">English</a> &middot; <b>Indonesia</b>
+            <? } else { ?>
+            <b>English</b> &middot; <a href="<?=ROOT_URL;?>/id">Indonesia</a>
+            <? } ?>
+        </aside>
+        <!-- End of Aside links -->
+    </div>
+</header>
+<!-- End of Header -->
+<!-- Page title -->
+<div id="pagetitle">
+    <div class="wrapper">
+        <h1>Dashboard</h1>
+    </div>
+</div>
+<!-- End of Page title -->

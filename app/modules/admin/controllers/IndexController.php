@@ -92,6 +92,10 @@ class Admin_IndexController extends Zend_Controller_Action
         $this->_helper->layout()->searchQuery = $query;
         $this->view->user = $this->_user;
     }
+    function headererrAction()
+    {
+    	
+    }
     function topnavAction()
     {
         $this->view->logout = $this->_signOut;
