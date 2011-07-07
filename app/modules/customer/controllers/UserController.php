@@ -79,7 +79,8 @@ class Customer_UserController extends Zend_Controller_Action
         $modelUser = new App_Model_Db_Table_User();
         $rowset = $modelUser->find($kopel)->current();
         
-        if ($rowset->packageId == 18 or $rowset->packageId == 21)
+        //if ($rowset->packageId == 18 or $rowset->packageId == 21)
+        if (in_array($rowUser->packageId,array(14,15,16,17,18,36,37,38)))
         {
         	$periodeId = 2;
 			// Get disc promo
