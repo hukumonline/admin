@@ -9,7 +9,7 @@ class Admin_ErrorController extends Zend_Controller_Action
 {
     function  preDispatch()
     {
-        $this->_helper->layout->setLayout('administry');
+        $this->_helper->layout->setLayout('error-administry');
     }
     function restrictedAction()
     {
