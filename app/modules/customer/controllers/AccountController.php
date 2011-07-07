@@ -156,7 +156,7 @@ class Customer_AccountController extends Zend_Controller_Action
 			,'paymentId'		=> ($value['payment'])? $value['payment'] : 0
 			,'businessTypeId'	=> ($value['businessType'])? $value['businessType'] : 0
 			,'periodeId'		=> 1
-			,'createdDate'		=> date('Y-m-d h:i:s')
+			,'createdDate'		=> date('Y-m-d H:i:s')
 			,'createdBy'		=> $value['createdBy']
 			,'isContact'		=> ($isContact == 1)? 'Y' : 'N'
 		);
