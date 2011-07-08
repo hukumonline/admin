@@ -31,7 +31,7 @@ class Customer_MigrationController extends Zend_Controller_Action
     	foreach ($rowUser as $user)
     	{
     		$modelUser = new App_Model_Db_Table_User();
-    		$dUser = $modelUser->fetchRow("username='".$user->username."'");
+    		$dUser = $modelUser->fetchRow("username='".$user['username']."'");
     		if (!$dUser) 
     		{
     			$data = $this->restmig($user);
@@ -282,37 +282,37 @@ class Customer_MigrationController extends Zend_Controller_Action
 	{
 		$data = array(
 			 'kopel'			=> $this->generateKopel()
-			,'username'			=> $row->username
-			,'password'			=> $row->password
-			,'fullName'			=> ($row->fullName)? $row->fullName : ''
-			,'birthday'			=> $row->birthday
-			,'phone'			=> ($row->phone)? $row->phone : ''
-			,'fax'				=> ($row->fax)? $row->fax : ''
-			,'gender'			=> $row->gender
-			,'email'			=> $row->email
-			,'company'			=> ($row->company)? $row->company : ''
-			,'address'			=> ($row->address)? $row->address : '' 
+			,'username'			=> $row['username']
+			,'password'			=> $row['password']
+			,'fullName'			=> ($row['fullName'])? $row['fullName'] : ''
+			,'birthday'			=> $row['birthday']
+			,'phone'			=> ($row['phone'])? $row['phone'] : ''
+			,'fax'				=> ($row['fax'])? $row['fax'] : ''
+			,'gender'			=> $row['gender']
+			,'email'			=> $row['email']
+			,'company'			=> ($row['company'])? $row['company'] : ''
+			,'address'			=> ($row['address'])? $row['address'] : '' 
 			,'state'			=> 7
 			,'countryId'		=> 'ID'
-			,'newArticle'		=> $row->newArticle
-			,'weeklyList'		=> $row->weeklyList
-			,'monthlyList'		=> $row->monthlyList
+			,'newArticle'		=> $row['newArticle']
+			,'weeklyList'		=> $row['weeklyList']
+			,'monthlyList'		=> $row['monthlyList']
 			,'packageId'		=> 18                         // acl id in the hid:pmg server
-			,'promotionId'		=> $row->promotionId
-			,'educationId'		=> $row->educationId
-			,'expenseId'		=> $row->expenseId
-			,'paymentId'		=> $row->paymentId
-			,'businessTypeId'	=> $row->businessTypeId
-			,'periodeId'		=> $row->periodeId
-			,'activationDate'	=> $row->activationDate
-			,'isEmailSent'		=> $row->isEmailSent
-			,'isEmailSentOver'	=> $row->isEmailSentOver
-			,'createdDate'		=> $row->createdDate
-			,'createdBy'		=> $row->createdBy
-			,'modifiedDate'		=> ($row->updatedDate)? $row->updatedDate : ''
-			,'modifiedBy'		=> ($row->updatedBy)? $row->updatedBy : ''
-			,'isActive'			=> $row->isActive
-			,'isContact'		=> $row->isContact
+			,'promotionId'		=> $row['promotionId']
+			,'educationId'		=> $row['educationId']
+			,'expenseId'		=> $row['expenseId']
+			,'paymentId'		=> $row['paymentId']
+			,'businessTypeId'	=> $row['businessTypeId']
+			,'periodeId'		=> $row['periodeId']
+			,'activationDate'	=> $row['activationDate']
+			,'isEmailSent'		=> $row['isEmailSent']
+			,'isEmailSentOver'	=> $row['isEmailSentOver']
+			,'createdDate'		=> $row['createdDate']
+			,'createdBy'		=> $row['createdBy']
+			,'modifiedDate'		=> ($row['updatedDate'])? $row['updatedDate'] : ''
+			,'modifiedBy'		=> ($row['updatedBy'])? $row['updatedBy'] : ''
+			,'isActive'			=> $row['isActive']
+			,'isContact'		=> $row['isContact']
 		);
 		
 		return $data;
