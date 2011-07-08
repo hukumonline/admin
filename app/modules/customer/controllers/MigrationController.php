@@ -13,6 +13,36 @@ class Customer_MigrationController extends Zend_Controller_Action
     	
         $this->_helper->layout->setLayout('layout-customer-migration');
     }
+    function vdAction()
+    {
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	
+        $title = "<h4>REST MIGRASI HUKUMONLINE INDONESIA</h4><hr/>";
+
+        echo $title.'<br>';
+        
+        $groupId = 28;
+        
+        
+    	$rowUser = App_Model_Show_Migration_UserIn::show()->getUserByPackageId($groupId);
+    	
+    	echo "Number of record(s): ".count($rowUser)."<br><br>";
+    	
+    	foreach ($rowUser as $user)
+    	{
+    		$modelUser = new App_Model_Db_Table_User();
+    		$dUser = $modelUser->fetchRow("username='".$user->username."'");
+    		if (!$dUser) 
+    		{
+    			$data = $this->restmig($user);
+    			
+    			echo '<pre>';
+    			print_r($data);
+    			echo '</pre>';
+    			die;
+    		}
+    	}
+    }
     function inaAction()
     {
         /* get GroupName
@@ -244,6 +274,45 @@ class Customer_MigrationController extends Zend_Controller_Action
 			,'modifiedBy'		=> ($value['updatedBy'])? $value['updatedBy'] : ''
 			,'isActive'			=> $value['isActive']
 			,'isContact'		=> $value['isContact']
+		);
+		
+		return $data;
+	}
+	private function restmig(&$row)
+	{
+		$data = array(
+			 'kopel'			=> $this->generateKopel()
+			,'username'			=> $row->username
+			,'password'			=> $row->password
+			,'fullName'			=> ($row->fullName)? $row->fullName : ''
+			,'birthday'			=> $row->birthday
+			,'phone'			=> ($row->phone)? $row->phone : ''
+			,'fax'				=> ($row->fax)? $row->fax : ''
+			,'gender'			=> $row->gender
+			,'email'			=> $row->email
+			,'company'			=> ($row->company)? $row->company : ''
+			,'address'			=> ($row->address)? $row->address : '' 
+			,'state'			=> 7
+			,'countryId'		=> 'ID'
+			,'newArticle'		=> $row->newArticle
+			,'weeklyList'		=> $row->weeklyList
+			,'monthlyList'		=> $row->monthlyList
+			,'packageId'		=> 18                         // acl id in the hid:pmg server
+			,'promotionId'		=> $row->promotionId
+			,'educationId'		=> $row->educationId
+			,'expenseId'		=> $row->expenseId
+			,'paymentId'		=> $row->paymentId
+			,'businessTypeId'	=> $row->businessTypeId
+			,'periodeId'		=> $row->periodeId
+			,'activationDate'	=> $row->activationDate
+			,'isEmailSent'		=> $row->isEmailSent
+			,'isEmailSentOver'	=> $row->isEmailSentOver
+			,'createdDate'		=> $row->createdDate
+			,'createdBy'		=> $row->createdBy
+			,'modifiedDate'		=> ($row->updatedDate)? $row->updatedDate : ''
+			,'modifiedBy'		=> ($row->updatedBy)? $row->updatedBy : ''
+			,'isActive'			=> $row->isActive
+			,'isContact'		=> $row->isContact
 		);
 		
 		return $data;

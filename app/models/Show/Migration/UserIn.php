@@ -56,4 +56,23 @@ class App_Model_Show_Migration_UserIn extends App_Model_Db_DefaultAdapter
 
     	return $row;
     }
+    public function getUserByPackageId($pid)
+    {
+        $db = parent::_dbSelect();
+    	$select = $db->from("KutuUser")
+                    ->where("packageId=?",$pid)
+                    ->where("isActive=1")
+                    ->where("email <> ''");
+
+        /*
+        $select = $select->__toString();
+    	print_r($select);exit();
+         *
+         */
+
+        $configDb = Zend_Registry::get('db1');
+    	$row = $configDb->fetchAll($select);
+
+    	return $row;
+    }
 }
