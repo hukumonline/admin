@@ -21,7 +21,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 
         echo $title.'<br>';
         
-        $groupId = 28;
+        $groupId = 29;
         
         
     	$rowUser = App_Model_Show_Migration_UserIn::show()->getUserByPackageId($groupId);
@@ -50,7 +50,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 					$this->updateKopel();
 					
 					$acl = Pandamp_Acl::manager();
-					$acl->addUserToGroup($user['username'],"Complete");
+					$acl->addUserToGroup($user['username'],"Ilb");
 					
                     $message = "
                         <div class='box box-info closeable'>
@@ -328,7 +328,7 @@ class Customer_MigrationController extends Zend_Controller_Action
 			,'newArticle'		=> $row['newArticle']
 			,'weeklyList'		=> $row['weeklyList']
 			,'monthlyList'		=> $row['monthlyList']
-			,'packageId'		=> 18                         // acl id in the hid:pmg server
+			,'packageId'		=> 16                         // acl id in the hid:pmg server
 			,'promotionId'		=> $row['promotionId']
 			,'educationId'		=> $row['educationId']
 			,'expenseId'		=> $row['expenseId']
