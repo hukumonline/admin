@@ -61,8 +61,7 @@ class App_Model_Show_Migration_UserIn extends App_Model_Db_DefaultAdapter
         $db = parent::_dbSelect();
     	$select = $db->from("KutuUser")
                     ->where("packageId=?",$pid)
-                    ->where("isActive=1")
-                    ->where("email <> ''");
+                    ->where("isActive=?",1);
 
         /*
         $select = $select->__toString();
