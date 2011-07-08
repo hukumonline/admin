@@ -36,10 +36,41 @@ class Customer_MigrationController extends Zend_Controller_Action
     		{
     			$data = $this->restmig($user);
     			
+    			/*
     			echo '<pre>';
     			print_r($data);
     			echo '</pre>';
     			die;
+    			*/
+    			
+				$result = $modelUser->insert($data);
+				
+				if ($result) {
+					
+					$this->updateKopel();
+					
+					$acl = Pandamp_Acl::manager();
+					$acl->addUserToGroup($user['username'],"Complete");
+					
+                    $message = "
+                        <div class='box box-info closeable'>
+                        User&nbsp;:&nbsp;<abbr>".$user['username']."</abbr> data has been successfully saved to local.
+                        </div><br>";
+					
+				}
+				else 
+				{
+                    $message = "
+                    <div class='box box-error'>ERROR</div>    
+                    <div class='box box-error-msg'>
+                    <ol>
+                    <li>User&nbsp;:&nbsp;<abbr>".$user['username']."</abbr> data has failed saved to local.</li>
+                    </ol>
+                    </div><br>";
+					
+				}
+			
+                echo $message;
     		}
     	}
     }
@@ -303,13 +334,13 @@ class Customer_MigrationController extends Zend_Controller_Action
 			,'expenseId'		=> $row['expenseId']
 			,'paymentId'		=> $row['paymentId']
 			,'businessTypeId'	=> $row['businessTypeId']
-			,'periodeId'		=> $row['periodeId']
+			,'periodeId'		=> 3
 			,'activationDate'	=> $row['activationDate']
 			,'isEmailSent'		=> $row['isEmailSent']
 			,'isEmailSentOver'	=> $row['isEmailSentOver']
 			,'createdDate'		=> $row['createdDate']
 			,'createdBy'		=> $row['createdBy']
-			,'modifiedDate'		=> ($row['updatedDate'])? $row['updatedDate'] : ''
+			,'modifiedDate'		=> date('Y-m-d H:i:s')
 			,'modifiedBy'		=> ($row['updatedBy'])? $row['updatedBy'] : ''
 			,'isActive'			=> $row['isActive']
 			,'isContact'		=> $row['isContact']
