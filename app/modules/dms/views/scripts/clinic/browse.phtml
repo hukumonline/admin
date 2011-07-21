@@ -59,7 +59,8 @@
                     <? 
                     $now = date('Y-m-d H:i:s');
                     foreach ($this->hits as $hit) { 
-                    $rowUser = App_Model_Show_User::show()->getUserByName($hit['createdBy']);
+                    $cb = ($hit['createdBy'])? $hit['createdBy'] : "";
+                    $rowUser = App_Model_Show_User::show()->getUserByName($cb);
                     ?>
                         <tr>
                             <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$hit['guid'];?>' class="check_me"></td>
