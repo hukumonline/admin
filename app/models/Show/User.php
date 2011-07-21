@@ -68,7 +68,7 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
     {
         $db = parent::_dbSelect();
         $select = $db->from('KutuUser')
-                ->where("username='".$username."'");
+                ->where("username='$username'");
                 
                 
 		$conn = self::$_db;                
