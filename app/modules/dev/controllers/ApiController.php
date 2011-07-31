@@ -7,10 +7,10 @@ class Dev_ApiController extends Zend_Controller_Action
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(TRUE);
 		
-		$text = "http://pmg.hukumonline.n1/berita/baca/lt4df84dc5d6c93/referensi-hasil-pertelaan-kembali";
+		$text = "http://pmg.hukumonline.com/berita/baca/lt4df84dc5d6c93/referensi-hasil-pertelaan-kembali";
 		
 		$http = new Zend_Http_Client();		
-		$http->setUri("http://hukum.nl/api?url=".$text);
+		$http->setUri("http://s.hukumonline.com/api?url=".$text);
 		$response = $http->request();
 		if ($response->isSuccessful())
 		{
