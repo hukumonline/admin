@@ -128,7 +128,7 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
     	$conn = self::$_db;    				
     	
     	if ($status == 0)
-    		$row = $conn->fetchAll($db->from('KutuCatalog')->where('profileGuid=?', 'klinik')->where('status=?', 0)->order($sort.' '.$sortBy)->limit($end,$start));
+    		$row = $conn->fetchAll($db->from('KutuCatalog')->where('profileGuid=?', 'klinik')->where('status=?', 0)->order('createdDate DESC')->limit($end,$start));
     	else 
     		$row = $conn->fetchAll($db->from('KutuCatalog')->where('profileGuid=?', 'klinik')->where('status=?', $status)->order($sort.' '.$sortBy)->limit($end,$start));
 
