@@ -81,7 +81,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
      *
      */
-
+    
+    
+	/*
     protected function _initZIDS() {
         // Ensure the front controller is initialized
         $this->bootstrap('FrontController');
@@ -111,7 +113,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $front->registerPlugin($zids);
         }
     }
-    
+    */
+
+
     /**
      * Initialize our view and add it to the ViewRenderer action helper.
      */
