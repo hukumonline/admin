@@ -7,26 +7,105 @@ if (count($this->userQueue) > 0) :
 <table class="display stylized">
     <thead>
         <tr>
+        	<?php if ($this->isAllowed('membership','all')) : ?>
+            <th><input name="select_deselect" id="select_deselect" type="checkbox"></th>
+            <?php endif; ?>
             <th>Name</th>
             <th>Group</th>
-            <th>Action</th>
+            <!--<th>Action</th>-->
         </tr>
     </thead>
     <tbody>
         <? $i=1; foreach($this->userQueue as $row): ?>
-        <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
+        <tr id="userRow_<?php echo $row['kopel']; ?>" class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
+        	<?php if ($this->isAllowed('membership','all')) : ?>
+			<td><input type='checkbox' name='kopel[]' id='kopel' value='<?=$row['kopel'];?>' class="check_me"></td>
+			<?php endif; ?>
             <td><?=$row['username'];?></td>
             <td><?=$this->group($row['packageId']);?></td>
+            <!--
             <td>
-                <? if ($this->isAllowed('membership','all')) { ?>
-                <input type="button" name="action" value="Approve" onclick="javascript: window.location.href='<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval','id'=>$row['kopel']),'customer'); ?>';" class="btn" />
-                <? } else { ?>
+                <? //if ($this->isAllowed('membership','all')) { ?>
+                <input type="button" name="action" value="Approve" onclick="javascript: window.location.href='<?//=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval','id'=>$row['kopel']),'customer'); ?>';" class="btn" />
+                <? //} else { ?>
                 <input type="button" name="action" value="Approve" disabled class="btn small" />
-                <? } ?>
+                <? //} ?>
             </td>
+            -->
         </tr>
         <? $i++; endforeach;?>
     </tbody>
+    <tfoot>
+    	<tr>
+    		<th colspan="4"><a href="javascript: void(0);" class="btn"><span class="icon icon-ok">&nbsp;</span>Approved</a></th>
+    	</tr>
+    </tfoot>
 </table>
+
+
 </form>
+
+<?php if ($this->isAllowed('membership','all')) : ?>
+
+<div id="confirmDialog"></div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	/**
+	 * Select/Deselect all rows handler
+	 */
+	$('#select_deselect').click(function() {
+		$('input[type="checkbox"].check_me').attr('checked', $(this).attr('checked'));
+	});	
+	
+	$('a.btn').click(function(){
+		var numSelected = $('input[type="checkbox"].check_me:checked').length;
+		var self = this;
+		if (0 == numSelected) {
+			$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+				.dialog({
+					title: '<?php echo addslashes("Error"); ?>',
+					dialogClass: 't_a_ui_dialog',
+					modal: true,
+					closeOnEscape: false,
+					resizable: false,
+					open: function(event, ui) {
+						$('.ui-dialog-titlebar-close').hide();
+						$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+					},
+					buttons: {
+						'<?php echo addslashes("OK"); ?>': function() {
+							$(this).dialog('destroy');
+						}
+					}
+				});
+			
+		}
+		else
+		{
+			var ids = new Array();
+			$('input[type="checkbox"].check_me:checked').each(function() {
+				ids.push($(this).val());
+			});
+			
+			$.ajaxq('customer', {
+				url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval'),'customer'); ?>",
+				type: 'POST',
+				data: { id: $.toJSON(ids) },
+				success: function(response) {
+					if ('RESULT_OK' == response) {
+						for (var i in ids) {
+							$('#userRow_' + ids[i]).fadeOut('slow');
+						}
+					}
+				}
+			});
+			
+		}
+	});
+});
+<?php endif; ?>
+
+	
+</script>
 <? endif; ?>

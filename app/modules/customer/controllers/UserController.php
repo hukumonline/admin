@@ -63,6 +63,59 @@ class Customer_UserController extends Zend_Controller_Action
     }
     function setApprovalAction()
     {
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$id     = $request->getPost('id');
+        		$ids    = array();
+        		$ids = Zend_Json::decode($id);
+        		
+   		        $modelUser = new App_Model_Db_Table_User();
+
+        		foreach ($ids as $id) {
+					$rowset = $modelUser->find($id)->current();
+					if ($rowset != null) 
+					{
+				        if (in_array($rowset->packageId,array(14,15,16,17,18,36,37,38)))
+				        {
+				        	$periodeId = 2;
+							// Get disc promo
+							$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+							// Get total promo
+							$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+							$formater->_writeInvoice($rowset->kopel,$total,$disc,$rowset->paymentId);
+				        }
+				        else 
+				        {
+				        	$periodeId = 3;
+				        }
+				        
+				        $data = array(
+				        	'periodeId' => $periodeId,
+				        	'activationDate' => date("Y-m-d h:i:s"),
+				            'isActive' => 1
+				        );
+				
+				        $modelUser->update($data, "kopel='".$id."'");
+						
+					}
+        		}
+        	}
+        	$result = 'RESULT_OK';
+        }
+        
+        $this->getResponse()->setBody($result);
+    }
+    
+    /*
+    function setApprovalAction()
+    {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
             $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
@@ -106,6 +159,8 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->_redirect(ROOT_URL."/".$zl->getLanguage().'/customer/user/list');
     }
+    */
+    
     function __listAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
