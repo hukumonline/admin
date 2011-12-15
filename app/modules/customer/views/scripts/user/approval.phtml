@@ -31,7 +31,6 @@ if ($this->aData['totalCount'] > 0) :
 		var isFirstTime = 1;
 		
 		var myPageIndex = 0;
-		var currentEncodedQuery ='';
 		var itemsPerPage = <?php echo $this->aData['limit'];?>
 		
 		$("#catalogPagination").pagination(<?php echo $this->aData['totalCount'];?>, 
@@ -49,7 +48,7 @@ if ($this->aData['totalCount'] > 0) :
 				if($('#tblCatalogPager-'+myPageIndex).length==0)
 				{
 					//$('#message_box').show();
-					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getappuser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getappuser/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
 				}
 				else
 					showCatalogContent();
@@ -96,17 +95,9 @@ if ($this->aData['totalCount'] > 0) :
 			isFirstTime = 0;
 		}
 		
-		$("#keywords").change(function(){ 
-			testCount();
-		});
-		
 		function testCount()
 		{
-			var textKeywords = $("input#keywords").val();
-			var searchQuery = textKeywords;
-			var base64encoded = Base64.encode(searchQuery);
-			currentEncodedQuery = base64encoded;
-			$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserappbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
+			$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserappbyquery/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
 		}
 		function callbackTestCount(res)
 		{
@@ -127,7 +118,7 @@ if ($this->aData['totalCount'] > 0) :
 				if($('#tblCatalogPager-'+myPageIndex).length==0)
 				{
 					//$('#message_box').show();
-					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
 				}
 				else
 					showCatalogContent();
