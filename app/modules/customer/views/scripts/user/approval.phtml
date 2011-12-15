@@ -1,111 +1,195 @@
 <?
-if (count($this->userQueue) > 0) :
+if ($this->aData['totalCount'] > 0) :
 ?>
 <h4>Queue List</h4>
 <hr/>
-<form method="post">
-<table class="display stylized">
-    <thead>
-        <tr>
-        	<?php if ($this->isAllowed('membership','all')) : ?>
-            <th><input name="select_deselect" id="select_deselect" type="checkbox"></th>
-            <?php endif; ?>
-            <th>Name</th>
-            <th>Group</th>
-            <!--<th>Action</th>-->
-        </tr>
-    </thead>
-    <tbody>
-        <? $i=1; foreach($this->userQueue as $row): ?>
-        <tr id="userRow_<?php echo $row['kopel']; ?>" class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
-        	<?php if ($this->isAllowed('membership','all')) : ?>
-			<td><input type='checkbox' name='kopel[]' id='kopel' value='<?=$row['kopel'];?>' class="check_me"></td>
-			<?php endif; ?>
-            <td><?=$row['username'];?></td>
-            <td><?=$this->group($row['packageId']);?></td>
-            <!--
-            <td>
-                <? //if ($this->isAllowed('membership','all')) { ?>
-                <input type="button" name="action" value="Approve" onclick="javascript: window.location.href='<?//=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval','id'=>$row['kopel']),'customer'); ?>';" class="btn" />
-                <? //} else { ?>
-                <input type="button" name="action" value="Approve" disabled class="btn small" />
-                <? //} ?>
-            </td>
-            -->
-        </tr>
-        <? $i++; endforeach;?>
-    </tbody>
-    <tfoot>
-    	<tr>
-    		<th colspan="4"><a href="javascript: void(0);" class="btn"><span class="icon icon-ok">&nbsp;</span>Approved</a></th>
-    	</tr>
-    </tfoot>
-</table>
 
-
-</form>
-
-<?php if ($this->isAllowed('membership','all')) : ?>
-
-<div id="confirmDialog"></div>
-
-<script type="text/javascript">
-$(document).ready(function(){
-	/**
-	 * Select/Deselect all rows handler
-	 */
-	$('#select_deselect').click(function() {
-		$('input[type="checkbox"].check_me').attr('checked', $(this).attr('checked'));
-	});	
+	<div class="align-right">
+	Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span>
+	</div>
+	<?php if ($this->isAllowed('membership','all')) : ?>
+	<div class="align-left">
+		&nbsp;&nbsp;&nbsp;&nbsp;<input name='select_deselect' id='select_deselect' type='checkbox'>&nbsp;<abbr>Select All</abbr> |
+		<a href="javascript: void(0);" class="approvedAction">Approved</a>
+	</div>
+	<?php endif; ?>
+	<div id='catalogContent'>
+		
+	</div>
+	<table width='100%'>
+		<tr>
+			<td width=35%>&nbsp;</td>
+			<td align=right><div id='catalogPagination' class="pagination"></div></td>
+		</tr>
+	</table>
 	
-	$('a.btn').click(function(){
-		var numSelected = $('input[type="checkbox"].check_me:checked').length;
-		var self = this;
-		if (0 == numSelected) {
-			$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
-				.dialog({
-					title: '<?php echo addslashes("Error"); ?>',
-					dialogClass: 't_a_ui_dialog',
-					modal: true,
-					closeOnEscape: false,
-					resizable: false,
-					open: function(event, ui) {
-						$('.ui-dialog-titlebar-close').hide();
-						$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
-					},
-					buttons: {
-						'<?php echo addslashes("OK"); ?>': function() {
-							$(this).dialog('destroy');
+	<div id="confirmDialog"></div>
+
+    <script>
+    $(document).ready(function(){
+    	
+		var isFirstTime = 1;
+		
+		var myPageIndex = 0;
+		var currentEncodedQuery ='';
+		var itemsPerPage = <?php echo $this->aData['limit'];?>
+		
+		$("#catalogPagination").pagination(<?php echo $this->aData['totalCount'];?>, 
+		{items_per_page:itemsPerPage, callback:handlePaginationClick}
+		);
+		
+		function handlePaginationClick(new_page_index, pagination_container) 
+		{
+			
+			myPageIndex = new_page_index;
+			myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+			
+			if(true)
+			{
+				if($('#tblCatalogPager-'+myPageIndex).length==0)
+				{
+					//$('#message_box').show();
+					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getappuser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+				}
+				else
+					showCatalogContent();
+			}
+			return false;
+		}
+		function testJson(res)
+		{
+			size = res.users.length;
+			var tblRow = "<a name='a-"+myPageIndex+"' ></a>"+'<div class="tblCatalogPager" id="tblCatalogPager-'+myPageIndex+'">';
+			tblRow += "<table class='display stylized'><thead><tr><th>&nbsp;</th><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th>Status</th></tr></thead><tbody>";
+			
+			
+			for(i=0;i<size;i++)
+			{
+				tblRow += 
+					"<tr id='row_"+res.users[i].kopel+"' class="+(i%2 ? 'gradeX' : 'gradeC')+">"
+					<?php if ($this->isAllowed('membership','all')) : ?>
+					+"<td>"+res.users[i].checkbox+"</td>"
+					<?php endif; ?>
+					+"<td>"+res.users[i].kopel+"</td>"
+					+"<td>"+res.users[i].username+"</td>"
+					+"<td width='25%'>"+res.users[i].company+"</td>"
+					+"<td>"+res.users[i].group+"</td>"
+					+"<td>"+res.users[i].status+"</td>"
+					+"</tr>";
+					
+					
+			}
+			tblRow += "</tbody></table></div>";
+			$(tblRow).appendTo("#catalogContent");
+			showCatalogContent();
+			//$('#message_box').fadeOut();
+			
+			
+		}
+		function showCatalogContent()
+		{
+			$('.tblCatalogPager').hide();
+			$('#tblCatalogPager-'+myPageIndex).show();
+			if(!isFirstTime)
+				//window.location.hash = '#a-'+myPageIndex;
+				Scroller.scroll();
+			isFirstTime = 0;
+		}
+		
+		$("#keywords").change(function(){ 
+			testCount();
+		});
+		
+		function testCount()
+		{
+			var textKeywords = $("input#keywords").val();
+			var searchQuery = textKeywords;
+			var base64encoded = Base64.encode(searchQuery);
+			currentEncodedQuery = base64encoded;
+			$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserappbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
+		}
+		function callbackTestCount(res)
+		{
+			$("#numOfRecords").html(res);
+			$("#catalogPagination").pagination(res, 
+			{items_per_page:itemsPerPage, callback:handlePaginationClick}
+			);
+			testInitiateFirstPagingClick();
+		}
+		function testInitiateFirstPagingClick()
+		{
+			$("#catalogContent").html("");
+			myPageIndex = 0;
+			myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+			
+			if(true)
+			{
+				if($('#tblCatalogPager-'+myPageIndex).length==0)
+				{
+					//$('#message_box').show();
+					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+				}
+				else
+					showCatalogContent();
+			}
+		}
+		
+		
+    	
+		/**
+		 * Select/Deselect all rows handler
+		 */
+		$('#select_deselect').click(function() {
+			$('input[type="checkbox"].check_me').attr('checked', $(this).attr('checked'));
+		});	
+		
+		<?php if ($this->isAllowed('membership','all')) : ?>
+		$('a.approvedAction').click(function(){
+			var numSelected = $('input[type="checkbox"].check_me:checked').length;
+			var self = this;
+			if (0 == numSelected) {
+				$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+					.dialog({
+						title: '<?php echo addslashes("Error"); ?>',
+						dialogClass: 't_a_ui_dialog',
+						modal: true,
+						closeOnEscape: false,
+						resizable: false,
+						open: function(event, ui) {
+							$('.ui-dialog-titlebar-close').hide();
+							$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+						},
+						buttons: {
+							'<?php echo addslashes("OK"); ?>': function() {
+								$(this).dialog('destroy');
+							}
+						}
+					});
+				
+			}
+			else
+			{
+				var ids = new Array();
+				$('input[type="checkbox"].check_me:checked').each(function() {
+					ids.push($(this).val());
+				});
+				
+				$.ajaxq('customer', {
+					url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval'),'customer'); ?>",
+					type: 'POST',
+					data: { id: $.toJSON(ids) },
+					success: function(response) {
+						if ('RESULT_OK' == response) {
+							window.location.reload();
 						}
 					}
 				});
-			
-		}
-		else
-		{
-			var ids = new Array();
-			$('input[type="checkbox"].check_me:checked').each(function() {
-				ids.push($(this).val());
-			});
-			
-			$.ajaxq('customer', {
-				url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval'),'customer'); ?>",
-				type: 'POST',
-				data: { id: $.toJSON(ids) },
-				success: function(response) {
-					if ('RESULT_OK' == response) {
-						for (var i in ids) {
-							$('#userRow_' + ids[i]).fadeOut('slow');
-						}
-					}
-				}
-			});
-			
-		}
-	});
-});
-<?php endif; ?>
+				
+			}
+		});
+		<?php endif; ?>
+	    
+    });
+    </script>
 
-	
-</script>
 <? endif; ?>

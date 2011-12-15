@@ -246,5 +246,65 @@ class Api_UserController extends Zend_Controller_Action
 		//$row = $db->fetchAll(Zend_Db::FETCH_OBJ);
 		echo $row[0]['count'];
 		die();
-	}	
+	}
+	
+	public function countuserappbyqueryAction()
+	{
+		$mainQuery = "SELECT count(*) as count from KutuUser where isActive = 0 AND periodeId IN (1,2)";
+		
+		$r = $this->getRequest();
+		
+		$finalQuery = $mainQuery;
+		$db = Zend_Registry::get('db2');
+		$query = $db->query($finalQuery);
+		
+		$row = $query->fetchAll(Zend_Db::FETCH_ASSOC);
+		echo $row[0]['count'];
+		die();
+	}
+	
+	public function getappuserAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		
+		$r = $this->getRequest();
+		
+		$start = ($r->getParam('start'))? $r->getParam('start') : 0;
+		$limit = ($r->getParam('limit'))? $r->getParam('limit'): 0;
+		$orderBy = ($r->getParam('orderBy'))? $r->getParam('sortBy') : 'firstname';
+		$sortOrder = ($r->getParam('sortOrder'))? $r->getParam('sortOrder') : ' asc';
+		
+		$a = array();
+		
+		$tblUser = new App_Model_Db_Table_User();
+		$rowset = $tblUser->fetchAll("isActive = 0 AND periodeId IN (1,2)", 'kopel ASC', $limit, $start);
+		
+		if(count($rowset)==0)
+		{
+			$a['users'][0]['kopel']= 'XXX';
+			$a['users'][0]['username']= "No Data";
+			$a['users'][0]['company']= "";
+			$a['users'][0]['group']= '';
+			$a['users'][0]['status']= '';
+		}
+		else 
+		{
+			$ii=0;
+			foreach ($rowset as $row) 
+			{
+				$a['users'][$ii]['kopel']= $row->kopel;
+				$a['users'][$ii]['username']= $row->username;
+				$a['users'][$ii]['company']= $row->company; 
+				$a['users'][$ii]['group']= Pandamp_Controller_Action_Helper_UserGroup::userGroup($row->packageId);
+				$a['users'][$ii]['status']= Pandamp_Controller_Action_Helper_UserStatus::userStatus($row->periodeId);
+				$a['users'][$ii]['checkbox']= "<input type='checkbox' name='kopel[]' id='kopel' value='$row->kopel' class='check_me'>";
+				
+				$ii++;
+			}
+		}
+		
+		echo Zend_Json::encode($a);
+		die();
+		
+	}
 }

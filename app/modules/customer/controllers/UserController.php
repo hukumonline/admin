@@ -54,11 +54,27 @@ class Customer_UserController extends Zend_Controller_Action
         $this->_helper->layout()->searchQuery = $query;
         $this->view->user = $this->_user;
     }
+    
+    /*
     function approvalAction()
     {
         $userQueue = App_Model_Show_User::show()->getUserQueue();
 
         $this->view->userQueue = $userQueue;
+        $this->view->user = $this->_user;
+    }
+    */
+    
+    function approvalAction()
+    {
+    	$userQueue = App_Model_Show_User::show()->getUserQueue();
+        
+		$a['totalCount'] = count($userQueue);
+		$limit = 15;
+		$a['limit'] = $limit;
+		
+		$this->view->aData = $a;
+
         $this->view->user = $this->_user;
     }
     function setApprovalAction()
