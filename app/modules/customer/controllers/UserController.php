@@ -70,7 +70,7 @@ class Customer_UserController extends Zend_Controller_Action
     	$userQueue = App_Model_Show_User::show()->getUserQueue();
         
 		$a['totalCount'] = count($userQueue);
-		$limit = 15;
+		$limit = 25;
 		$a['limit'] = $limit;
 		
 		$this->view->aData = $a;
