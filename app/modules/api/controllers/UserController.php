@@ -186,9 +186,13 @@ class Api_UserController extends Zend_Controller_Action
         		else 
         		{
         			if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all')) {
-        				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'\" class=\"form-button\">&nbsp";
-        				$btn .= "<input type=\"button\" name=\"delete\" value=\"Delete\" id=\"$row->kopel\" class=\"form-button\" />&nbsp";
-        				$btn .= "<input type=\"button\" name=\"reset\" value=\"Reset\" id=\"$row->kopel\" class=\"form-button\" />";
+        				$btn .= "<a href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'>edit</a>&nbsp";
+        				$btn .= "<a href=\"$row->kopel\" id=\"delete\">delete</a>&nbsp";
+        				$btn .= "<a href=\"$row->kopel\" id=\"reset\">reset</a>";
+        				
+//        				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'\" class=\"form-button\">&nbsp";
+//        				$btn .= "<input type=\"button\" name=\"delete\" value=\"Delete\" id=\"$row->kopel\" class=\"form-button\" />&nbsp";
+//        				$btn .= "<input type=\"button\" name=\"reset\" value=\"Reset\" id=\"$row->kopel\" class=\"form-button\" />";
         			}
         			else 
         			{

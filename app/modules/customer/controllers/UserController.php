@@ -72,6 +72,8 @@ class Customer_UserController extends Zend_Controller_Action
         if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
         {
         	if ($request->isPost()) {
+        		$formater = new Pandamp_Core_Hol_User();
+        		
         		$id     = $request->getPost('id');
         		$ids    = array();
         		$ids = Zend_Json::decode($id);
