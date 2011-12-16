@@ -277,7 +277,7 @@ class Api_UserController extends Zend_Controller_Action
 		$a = array();
 		
 		$tblUser = new App_Model_Db_Table_User();
-		$rowset = $tblUser->fetchAll("isActive = 0 AND periodeId IN (1,2)", 'kopel ASC', $limit, $start);
+		$rowset = $tblUser->fetchAll("isActive = 0 AND periodeId IN (1,2)", 'createdDate ASC', $limit, $start);
 		
 		if(count($rowset)==0)
 		{
