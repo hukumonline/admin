@@ -10,7 +10,8 @@ if ($this->aData['totalCount'] > 0) :
 	<?php if ($this->isAllowed('membership','all')) : ?>
 	<div class="align-left">
 		&nbsp;&nbsp;&nbsp;&nbsp;<input name='select_deselect' id='select_deselect' type='checkbox'>&nbsp;<abbr>Select All</abbr> |
-		<a href="javascript: void(0);" class="approvedAction">Approved</a>
+		<a href="javascript: void(0);" class="approvedAction">Approved</a> |
+		<a href="javascript: void(0);" class="suspendedAction">Suspended</a>
 	</div>
 	<?php endif; ?>
 	<div id='catalogContent'>
@@ -167,6 +168,52 @@ if ($this->aData['totalCount'] > 0) :
 				
 				$.ajaxq('customer', {
 					url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.approval'),'customer'); ?>",
+					type: 'POST',
+					data: { id: $.toJSON(ids) },
+					success: function(response) {
+						if ('RESULT_OK' == response) {
+							window.location.reload();
+						}
+					}
+				});
+				
+			}
+		});
+		<?php endif; ?>
+	    
+		<?php if ($this->isAllowed('membership','all')) : ?>
+		$('a.suspendedAction').click(function(){
+			var numSelected = $('input[type="checkbox"].check_me:checked').length;
+			var self = this;
+			if (0 == numSelected) {
+				$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+					.dialog({
+						title: '<?php echo addslashes("Error"); ?>',
+						dialogClass: 't_a_ui_dialog',
+						modal: true,
+						closeOnEscape: false,
+						resizable: false,
+						open: function(event, ui) {
+							$('.ui-dialog-titlebar-close').hide();
+							$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+						},
+						buttons: {
+							'<?php echo addslashes("OK"); ?>': function() {
+								$(this).dialog('destroy');
+							}
+						}
+					});
+				
+			}
+			else
+			{
+				var ids = new Array();
+				$('input[type="checkbox"].check_me:checked').each(function() {
+					ids.push($(this).val());
+				});
+				
+				$.ajaxq('customer', {
+					url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.suspended'),'customer'); ?>",
 					type: 'POST',
 					data: { id: $.toJSON(ids) },
 					success: function(response) {

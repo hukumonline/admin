@@ -89,4 +89,24 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
 
         return $result;
     }
+    public function fetchUser($where,$start,$end)
+    {
+    	$db = parent::_dbSelect();
+    	$select = $db->from(array('ku' => 'KutuUser'))
+			->joinLeft(array('gag' => 'gacl_aro_groups'),
+			'ku.packageId = gag.id')
+			->joinLeft(array('kus' => 'KutuUserStatus'),
+			'ku.periodeId = kus.accountStatusId','kus.status')
+			->where("$where")
+			->order('kopel ASC')->limit($end, $start);
+    	
+		//$sql = $select->__toString();
+    	//print_r($sql);exit();
+    	
+        $conn = self::$_db;
+
+        $db = $conn->query($select);
+        $dataFetch = $db->fetchAll(Zend_Db::FETCH_OBJ);
+        return $dataFetch;
+    }
 }

@@ -129,7 +129,7 @@ class Api_UserController extends Zend_Controller_Action
 		$r = $this->getRequest();
 		//$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
 		
-		$pColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId' );
+		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'gag.value', 'kus.status' );
 		
 		$sWhere = "";
 		if ($r->getParam('q'))
@@ -157,7 +157,8 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
-		$rowset = $tblUser->fetchAll($sWhere, 'kopel ASC', $limit, $start);
+		//$rowset = $tblUser->fetchAll($sWhere, 'kopel ASC', $limit, $start);
+		$rowset = App_Model_Show_User::show()->fetchUser($sWhere, $start, $limit);
 		
 		if(count($rowset)==0)
 		{
@@ -175,8 +176,10 @@ class Api_UserController extends Zend_Controller_Action
 				$a['users'][$ii]['kopel']= $row->kopel;
 				$a['users'][$ii]['username']= $row->username;
 				$a['users'][$ii]['company']= $row->company; 
-				$a['users'][$ii]['group']= Pandamp_Controller_Action_Helper_UserGroup::userGroup($row->packageId);
-				$a['users'][$ii]['status']= Pandamp_Controller_Action_Helper_UserStatus::userStatus($row->periodeId);
+				//$a['users'][$ii]['group']= Pandamp_Controller_Action_Helper_UserGroup::userGroup($row->packageId);
+				$a['users'][$ii]['group']= $row->value;
+				//$a['users'][$ii]['status']= Pandamp_Controller_Action_Helper_UserStatus::userStatus($row->periodeId);
+				$a['users'][$ii]['status']= $row->status;
 				
         		$btn="";
         		$gEx = Pandamp_Controller_Action_Helper_GroupException::groupException(11);

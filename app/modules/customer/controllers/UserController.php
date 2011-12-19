@@ -131,6 +131,47 @@ class Customer_UserController extends Zend_Controller_Action
         $this->getResponse()->setBody($result);
     }
     
+    function setSuspendedAction()
+    {
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$formater = new Pandamp_Core_Hol_User();
+        		
+        		$id     = $request->getPost('id');
+        		$ids    = array();
+        		$ids = Zend_Json::decode($id);
+        		
+   		        $modelUser = new App_Model_Db_Table_User();
+
+        		foreach ($ids as $id) {
+					$rowset = $modelUser->find($id)->current();
+					if ($rowset != null) 
+					{
+				        $data = array(
+				        	'periodeId' => 6,
+				        	'modifiedDate' => date("Y-m-d h:i:s"),
+				        	'modifiedBy' => $this->_user->username,
+				            'isActive' => 0
+				        );
+				
+				        $modelUser->update($data, "kopel='".$id."'");
+						
+					}
+        		}
+        	}
+        	$result = 'RESULT_OK';
+        }
+        
+        $this->getResponse()->setBody($result);
+    }
+    
     /*
     function setApprovalAction()
     {
