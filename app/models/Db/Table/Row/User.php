@@ -12,6 +12,9 @@ class App_Model_Db_Table_Row_User extends Zend_Db_Table_Row_Abstract
         $modelUserFinance = new App_Model_Db_Table_UserFinance();
         $modelUserFinance->delete("userId='".$this->kopel."'");
 
+        $modelUserInvoice = new App_Model_Db_Table_Invoice();
+        $modelUserInvoice->delete("uid='".$this->kopel."'");
+
         $acl = Pandamp_Acl::manager();
         $acl->deleteUser($this->username);
 

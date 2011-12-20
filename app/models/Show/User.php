@@ -109,4 +109,21 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
         $dataFetch = $db->fetchAll(Zend_Db::FETCH_OBJ);
         return $dataFetch;
     }
+    public function countUser($where)
+    {
+    	$db = parent::_dbSelect();
+    	$sql = $db->from(array('ku' => 'KutuUser'),array('count'=>'COUNT(*)'))
+			->joinLeft(array('gag' => 'gacl_aro_groups'),
+			'ku.packageId = gag.id')
+			->joinLeft(array('kus' => 'KutuUserStatus'),
+			'ku.periodeId = kus.accountStatusId','kus.status')
+			->where("$where");
+		
+        $conn = self::$_db;
+        
+		$db = $conn->query($sql);
+    	$dataFetch = $db->fetchAll(Zend_Db::FETCH_ASSOC);
+    	
+    	return ($dataFetch[0]['count']);
+    }
 }

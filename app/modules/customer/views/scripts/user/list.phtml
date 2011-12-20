@@ -3,25 +3,39 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <h3>User Management</h3>
+        	<h3>User Management</h3>
+            Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span>
+            <div class="clear">&nbsp;</div>
             <div class="box box-success" id="message"></div>
+            
+			<div class="align-left">
+				&nbsp;&nbsp;&nbsp;&nbsp;<input name='select_deselect' id='select_deselect' type='checkbox'>&nbsp;<abbr>Select All</abbr> |
+				<a href="javascript: void(0);" class="activateAction">Activation</a> |
+				<a href="javascript: void(0);" class="confirmAction">Confirm</a> |
+				<a href="javascript: void(0);" class="invoiceAction">Invoice</a> |
+				<a href="javascript: void(0);" class="dlAction">Delete</a> 
+			</div>
 			<div class="align-right">
 				<div class="psearch">
 				<input id="keywords" name="keywords" type="text">
 				</div>
 			</div>
-			<div class="align-left">
-			Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span>
-			</div>
+			
 			<div id='catalogContent'>
 				
 			</div>
+			
 			<table width='100%'>
 				<tr>
 					<td width=35%>&nbsp;</td>
 					<td align=right><div id='catalogPagination' class="pagination"></div></td>
 				</tr>
 			</table>
+			
+			<div id="messageDialog"></div>
+			
+			<div id="confirmDialog"></div>
+			
             <script>
             $(document).ready(function(){
             	
@@ -57,7 +71,7 @@
 				{
 					size = res.users.length;
 					var tblRow = "<a name='a-"+myPageIndex+"' ></a>"+'<div class="tblCatalogPager" id="tblCatalogPager-'+myPageIndex+'">';
-					tblRow += "<table class='display stylized'><thead><tr><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th>Status</th><th class='ta-center'>Action</th></tr></thead><tbody>"
+					tblRow += "<table class='display stylized'><thead><tr><th>&nbsp;</th><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th>Status</th><th class='ta-center'>Action</th></tr></thead><tbody>"
 					+"<?$gEx = $this->groupException(11);?>";
 					
 					
@@ -65,6 +79,7 @@
 					{
 						tblRow += 
 							"<tr id='row_"+res.users[i].kopel+"'>"
+							+"<td>"+res.users[i].checkbox+"</td>"
 							+"<td>"+res.users[i].kopel+"</td>"
 							+"<td>"+res.users[i].username+"</td>"
 							+"<td width='25%'>"+res.users[i].company+"</td>"
@@ -130,6 +145,216 @@
 					}
 				}
 				
+				/**
+				 * Select/Deselect all rows handler
+				 */
+				$('#select_deselect').click(function() {
+					$('input[type="checkbox"].check_me').attr('checked', $(this).attr('checked'));
+				});	
+				
+				$('a.activateAction').click(function(){
+					var numSelected = $('input[type="checkbox"].check_me:checked').length;
+					var self = this;
+					if (0 == numSelected) {
+						$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+							.dialog({
+								title: '<?php echo addslashes("Error"); ?>',
+								dialogClass: 't_a_ui_dialog',
+								modal: true,
+								closeOnEscape: false,
+								resizable: false,
+								open: function(event, ui) {
+									$('.ui-dialog-titlebar-close').hide();
+									$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+								},
+								buttons: {
+									'<?php echo addslashes("OK"); ?>': function() {
+										$(this).dialog('destroy');
+									}
+								}
+							});
+						
+					}
+					else
+					{
+						var ids = new Array();
+						$('input[type="checkbox"].check_me:checked').each(function() {
+							ids.push($(this).val());
+						});
+						
+						$.ajaxq('customer', {
+							url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set.active'),'customer'); ?>",
+							type: 'POST',
+							data: { id: $.toJSON(ids) },
+							success: function(response) {
+								if ('RESULT_OK' == response) {
+									window.location.reload();
+								}
+							}
+						});
+						
+					}
+				});
+				
+				$('a.confirmAction').click(function(){
+					var numSelected = $('input[type="checkbox"].check_me:checked').length;
+					var self = this;
+					if (0 == numSelected) {
+						$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+							.dialog({
+								title: '<?php echo addslashes("Error"); ?>',
+								dialogClass: 't_a_ui_dialog',
+								modal: true,
+								closeOnEscape: false,
+								resizable: false,
+								open: function(event, ui) {
+									$('.ui-dialog-titlebar-close').hide();
+									$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+								},
+								buttons: {
+									'<?php echo addslashes("OK"); ?>': function() {
+										$(this).dialog('destroy');
+									}
+								}
+							});
+						
+					}
+					else
+					{
+						var ids = new Array();
+						$('input[type="checkbox"].check_me:checked').each(function() {
+							ids.push($(this).val());
+						});
+						
+						for(var i = 0; i< ids.length; i++){
+							$('#kopel_' + ids[i]).empty();
+							$.ajaxq('customer', {
+								url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'confirm'),'customer'); ?>",
+								type: 'POST',
+								data: { id: ids[i] },
+								ajaxI: i,
+								success: function(response) {
+									i = this.ajaxI; 
+										
+										$('#kopel_' + ids[i]).append($('<span/>').html('<small><b>'+response+'</b></small>'))
+											.removeClass('t_a_ui_helper_loading');
+											
+											//window.location.reload();
+								}
+								
+							});
+							
+						}
+						
+						
+					}
+				});
+				
+				$('a.invoiceAction').click(function(){
+					var numSelected = $('input[type="checkbox"].check_me:checked').length;
+					var self = this;
+					if (0 == numSelected) {
+						$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+							.dialog({
+								title: '<?php echo addslashes("Error"); ?>',
+								dialogClass: 't_a_ui_dialog',
+								modal: true,
+								closeOnEscape: false,
+								resizable: false,
+								open: function(event, ui) {
+									$('.ui-dialog-titlebar-close').hide();
+									$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+								},
+								buttons: {
+									'<?php echo addslashes("OK"); ?>': function() {
+										$(this).dialog('destroy');
+									}
+								}
+							});
+						
+					}
+					else
+					{
+						var ids = new Array();
+						$('input[type="checkbox"].check_me:checked').each(function() {
+							ids.push($(this).val());
+						});
+						
+						for(var i = 0; i< ids.length; i++){
+							$('#kopel_' + ids[i]).empty();
+							$.ajaxq('customer', {
+								url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'set-invoice'),'customer'); ?>",
+								type: 'POST',
+								data: { id: ids[i] },
+								ajaxI: i,
+								success: function(response) {
+									i = this.ajaxI; 
+										
+										$('#kopel_' + ids[i]).append($('<span/>').html('<small><b>'+response+'</b></small>'))
+											.removeClass('t_a_ui_helper_loading');
+								}
+								
+							});
+							
+						}
+						
+						
+					}
+				});
+				
+				$('a.dlAction').click(function(){
+					var numSelected = $('input[type="checkbox"].check_me:checked').length;
+					var self = this;
+					if (0 == numSelected) {
+						$('#confirmDialog').html('<?php echo addslashes("Please select at least one user"); ?>')
+							.dialog({
+								title: '<?php echo addslashes("Error"); ?>',
+								dialogClass: 't_a_ui_dialog',
+								modal: true,
+								closeOnEscape: false,
+								resizable: false,
+								open: function(event, ui) {
+									$('.ui-dialog-titlebar-close').hide();
+									$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+								},
+								buttons: {
+									'<?php echo addslashes("OK"); ?>': function() {
+										$(this).dialog('destroy');
+									}
+								}
+							});
+						
+					}
+					else
+					{
+						var ids = new Array();
+						$('input[type="checkbox"].check_me:checked').each(function() {
+							ids.push($(this).val());
+						});
+						
+						for(var i = 0; i< ids.length; i++){
+							$('#kopel_' + ids[i]).empty();
+							$.ajaxq('customer', {
+								url: "<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'user','module'=>'customer','action'=>'del'),'customer'); ?>",
+								type: 'POST',
+								data: { id: ids[i] },
+								ajaxI: i,
+								success: function(response) {
+									i = this.ajaxI; 
+										
+										$('#kopel_' + ids[i]).append($('<span/>').html('<small><b>'+response+'</b></small>'))
+											.removeClass('t_a_ui_helper_loading');
+											
+									//window.location.reload();
+								}
+								
+							});
+							
+						}
+						
+						
+					}
+				});
 				
             	
             });

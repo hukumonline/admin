@@ -118,9 +118,13 @@ class Pandamp_Core_Hol_User
 			{
 				$result = $rowInvoice->save();
 				
-				if (!$result)
+				if ($result)
 				{
-					die('failure');
+					$r = $memberId . " OK";
+				}
+				else 
+				{
+					$r = 'failure';
 				}
 				
 			}
@@ -129,9 +133,11 @@ class Pandamp_Core_Hol_User
 		{
 			if (!empty($access))
 			{
-				die('?');
+				$r = "invoice:$memberId sudah pernah dibuat!";
 			}
 		}
+		
+		return $r;
 	}
 	
 	/**

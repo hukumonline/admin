@@ -104,10 +104,10 @@ class Customer_UserController extends Zend_Controller_Action
 				        {
 				        	$periodeId = 2;
 							// Get disc promo
-							$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+							//$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
 							// Get total promo
-							$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
-							$formater->_writeInvoice($rowset->kopel,$total,$disc,$rowset->paymentId);
+							//$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+							//$formater->_writeInvoice($rowset->kopel,$total,$disc,$rowset->paymentId);
 				        }
 				        else 
 				        {
@@ -172,6 +172,205 @@ class Customer_UserController extends Zend_Controller_Action
         $this->getResponse()->setBody($result);
     }
     
+	/**	
+	 * TODO
+	 * admin setActive
+	 */
+	function setActiveAction()
+	{
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$id  = $request->getPost('id');
+        		$ids = array();
+        		$ids = Zend_Json::decode($id);
+        		
+   		        $modelUser = new App_Model_Db_Table_User();
+
+        		foreach ($ids as $id) {
+					$rowset = $modelUser->find($id)->current();
+					if ($rowset != null) 
+					{
+						if (($rowset->isActive == 0)) 
+						{
+					        if (in_array($rowset->packageId,array(14,15,16,17,18,36,37,38)))
+					        {
+					        	$periodeId = 2;
+					        }
+					        else 
+					        {
+					        	$periodeId = 3;
+					        }
+					        
+					        $isActive = 1;
+						}
+						else 
+						{
+							$periodeId = 1;
+							$isActive = 0;
+						}
+						
+				        $data = array(
+				        	'periodeId' => $periodeId,
+				        	'modifiedDate' => date("Y-m-d h:i:s"),
+				        	'modifiedBy' => $this->_user->username,
+				            'isActive' => $isActive
+				        );
+				
+				        $modelUser->update($data, "kopel='".$id."'");
+						
+					}
+        		}
+        	}
+        	$result = 'RESULT_OK';
+        }
+		
+		$this->getResponse()->setBody($result);
+	}
+    
+	function confirmAction()
+	{
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$id  = $request->getPost('id');
+//        		$ids = array();
+//        		$ids = Zend_Json::decode($id);
+        		
+        		$aclMan	= Pandamp_Acl::manager();
+        		
+   		        $modelUser = new App_Model_Db_Table_User();
+        		
+//   		        foreach ($ids as $id) {
+			    	$sql = $modelUser->select()->setIntegrityCheck(false);
+					$sql->from(array('ku' => 'KutuUser'))->join(array('gag' => 'gacl_aro_groups'),'ku.packageId = gag.id')
+						->where('ku.kopel=?',$id);
+			
+					$rowUser = $modelUser->fetchRow($sql);
+   		        	if (in_array($rowUser->packageId,array(14,15,16,17,18,36,37,38))) {
+   		        		
+						$tblInvoice = new App_Model_Db_Table_Invoice();
+						$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$id);
+						$rowInvoice = $tblInvoice->fetchRow($where);
+						if ($rowInvoice) {
+							$rowInvoice->invoiceConfirmDate = date("Y-m-d");
+							$rowInvoice->isPaid = 'Y';
+							// get expiration date
+							$temptime = time();
+							$temptime = Pandamp_Lib_Formater::DateAdd('m',$rowUser->paymentId,$temptime);
+							$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
+							$rowInvoice->save();
+							
+							// delete user group = trial from gacl
+							$aclMan->deleteUser($rowUser->username);
+							
+							// add user to gacl
+							$aReturn = $aclMan->getGroupData($rowUser->packageId);
+							$aclMan->addUser($rowUser->username,$aReturn[2]);
+							
+							$rowUser->periodeId = 3;
+							$rowUser->isActive = 1;
+							$rowUser->modifiedDate = date("Y-m-d h:i:s");
+							$rowUser->modifiedBy = "$rowUser->username";
+							
+							$rowUser->save();
+							
+							$result = 'RESULT_OK';
+						}
+						else 
+						{
+							$result = 'Create Invoice First';
+						}
+   		        	}
+   		        	else 
+   		        	{
+   		        		$result = 'Wrong Package';
+   		        	}
+//   		        }
+        	}        	
+        }
+        
+        $this->getResponse()->setBody($result);
+	}
+	
+	/**	
+	 * Set Invoice
+	 * @param guid
+	 */
+	function setInvoiceAction()
+	{
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$id  = $request->getPost('id');
+        		
+   		        $modelUser = new App_Model_Db_Table_User();
+        		$rowset = $modelUser->fetchRow("kopel='".$id."'");
+				if ((in_array($rowset->packageId,array(14,15,16,17,18,36,37,38))) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
+				{
+					$formater = new Pandamp_Core_Hol_User();
+					// GET disc promo
+					$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+					// GET total promo
+					$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+					// WRITE invoice
+					$r = $formater->_writeInvoice($rowset->kopel, $total, $disc, $rowset->paymentId,'admin');
+					
+					$result = $r;
+				}
+				else
+				{
+					$result = "check your payment/status";
+				}
+        	}
+        }
+        
+        $this->getResponse()->setBody($result);		
+	}
+	
+	function delAction()
+	{
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$id  = $request->getPost('id');
+        		
+   		        $modelUser = new App_Model_Db_Table_User();
+		        $row = $modelUser->find($id)->current();
+		        if ($row)
+		        {
+		            $row->delete();
+		        }
+        		$result  = 'RESULT_OK';
+        	}
+        }
+        $this->getResponse()->setBody($result);		
+	}
+	
     /*
     function setApprovalAction()
     {

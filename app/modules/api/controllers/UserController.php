@@ -173,6 +173,7 @@ class Api_UserController extends Zend_Controller_Action
 			$ii=0;
 			foreach ($rowset as $row) 
 			{
+				$a['users'][$ii]['checkbox'] = "<input type='checkbox' name='kopel[]' id='kopel' value='$row->kopel' class='check_me'>";
 				$a['users'][$ii]['kopel']= $row->kopel;
 				$a['users'][$ii]['username']= $row->username;
 				$a['users'][$ii]['company']= $row->company; 
@@ -205,7 +206,7 @@ class Api_UserController extends Zend_Controller_Action
         			}
         		}
 				
-				$a['users'][$ii]['action']= $btn;
+				$a['users'][$ii]['action']= $btn."<br><div id='kopel_$row->kopel'></div>";
 				$ii++;
 			}
 		}
@@ -215,13 +216,13 @@ class Api_UserController extends Zend_Controller_Action
 	}
 	public function countuserbyqueryAction()
 	{
-		$mainQuery = "SELECT count(*) as count from KutuUser where ";
+		//$mainQuery = "SELECT count(*) as count from KutuUser where ";
 		
 		$r = $this->getRequest();
 		//$q = ($r->getParam('q'))? $r->getParam('q') : '';
 		//$q = base64_decode($q);
 		
-		$pColumns = array( 'kopel', 'username', 'company', 'packageId', 'periodeId' );
+		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'gag.value', 'kus.status' );
 		
 		$sWhere = "";
 		if ($r->getParam('q'))
@@ -240,14 +241,18 @@ class Api_UserController extends Zend_Controller_Action
 			$sWhere = "1=1";
 		}
 		
-		$finalQuery = $mainQuery.$sWhere;
-		$db = Zend_Registry::get('db2');
-		$query = $db->query($finalQuery);
+		//$finalQuery = $mainQuery.$sWhere;
+		//$db = Zend_Registry::get('db2');
+		//$query = $db->query($finalQuery);
 		//$db = Zend_Db_Table::getDefaultAdapter()->query($finalQuery);
 		
-		$row = $query->fetchAll(Zend_Db::FETCH_ASSOC);
+		//$row = $query->fetchAll(Zend_Db::FETCH_ASSOC);
 		//$row = $db->fetchAll(Zend_Db::FETCH_OBJ);
-		echo $row[0]['count'];
+		//echo $row[0]['count'];
+		
+		$tblUser = new App_Model_Db_Table_User();
+		$row = App_Model_Show_User::show()->countUser($sWhere);
+		echo $row; 
 		die();
 	}
 	
