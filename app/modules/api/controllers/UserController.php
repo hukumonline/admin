@@ -204,14 +204,20 @@ class Api_UserController extends Zend_Controller_Action
 						
 						if (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) == "Master") {
 
-							$password = $obj->decryptPassword($row->password);
-							$password = ($password !== "null")? $password : "";	
+							if (is_sha1($row->password)) {
+								$password = "TYPE: SHA1";
+							}
+							else 
+							{
+								$password = $obj->decryptPassword($row->password);	
+							}
+							
 							
 							$passwd .= "<tr><td>&nbsp;</td><td colspan='6' style='color:green;'>password:<a href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'>".$password."</a></td></tr>";
 							
 						} else {
 							
-							$passwd .= "))";
+							$passwd .= "";
 							
 						}	
 						
@@ -335,5 +341,8 @@ class Api_UserController extends Zend_Controller_Action
 		echo Zend_Json::encode($a);
 		die();
 		
+	}
+	function is_sha1($str) {
+	    return (bool) preg_match('/^[0-9a-f]{40}$/i', $str);
 	}
 }
