@@ -155,6 +155,8 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$a = array();
 		
+		$obj = new Pandamp_Crypt_Password();
+		
 		$tblUser = new App_Model_Db_Table_User();
 		//echo $q;die();
 		//$rowset = $tblUser->fetchAll($sWhere, 'kopel ASC', $limit, $start);
@@ -183,9 +185,11 @@ class Api_UserController extends Zend_Controller_Action
 				$a['users'][$ii]['status']= $row->status;
 				
         		$btn="";
+        		$passwd="";
         		$gEx = Pandamp_Controller_Action_Helper_GroupException::groupException(11);
         		if ((in_array($row->username, $gEx)) && (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) !== "Master")) { 
 					$btn .= '-';            			
+					$passwd .= '';					
         		}
         		else 
         		{
@@ -197,16 +201,25 @@ class Api_UserController extends Zend_Controller_Action
 //        				$btn .= "<input type=\"button\" name=\"edit\" value=\"Edit\" onclick=\"javascript: window.location.href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'\" class=\"form-button\">&nbsp";
 //        				$btn .= "<input type=\"button\" name=\"delete\" value=\"Delete\" id=\"$row->kopel\" class=\"form-button\" />&nbsp";
 //        				$btn .= "<input type=\"button\" name=\"reset\" value=\"Reset\" id=\"$row->kopel\" class=\"form-button\" />";
+						
+						if (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) == "Master")
+							$passwd .= "<tr><td>&nbsp;</td><td colspan='6' style='color:green;'>password:<a href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'>".$obj->decryptPassword($row->password)."</a></td></tr>";
+						else 
+							$passwd .= "";
+							
         			}
         			else 
         			{
         				$btn .= "Edit&nbsp;";
         				$btn .= "Delete&nbsp;";
         				$btn .= "Reset";
+        				
+        				$passwd .= "";
         			}
         		}
 				
 				$a['users'][$ii]['action']= $btn."<br><div id='kopel_$row->kopel'></div>";
+				$a['users'][$ii]['passwd']= $passwd;
 				$ii++;
 			}
 		}

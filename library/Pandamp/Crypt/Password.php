@@ -3,9 +3,6 @@
 /**
  * module Password Encryption/Decryption
  * 
- * @author Himawan Anindya Putra <putra@langit.biz>
- * @package Kutu
- * 
  */
 
 class Pandamp_Crypt_Password
