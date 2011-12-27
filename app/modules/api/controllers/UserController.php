@@ -211,7 +211,7 @@ class Api_UserController extends Zend_Controller_Action
 							
 						} else {
 							
-							$passwd .= "";
+							$passwd .= "))";
 							
 						}	
 						
