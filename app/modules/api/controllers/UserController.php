@@ -228,7 +228,7 @@ class Api_UserController extends Zend_Controller_Action
         				$btn .= "Delete&nbsp;";
         				$btn .= "Reset";
         				
-        				$passwd .= "+";
+        				$passwd .= "";
         			}
         		}
 				
