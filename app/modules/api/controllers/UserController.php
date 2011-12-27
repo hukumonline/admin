@@ -204,7 +204,7 @@ class Api_UserController extends Zend_Controller_Action
 						
 						if (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) == "Master") {
 
-							if (is_sha1($row->password)) {
+							if ($this->is_sha1($row->password)) {
 								$password = "TYPE: SHA1";
 							}
 							else 
