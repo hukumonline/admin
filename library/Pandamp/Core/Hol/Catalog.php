@@ -99,6 +99,23 @@ class Pandamp_Core_Hol_Catalog
         $indexingEngine = Pandamp_Search::manager();
         $indexingEngine->indexCatalog($catalogGuid);
 
+		try {
+			
+			$url_content = ROOT_URL.'/berita/baca/'.$catalogGuid.'/'.$rowCatalog->shortTitle;
+		    $url = 'http://developers.facebook.com/tools/lint/?url={'.$url_content.'}&format=json';
+		    $ch = curl_init($url);
+		    curl_setopt($ch, CURLOPT_NOBODY, true);
+		    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		    curl_exec($ch);
+		    $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		    curl_close($ch);
+			
+		}
+		catch (Exception $e)
+		{
+			die($e->getMessage());
+		}
+		
         //after indexing, update isIndex and indexedDate in table KutuCatalog
         return $catalogGuid;
     }
