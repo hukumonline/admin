@@ -107,7 +107,7 @@ class Agenda_EventController extends Zend_Controller_Action
                 $timestr = "";
         }
 
-        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('event','all'))
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('eventcalendar','all'))
         {
             $zl = Zend_Registry::get("Zend_Locale");
             $editstr = "<span class=\"display_edit\">";
@@ -134,7 +134,7 @@ class Agenda_EventController extends Zend_Controller_Action
     function editpostingAction()
     {
         $zl = Zend_Registry::get("Zend_Locale");
-        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('event','all'))
+        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('eventcalendar','all'))
         {
             $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
         }
