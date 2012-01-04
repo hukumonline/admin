@@ -41,7 +41,7 @@ class Agenda_EventController extends Zend_Controller_Action
     }
     function postmessageAction()
     {
-        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('event','all'))
+        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('eventcalendar','all'))
         {
             $zl = Zend_Registry::get("Zend_Locale");
             $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
