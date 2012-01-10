@@ -64,7 +64,7 @@ class Dms_Relation_Dci
                 closedir($dh);
             }
 
-            Zend_Session::sessionExists('cfg')?Zend_Session::namespaceUnset('cfg'):'';
+            Zend_Session::sessionExists('cfg') ? Zend_Session::namespaceUnset('cfg') : '';
             
             $configGallery = new Zend_Session_Namespace("cfg");
             $configGallery->allThumbs = (isset($all_thumbs))? $all_thumbs : '';
