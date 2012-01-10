@@ -33,6 +33,7 @@
             </div>
 
             <?
+            Zend_Session::sessionExists('cfg') ? Zend_Session::namespaceUnset('cfg') : '';
             $configGallery = new Zend_Session_Namespace("cfg");
             if (sizeof($configGallery->allThumbs) > $configGallery->perPage) {
             ?>
