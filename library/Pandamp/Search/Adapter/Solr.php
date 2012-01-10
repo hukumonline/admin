@@ -280,7 +280,6 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  	case 'fixedDate':
 	  	  	  	case 'prtDisahkan':
 	  	  	  	case 'ptsDibaca':
-	  	  	  	case 'prtBerlaku':
 	  	  	  		$part->date = $this->getDateInSolrFormat($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedLanguage':
@@ -884,7 +883,6 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  	case 'fixedDate':
 	  	  	  	case 'prtDisahkan':
 	  	  	  	case 'ptsDibacakan':
-				case 'prtBerlaku':	  	  	  		
 	  	  	  		$part->date = $this->getDateInSolrFormat($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedLanguage':
