@@ -50,8 +50,10 @@ class Pandamp_Session_SaveHandler_Remote implements Zend_Session_SaveHandler_Int
         $configs = array('timeout'=>1000);
         $client->setConfig($configs);
         
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
 		$client->setHeaders("User-Agent: $userAgent");
+        }
 		
 //		try 
 //		{
