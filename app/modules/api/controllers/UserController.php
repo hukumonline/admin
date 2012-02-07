@@ -129,7 +129,7 @@ class Api_UserController extends Zend_Controller_Action
 		$r = $this->getRequest();
 		//$q = ($r->getParam('q'))? base64_decode($r->getParam('q')) : "1=1";
 		
-		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'gag.value', 'kus.status' );
+		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'ku.email', 'gag.value', 'kus.status' );
 		
 		$sWhere = "";
 		if ($r->getParam('q'))
@@ -213,7 +213,7 @@ class Api_UserController extends Zend_Controller_Action
 							}
 							
 							
-							$passwd .= "<tr><td>&nbsp;</td><td colspan='6' style='color:green;'>password:<a href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'>".$password."</a></td></tr>";
+							$passwd .= "<tr><td>&nbsp;</td><td colspan='6' style='color:green;'>password:<a href='".ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/edit/id/'.$row->kopel."'>".$password."</a> - ".$row->email."</td></tr>";
 							
 						} else {
 							
