@@ -12,6 +12,8 @@ class Polling_ElectionController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('layout-polling');
         $auth = Zend_Auth::getInstance();
+        
+        $identity = Pandamp_Application::getResource('identity');
 
         $sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
         $sReturn = base64_encode($sReturn);
