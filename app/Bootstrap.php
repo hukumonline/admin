@@ -48,7 +48,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		 * session.cookie_lifetime = "3600"
 		 * session.cookie_domain   = ".domain.ext"
 		 */
-		Zend_Session::setOptions($session);Pandamp_Debug::manager(Zend_Session);
+		//Zend_Session::setOptions($session);
+		Pandamp_Debug::manager($_SESSION);
 	}
 	
     /*
