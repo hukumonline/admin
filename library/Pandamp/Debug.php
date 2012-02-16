@@ -7,6 +7,6 @@ class Pandamp_Debug
 		echo '<pre>';
 		print_r($data);
 		echo '</pre>';
-		//die;
+		die;
 	}
 }
