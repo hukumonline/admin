@@ -176,10 +176,14 @@
 
     <?
     $auth = Zend_Auth::getInstance();
-    if ($auth->hasIdentity())
-        $createdBy = $auth->getIdentity()->username;
-    else
+    if ($auth->hasIdentity()) {
+    	$identity = $auth->getIdentity();
+        $createdBy = $identity['properties']['username'];
+    } 
+    else 
+    {
         $createdBy = "";
+    }
     ?>
     <input type="hidden" name="createdBy" value="<?=$createdBy;?>" />
     <p>

@@ -27,11 +27,18 @@ class Dms_ExplorerController extends Zend_Controller_Action
             //$this->_forward('login','account','admin');
 			$loginUrl = $identity->loginUrl;
 			
-			$this->_redirect($loginUrl.'?returnTo='.$sReturn);     
+			//$this->_redirect($loginUrl.'?returnTo='.$sReturn);   
+			$this->_redirect($loginUrl.'/returnUrl/'.$sReturn);  
         }
         else
         {
-            $this->_user = $auth->getIdentity();
+            //$this->_user = $auth->getIdentity();
+            $idt = $auth->getIdentity();
+			//$this->_user = $identity['properties'];
+			$this->_user = new stdClass();
+			$this->_user->kopel 	= $idt['properties']['kopel'];
+			$this->_user->username 	= $idt['properties']['username'];
+			$this->_user->packageId = $idt['properties']['packageId'];
 
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))

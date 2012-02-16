@@ -35,9 +35,11 @@ class Dms_Menu_ViewFolder
             echo "You aren't login";
         }
         
-        $packageId = $auth->getIdentity()->packageId;
+        $identity = $auth->getIdentity();
         
-        $username = $auth->getIdentity()->username;
+        $packageId = $identity['properties']['packageId'];
+        
+        $username = $identity['properties']['username'];
 
 		$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($packageId);
 		

@@ -21,7 +21,8 @@ class Pandamp_Controller_Action_Helper_LastLogin
                 return;
             }
 
-            $id = $auth->getIdentity()->kopel;
+            $identity = $auth->getIdentity();
+            $id = $identity['properties']['kopel'];
 
         }
 		

@@ -28,6 +28,29 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //Zend_Registry::set('db5', $multidb->getDb('db5'));
     }
 
+	/**
+	 * Init session
+	 * 
+	 * @return void
+	 */
+	protected function _initSession()
+	{
+		/** 
+		 * Registry session handler 
+		 */
+		require_once(APPLICATION_PATH.'/modules/core/services/SessionHandler.php');
+		Zend_Session::setSaveHandler(Core_Services_SessionHandler::getInstance());
+        $session = $this->getOption('session');
+        
+		/**
+		 * Allow user to set more session settings in application.ini
+		 * For example:
+		 * session.cookie_lifetime = "3600"
+		 * session.cookie_domain   = ".domain.ext"
+		 */
+		Zend_Session::setOptions($session);
+	}
+	
     /*
     protected function _initRoutes()
     {

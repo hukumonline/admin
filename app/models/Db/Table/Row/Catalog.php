@@ -41,7 +41,8 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             $auth = Zend_Auth::getInstance();
             if($auth->hasIdentity())
             {
-                $this->createdBy = $auth->getIdentity()->username;
+            	$identity = $auth->getIdentity();
+                $this->createdBy = $identity['properties']['username'];
             }
         }
 
@@ -60,7 +61,8 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
         $auth = Zend_Auth::getInstance();
         if($auth->hasIdentity())
         {
-            $userName = $auth->getIdentity()->username;
+        	$identity = $auth->getIdentity();
+            $userName = $identity['properties']['username'];
         }
 
         $this->modifiedBy = $userName;

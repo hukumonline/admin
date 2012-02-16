@@ -349,7 +349,8 @@ class Pandamp_Form_Attribute_Renderer
 				$view->value = $this->value;
 				
 				$auth = Zend_Auth::getInstance();
-				$username = $auth->getIdentity()->username;
+				$identity = $auth->getIdentity();
+				$username = $identity['properties']['username'];
 				// get group information
 				$acl = Pandamp_Acl::manager();
 				$aReturn = $acl->getUserGroupIds($username);
