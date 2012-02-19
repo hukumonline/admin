@@ -28,9 +28,9 @@ class Api_FolderController extends Zend_Controller_Action
         
         $identity = $auth->getIdentity();
         
-        $packageId = $identity['properties']['packageId'];
+        $packageId = $identity->packageId;
         
-        $username = $identity['properties']['username'];
+        $username = $identity->username;
 
 		$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($packageId);
 		

@@ -15,7 +15,7 @@ class Pandamp_Controller_Action_Helper_AclCheck
         }
         
         $identity = $auth->getIdentity();
-        $username = $identity['properties']['username'];
+        $username = $identity->username;
         
 		$acl = Pandamp_Acl::manager();
 		return $acl->checkAcl($section,$aco,'user', $username, $axoSectionValue,$axoValue);

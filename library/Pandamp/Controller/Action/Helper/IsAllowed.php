@@ -15,12 +15,12 @@ class Pandamp_Controller_Action_Helper_IsAllowed
         }
         
         $identity = $auth->getIdentity();
-        $username = $identity['properties']['username'];
+        $username = $identity->username;
 
         $front = Zend_Controller_Front::getInstance();
         $aclMan = $front->getParam('bootstrap')->getResource('acl');
         
-        $aReturn = App_Model_Show_AroGroup::show()->getUserGroup($identity['properties']['packageId']);
+        $aReturn = App_Model_Show_AroGroup::show()->getUserGroup($identity->packageId);
         
         if (($aReturn['name'] == "Master") || ($aReturn['name'] == "Super Admin"))
         	$content = 'all-access';

@@ -178,7 +178,7 @@
     $auth = Zend_Auth::getInstance();
     if ($auth->hasIdentity()) {
     	$identity = $auth->getIdentity();
-        $createdBy = $identity['properties']['username'];
+        $createdBy = $identity->username;
     } 
     else 
     {

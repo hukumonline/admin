@@ -15,13 +15,7 @@ class Api_UserController extends Zend_Controller_Action
         $this->_zl = Zend_Registry::get("Zend_Locale");
         
         if ($auth->hasIdentity()) {
-            //$this->_user = $auth->getIdentity();
-            $idt = $auth->getIdentity();
-			//$this->_user = $identity['properties'];
-			$this->_user = new stdClass();
-			$this->_user->kopel 	= $idt['properties']['kopel'];
-			$this->_user->username 	= $idt['properties']['username'];
-			$this->_user->packageId = $idt['properties']['packageId'];
+            $this->_user = $auth->getIdentity();
         }
     }
 	public function __getalluserAction()

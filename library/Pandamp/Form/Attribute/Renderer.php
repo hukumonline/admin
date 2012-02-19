@@ -1,9 +1,9 @@
 <?php
-
 /**
  * manage Form Template Attribute for application
  * 
  * @author Himawan Anindya Putra <putra@langit.biz>
+ * @author Nihki Prihadi <nihki@madaniyah.com>
  * @package Kutu
  * 
  */
@@ -350,7 +350,7 @@ class Pandamp_Form_Attribute_Renderer
 				
 				$auth = Zend_Auth::getInstance();
 				$identity = $auth->getIdentity();
-				$username = $identity['properties']['username'];
+				$username = $identity->username;
 				// get group information
 				$acl = Pandamp_Acl::manager();
 				$aReturn = $acl->getUserGroupIds($username);
