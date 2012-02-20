@@ -53,7 +53,7 @@ class Dms_BrowserController extends Zend_Controller_Action
     		if ($auth->hasIdentity())
     		{
     			$identity = $auth->getIdentity();
-    			$guidUser = $identity['properties']['kopel'];
+    			$guidUser = $identity->kopel;
     		}
     		
     		$tblAsetSetting = new App_Model_Db_Table_AssetSetting();
