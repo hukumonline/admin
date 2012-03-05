@@ -35,7 +35,6 @@ class Pandamp_Form_Attribute_Renderer
 		{
 			default:
 	        case 0:     // field type = single line
-	        	
 	        	$view = new Zend_View();
 				$view->name = $this->name;
 				$view->value = $this->value;
@@ -48,7 +47,6 @@ class Pandamp_Form_Attribute_Renderer
 	            break;
 	
 	        case 1:     // field type = textarea paragraph
-	        	
 	        	$view = new Zend_View();
 				$view->name = $this->name;
 				$view->value = $this->value;
@@ -62,7 +60,6 @@ class Pandamp_Form_Attribute_Renderer
 	            break;
 	
 	        case 2:     // field type = html paragraph
-				
 //				require_once('FCKeditor/fckeditor.php');
 //				$oFCKeditor = new FCKeditor($this->name) ;
 //				$oFCKeditor->BasePath = ROOT_URL.'/library/FCKeditor/';
@@ -76,14 +73,29 @@ class Pandamp_Form_Attribute_Renderer
 	            
 //	            return $sReturn;
 
-				$view = new Zend_View();
+//				$view = new Zend_View();
+//				$view->name = $this->name;
+//				$view->value = $this->value;
+//				$view->setScriptPath(dirname(__FILE__));
+//				return $view->render('TextArea2.phtml');
+//
+//	            break;
+	        
+	        	$view = new Zend_View();
 				$view->name = $this->name;
 				$view->value = $this->value;
+				
+				$config = Pandamp_Config::getConfig();
+				$view->cdn = $config->cdn->js;
+				if(isset($this->attribs))
+					$view->attribs = $this->attribs;
+				else
+					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 1000px;');
 				$view->setScriptPath(dirname(__FILE__));
-				return $view->render('TextArea2.phtml');
-
-	            break;
-	        
+				return $view->render('TextAreaContent.phtml');
+				
+				break;
+				
 	        case 79:     // field type = html paragraph
 				
 				require_once('FCKeditor/fckeditor.php');

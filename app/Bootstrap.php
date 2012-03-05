@@ -175,7 +175,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->doctype('XHTML1_STRICT');
 
         // Set our TITLE
-        $view->headTitle()->setSeparator(' - ')->append('hukumonline.com');
+        $view->headTitle()->setSeparator(' - ')->append('CMS hukumonline.com');
 
         // Add any META elements
         $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=' . $view->getEncoding());
@@ -192,19 +192,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         ));
 
         // Add Stylesheet's
-        $view->headLink()
-            ->appendStylesheet($view->baseUrl('resources/css/elastic.css'))
-            ->appendStylesheet($view->baseUrl('resources/css/jquery-ui-1.8.5.custom.css'))
-            ->appendStylesheet($view->baseUrl('resources/css/featured.css'))
-            ->appendStylesheet($view->baseUrl('resources/css/typography.css'));
+//        $view->headLink()
+//            ->appendStylesheet($view->baseUrl('resources/css/elastic.css'))
+//            ->appendStylesheet($view->baseUrl('resources/css/jquery-ui-1.8.5.custom.css'))
+//            ->appendStylesheet($view->baseUrl('resources/css/featured.css'))
+//            ->appendStylesheet($view->baseUrl('resources/css/typography.css'));
 
         // Add JavaScript's
-        $view->headScript()
-            ->appendFile($view->baseUrl('js/jquery/jquery-1.4.2.min'))
-            ->appendFile($view->baseUrl('resources/css/elastic.js'))
-            ->appendFile($view->baseUrl('js/jquery/newsticker/jquery.newsticker.pack.js'))
-            ->appendFile($view->baseUrl('js/jquery/ui/jquery-ui-1.8.5.custom.min.js'))
-            ->appendFile($view->baseUrl('js/global.js'));
+//        $view->headScript()
+//            ->appendFile($view->baseUrl('js/jquery/jquery-1.4.2.min'))
+//            ->appendFile($view->baseUrl('resources/css/elastic.js'))
+//            ->appendFile($view->baseUrl('js/jquery/newsticker/jquery.newsticker.pack.js'))
+//            ->appendFile($view->baseUrl('js/jquery/ui/jquery-ui-1.8.5.custom.min.js'))
+//            ->appendFile($view->baseUrl('js/global.js'));
     }
 
 }

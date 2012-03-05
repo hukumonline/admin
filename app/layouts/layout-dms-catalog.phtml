@@ -1,25 +1,46 @@
-<?=$this->doctype();?>
+<?php echo $this->doctype(); ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CMS Hukumonline</title>
-        <link href="<?=$this->cdn('styles')?>/favicon.ico" rel="shortcut icon" type="image/ico" />
-        <link href="<?=$this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="<?=$this->cdn('styles')?>/adm/style.css" media="screen" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery.js,hol/jquery/jquery.cookie.js,hol/jquery/wysiwyg/jquery.wysiwyg.min.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/form/jquery.form.js,hol/jquery/nyroModal/jquery.nyroModal.pack.js" ></script>
-        
+        <?php echo $this->headTitle(); ?>
+        <link href="<?php echo $this->cdn('styles'); ?>/favicon.ico" rel="shortcut icon" type="image/ico" />
+
+	    <?php 
+	    $this->headLink()
+	    	->prependStylesheet($this->cdn('styles') . '/adm/administry.css')
+			->prependStylesheet($this->cdn('styles') . '/adm/style.css');
+	    	
+		$this->headScript()
+	    	->prependFile($this->cdn('scripts') . '/hol/pandamp/namespace.js')
+	    	->prependFile($this->cdn('scripts') . '/hol/jquery/jquery.js')
+	    	->appendFile($this->cdn('scripts') . '/hol/jquery/jquery.cookie.js')
+	    	->appendFile($this->cdn('scripts') . '/hol/jquery/wysiwyg/jquery.wysiwyg.min.js')
+	    	->appendFile($this->cdn('scripts') . '/hol/jquery/tooltip/jquery.tipTip.min.js')
+	    	->appendFile($this->cdn('scripts') . '/hol/jquery/form/jquery.validate.pack.js')
+	    	->appendFile($this->cdn('scripts') . '/hol/jquery/form/jquery.form.js')
+	    	->appendFile($this->cdn('scripts') . '/hol/jquery/nyroModal/jquery.nyroModal.pack.js');
+	    ?>
+	    
+	    <?php
+	    /**
+	     * Compress CSS and JS if it is enabled
+	     */ 
+	    echo $this->compressor('css');
+	    echo $this->compressor('js');
+	    ?>
+		
         <!-- Internet Explorer Fixes -->
         <!--[if IE]>
 
-        <link rel="stylesheet" type="text/css" media="all" href="<?=$this->cdn('styles')?>/ie.css"/>
+        <link rel="stylesheet" type="text/css" media="all" href="<?php echo $this->cdn('styles'); ?>/ie.css"/>
 
-        <script src="<?=$this->cdn('scripts')?>/hol/html5.js"></script>
+        <script src="<?php echo $this->cdn('scripts'); ?>/hol/html5.js"></script>
 
         <![endif]-->
         <!--Upgrade MSIE5.5-7 to be compatible with MSIE8: http://ie7-js.googlecode.com/svn/version/2.1(beta3)/IE8.js -->
         <!--[if lt IE 8]>
 
-        <script src="<?=$this->cdn('scripts')?>/hol/IE8.js"></script>
+        <script src="<?php echo $this->cdn('scripts'); ?>/hol/IE8.js"></script>
 
         <![endif]-->
 

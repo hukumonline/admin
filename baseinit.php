@@ -1,4 +1,7 @@
 <?php
+define('DS', DIRECTORY_SEPARATOR);    
+define('PS', PATH_SEPARATOR);
+
 define('ROOT_DIR',dirname(__FILE__));
 define('ROOT_PATH',dirname(__FILE__));
 define('LIB_PATH' , ROOT_PATH . '/library') ;

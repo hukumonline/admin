@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+  <title>{$lang_insert_caption_title}</title>
+  <script language="javascript" type="text/javascript" src="../../tiny_mce_popup.js"></script>
+  <script language="javascript" type="text/javascript" src="cookie.js"></script>
+  <script language="javascript" type="text/javascript">
+<!--
+var values=new Array();
+
+function init() {
+    var formObj = document.forms[0];
+ 	selElem=tinyMCE.getWindowArg('selElem');
+ 	parentElem=selElem.parentNode;
+	var captionElem;
+	if (parentElem!=null && parentElem.className=='imageCaption'){
+		formObj.background_margin.value=isNaN(parseInt(parentElem.style.margin))?'':parseInt(parentElem.style.margin);
+		formObj.background_padding.value=isNaN(parseInt(parentElem.style.padding))?'':parseInt(parentElem.style.padding);
+		formObj.background_color.value=parentElem.style.backgroundColor;
+
+		formObj.border_width.value=isNaN(parseInt(parentElem.style.borderLeftWidth))?'':parseInt(parentElem.style.borderLeftWidth);
+		formObj.border_style.value=parentElem.style.borderLeftStyle;//borderStyle gives e.g. solid solid solid solid (for each side)
+		formObj.border_color.value=parentElem.style.borderLeftColor;
+		if (parentElem.firstChild.tagName=='SPAN' ) {
+			formObj.caption_position.value='top';
+			captionElem=parentElem.firstChild;
+		}
+		else {
+			formObj.caption_position.value='bottom';
+			captionElem=parentElem.lastChild;
+		}
+		formObj.caption_text.value=captionElem.firstChild.nodeValue;
+		formObj.caption_alignment.value=captionElem.style.textAlign;
+		formObj.caption_background.value=captionElem.style.backgroundColor;
+		formObj.caption_color.value=captionElem.style.color;
+		
+		formObj.caption_clear.value=parentElem.style.clear;
+		formObj.caption_float.value=parentElem.style.cssFloat==undefined?parentElem.style.styleFloat:parentElem.style.cssFloat;
+		
+	}
+	window.focus();
+ }//func
+
+function doCaption() {
+        
+        if (window.opener) {
+		            	
+        readoutValues();   
+       	doRemove();
+       	    
+        doc=window.opener.document;
+        borderElem=doc.createElement("SPAN");
+		captionElem=doc.createElement("SPAN");		
+		 
+		borderElem.setAttribute('class','imageCaption');
+		strStyle='position:relative;display:block;';
+		strStyle+='width:'+selElem.width+'px;';
+		strStyle+=(values['background_margin']!=''?'margin: '+values['background_margin']+'px;':'');
+		strStyle+=(values['background_padding']!=''?'padding: '+values['background_padding']+'px;':'');
+		strStyle+=(values['background_color']!=''?'background-color: '+values['background_color']+';':'');
+		/*if (!((values['border_width']=='' || values['border_width']=='0') && values['border_color']=='' & values['border_style']=='default')){
+			strStyle+='border: ';
+			strStyle+=(values['border_width']!=''?values['border_width']+'px':'');
+			strStyle+=(values['border_style']!='default'?' '+values['border_style']:'');
+			strStyle+=(values['border_color']!=''?' '+values['border_color']:'');
+			strStyle+=';';
+		}*/
+		
+		strStyle+=(values['border_width']!=''?'border-width: '+values['border_width']+'px;':'');
+		strStyle+=(values['border_style']!='default'?'border-style: '+values['border_style']+';':'');
+		strStyle+=(values['border_color']!=''?'border-color: '+values['border_color']+';':'');
+		strStyle+=(values['caption_float']!='default'?'float:'+values['caption_float']+';':'');
+		strStyle+=(values['caption_clear']!='default'?'clear:'+values['caption_clear']+';':'');
+		borderElem.setAttribute('style',strStyle);
+		
+		strStyle='position:relative; display:block;';
+		strStyle+=(values['caption_color']!=''?'color:'+values['caption_color']+';':'');
+		strStyle+=(values['caption_background']!=''?'background-color:'+values['caption_background']+';':'');
+		strStyle+=(values['caption_alignment']!='default'?'text-align:'+values['caption_alignment']+';':'');
+		captionElem.setAttribute('style',strStyle);
+		captionElem.appendChild(document.createTextNode(values['caption_text']));
+		
+		selElem.parentNode.insertBefore(borderElem,selElem);
+		if (values['caption_position']=='top') borderElem.appendChild(captionElem);
+		borderElem.appendChild(selElem);
+		if (values['caption_position']=='bottom') borderElem.appendChild(captionElem);
+        }
+    }
+
+function doIt(){
+	doCaption();
+	top.close();
+}
+function doRemove(){
+	parentElem=selElem.parentNode;
+	if (parentElem!= null && parentElem.className=='imageCaption'){
+		parentElem.parentNode.insertBefore(selElem,parentElem);
+		parentElem.parentNode.removeChild(parentElem);
+	}//if
+}//func
+
+function cancelAction() {
+        top.close();
+}
+function readoutValues(){
+	var formObj = document.forms[0];
+	/*
+	values['caption_text']=formObj.caption_text.value;
+	values['caption_position']=formObj.caption_position.value;
+	values['caption_alignment']=formObj.caption_alignment.value;
+	values['caption_background']=formObj.caption_background.value;
+	values['caption_color']=formObj.caption_color.value;
+
+	values['padding']=formObj.background_padding.value;
+	values['background_color']=formObj.background_color.value;
+
+    values['border_width']=formObj.border_width.value;
+	values['border_style']=formObj.border_style.value;
+	values['border_color']=formObj['border_color'].value;
+	*/
+	
+	var el, i = 0;
+	while (el = formObj.elements[i++]){
+		if (el.type != 'button' && el.name!=undefined && el.name!='') values[el.name]=el.value;
+		//don't read out button values and values of element without names (fieldset, label, etc)
+	}
+}
+function fillinValues(){
+	var formObj = document.forms[0];
+	for (var key in values){
+		formObj[key].value=values[key];
+	}
+}
+function doSave(){
+	var arrTmp=new Array();
+	readoutValues();
+	
+	//next serialize the values array. join does not work on assoc arrays,
+	//so put key-value pairs of values array in a new indexed array to make join work
+	for (var key in values){
+		arrTmp.push(key+':'+values[key]);
+	}
+	setCookie('tinyMCE_caption',arrTmp.join("|"));
+}
+function doLoad(){
+	var arrTmp=new Array();
+	
+	var caption_cookie=getCookie('tinyMCE_caption');
+	
+	//next deserialize cookie valu to values array
+	//some extra code is needed again because the values array isn't an indexed one but an assoc array 
+	arrTmp=caption_cookie.split("|");
+	for (var i=0;i<arrTmp.length;i++){
+		var keyvalue=new Array();
+		keyvalue=arrTmp[i].split(":");
+		values[keyvalue[0]]=keyvalue[1];
+	}
+	fillinValues();
+}
+//-->
+  </script>
+  <style type="text/css">
+<!--
+   input.radio {
+        border: 1px none #000000;
+        background-color: transparent;
+        vertical-align: middle;
+   }
+-->
+  </style>
+</head>
+<body onload="init();">
+<form>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+      <tr>
+        <td align="center" valign="middle">
+        <table border="0" cellpadding="4" cellspacing="0">
+          <tbody>
+            <tr>
+              <td colspan="2" class="title">{$lang_insert_caption_desc}</td>
+            </tr>
+            <tr>
+              <td colspan="2">{$lang_insert_caption_text}:<input size="50" name="caption_text" id="caption_text"> </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">
+              <fieldset><legend>{$lang_insert_caption_caption}:</legend>
+              <table style="width: 100%; text-align: left;" border="0" cellpadding="2" cellspacing="2">
+                <tbody>
+                  <tr>
+                    <td>{$lang_insert_caption_position}: </td>
+                    <td>
+                    <select name="caption_position" id="caption_position">
+                    <option value="bottom">bottom</option>
+                    <option value="top">top</option>
+                    </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_alignment}:</td>
+                    <td>
+                    <select name="caption_alignment" id="caption_alignment">
+                    <option value="default">(default)</option>
+                    <option value="left">left</option>
+                    <option value="center">center</option>
+                    <option value="right">right</option>
+                    <option value="justified">justified</option>
+                    </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_background_color}:</td>
+                    <td><input size="7" name="caption_background" id="caption_background">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_color}:</td>
+                    <td><input size="7" name="caption_color" id="caption_color"> </td>
+                  </tr>
+                </tbody>
+              </table>
+              </fieldset>
+              </td>
+              
+              <td nowrap="nowrap" rowspan="2" style="vertical-align: top;">
+              <fieldset><legend>{$lang_insert_caption_backdrop}:</legend>
+              <table style="width: 100%; text-align: left;" border="0" cellpadding="2" cellspacing="2">
+                <tbody>
+                  <tr>
+                    <td>{$lang_insert_caption_background_margin}:</td>
+                    <td><input maxlength="2" size="2" name="background_margin" id="background_margin">px</td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_background_padding}:</td>
+                    <td><input maxlength="2" size="2" name="background_padding" id="background_padding">px</td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_background_color}:</td>
+                    <td><input size="7" name="background_color" id="background_color"></td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_border_width}:</td>
+                    <td><input maxlength="2" size="2" name="border_width" id="border_width">px</td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_border_color}:</td>
+                    <td><input size="7" name="border_color" id="border_color"></td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_border_style}:</td>
+                    <td>
+                    <select name="border_style" id="border_style">
+                    <option value="default">(default)</option>
+                    <option value="none">none</option>
+                    <option value="solid">solid</option>
+                    <option value="dotted">dotted</option>
+                    <option value="dashed">dashed</option>
+                    <option value="double">double</option>
+                    <option value="groove">groove</option>
+                    <option value="ridge">ridge</option>
+                    <option value="inset">inset</option>
+                    <option value="outset">outset</option>
+                    </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </fieldset>
+              </td>
+              
+              </tr>
+              <tr>
+              <td style="vertical-align: top;">
+              <fieldset><legend>{$lang_insert_caption_floatandclear}:</legend>
+              <table style="width: 100%; text-align: left;" border="0" cellpadding="2" cellspacing="2">
+                <tbody>
+                  <tr>
+                    <td>{$lang_insert_caption_float}: </td>
+                    <td>
+                    <select name="caption_float" id="caption_float">
+                    <option value="default">(default)</option>
+                    <option value="none">none</option>
+                    <option value="left">left</option>
+                    <option value="right">right</option>
+                    </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{$lang_insert_caption_clear}:</td>
+                    <td>
+                    <select name="caption_clear" id="caption_clear">
+                    <option value="default">(default)</option>
+                    <option value="none">none</option>
+                    <option value="left">left</option>
+                    <option value="right">right</option>
+                    <option value="both">both</option>
+                    </select>
+                    </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+              </fieldset>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+              <input name="doit" value="{$lang_OK}" onclick="doIt();" id="doit" type="button">
+              <input name="apply" value="{$lang_apply}" onclick="doCaption();" id="apply" type="button">
+              <input name="cancel" value="{$lang_close}" onclick="cancelAction();" id="close" type="button">
+              <br>
+              <input name="remove" value="{$lang_remove}" onclick="doRemove();" id="remove" type="button">
+              <input name="save" value="{$lang_save}" onclick="doSave();" id="save" type="button">
+              <input name="load" value="{$lang_load}" onclick="doLoad();" id="load" type="button">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+</body>
+</html>
