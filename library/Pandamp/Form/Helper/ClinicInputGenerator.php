@@ -77,10 +77,10 @@ class Pandamp_Form_Helper_ClinicInputGenerator
 			
 		}
 		
-		$aBaseAttributes['guid']['description'] = '';
-		$aBaseAttributes['guid']['form'] = "<input type='hidden' name='guid' id='guid' value='$rowCatalog->guid'>";
-		$aBaseAttributes['profileGuid']['description'] = '';
-		$aBaseAttributes['profileGuid']['form'] = "<input type='hidden' name='profileGuid' id='profileGuid' value='$rowCatalog->profileGuid'>";
+		$aBaseAttributes['guid']['description'] = 'guid';
+		$aBaseAttributes['guid']['form'] = $rowCatalog->guid."<input type='hidden' name='guid' id='guid' value='$rowCatalog->guid'>";
+		$aBaseAttributes['profileGuid']['description'] = 'profile';
+		$aBaseAttributes['profileGuid']['form'] = $rowCatalog->profileGuid."<input type='hidden' name='profileGuid' id='profileGuid' value='$rowCatalog->profileGuid'>";
 		
     	$registry = Zend_Registry::getInstance();
     	$config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
