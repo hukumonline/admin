@@ -12,7 +12,11 @@ class Pandamp_Controller_Action_Helper_Profile
     	
     	$packageId = $auth->getIdentity()->packageId;
     	
-    	$acl = Pandamp_Acl::manager();
+    	$zl   = Zend_Registry::get("Zend_Locale");
+    	
+    	$lang = $zl->getLanguage();
+    	
+    	$acl  = Pandamp_Acl::manager();
     	
     	$modelAroGroup = App_Model_Show_AroGroup::show();
     	
@@ -43,14 +47,20 @@ class Pandamp_Controller_Action_Helper_Profile
                 
             } else {
             	
-				if ($acl->getPermissionsOnContent('', $aReturn['name'], $content))
-				{
-					$select_profile .= "<option value='$rowset->guid'>$rowset->title</option>";
-				}
-				else 
-				{
-					continue;
-				}
+            	if (($lang == 'en')) {
+            		$select_profile .= "<option value='$rowset->guid'>$rowset->title</option>";
+            	}
+            	else 
+            	{
+					if ($acl->getPermissionsOnContent('', $aReturn['name'], $content))
+					{
+						$select_profile .= "<option value='$rowset->guid'>$rowset->title</option>";
+					}
+					else 
+					{
+						continue;
+					}
+            	}
             }
         }
 
