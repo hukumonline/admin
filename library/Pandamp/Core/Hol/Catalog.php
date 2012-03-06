@@ -13,8 +13,6 @@ class Pandamp_Core_Hol_Catalog
 {
     public function save($aData)
     {
-        if(empty($aData['fixedTitle']))
-            throw new Zend_Exception('Catalog Title can not be EMPTY!');
         if(empty($aData['profileGuid']))
             throw new Zend_Exception('Catalog Profile can not be EMPTY!');
 

@@ -98,6 +98,7 @@ class Pandamp_Form_Attribute_Renderer
 				
 	        case 79:     // field type = html paragraph
 				
+	        	/*
 				require_once('FCKeditor/fckeditor.php');
 				$oFCKeditor = new FCKeditor($this->name) ;
 				$oFCKeditor->BasePath = ROOT_URL.'/library/FCKeditor/';
@@ -110,6 +111,19 @@ class Pandamp_Form_Attribute_Renderer
 				$sReturn = $oFCKeditor->CreateHtml() ;
 	            
 	            return $sReturn;
+	            */
+	        	
+	        	$view = new Zend_View();
+				$view->name = $this->name;
+				$view->value = $this->value;
+				if(isset($this->attribs))
+					$view->attribs = $this->attribs;
+				else
+					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 200px;');
+				$view->setScriptPath(dirname(__FILE__));
+				return $view->render('TextAreaDescription.phtml');
+				
+	        	
 
 	            break;
 	            

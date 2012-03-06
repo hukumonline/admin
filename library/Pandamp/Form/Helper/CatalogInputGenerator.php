@@ -28,7 +28,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
             $today = date('Y-m-d H:i:s');
 
             $aBaseAttributes['shortTitle']['description'] = 'shortTitle';
-            $aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1' cols='50'></textarea>";
+            $aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1' cols='50' readonly></textarea>";
             $aBaseAttributes['profileGuid']['description'] = 'Profile';
             $aBaseAttributes['profileGuid']['form'] = $profileGuid."<input type='hidden' name='profileGuid' id='profileGuid' value='$profileGuid'>";
             $aBaseAttributes['folderGuid']['description'] = '';
@@ -127,7 +127,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 		$aBaseAttributes['guid']['description'] = '';
 		$aBaseAttributes['guid']['form'] = "<input type='hidden' name='guid' id='guid' value='$rowCatalog->guid'>";
 		$aBaseAttributes['shortTitle']['description'] = 'shortTitle';
-		$aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1'' cols='50'>$rowCatalog->shortTitle</textarea>";
+		$aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1'' cols='50' readonly>$rowCatalog->shortTitle</textarea>";
 		$aBaseAttributes['profileGuid']['description'] = 'Profile';
 		$aBaseAttributes['profileGuid']['form'] = $rowCatalog->profileGuid."<input type='hidden' name='profileGuid' id='profileGuid' value='$rowCatalog->profileGuid'>";
 		

@@ -1,0 +1,17 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2011-2012 Nihki Prihadi
+ * @version		$Id: _messages.phtml 1 2011-12-26 12:35Z $
+ */
+?>
+<?php if ($this->messages) : ?>
+<div class="box box-info">
+	<ul style="list-style:none;">
+	<?php foreach ($this->messages as $msg) : ?>
+		<li><?php echo $msg; ?></li>
+	<?php endforeach; ?>
+	</ul>
+</div>
+<?php endif; ?>

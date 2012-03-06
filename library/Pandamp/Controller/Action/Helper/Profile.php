@@ -1,14 +1,21 @@
 <?php
-
 /**
  * Description of State
- *
  * @author nihki <nihki@madaniyah.com>
  */
+
 class Pandamp_Controller_Action_Helper_Profile
 {
     public function profile($profile=null)
     {
+    	$auth = Zend_Auth::getInstance();
+    	
+    	$packageId = $auth->getIdentity()->packageId;
+    	
+    	$acl = Pandamp_Acl::manager();
+    	
+    	$modelAroGroup = App_Model_Show_AroGroup::show();
+    	
         $tblProfile = new App_Model_Db_Table_Profile();
         $row = $tblProfile->fetchAll();
 
@@ -22,10 +29,28 @@ class Pandamp_Controller_Action_Helper_Profile
         }
 
         foreach ($row as $rowset) {
+        	
+			$aReturn = $modelAroGroup->getUserGroup($packageId);
+			
+			if (($aReturn['name'] == "Master") || ($aReturn['name'] == "Super Admin"))
+				$content = 'all-access';
+			else 
+				$content = $rowset->profileType;
+				
             if (($profile) and ($rowset->guid == $rowProfile->guid)) {
+            	
                 continue;
+                
             } else {
-                $select_profile .= "<option value='$rowset->guid'>$rowset->title</option>";
+            	
+				if ($acl->getPermissionsOnContent('', $aReturn['name'], $content))
+				{
+					$select_profile .= "<option value='$rowset->guid'>$rowset->title</option>";
+				}
+				else 
+				{
+					continue;
+				}
             }
         }
 

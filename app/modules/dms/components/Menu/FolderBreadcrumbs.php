@@ -64,7 +64,26 @@ class Dms_Menu_FolderBreadcrumbs
                     }
 
                     $aPath[$i]['title'] = $rowFolder->title;
-                    $aPath[$i]['url'] = $browserUrl.'/'.$rowFolder->guid;
+                    
+                    if ($rowFolder->title == 'Published') {
+                    	$aPath[$i]['url'] = ROOT_URL.'/'.$zl->getLanguage().'/dms/clinic/browse/status/99/node/'.$rowFolder->guid;
+                    }
+                    else if ($rowFolder->title == 'Selected') {
+                    	$aPath[$i]['url'] = ROOT_URL.'/'.$zl->getLanguage().'/dms/clinic/browse/status/9/node/'.$rowFolder->guid;
+                    }
+                    else if ($rowFolder->title == 'NA') {
+                    	$aPath[$i]['url'] = ROOT_URL.'/'.$zl->getLanguage().'/dms/clinic/browse/status/2/node/'.$rowFolder->guid;
+                    }
+                    else if ($rowFolder->title == 'Draft') {
+                    	$aPath[$i]['url'] = ROOT_URL.'/'.$zl->getLanguage().'/dms/clinic/browse/status/0/node/'.$rowFolder->guid;
+                    }
+                    else if ($rowFolder->title == 'Approved') {
+                    	$aPath[$i]['url'] = ROOT_URL.'/'.$zl->getLanguage().'/dms/clinic/browse/status/1/node/'.$rowFolder->guid;
+                    }
+                    else 
+                    {
+                    	$aPath[$i]['url'] = $browserUrl.'/'.$rowFolder->guid;
+                    }
                 }
 
             }

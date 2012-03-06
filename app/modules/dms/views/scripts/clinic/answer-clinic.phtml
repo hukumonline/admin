@@ -1,8 +1,27 @@
-<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/datepicker/datetimepicker.js"></script>
-<link href="<?=$this->cdn('scripts');?>/hol/datepicker/rfnet.css" type="text/css" rel="stylesheet" />
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2011-2012 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: answer-clinic.phtml 1 2012-03-06 16:55Z $modified
+ */
+?>
+<?php 
+$this->headTitle('Answer Clinic');
+
+$this->headLink()
+	->appendStylesheet($this->cdn('scripts') . '/hol/datepicker/rfnet.css');
+
+$this->headScript()
+	->appendFile($this->cdn('scripts') . '/hol/pandamp/util.js');
+?>
+
+<script type="text/javascript" src="<?php echo ROOT_URL; ?>/library/tinymce/tiny_mce.js"></script>
+<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/datepicker/datetimepicker.js"></script>
+
 <!-- Left column/section -->
 <section class="column width6 first">
-
+	<h3><?php echo $this->flashMessenger(); ?></h3>
     <div class="colgroup leading">
         <div class="column width6 first">
             <?
@@ -14,48 +33,35 @@
             <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
             <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
             <fieldset>
-                <legend>Location:</legend>
+                <legend>LOCATION:</legend>
                 <?=$this->widget2->render();?>
             </fieldset>
             <form id="answerClinicForm" name="answerClinicForm" method="POST">
                 <fieldset>
-                    <legend>Clinic</legend>
-                    <table width="100%">
-                        <?php
-                        foreach ($this->aRenderedAttributes['baseForm'] as $a)
-                        {
-                        ?>
-                        <tr>
-                            <td width="200"><?=$a['description']; ?></td>
-                            <td><?=$a['form']; ?></td>
-                        </tr>
-                        <?php
-                        }
-                        ?>
-                    </table>
-                    <table width="100%">
-                        <?php
-                        foreach ($this->aRenderedAttributes['attributeForm'] as $a)
-                        {
-                        ?>
-                        <tr>
-                            <td width="200"><?=$a['description']; ?></td>
-                            <td><?=$a['form']; ?></td>
-                        </tr>
-                        <?php
-                        }
-                        ?>
-                    </table>
-                    <input type="submit" name="save" id="save" value="Save" class="btn btn-blue big" />
-
+                    <legend>CLINIC</legend>
+					<? foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
+					<p>
+						<label><?=$a['description']; ?></label><br>
+						<?=$a['form']; ?>
+					</p>
+					<? endforeach; ?>
+					<? foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
+					<? if (isset($a['description']) && isset($a['form'])) : ?>
+					<p>
+						<label><?=$a['description']; ?></label><br>
+						<?=$a['form']; ?>
+					</p>
+					<? endif; ?>
+					<? endforeach; ?>
+					<p>
+                    	<input type="submit" name="save" id="save" value="Save" class="btn btn-blue big" />
+					</p>
                 </fieldset>
             </form>
         </div>
     </div>
 
-
     <div class="clear">&nbsp;</div>
-
 </section>
 <!-- End of Left column/section -->
 
@@ -69,12 +75,19 @@
 <script type="text/javascript">
 setTimeout(function()
 {
-    var message = "<?echo $this->message;?>";
-    if(message!="")
-    {
-        alert (message);
-    }
-
+	/**
+	 * Validate form
+	 */
+	$.validator.addMethod('shortTitle', function(value) {
+		value = value.replace(/^\s+|\s+$/g, '');
+		var regex = new RegExp(/^[a-z0-9\-]+$/);
+		if (value == '' || value.match(regex)) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+	
     $("#answerClinicForm").validate({
         rules: {
             fixedAnswer: "required"
@@ -84,5 +97,11 @@ setTimeout(function()
         }
     });
 
+	/**
+	 * Automatically create shortTitle once user enter the title
+	 */
+	$('#fixedTitle').bind('change', function() {
+		$('#shortTitle').val(Pandamp.Util.generateShortTitle($(this).val()));
+	});
 });
 </script>

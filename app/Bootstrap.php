@@ -185,11 +185,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //$view->headMeta()->appendHttpEquiv('imagetoolbar', 'no');
 
         // Add our favicon
-        $view->headLink()->headLink(array(
-            'rel' => 'shortcut icon',
-            'type' => 'image/ico',
-            'href' => $view->baseUrl('resources/images/hole_small.ico')
-        ));
+//        $view->headLink()->headLink(array(
+//            'rel' => 'shortcut icon',
+//            'type' => 'image/ico',
+//            'href' => $view->baseUrl('resources/images/hole_small.ico')
+//        ));
 
         // Add Stylesheet's
 //        $view->headLink()

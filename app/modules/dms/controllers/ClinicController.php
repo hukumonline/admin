@@ -109,40 +109,39 @@ class Dms_ClinicController extends Zend_Controller_Action
     }
     function answerClinicAction()
     {
-    	$r = $this->getRequest();
+        $urlReferer = (isset($_SERVER['HTTP_REFERER']))? $_SERVER['HTTP_REFERER'] : '';
+
+    	$request 		= $this->getRequest();
     	
-        $urlReferer = $_SERVER['HTTP_REFERER'];
-
-        $message = "";
-
-        $catalogGuid = ($this->_getParam('catalogGuid'))? $this->_getParam('catalogGuid') : '';
+        $catalogGuid 	= $request->getParam('guid');
+        $node 			= $request->getParam('node');
+        
         $gen = new Pandamp_Form_Helper_ClinicInputGenerator();
         $aRender = $gen->generateFormAnswer($catalogGuid);
         $this->view->aRenderedAttributes = $aRender;
 
-        if($r->isPost())
+        if($request->isPost())
         {
             $sessHistory = new Zend_Session_Namespace('BROWSER_HISTORY');
             $urlReferer = $sessHistory->urlReferer;
 
-            $this->save();
-            $message = "Data was successfully saved.";
+	        $aData = $request->getPost();
+	
+	        $aData['username'] = $this->_user->username;
+	
+	        $Bpm = new Pandamp_Core_Hol_Catalog();
+	        $id	 = $Bpm->save($aData);
+	        
+            if ($id) {
+	            $message = "Data was successfully saved.";
+				$this->_helper->getHelper('FlashMessenger')
+					->addMessage($message);
+				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/answer-clinic/guid/'.$catalogGuid.'/node/'.$node);
+            }
         }
-
-        $this->view->message = $message;
 
         $sessHistory = new Zend_Session_Namespace('BROWSER_HISTORY');
         $sessHistory->urlReferer = $urlReferer;
         $this->view->urlReferer = $sessHistory->urlReferer;
-    }
-    private function save()
-    {
-        $Bpm = new Pandamp_Core_Hol_Catalog();
-        $request = $this->getRequest();
-        $aData = $request->getParams();
-
-        $aData['username'] = $this->_user->username;
-
-        $Bpm->save($aData);
     }
 }

@@ -18,9 +18,22 @@
               ?>
                         <td width="30" valign="top"><input type='checkbox' name='folderGuid' id='folderGuid' value='<?=$this->data[$i + ($j * $this->rows)][2];?>'></td>
                         <td width="250" valign="top">
-                            <a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/explorer/browse/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?><span style="font-size:12px;"><patTemplate:var name="CATEGORYTITLE" default=""/></span></a>
-                            <br>
-                            <patTemplate:var name="DESCRIPTION" default=""/>
+                        	<?php
+                        	$folderTitle = $this->data[$i + ($j * $this->rows)][0]; 
+                        	?>
+                        	<?php if ($folderTitle == 'Approved') { ?>
+   							<a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/clinic/browse/status/1/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?></a>                     	
+                        	<?php } else if ($folderTitle == 'Draft') { ?>
+   							<a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/clinic/browse/status/0/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?></a>                     	
+                        	<?php } else if ($folderTitle == 'NA') { ?>
+   							<a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/clinic/browse/status/2/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?></a>                     	
+                        	<?php } else if ($folderTitle == 'Selected') { ?>
+   							<a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/clinic/browse/status/9/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?></a>                     	
+                        	<?php } else if ($folderTitle == 'Published') { ?>
+   							<a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/clinic/browse/status/99/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?></a>                     	
+                        	<?php } else { ?>
+                            <a class="folderTitleLink" href="<?=ROOT_URL.'/'.$this->getLanguage().'/dms/explorer/browse/node/'.$this->data[$i + ($j * $this->rows)][2];?>"><?=$this->data[$i + ($j * $this->rows)][0];?></a>
+                            <?php } ?>
                         </td>
                         <td width="10">&nbsp;</td>
                         <td width="">&nbsp;</td>

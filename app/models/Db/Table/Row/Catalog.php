@@ -19,6 +19,7 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             $this->guid = $guidMan->generateGuid();
         }
 
+        /*
         if(!empty($this->shortTitle))
         {
             $sTitleLower = strtolower($this->shortTitle);
@@ -26,6 +27,7 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             $sTitleLower = str_replace(' ', '-', $sTitleLower);
             $this->shortTitle = $sTitleLower;
         }
+        */
 
         $today = date('Y-m-d H:i:s');
 

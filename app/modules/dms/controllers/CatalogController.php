@@ -8,6 +8,7 @@
 class Dms_CatalogController extends Zend_Controller_Action
 {
     protected $_user;
+    protected $_lang;
 
     function  preDispatch()
     {
@@ -33,11 +34,13 @@ class Dms_CatalogController extends Zend_Controller_Action
         {
             $this->_user = $auth->getIdentity();
 
+			$zl = Zend_Registry::get("Zend_Locale");
+			$this->_lang = $zl;
+			
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $zl = Zend_Registry::get("Zend_Locale");
-                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                $this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/error/restricted');
             }
         }
     }
@@ -483,11 +486,20 @@ class Dms_CatalogController extends Zend_Controller_Action
         $message = "";
         if($r->isPost())
         {
-            $this->save();
-            $message = "Data was successfully saved.";
+	        $aData = $r->getPost();
+	
+	        $aData['username'] = $this->_user->username;
+	
+	        $Bpm = new Pandamp_Core_Hol_Catalog();
+	        $id	 = $Bpm->save($aData);
+	        
+            if ($id) {
+	            $message = "Data was successfully saved.";
+				$this->_helper->getHelper('FlashMessenger')
+					->addMessage($message);
+				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/edit/guid/'.$id.'/node/'.$folderGuid);
+            }
         }
-
-        $this->view->message = $message;
     }
     function editAction()
     {
@@ -498,7 +510,7 @@ class Dms_CatalogController extends Zend_Controller_Action
         $sessHistory->currentNode = ($this->_getParam('node'))? $this->_getParam('node') : $sessHistory->currentNode;
         $this->view->currentNode = $sessHistory->currentNode;
 
-        $urlReferer = $_SERVER['HTTP_REFERER'];
+        $urlReferer = (isset($_SERVER['HTTP_REFERER']))? $_SERVER['HTTP_REFERER'] : '';
 
         $message = "";
 
@@ -509,7 +521,7 @@ class Dms_CatalogController extends Zend_Controller_Action
 
         $modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
         if ($modelCatalog['profileGuid'] == "klinik") {
-            $this->_forward('answer.clinic','clinic','dms',array('catalogGuid'=>$catalogGuid));
+            $this->_forward('answer.clinic','clinic','dms',array('guid'=>$catalogGuid));
         }
         else
         {
@@ -523,26 +535,26 @@ class Dms_CatalogController extends Zend_Controller_Action
             $sessHistory = new Zend_Session_Namespace('BROWSER_HISTORY');
             $urlReferer = $sessHistory->urlReferer;
 
-            $this->save();
-            $message = "Data was successfully saved.";
+	        $aData = $r->getPost();
+	
+	        $aData['username'] = $this->_user->username;
+	
+	        $Bpm = new Pandamp_Core_Hol_Catalog();
+	        $id	 = $Bpm->save($aData);
+	        
+            if ($id) {
+	            $message = "Data was successfully saved.";
+				$this->_helper->getHelper('FlashMessenger')
+					->addMessage($message);
+				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/edit/guid/'.$catalogGuid.'/node/'.$sessHistory->currentNode);
+            }
         }
 
         $this->_helper->layout()->headerTitle = "Catalog Management: Edit Catalog";
 
-        $this->view->message = $message;
-
         $sessHistory = new Zend_Session_Namespace('BROWSER_HISTORY');
         $sessHistory->urlReferer = $urlReferer;
+        
         $this->view->urlReferer = $sessHistory->urlReferer;
-    }
-    private function save()
-    {
-        $Bpm = new Pandamp_Core_Hol_Catalog();
-        $request = $this->getRequest();
-        $aData = $request->getParams();
-
-        $aData['username'] = $this->_user->username;
-
-        $Bpm->save($aData);
     }
 }
