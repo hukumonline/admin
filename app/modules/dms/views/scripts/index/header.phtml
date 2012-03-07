@@ -40,6 +40,15 @@
         <h1><?=$this->layout()->headerTitle;?></h1>
         <!-- Quick search box -->
         <form id="frmSearch" method="get" action="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/dms/browse">
+			<select name="category" id="category">
+                <option value="all">All</option>
+                <option value="article">Artikel</option>
+                <option value="isuhangat">Isu Hangat</option>
+                <option value="comment">Komentar</option>
+                <option value="klinik">Klinik</option>
+                <option value="kutu_putusan">Putusan</option>
+                <option value="(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan)">Peraturan</option>
+            </select>    
             <input class="" id="q" name="q" type="text" value="<?=$this->layout()->searchQuery;?>">
             <input type="hidden" id="sLimit" name="sLimit" value="25">
             <input type="hidden" id="sOffset" name="sOffset" value="<?=$this->sOffset;?>">

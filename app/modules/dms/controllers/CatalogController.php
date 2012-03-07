@@ -497,7 +497,7 @@ class Dms_CatalogController extends Zend_Controller_Action
 	            $message = "Data was successfully saved.";
 				$this->_helper->getHelper('FlashMessenger')
 					->addMessage($message);
-				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/edit/guid/'.$id.'/node/'.$folderGuid);
+				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$folderGuid);
             }
         }
     }
@@ -546,7 +546,7 @@ class Dms_CatalogController extends Zend_Controller_Action
 	            $message = "Data was successfully saved.";
 				$this->_helper->getHelper('FlashMessenger')
 					->addMessage($message);
-				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/edit/guid/'.$catalogGuid.'/node/'.$sessHistory->currentNode);
+				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$sessHistory->currentNode);
             }
         }
 

@@ -136,7 +136,7 @@ class Dms_ClinicController extends Zend_Controller_Action
 	            $message = "Data was successfully saved.";
 				$this->_helper->getHelper('FlashMessenger')
 					->addMessage($message);
-				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/answer-clinic/guid/'.$catalogGuid.'/node/'.$node);
+				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$node);
             }
         }
 
