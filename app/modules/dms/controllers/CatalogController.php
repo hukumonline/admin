@@ -552,8 +552,22 @@ class Dms_CatalogController extends Zend_Controller_Action
 					->addMessage($message);
 					
 				if ($modelCatalog['profileGuid'] == "klinik") {
-					$node = $r->getParam('node');
-					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$modelCatalog['status'].'/node/'.$node);
+					if ($modelCatalog['status'] == 99) {
+						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/99/node/lt4b11e8c86c8a4');
+					}
+					else if ($modelCatalog['status'] == 2) {
+						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/2/node/lt4b11ecf5408d2');
+					}
+					else if ($modelCatalog['status'] == 0) {
+						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/0/node/lt4b11e8fde1e42');
+					}
+					else if ($modelCatalog['status'] == 1) {
+						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/1/node/lt4b11ece54d870');
+					}
+					else 
+					{
+						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$modelCatalog['status'].'/node/'.$sessHistory->currentNode);
+					}
 				}
 				else 
 				{
