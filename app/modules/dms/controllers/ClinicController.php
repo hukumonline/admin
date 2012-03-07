@@ -8,6 +8,7 @@
 class Dms_ClinicController extends Zend_Controller_Action
 {
     protected $_user;
+    protected $_lang;
 
     function  preDispatch()
     {
@@ -31,11 +32,13 @@ class Dms_ClinicController extends Zend_Controller_Action
         {
             $this->_user = $auth->getIdentity();
 
+			$zl = Zend_Registry::get("Zend_Locale");
+			$this->_lang = $zl;
+			
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $zl = Zend_Registry::get("Zend_Locale");
-                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                $this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/error/restricted');
             }
         }
     }
