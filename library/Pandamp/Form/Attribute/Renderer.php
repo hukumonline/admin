@@ -73,32 +73,32 @@ class Pandamp_Form_Attribute_Renderer
 	            
 //	            return $sReturn;
 
-//				$view = new Zend_View();
-//				$view->name = $this->name;
-//				$view->value = $this->value;
-//				$view->setScriptPath(dirname(__FILE__));
-//				return $view->render('TextArea2.phtml');
-//
-//	            break;
-	        
-	        	$view = new Zend_View();
+				$view = new Zend_View();
 				$view->name = $this->name;
 				$view->value = $this->value;
-				
-				$config = Pandamp_Config::getConfig();
-				$view->cdn = $config->cdn->js;
-				if(isset($this->attribs))
-					$view->attribs = $this->attribs;
-				else
-					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 400px;');
 				$view->setScriptPath(dirname(__FILE__));
-				return $view->render('TextAreaContent.phtml');
-				
-				break;
+				return $view->render('TextArea2.phtml');
+
+	            break;
+	        
+//	        	$view = new Zend_View();
+//				$view->name = $this->name;
+//				$view->value = $this->value;
+//				
+//				$config = Pandamp_Config::getConfig();
+//				$view->cdn = $config->cdn->js;
+//				if(isset($this->attribs))
+//					$view->attribs = $this->attribs;
+//				else
+//					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 1000px;');
+//				$view->setScriptPath(dirname(__FILE__));
+//				return $view->render('TextAreaContent.phtml');
+//				
+//				break;
 				
 	        case 79:     // field type = html paragraph
 				
-	        	/*
+	        	
 				require_once('FCKeditor/fckeditor.php');
 				$oFCKeditor = new FCKeditor($this->name) ;
 				$oFCKeditor->BasePath = ROOT_URL.'/library/FCKeditor/';
@@ -111,17 +111,17 @@ class Pandamp_Form_Attribute_Renderer
 				$sReturn = $oFCKeditor->CreateHtml() ;
 	            
 	            return $sReturn;
-	            */
+	            
 	        	
-	        	$view = new Zend_View();
-				$view->name = $this->name;
-				$view->value = $this->value;
-				if(isset($this->attribs))
-					$view->attribs = $this->attribs;
-				else
-					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 200px;');
-				$view->setScriptPath(dirname(__FILE__));
-				return $view->render('TextAreaDescription.phtml');
+//	        	$view = new Zend_View();
+//				$view->name = $this->name;
+//				$view->value = $this->value;
+//				if(isset($this->attribs))
+//					$view->attribs = $this->attribs;
+//				else
+//					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 200px;');
+//				$view->setScriptPath(dirname(__FILE__));
+//				return $view->render('TextAreaDescription.phtml');
 				
 	        	
 
