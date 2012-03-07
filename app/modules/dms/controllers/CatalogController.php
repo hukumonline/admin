@@ -552,7 +552,8 @@ class Dms_CatalogController extends Zend_Controller_Action
 					->addMessage($message);
 					
 				if ($modelCatalog['profileGuid'] == "klinik") {
-					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$modelCatalog['status'].'/node/'.$sessHistory->currentNode);
+					$node = $r->getParam('node');
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$modelCatalog['status'].'/node/'.$node);
 				}
 				else 
 				{
