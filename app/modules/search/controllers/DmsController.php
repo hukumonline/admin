@@ -48,6 +48,12 @@ class Search_DmsController extends Zend_Controller_Action
         $this->view->sOffset = $sOffset;
         $sLimit = $r->getParam('sLimit');
         $this->view->sLimit = $sLimit;
+        
+        $category = ($r->getParam('category'))? $r->getParam('category') : '';
+        
+		if ($category=="all")
+		$category="";
+		
 
         $query = ($r->getParam('q'))? $r->getParam('q') : '';
 
@@ -56,8 +62,18 @@ class Search_DmsController extends Zend_Controller_Action
             //$hits = $indexingEngine->find("*:*;publishedDate desc",$sOffset, $sLimit);
             $hits = $indexingEngine->find("*:*",$sOffset, $sLimit);
         } else {
-            //$hits = $indexingEngine->find($query." -profile:kutu_doc;publishedDate desc",$sOffset, $sLimit);
-            $hits = $indexingEngine->find($query." -profile:kutu_doc",$sOffset, $sLimit);
+        	
+        	if ($category)
+        	{
+        		$querySolr = $query . ' profile:'.$category.';publishedDate desc,date desc';
+        	}
+        	else 
+        	{
+	            //$hits = $indexingEngine->find($query." -profile:kutu_doc;publishedDate desc",$sOffset, $sLimit);
+	            $querySolr = $query." -profile:kutu_doc";
+        	}
+        	
+        	$hits = $indexingEngine->find($querySolr, $sOffset, $sLimit);
         }
         
         $solrNumFound = count($hits->response->docs);
@@ -68,7 +84,7 @@ class Search_DmsController extends Zend_Controller_Action
         for($ii=0;$ii<$solrNumFound;$ii++) {
                 $row = $hits->response->docs[$ii];
                 $data[$content][0] = $row->id;
-                $data[$content][1] = $row->title;
+                $data[$content][1] = (isset($row->title))? $row->title : '';
 
                 $tblCatalogFolder = new App_Model_Db_Table_CatalogFolder();
                 $rowsetCatalogFolder = $tblCatalogFolder->fetchRow("catalogGuid='$row->id'");
@@ -89,6 +105,23 @@ class Search_DmsController extends Zend_Controller_Action
 
                 $content++;
         }
+
+        switch ($category)
+        {
+			case "kutu_peraturan":
+            case "kutu_rancangan_peraturan":
+            case "kutu_peraturan_kolonial":
+				$ct = "(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan)";  
+				break;
+			case "":
+                $ct = "all";
+                break;	
+            default :
+                $ct = $category;
+                break;
+        }
+
+		$this->_helper->layout()->categorySearchQuery = $ct;
 
         $num_rows = $solrNumFound;
 

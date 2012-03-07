@@ -32,6 +32,7 @@
                 var myPageIndex = 0;
                 var itemsPerPage = 25;
                 var currentQuery = $("#q").val();
+                var category = $("#category").val();
 
                 var tmpCurrentPage = $("#sOffset").val()/itemsPerPage;
 
@@ -48,6 +49,7 @@
 
                         $("#sOffset").val(myStart);
                         $("#q").val(currentQuery);
+                        $("#category").val(category);
                         $("#frmSearch").submit();
                     }
                     isFirstTime = 0;
@@ -62,6 +64,8 @@
                         return false;
                     }
                 });
+                
+                $("#category").val('<?php echo $this->layout()->categorySearchQuery; ?>');
 
             });
 
