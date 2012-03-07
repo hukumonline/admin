@@ -507,6 +507,9 @@ class Dms_CatalogController extends Zend_Controller_Action
         $catalogGuid = ($this->_getParam('guid'))? $this->_getParam('guid') : '';
 
         $sessHistory = new Zend_Session_Namespace('BROWSER_HISTORY');
+        if (isset($sessHistory->currentNode)) 
+        	unset($sessHistory->currentNode);
+        	
         $sessHistory->currentNode = ($this->_getParam('node'))? $this->_getParam('node') : $sessHistory->currentNode;
         $this->view->currentNode = $sessHistory->currentNode;
 
