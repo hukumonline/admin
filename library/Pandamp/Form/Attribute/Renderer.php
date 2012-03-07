@@ -90,7 +90,7 @@ class Pandamp_Form_Attribute_Renderer
 				if(isset($this->attribs))
 					$view->attribs = $this->attribs;
 				else
-					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 1000px;');
+					$view->attribs = array('class' => 'tinymce', 'style' => 'width: 440px; height: 400px;');
 				$view->setScriptPath(dirname(__FILE__));
 				return $view->render('TextAreaContent.phtml');
 				
