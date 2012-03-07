@@ -543,10 +543,18 @@ class Dms_CatalogController extends Zend_Controller_Action
 	        $id	 = $Bpm->save($aData);
 	        
             if ($id) {
+            	$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($id);
 	            $message = "Data was successfully saved.";
 				$this->_helper->getHelper('FlashMessenger')
 					->addMessage($message);
-				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$sessHistory->currentNode);
+					
+				if ($modelCatalog['profileGuid'] == "klinik") {
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$modelCatalog['status'].'/node/'.$sessHistory->currentNode);
+				}
+				else 
+				{
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$sessHistory->currentNode);
+				}
             }
         }
 
