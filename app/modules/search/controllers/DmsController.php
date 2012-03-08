@@ -65,7 +65,7 @@ class Search_DmsController extends Zend_Controller_Action
         	
         	if ($category)
         	{
-        		$querySolr = $query . ' profile:'.$category.';publishedDate desc,date desc';
+        		$querySolr = $query . ' profile:'.$category;
         	}
         	else 
         	{
