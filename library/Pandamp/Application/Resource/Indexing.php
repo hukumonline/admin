@@ -14,7 +14,10 @@ class Pandamp_Application_Resource_Indexing extends Zend_Application_Resource_Re
 
                 $solrHost = $aWrite['host'];
                 $solrPort = $aWrite['port'];
-                if (strpos($sReturn,"en"))
+                
+                $pos = strpos($sReturn,"/en/");
+                
+                if ($pos !== false) 
                     $solrHomeDir = $aWrite['dir2'];
                 else
                     $solrHomeDir = $aWrite['dir1'];
