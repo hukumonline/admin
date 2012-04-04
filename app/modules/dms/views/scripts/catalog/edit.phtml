@@ -39,10 +39,12 @@ $this->headScript()
                 <fieldset>
                     <legend>EDIT CATALOG</legend>
 					<? foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
+					<? if (isset($a['description']) && isset($a['form'])) : ?>
 					<p>
 						<label><?=$a['description']; ?></label><br>
 						<?=$a['form']; ?>
 					</p>
+					<? endif; ?>
 					<? endforeach; ?>
 					<? foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
 					<? if (isset($a['description']) && isset($a['form'])) : ?>
