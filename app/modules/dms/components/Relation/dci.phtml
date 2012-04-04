@@ -28,7 +28,7 @@
                                 $th = str_replace(array('tn_','.'.$ext), "", $this->allThumbs[$i])
                                 ?>
                                 <div style="top:-16px;opacity:0.75;">
-                                    <small><?=$this->getCatalogTitle($th,'fixedTitle');?></small>&nbsp;<a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/edit/guid/<?=$th;?>" target="_blank">[edit]</a><br>
+                                    <small><?=$this->getCatalogTitle($th,'fixedTitle');?></small>&nbsp;<a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/edit/guid/<?=$th;?>/node/<?=$this->folderGuid;?>" target="_blank">[edit]</a><br>
                                     <small>delete:</small>&nbsp;<a href="javascript:;" onclick="remove('<?=$th;?>', '<?=$this->catalogGuid;?>', 'RELATED_IMAGE');return false;"><?=$th;?></a>
                                 </div><br/>
                             </div>
