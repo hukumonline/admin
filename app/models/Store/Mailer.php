@@ -47,6 +47,8 @@ class App_Model_Store_Mailer
 		$registry = Zend_Registry::getInstance();
 	    $config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
 	    $store = $config->getOption('store');
+	    
+	    $holConfig = Pandamp_Config::getConfig();
 		
 		switch(strtolower($paymentMethod))
 		{
@@ -67,7 +69,7 @@ Total Paid: IDR $rowOrder->orderTotal
 Status: $orderStatus
 Your payment method is: $paymentMethod
 
-You may review your invoice history at any time by logging in to your account ".$store['website']."/shop/payment/list
+You may review your invoice history at any time by logging in to your account ".$holConfig->cdn->id->url."/user/payment/list
 
 Note: This email will serve as an official receipt for this payment.
 
