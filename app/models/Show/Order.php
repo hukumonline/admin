@@ -19,13 +19,14 @@ class App_Model_Show_Order extends App_Model_Db_DefaultAdapter
      */
     final private function  __construct()
     {
+    	$config = Pandamp_Config::getConfig();
         $zl = Zend_Registry::get('Zend_Locale');
         if ($zl->getLanguage() == "id")
         {
-            self::$_schema = "pengembangan_ina";
+            self::$_schema = $config->web->db->ina;
         }
         else {
-            self::$_schema = "pengembangan_en";
+            self::$_schema = $config->web->db->en;
         }
     }
 
