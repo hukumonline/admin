@@ -13,9 +13,9 @@
                 <thead>
                     <tr>
                         <th>Invoice</th>
-                        <th>Status</th>
+                        <th>S</th>
                         <th>Price</th>
-                        <th>Discount</th>
+                        <th>Disc</th>
                         <th>Date Out</th>
                         <th>Paid Date</th>
                         <th>Expr. Date</th>
@@ -48,15 +48,15 @@
                                 if ($this->isAllowed('membership','all'))
                                 {
                             ?>
-                                    <input type="button" name="confirm" value="Confirm" id="<?=$row['invoiceId'];?>" />&nbsp;
-                                    <input type="button" name="delete_invoice" value="Delete" id="<?=$row['invoiceId'];?>" />&nbsp;
-                                    <input type="button" name="renew" value="Renewable" id="<?=$row['invoiceId'];?>" />
+                                    <input type="button" name="confirm" value="Confirm" id="<?=$row['invoiceId'];?>" class="form-button" />&nbsp;
+                                    <input type="button" name="delete_invoice" value="Del" id="<?=$row['invoiceId'];?>" class="form-button" />&nbsp;
+                                    <input type="button" name="renew" value="Renewable" id="<?=$row['invoiceId'];?>" class="form-button" />
 
                                 <? } else { ?>
 
-                                    <input type="button" name="confirm" value="Edit" disabled />&nbsp;
-                                    <input type="button" name="delete_invoice" value="Delete" disabled />&nbsp;
-                                    <input type="button" name="renew" value="Reset" disabled />
+                                    <input type="button" name="confirm" value="Edit" disabled class="form-button" />&nbsp;
+                                    <input type="button" name="delete_invoice" value="Del" disabled class="form-button" />&nbsp;
+                                    <input type="button" name="renew" value="Reset" disabled class="form-button" />
 
                                 <? } ?>
 
