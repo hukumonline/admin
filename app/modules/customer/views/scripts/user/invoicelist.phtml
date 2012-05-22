@@ -48,15 +48,15 @@
                                 if ($this->isAllowed('membership','all'))
                                 {
                             ?>
-                                    <input type="button" name="confirm" value="Confirm" id="<?=$row['invoiceId'];?>" class="form-button" />&nbsp;
-                                    <input type="button" name="delete_invoice" value="Delete" id="<?=$row['invoiceId'];?>" class="form-button" />&nbsp;
-                                    <input type="button" name="renew" value="Renewable" id="<?=$row['invoiceId'];?>" class="form-button" />
+                                    <input type="button" name="confirm" value="Confirm" id="<?=$row['invoiceId'];?>" />&nbsp;
+                                    <input type="button" name="delete_invoice" value="Delete" id="<?=$row['invoiceId'];?>" />&nbsp;
+                                    <input type="button" name="renew" value="Renewable" id="<?=$row['invoiceId'];?>" />
 
                                 <? } else { ?>
 
-                                    <input type="button" name="confirm" value="Edit" disabled class="form-button" />&nbsp;
-                                    <input type="button" name="delete_invoice" value="Delete" disabled class="form-button" />&nbsp;
-                                    <input type="button" name="renew" value="Reset" disabled class="form-button" />
+                                    <input type="button" name="confirm" value="Edit" disabled />&nbsp;
+                                    <input type="button" name="delete_invoice" value="Delete" disabled />&nbsp;
+                                    <input type="button" name="renew" value="Reset" disabled />
 
                                 <? } ?>
 
