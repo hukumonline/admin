@@ -12,6 +12,7 @@
             <table class="display stylized" id="userinvoicelist">
                 <thead>
                     <tr>
+                        <th>Invoice</th>
                         <th>Status</th>
                         <th>Price</th>
                         <th>Discount</th>
@@ -26,6 +27,7 @@
                     $i=1; foreach($this->userInvoiceList as $row):
                     ?>
                     <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$row['invoiceId'];?>">
+                        <td><?=$row['invoiceId'];?></td>
                         <td><?=$row['isPaid'];?></td>
                         <td><?=$row['price'];?></td>
                         <td><?=$row['discount'];?></td>
