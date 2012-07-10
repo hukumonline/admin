@@ -30,6 +30,7 @@ $this->headScript()
                 $tag = "en.hukumonline.com";
             ?>
             <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h4>SOLR Dir: <?php echo $this->getSolrDir(); ?></h4>
             <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
             <fieldset>
                 <legend>LOCATION:</legend>

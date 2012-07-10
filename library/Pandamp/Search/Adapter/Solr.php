@@ -29,21 +29,27 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 
         public function __construct($solrHost, $solrPort, $solrHomeDir)
 	{
+		$sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+		
             $this->_solr = new Apache_Solr_Service( $solrHost, $solrPort, $solrHomeDir );
 
-            $this->_return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+            $this->_return = $sReturn;
 
-            if (strpos($this->_return,"id")) {
-                $this->_conn = Zend_Registry::get('db1');
-                $this->_lang = "id";
-            } else if (strpos($this->_return,"en")) {
+            $pos = strpos($sReturn,"/en/");
+            
+            if ($pos !== false)  {
                 $this->_conn = Zend_Registry::get('db3');
                 $this->_lang = "en";
+            } else {
+                $this->_conn = Zend_Registry::get('db1');
+                $this->_lang = "id";
             }
+            
+            /*
             else
             {
                 $this->_conn = Zend_Db_Table_Abstract::getDefaultAdapter();
-            }
+            }*/
 
 	}
 	public function setExtractor($type, $extractor)
@@ -1522,6 +1528,12 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 		$s = $sortField;
 		$aParams=array('sort'=>$s, 'q.op'=>'OR');
   		return $solr->searchByPost( $querySolr,$start, $limit, $aParams);
+	}
+	public function getSolrDir()
+	{
+		$solr = &$this->_lang;
+		
+		return $solr;
 	}
 	
 	function clean_string_input($input)
