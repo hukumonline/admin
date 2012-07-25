@@ -790,6 +790,34 @@ class Customer_UserController extends Zend_Controller_Action
             $this->view->user = $user;
             $this->view->identity = $this->_user;
     }
+    function alertAction()
+    {
+    	$this->_helper->layout->disableLayout();
+    	
+    	$tblInvoice = new App_Model_Db_Table_Invoice();
+    	
+    	$rowInvoice = $tblInvoice->fetchExpireInvoice();
+    	
+    	$this->view->invoice = $rowInvoice;
+    }
+    function expirationalertAction()
+    {
+    	$this->_helper->layout->setLayout('layout-customer-credential');
+    	
+    	$request = $this->getRequest();
+    	
+    	$period = $request->getParam('period');
+    	
+    	$tblInvoice = new App_Model_Db_Table_Invoice();
+    	
+    	$countInvoice = $tblInvoice->getCountExpireInvoice($period);
+    	
+    	$userIE = $tblInvoice->fetchUserExpireInvoice($period);
+    	
+    	$this->view->uie = $userIE;
+    	$this->view->count_invoice = $countInvoice;
+    	$this->view->period = $period;
+    }
     function invoicelistAction()
     {
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
@@ -808,6 +836,32 @@ class Customer_UserController extends Zend_Controller_Action
         if ($user) 
             $this->view->user = $user;
             $this->view->identity = $this->_user;
+            
+        
+        /**
+         * UPDATED:July 25, 2012
+         */
+        if ($this->getRequest()->isPost()) {
+			$tblInvoice = new App_Model_Db_Table_Invoice();
+			$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$this->getRequest()->getPost('kopel'));
+			$rowInvoice = $tblInvoice->fetchAll($where);
+			if (count($rowInvoice) <= 0)
+			{
+				$rowInvoice = $tblInvoice->fetchNew();
+				$rowInvoice->uid = $this->getRequest()->getPost('kopel');
+				$rowInvoice->price = $this->getRequest()->getPost('price');
+				$rowInvoice->discount = $this->getRequest()->getPost('disc');
+				$rowInvoice->invoiceOutDate = $this->getRequest()->getPost('invoiceOutDate');
+				$rowInvoice->invoiceConfirmDate = $this->getRequest()->getPost('invoiceConfirmDate');
+				$rowInvoice->clientBankAccount = $this->getRequest()->getPost('clientBankAccount');
+				$rowInvoice->isPaid = $this->getRequest()->getPost('isPaid');
+				$rowInvoice->expirationDate = $this->getRequest()->getPost('expirationDate');
+				
+				$rowInvoice->save();
+				
+				$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/invoicelist/id/'.$this->getRequest()->getPost('kopel'));
+			}
+        }
     }
     function delassAction()
     {

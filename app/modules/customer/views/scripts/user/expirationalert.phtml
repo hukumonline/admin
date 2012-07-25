@@ -1,0 +1,77 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+    <div class="colgroup leading">
+        <div class="column width6 first">
+        	<h3>Member Expiration Date Notification</h3>
+        	Member yang expirationDate-nya akan berakhir dalam <?php echo $this->period; ?> hari
+        	
+        	<?php if ($this->count_invoice > 0) { ?>
+        	
+        	<form action="" method="post">
+        	<table class='display stylized'>
+        	<thead>
+        		<tr>
+        			<td>
+        				<label>Periode:</label>
+					    <?php
+					    $period_arr = array('7' => '1 Minggu', '14' => '2 Minggu', '30' => '1 Bulan', '60' => '2 Bulan', '90' => '3 Bulan', '180' => '6 Bulan', '365' => '1 Tahun');
+						$sel='selected="true"';
+						?>
+						<select name="period" onchange="location.href='<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/customer/user/expirationalert/period/'+this.options[this.selectedIndex].value;">
+						<?php 
+						$period = $this->period;
+						foreach ($period_arr as $k => $v) {
+						?>
+						<option <?php if($period == $k) echo "selected='selected'"; ?> value="<?=$k?>"><?=$v?></option>
+						<?php } ?>
+						</select>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td><label>Jumlah Account :</label> <?php echo $this->count_invoice; ?></td>
+        		</tr>
+        	</thead>
+        	</table>
+        	</form>
+        	
+        	<?php $i=1; ?>
+        	<table class='display stylized'>
+        	<thead>
+        		<tr>
+        			<th>No.</th>
+        			<th>Username</th>
+        			<th>Company</th>
+        			<th>ExpirationDate</th>
+        			<th>Package</th>
+        			<th>Status</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<?php foreach ($this->uie as $in) : ?>
+        		<tr>
+        			<td><?php echo $i; ?></td>
+        			<td><?php echo $in->username; ?></td>
+        			<td><?php echo $in->company; ?></td>
+        			<td><?php echo $in->expirationDate; ?></td>
+        			<td><?php echo $in->PackageName; ?></td>
+        			<td><?php echo $in->status; ?></td>
+        		</tr>
+        		<?php $i++; endforeach; ?>
+        	</tbody>
+        	</table>
+        	
+        	<?php } ?>
+        </div>
+    </div>
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+
+</aside>
+
+<div class="clear">&nbsp;</div>
