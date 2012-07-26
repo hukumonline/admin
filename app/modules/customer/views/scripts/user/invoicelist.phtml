@@ -24,77 +24,71 @@ $this->headLink()
             <form action="" method="POST" name="newinvoice">
             	<fieldset>
             		<legend>CREATE NEW INVOICE</legend>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Kode Pelanggan:</label></div>
-            			<div class="column width6"><input type="text" value="<?php echo $this->user['kopel']; ?>" name="kopel" size="6" maxlength="6" readonly=""/></div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
             		<?php 
             		$formater = new Pandamp_Core_Hol_User(); 
             		$disc = $formater->checkPromoValidation('Disc',$this->user['packageId'],$this->user['promotionId'],$this->user['paymentId']);
             		$total = $formater->checkPromoValidation('Total',$this->user['packageId'],$this->user['promotionId'],$this->user['paymentId']);
             		?>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Price:</label></div>
-            			<div class="column width6"><input type="text" value="<?php echo $total; ?>" name="price"/></div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Discount:</label></div>
-            			<div class="column width6"><input type="text" value="<?php echo $disc; ?>" name="disc"/></div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Invoice Out Date:</label></div>
-            			<div class="column width6">
+            		<table class='display stylized'>
+            		<tr>
+            			<td><label>Kode Pelanggan:</label></td>
+            			<td><input type="text" value="<?php echo $this->user['kopel']; ?>" name="kopel" size="6" maxlength="6" readonly=""/></td>
+            		</tr>
+            		<tr>
+            			<td><label>Price:</label></td>
+            			<td><input type="text" value="<?php echo $total; ?>" name="price"/></td>
+            		</tr>
+            		<tr>
+            			<td><label>Discount:</label></td>
+            			<td><input type="text" value="<?php echo $disc; ?>" name="disc"/></td>
+            		</tr>
+            		<tr>
+            			<td><label>Invoice Out Date:</label></td>
+            			<td nowrap>
             				<input type="text" value="<?php echo date("Y-m-d"); ?>" name="invoiceOutDate" id="invoiceOutDate"/>
             				<a href="javascript:NewCal('invoiceOutDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
-            			</div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Invoice Confirm Date:</label></div>
-            			<div class="column width6">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td nowrap><label>Invoice Confirm Date:</label></td>
+            			<td nowrap>
             				<input type="text" value="0000-00-00" name="invoiceConfirmDate" id="invoiceConfirmDate"/>
             				<a href="javascript:NewCal('invoiceConfirmDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
-            			</div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Client Bank Account:</label></div>
-            			<div class="column width6">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td nowrap><label>Client Bank Account:</label></td>
+            			<td>
             				<select name="clientBankAccount">
             					<option value="BCA">BCA</option>
             					<option value="BNI">BNI</option>
             				</select>
-            			</div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Is Paid:</label></div>
-            			<div class="column width6">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td><label>Is Paid:</label></td>
+            			<td>
             				<select name="isPaid">
             					<option value="N">No</option>
             					<option value="Y">Yes</option>
             				</select>
-            			</div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
+            			</td>
+            		</tr>
             		<?php
         			$temptime = time();
 					$temptime = Pandamp_Lib_Formater::DateAdd('d',5,$temptime);
 					?>
-            		<div class="colgroup">
-            			<div class="column width2 first"><label>Expiration Date:</label></div>
-            			<div class="column width5">
+            		<tr>
+            			<td><label>Expiration Date:</label></td>
+            			<td nowrap>
             				<input type="text" value="<?php echo strftime('%Y-%m-%d',$temptime); ?>" name="expirationDate" id="expirationDate"/>
             				<a href="javascript:NewCal('expirationDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
-            			</div>
-            			<div class="column width1">
-            				<input type="submit" value="Save" class="btn btn-blue big" />
-            			</div>
-            		</div>
-            		<div class="clear">&nbsp;</div>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td colspan="2"><input type="submit" value="Save" class="btn btn-blue big" /></td>
+            		</tr>
+            		</table>
             		
             	</fieldset>
             </form>
