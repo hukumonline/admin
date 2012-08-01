@@ -318,12 +318,12 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		{
 		  	  	  		$part->kategoriklinik = $rowAttr->value;
 		  	  	  		
-					  	$queryKK="SELECT * FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."'";
+					  	$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
 						$resultsKK = $this->_conn->query($queryKK);
 						
 						$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
 						
-						$part->kategori = $rowsetAttrKK[0]->fixedTitle;
+						$part->kategori = $rowsetAttrKK[0]->value;
 						
 						/*
 		  	  	  		switch (strtolower($part->kategoriklinik))
