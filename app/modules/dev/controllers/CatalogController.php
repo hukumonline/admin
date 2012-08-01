@@ -50,7 +50,7 @@ class Dev_CatalogController extends Zend_Controller_Action
 
     	$indexingEngine = Pandamp_Search::manager();
     	
-		$query 			= "profile:klinik kategoriklinik:lt501649fa53cd2 status:99;publishedDate desc";
+		$query 			= "profile:klinik kategoriklinik:lt501649fa53cd2 status:99";
         $hits 			= $indexingEngine->find($query);
         $solrNumFound 	= count($hits->response->docs);
         
@@ -58,10 +58,10 @@ class Dev_CatalogController extends Zend_Controller_Action
         	if(isset($hits->response->docs[$ii]))
         	{
         		$row = $hits->response->docs[$ii];
-        		//$indexingEngine->indexCatalog($row->id);
+        		$indexingEngine->indexCatalog($row->id);
 	            $message = "
 	                <div class='box box-info closeable'>
-	                CatalogGuid&nbsp;:&nbsp;<abbr>".$row->id." - ".$row->title."</abbr> data has been successfully indexed.
+	                id&nbsp;:&nbsp;<abbr>".$row->id." - ".$row->title."</abbr> data has been successfully indexed.
 	                </div>";
 	            echo $message.'<br>';
         	}
