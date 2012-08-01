@@ -48,6 +48,18 @@ class Dev_CatalogController extends Zend_Controller_Action
 
         echo $title.'<br>';
 
-    	$solrAdapter = Pandamp_Search::manager();
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+		$query 			= "profile:klinik kategoriklinik:lt501649fa53cd2 status:99;publishedDate desc";
+        $hits 			= $indexingEngine->find($query);
+        $solrNumFound 	= count($hits->response->docs);
+        
+        for($ii=0;$ii<$solrNumFound;$ii++) {
+        	if(isset($hits->response->docs[$ii]))
+        	{
+        		$row = $hits->response->docs[$ii];
+        		echo $row->title.'<br>';
+        	}
+        }
     }
 }
