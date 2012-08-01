@@ -317,15 +317,6 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		if (!empty($rowAttr->value))
 	  	  	  		{
 		  	  	  		$part->kategoriklinik = $rowAttr->value;
-		  	  	  		
-					  	$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
-						$resultsKK = $this->_conn->query($queryKK);
-						
-						$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
-						
-						$part->kategori = $rowsetAttrKK[0]->value;
-						
-						/*
 		  	  	  		switch (strtolower($part->kategoriklinik))
 		  	  	  		{
 				  			case "lt48310d3da83db":
@@ -377,12 +368,21 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 			  	  				$part->kategori = 'Agreements';
 			  	  				break;
 		  	  	  		}
-		  	  	  		*/
 	  	  	  		}
 		  	  	  		
 	  	  	  		break;
 	  	  	  	case 'fixedKategoriKlinik':
 	  	  	  		$part->kategoriklinik = $rowAttr->value;
+	  	  	  		
+				  	$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
+					$resultsKK = $this->_conn->query($queryKK);
+					
+					$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
+					
+					$part->kategori = $rowsetAttrKK[0]->value;
+					
+	  	  	  		
+	  	  	  		/*
 	  	  	  		switch (strtolower($part->kategoriklinik))
 	  	  	  		{
 	  	  	  			case 'lt4a0a9ea1c4f76':
@@ -422,6 +422,8 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  				$part->kategori = 'Telekomunikasi & Teknologi';
 	  	  	  				break;
 	  	  	  		}
+	  	  	  		*/
+	  	  	  		
 	  	  	  		break;
 	  	  	  	case 'prtJenis':
 	  	  	  		$part->regulationType = $rowAttr->value;
