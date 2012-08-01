@@ -317,6 +317,15 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		if (!empty($rowAttr->value))
 	  	  	  		{
 		  	  	  		$part->kategoriklinik = $rowAttr->value;
+		  	  	  		
+					  	$queryKK="SELECT * FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."'";
+						$resultsKK = $this->_conn->query($queryKK);
+						
+						$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
+						
+						$part->kategori = $rowsetAttrKK[0]->fixedTitle;
+						
+						/*
 		  	  	  		switch (strtolower($part->kategoriklinik))
 		  	  	  		{
 				  			case "lt48310d3da83db":
@@ -368,6 +377,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 			  	  				$part->kategori = 'Agreements';
 			  	  				break;
 		  	  	  		}
+		  	  	  		*/
 	  	  	  		}
 		  	  	  		
 	  	  	  		break;
