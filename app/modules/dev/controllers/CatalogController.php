@@ -58,7 +58,12 @@ class Dev_CatalogController extends Zend_Controller_Action
         	if(isset($hits->response->docs[$ii]))
         	{
         		$row = $hits->response->docs[$ii];
-        		echo $row->title.'<br>';
+        		$indexingEngine->indexCatalog($row->id);
+	            $message = "
+	                <div class='box box-info closeable'>
+	                CatalogGuid&nbsp;:&nbsp;<abbr>".$row->id." - ".$row->title."</abbr> data has been successfully indexed.
+	                </div>";
+	            echo $message.'<br>';
         	}
         }
     }
