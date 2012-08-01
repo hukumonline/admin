@@ -41,4 +41,13 @@ class Dev_CatalogController extends Zend_Controller_Action
          *
          */
     }
+    function doindexckAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+        $title = "<h4>HUKUMONLINE INDONESIA: <small>indexing kategori klinik</small></h4><hr/>";
+
+        echo $title.'<br>';
+
+    	$solrAdapter = Pandamp_Search::manager();
+    }
 }
