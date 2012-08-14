@@ -39,10 +39,11 @@ class Admin_IndexController extends Zend_Controller_Action
 			//$this->_signOut = $logoutUrl.'/'.$sReturn;
 			$this->_signOut = $logoutUrl.'/returnUrl/'.$sReturn;
 
+			$zl  = Zend_Registry::get("Zend_Locale");
+			
             $acl = Pandamp_Acl::manager();
             if (!($acl->checkAcl("site",'all','user', $this->_user->username, false,false)))
             {
-                $zl = Zend_Registry::get("Zend_Locale");
                 //$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
                 header(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
             }
@@ -54,7 +55,35 @@ class Admin_IndexController extends Zend_Controller_Action
 			
 			if ($rowset)
 			{
-				if ($rowset->status == 1)
+				if ($rowset->status == 1 && $zl->getLanguage() == 'id')
+				{
+					// it means that user offline other than admin
+					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
+					
+					if (isset($aReturn['name']))
+					{
+						//if (($aReturn[1] !== "admin"))
+						if (($aReturn['name'] !== "Master") && ($aReturn['name'] !== "Super Admin"))
+						{
+							$this->_forward('temporary','error','admin'); 
+						}
+					}
+				}
+				else if ($rowset->status == 2 && $zl->getLanguage() == 'en')
+				{
+					// it means that user offline other than admin
+					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
+					
+					if (isset($aReturn['name']))
+					{
+						//if (($aReturn[1] !== "admin"))
+						if (($aReturn['name'] !== "Master") && ($aReturn['name'] !== "Super Admin"))
+						{
+							$this->_forward('temporary','error','admin'); 
+						}
+					}
+				}
+				else if ($rowset->status == 3)
 				{
 					// it means that user offline other than admin
 					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
