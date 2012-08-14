@@ -55,11 +55,11 @@ class Admin_IndexController extends Zend_Controller_Action
 			
 			if ($rowset)
 			{
+				// it means that user offline other than admin
+				$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
+				
 				if ($rowset->status == 1 && $zl->getLanguage() == 'id')
 				{
-					// it means that user offline other than admin
-					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
-					
 					if (isset($aReturn['name']))
 					{
 						//if (($aReturn[1] !== "admin"))
@@ -71,9 +71,6 @@ class Admin_IndexController extends Zend_Controller_Action
 				}
 				else if ($rowset->status == 2 && $zl->getLanguage() == 'en')
 				{
-					// it means that user offline other than admin
-					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
-					
 					if (isset($aReturn['name']))
 					{
 						//if (($aReturn[1] !== "admin"))
@@ -85,9 +82,6 @@ class Admin_IndexController extends Zend_Controller_Action
 				}
 				else if ($rowset->status == 3)
 				{
-					// it means that user offline other than admin
-					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
-					
 					if (isset($aReturn['name']))
 					{
 						//if (($aReturn[1] !== "admin"))
