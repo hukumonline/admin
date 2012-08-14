@@ -55,15 +55,15 @@ class Admin_IndexController extends Zend_Controller_Action
 			
 			if ($rowset)
 			{
-				// it means that user offline other than admin
-				$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
-				
 				if (($rowset->status == 1 && $zl->getLanguage() == 'id') ||
 					($rowset->status == 2 && $zl->getLanguage() == 'en') ||
 					$rowset->status == 3)
 				{
 					if (isset($aReturn['name']))
 					{
+						// it means that user offline other than admin
+						$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
+						
 						//if (($aReturn[1] !== "admin"))
 						if (($aReturn['name'] !== "Master") && ($aReturn['name'] !== "Super Admin"))
 						{
