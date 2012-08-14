@@ -55,8 +55,8 @@ class Admin_IndexController extends Zend_Controller_Action
 			
 			if ($rowset)
 			{
-				if (($rowset->status == 1 && $zl->getLanguage() == 'id') ||
-					($rowset->status == 2 && $zl->getLanguage() == 'en') ||
+				if ((($rowset->status == 1) && ($zl->getLanguage() == 'id')) ||
+					(($rowset->status == 2) && ($zl->getLanguage() == 'en')) ||
 					$rowset->status == 3)
 				{
 					if (isset($aReturn['name']))
