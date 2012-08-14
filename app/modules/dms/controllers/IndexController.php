@@ -33,10 +33,11 @@ class Dms_IndexController extends Zend_Controller_Action
         {
             $this->_user = $auth->getIdentity();
 
+            $zl  = Zend_Registry::get("Zend_Locale");
+            
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $zl = Zend_Registry::get("Zend_Locale");
                 $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
             }
             
