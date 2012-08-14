@@ -40,6 +40,32 @@ class Dms_ClinicController extends Zend_Controller_Action
             {
                 $this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/error/restricted');
             }
+            
+			// [TODO] else: check if user has access to admin page and status website is online
+			$tblSetting = new App_Model_Db_Table_Setting();
+			$rowset = $tblSetting->find(1)->current();
+			
+			if ($rowset)
+			{
+				if (($rowset->status == 1 && $this->_lang->getLanguage() == 'id') || ($rowset->status == 2 && $this->_lang->getLanguage() == 'en') || ($rowset->status == 3))
+				{
+					// it means that user offline other than admin
+					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
+					
+					if (isset($aReturn['name']))
+					{
+						//if (($aReturn[1] !== "admin"))
+						if (($aReturn['name'] !== "Master") && ($aReturn['name'] !== "Super Admin"))
+						{
+							$this->_forward('temporary','error','admin'); 
+						}
+					}
+				}
+				else 
+				{
+					return;
+				}
+			}
         }
     }
     function browseAction()
