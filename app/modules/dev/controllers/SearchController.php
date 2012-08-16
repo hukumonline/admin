@@ -83,4 +83,24 @@ class Dev_SearchController extends Zend_Controller_Action
             echo $response->getHttpStatusMessage();
         }
     }
+    function solrenAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+        $title = "<h4>HUKUMONLINE ENGLISH: <small>search</small></h4><hr/>";
+
+        echo $title.'<br>';
+
+        $solr = new Apache_Solr_Service( 'localhost', '8983', '/solr/core1' );
+        if ( ! $solr->ping() ) {
+            echo 'Solr service not responding.';
+            exit;
+        }
+
+    	$db = Zend_Registry::get('db3');
+    	
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ilb_english_rules','ild_english_rules','article',
+    	'consumer_goods','executive_alert','executive_summary','financial_services','general_corporate','hotile',
+    	'hot_issue_ilb','hot_issue_ild','hot_news','ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas',
+    	'telecommunications_and_media')";
+    }
 }

@@ -81,6 +81,8 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 	}
 	function generateFormEdit($catalogGuid)
 	{
+		$zl = Zend_Registry::get("Zend_Locale");
+		
 		$today = date('Y-m-d H:i:s');
 		
 		$aRenderedAttributes = array();
@@ -115,7 +117,10 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 			}
 			if(isset($rowAttribute))
 			{
-				$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid,'partner');
+				if ($zl->getLanguage() == 'en')
+					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid,'clinic_partner');
+				else
+					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid,'partner');
 				
 				$aRenderedAttributes[$rowAttribute->guid]['description'] = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
 				
