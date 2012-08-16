@@ -80,7 +80,7 @@
                             <td>
                                 <? if($hit['profileGuid'] == 'kutu_doc'){?>
                                     <a href="<?=ROOT_URL;?>/browser/downloadfile/guid/<?=$hit['guid'];?>"><div class="searchResultTitle">File: <?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedTitle').' ['.$hit['guid'].']';} catch (Exception $e) {echo '';}?></div></a>
-                                <? } else if($hit['profileGuid'] == 'clinic') { ?>
+                                <? } else if($hit['profileGuid'] == 'clinic' || $hit['profileGuid'] == 'klinik') { ?>
                                     <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit['guid'];?>/node/<?=$this->currentNode;?>" title="<?=$this->getCatalogAttribute($hit['guid'],'fixedDescription');?>"><?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle');} catch (Exception $e) {echo 'No-Title';}?></a>
                                 <? } else { ?>
                                     <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit['guid'];?>/node/<?=$this->currentNode;?>" title="<?=$this->getCatalogAttribute($hit['guid'],'fixedDescription');?>"><?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedTitle');} catch (Exception $e) {echo 'No-Title';}?></a>
