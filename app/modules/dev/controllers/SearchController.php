@@ -125,8 +125,8 @@ class Dev_SearchController extends Zend_Controller_Action
                 
             $message = "
                 <div class='box box-info closeable'>
-                [urutan:$iCount]&nbsp;id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$sTitle."</abbr> data has been successfully indexed.
-                [next guid: ".$nextRow->guid."] - <i>".$modelCatalog['profileGuid']."</i></div>";
+                <b>[urutan:$iCount]</b>&nbsp;id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$sTitle."</abbr> data has been successfully indexed.
+                <b>[next guid: ".$nextRow->guid."]</b> - <i>".$modelCatalog['profileGuid']."</i></div>";
             echo $message.'<br>';
     		
             flush();
