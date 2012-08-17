@@ -104,7 +104,8 @@ class Dev_SearchController extends Zend_Controller_Action
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'consumer_goods'";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('executive_alert','executive_summary','financial_services','general_corporate')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hotile','hot_issue_ilb','hot_issue_ild','hot_news')";
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ilb','ild','ile')";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'ilb'";
+    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ild','ile')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
     	
     	$results = $db->query($query);
