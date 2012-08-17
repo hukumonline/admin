@@ -35,6 +35,9 @@
 							if ($rowset['profileGuid'] == 'kutu_doc') {
 								?><strong>File</strong>&nbsp;&raquo;&nbsp;<?=$this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;								
 							}
+							else if ($rowset['profileGuid'] == 'klinik') {
+								echo $this->getCatalogTitle($guid,'fixedCommentTitle');?> :<?=$guid;
+							}
 							else 
 							{
 								echo $this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;
