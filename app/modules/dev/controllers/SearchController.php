@@ -108,11 +108,18 @@ class Dev_SearchController extends Zend_Controller_Action
     	echo $rowCount.'<br><br>';
     	for($iCount=0;$iCount<$rowCount;$iCount++) {
     		$row = $rowset[$iCount];
-    		$indexingEngine->indexCatalog($row->guid);       
-    		$ca = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, 'fixedTitle'); 		
+    		$indexingEngine->indexCatalog($row->guid);  
+    		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($row->guid);     
+    		
+            if ($modelCatalog['profileGuid'] == "klinik")
+                $sTitle = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, "fixedCommentTitle");
+            else
+                $sTitle = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, "fixedTitle");
+                
+                
             $message = "
                 <div class='box box-info closeable'>
-                id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$ca."</abbr> data has been successfully indexed.
+                id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$sTitle."</abbr> data has been successfully indexed.
                 </div>";
             echo $message.'<br>';
     		
