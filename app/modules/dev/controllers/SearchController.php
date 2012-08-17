@@ -101,7 +101,8 @@ class Dev_SearchController extends Zend_Controller_Action
     	$db = Zend_Registry::get('db3');
     	
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'article'";
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'consumer_goods'";
+    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'consumer_goods'";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('executive_alert','executive_summary','financial_services','general_corporate')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('consumer_goods','executive_alert','executive_summary','financial_services','general_corporate','hotile','hot_issue_ilb','hot_issue_ild','hot_news','ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
     	
     	$results = $db->query($query);
@@ -125,6 +126,7 @@ class Dev_SearchController extends Zend_Controller_Action
                 </div>";
             echo $message.'<br>';
     		
+            flush();
     	}
     }
 }
