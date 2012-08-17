@@ -85,6 +85,9 @@ class Dev_SearchController extends Zend_Controller_Action
     }
     function solrenAction()
     {
+    	set_time_limit(0);
+    	ini_set('max_execution_time', '0'); 
+    	
         $this->_helper->viewRenderer->setNoRender(TRUE);
         $title = "<h4>HUKUMONLINE ENGLISH: <small>search</small></h4><hr/>";
 
@@ -118,7 +121,11 @@ class Dev_SearchController extends Zend_Controller_Action
     	for($iCount=0;$iCount<$rowCount;$iCount++) {
     		$row = $rowset[$iCount];
     		$nextRow = $rowset[$iCount+1];
-    		$indexingEngine->indexCatalog($row->guid);  
+    		
+    		//if ($iCount%500 == 0) {
+    			$indexingEngine->indexCatalog($row->guid);  
+    		//}
+    		
     		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($row->guid);     
     		
             if ($modelCatalog['profileGuid'] == "klinik")
