@@ -96,11 +96,26 @@ class Dev_SearchController extends Zend_Controller_Action
             exit;
         }
 
+        $indexingEngine = Pandamp_Search::manager();
+        
     	$db = Zend_Registry::get('db3');
     	
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ilb_english_rules','ild_english_rules','article',
-    	'consumer_goods','executive_alert','executive_summary','financial_services','general_corporate','hotile',
-    	'hot_issue_ilb','hot_issue_ild','hot_news','ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas',
-    	'telecommunications_and_media')";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('article','consumer_goods','executive_alert','executive_summary','financial_services','general_corporate','hotile','hot_issue_ilb','hot_issue_ild','hot_news','ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
+    	
+    	$results = $db->query($query);
+    	$rowset = $results->fetchAll(PDO::FETCH_OBJ);
+    	$rowCount = count($rowset);
+    	echo $rowCount.'<br><br>';
+    	for($iCount=0;$iCount<$rowCount;$iCount++) {
+    		$row = $rowset[$iCount];
+    		$indexingEngine->indexCatalog($row->guid);       
+    		$ca = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, 'fixedTitle'); 		
+            $message = "
+                <div class='box box-info closeable'>
+                id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$ca->value."</abbr> data has been successfully indexed.
+                </div>";
+            echo $message.'<br>';
+    		
+    	}
     }
 }
