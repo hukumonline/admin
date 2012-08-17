@@ -103,8 +103,8 @@ class Dev_SearchController extends Zend_Controller_Action
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'article'";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'consumer_goods'";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('executive_alert','executive_summary','financial_services','general_corporate')";
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hotile','hot_issue_ilb','hot_issue_ild','hot_news','ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
-    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('consumer_goods','executive_alert','executive_summary','financial_services','general_corporate','hotile','hot_issue_ilb','hot_issue_ild','hot_news','ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hotile','hot_issue_ilb','hot_issue_ild','hot_news')";
+    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ilb','ild','ile','manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
     	
     	$results = $db->query($query);
     	$rowset = $results->fetchAll(PDO::FETCH_OBJ);
@@ -112,6 +112,7 @@ class Dev_SearchController extends Zend_Controller_Action
     	echo $rowCount.'<br><br>';
     	for($iCount=0;$iCount<$rowCount;$iCount++) {
     		$row = $rowset[$iCount];
+    		$nextRow = $rowset[$iCount+1];
     		$indexingEngine->indexCatalog($row->guid);  
     		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($row->guid);     
     		
@@ -123,8 +124,8 @@ class Dev_SearchController extends Zend_Controller_Action
                 
             $message = "
                 <div class='box box-info closeable'>
-                [urutan:'.$iCount.']&nbsp;id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$sTitle."</abbr> data has been successfully indexed.
-                [next guid: ".$nextRow->guid."]</div>";
+                [urutan:$iCount]&nbsp;id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$sTitle."</abbr> data has been successfully indexed.
+                [next guid: ".$nextRow->guid."] - <i>".$modelCatalog['profileGuid']."</i></div>";
             echo $message.'<br>';
     		
             flush();
