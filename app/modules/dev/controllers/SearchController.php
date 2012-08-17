@@ -112,7 +112,7 @@ class Dev_SearchController extends Zend_Controller_Action
     		$ca = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, 'fixedTitle'); 		
             $message = "
                 <div class='box box-info closeable'>
-                id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$ca->value."</abbr> data has been successfully indexed.
+                id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$ca."</abbr> data has been successfully indexed.
                 </div>";
             echo $message.'<br>';
     		
