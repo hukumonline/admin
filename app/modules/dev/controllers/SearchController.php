@@ -106,8 +106,9 @@ class Dev_SearchController extends Zend_Controller_Action
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hotile','hot_issue_ilb','hot_issue_ild','hot_news')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'ilb'";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ild','ile')";
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('partner','klinik','kategoriklinik','author')";
-    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hot_issue_ile','ilb_english_rules','ild_english_rules','manufacturing_&_industry','news','oil_and_gas','telecommunications_and_media')";
+    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('partner','klinik','kategoriklinik','author')";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hot_issue_ile','ilb_english_rules','ild_english_rules','manufacturing_&_industry')";
+    	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('news','oil_and_gas','telecommunications_and_media')";
     	
     	$results = $db->query($query);
     	$rowset = $results->fetchAll(PDO::FETCH_OBJ);
