@@ -85,6 +85,9 @@ class Dev_SearchController extends Zend_Controller_Action
     }
     function solrenAction()
     {
+    	set_time_limit(0);
+    	ini_set('max_execution_time', '0'); 
+    	
         $this->_helper->viewRenderer->setNoRender(TRUE);
         $title = "<h4>HUKUMONLINE ENGLISH: <small>search</small></h4><hr/>";
 
@@ -108,7 +111,7 @@ class Dev_SearchController extends Zend_Controller_Action
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ild','ile')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('partner','klinik','kategoriklinik','author')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hot_issue_ile','ilb_english_rules','ild_english_rules','manufacturing_&_industry')";
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'news' limit 120,30";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'news' limit 0,500";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('oil_and_gas','telecommunications_and_media')";
     	
     	$results = $db->query($query);
@@ -116,9 +119,6 @@ class Dev_SearchController extends Zend_Controller_Action
     	$rowCount = count($rowset);
     	echo $rowCount.'<br><br>';
     	for($iCount=0;$iCount<$rowCount;$iCount++) {
-	    	set_time_limit(0);
-	    	ini_set('max_execution_time', '0'); 
-	    	
     		$row = $rowset[$iCount];
     		$nextRow = $rowset[$iCount+1];
     		
