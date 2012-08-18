@@ -108,7 +108,7 @@ class Dev_SearchController extends Zend_Controller_Action
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('ild','ile')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('partner','klinik','kategoriklinik','author')";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('hot_issue_ile','ilb_english_rules','ild_english_rules','manufacturing_&_industry')";
-    	$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'news'";
+    	$query="SELECT * FROM KutuCatalog WHERE profileGuid = 'news' order by createdDate desc";
     	//$query="SELECT * FROM KutuCatalog WHERE profileGuid IN ('oil_and_gas','telecommunications_and_media')";
     	
     	$results = $db->query($query);
@@ -122,9 +122,9 @@ class Dev_SearchController extends Zend_Controller_Action
     		$row = $rowset[$iCount];
     		$nextRow = $rowset[$iCount+1];
     		
-    		//if ($iCount%500 == 0) {
+    		if ($iCount%500 == 0) {
     			$indexingEngine->indexCatalog($row->guid);  
-    		//}
+    		}
     		
     		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($row->guid);     
     		
