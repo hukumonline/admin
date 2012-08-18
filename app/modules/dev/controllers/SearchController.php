@@ -141,6 +141,7 @@ class Dev_SearchController extends Zend_Controller_Action
             echo $message.'<br>';
     		
             flush();
+            sleep(30);
     	}
     }
 }
