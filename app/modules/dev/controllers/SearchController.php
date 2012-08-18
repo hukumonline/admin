@@ -122,9 +122,9 @@ class Dev_SearchController extends Zend_Controller_Action
     		$row = $rowset[$iCount];
     		$nextRow = $rowset[$iCount+1];
     		
-    		if ($iCount%500 == 0) {
+    		//if ($iCount%500 == 0) {
     			$indexingEngine->indexCatalog($row->guid);  
-    		}
+    		//}
     		
     		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($row->guid);     
     		
