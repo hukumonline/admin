@@ -135,9 +135,9 @@ class Api_UserController extends Zend_Controller_Action
 		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'ku.email', 'gag.value', 'kus.status' );
 		
 		$sWhere = "";
-		if ($r->getParam('q'))
+		if ($request->getParam('q'))
 		{
-			$q = base64_decode($r->getParam('q'));
+			$q = base64_decode($request->getParam('q'));
 			for ($i=0;$i<count($pColumns);$i++)
 			{
 				$sWhere .= $pColumns[$i]." LIKE '%".mysql_real_escape_string($q)."%' OR ";
