@@ -945,6 +945,58 @@ class Customer_UserController extends Zend_Controller_Action
             $this->view->user = $user;
         }
     }
+    
+    /**
+     * Who's Online
+     *
+     */
+    function wholAction()
+    {
+        if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+            $this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
+        }
+
+        $this->_helper->layout->setLayout('layout-customer-credential');
+
+    	$modelUser = new App_Model_Db_Table_User();
+    	$rowset = $modelUser->fetchAll("ses!='*'");
+    	
+		$a['totalCount'] = count($rowset);
+		$limit = 25;
+		$a['limit'] = $limit;
+		
+		$this->view->aData = $a;
+
+        $this->view->identity = $this->_user;
+    }
+    
+    /**
+     * Kick User
+     *
+     */
+    function kickAction()
+    {
+        $this->_helper->layout->setLayout('layout-customer-credential');
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $id = ($this->_request->getParam('id'))? $this->_request->getParam('id') : '';
+
+        $modelUser = new App_Model_Db_Table_User();
+        $modelUser->update(array('ses' => '*'), array('kopel = ?' => $id));
+        
+        $modelSession = new App_Model_Db_Table_Session();
+        $rowSession = $modelSession->fetchRow("sessionData LIKE '%$id%'");
+        if ($rowSession)
+        {
+        	/**
+        	 * Destroy any active session identified by sessionId
+        	 */
+        	session_id($rowSession->sessionId);
+        	session_destroy();
+        }
+    }
+    
     function rightupmenuAction()
     {
         $modelUser = App_Model_Show_User::show()->getUserById($this->_getParam('id'));

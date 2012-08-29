@@ -121,6 +121,68 @@ class Api_UserController extends Zend_Controller_Action
 		echo Zend_Json::encode($a);
 		die();
 	}
+	
+	/**
+	 * Who's Online
+	 *
+	 */
+	public function getwholuserAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+		
+		$start 		= ($request->getParam('start'))? $request->getParam('start') : 0;
+		$limit 		= ($request->getParam('limit'))? $request->getParam('limit'): 0;
+		$orderBy 	= ($request->getParam('orderBy'))? $request->getParam('sortBy') : 'firstname';
+		$sortOrder 	= ($request->getParam('sortOrder'))? $request->getParam('sortOrder') : ' asc';
+		
+		$a = array();
+		
+		$rowset = App_Model_Show_User::show()->fetchUser("ses!='*'", $start, $limit);
+		
+		if(count($rowset)==0)
+		{
+			$a['users'][0]['kopel']= 'XXX';
+			$a['users'][0]['username']= "No Data";
+			$a['users'][0]['company']= "";
+			$a['users'][0]['group']= '';
+		}
+		else 
+		{
+			$ii=0;
+			foreach ($rowset as $row) 
+			{
+				$a['users'][$ii]['kopel']		= $row->kopel;
+				$a['users'][$ii]['username']	= $row->username;
+				$a['users'][$ii]['company']		= $row->company; 
+				$a['users'][$ii]['group']		= $row->value;
+				
+        		$btn="";
+        		$gEx = Pandamp_Controller_Action_Helper_GroupException::groupException(11);
+        		if ((in_array($row->username, $gEx)) && (Pandamp_Controller_Action_Helper_UserGroup::userGroup($this->_user->packageId) !== "Master")) { 
+					$btn .= '-';            			
+        		}
+        		else 
+        		{
+        			if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all')) {
+        				$btn .= "<a class=\"kickAction\" rel=\"$row->kopel\" href=\"javascript: void(0);\">kick</a>";
+        			}
+        			else 
+        			{
+        				$btn .= "kick";
+        			}
+        		}
+				
+				$a['users'][$ii]['action']= $btn."<br><div id='kopel_$row->kopel'></div>";
+				$ii++;
+			}
+		}		
+		
+		echo Zend_Json::encode($a);
+		die();
+	}
+	
 	public function getalluserAction()
 	{
 		$this->_helper->layout()->disableLayout();
