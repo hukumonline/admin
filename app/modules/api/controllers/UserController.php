@@ -132,6 +132,25 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$request = $this->getRequest();
 		
+		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'ku.email', 'gag.value', 'kus.status' );
+		
+		$sWhere = "";
+		if ($r->getParam('q'))
+		{
+			$q = base64_decode($r->getParam('q'));
+			for ($i=0;$i<count($pColumns);$i++)
+			{
+				$sWhere .= $pColumns[$i]." LIKE '%".mysql_real_escape_string($q)."%' OR ";
+			}
+			
+			$sWhere = substr_replace($sWhere,"",-3);
+			
+		}
+		else 
+		{
+			$sWhere = "1=1";
+		}
+		
 		$start 		= ($request->getParam('start'))? $request->getParam('start') : 0;
 		$limit 		= ($request->getParam('limit'))? $request->getParam('limit'): 0;
 		$orderBy 	= ($request->getParam('orderBy'))? $request->getParam('sortBy') : 'firstname';
@@ -139,7 +158,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$a = array();
 		
-		$rowset = App_Model_Show_User::show()->fetchUser("ses!='*'", $start, $limit);
+		$rowset = App_Model_Show_User::show()->fetchUser($sWhere." AND ses!='*'", $start, $limit);
 		
 		if(count($rowset)==0)
 		{
@@ -301,6 +320,34 @@ class Api_UserController extends Zend_Controller_Action
 		}
 		
 		echo Zend_Json::encode($a);
+		die();
+	}
+	public function countuserwholbyqueryAction()
+	{
+		$r = $this->getRequest();
+		
+		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'gag.value' );
+		
+		$sWhere = "";
+		if ($r->getParam('q'))
+		{
+			$q = base64_decode($r->getParam('q'));
+			for ($i=0;$i<count($pColumns);$i++)
+			{
+				$sWhere .= $pColumns[$i]." LIKE '%".mysql_real_escape_string($q)."%' OR ";
+			}
+			
+			$sWhere = substr_replace($sWhere,"",-3);
+			
+		}
+		else 
+		{
+			$sWhere = "1=1";
+		}
+		
+		$tblUser = new App_Model_Db_Table_User();
+		$row = App_Model_Show_User::show()->countUser($sWhere." AND ses!='*'");
+		echo $row; 
 		die();
 	}
 	public function countuserbyqueryAction()
