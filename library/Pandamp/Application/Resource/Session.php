@@ -6,9 +6,9 @@ class Pandamp_Application_Resource_Session extends Zend_Application_Resource_Res
 
     public function init()
     {
-        //$cookie_timeout = 60 * 60 * 24;
+        $cookie_timeout = 60 * 60 * 24;
 
-        //$garbage_timeout = $cookie_timeout + 600;
+        $garbage_timeout = $cookie_timeout + 600;
 
 		$aServerName = explode('.', $_SERVER['SERVER_NAME']);
 
@@ -17,7 +17,8 @@ class Pandamp_Application_Resource_Session extends Zend_Application_Resource_Res
 		
         //session_set_cookie_params($cookie_timeout, '/', $domainName);
         session_set_cookie_params(0, '/', $domainName);
-        //ini_set('session.gc_maxlifetime', $garbage_timeout);
+        ini_set('session.gc_maxlifetime', $garbage_timeout);
+        ini_set('session.cookie_lifetime',$garbage_timeout); 
 
 //		$session = new Zend_Session_Namespace();
         $options = array_change_key_case($this->getOptions(), CASE_LOWER);
