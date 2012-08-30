@@ -997,6 +997,48 @@ class Customer_UserController extends Zend_Controller_Action
         }
     }
     
+    /**
+     * Kick all user
+     *
+     */
+    function kickallAction()
+    {
+		$this->_helper->getHelper('layout')->disableLayout();
+		$this->_helper->getHelper('viewRenderer')->setNoRender();
+		
+		$request = $this->getRequest();
+        $result  = 'RESULT_ERROR';
+        
+        if (Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+        {
+        	if ($request->isPost()) {
+        		$id  = $request->getPost('id');
+        		$ids = array();
+        		$ids = Zend_Json::decode($id);
+        		
+        		foreach ($ids as $id) {
+			        $modelUser = new App_Model_Db_Table_User();
+			        $modelUser->update(array('ses' => '*'), array('kopel = ?' => $id));
+			        
+			        $modelSession = new App_Model_Db_Table_Session();
+			        $rowSession = $modelSession->fetchRow("sessionData LIKE '%$id%'");
+			        if ($rowSession)
+			        {
+			        	/**
+			        	 * Destroy any active session identified by sessionId
+			        	 */
+			        	session_id($rowSession->sessionId);
+			        	session_destroy();
+			        }
+        		}        		
+        	}
+        	
+        	$result = 'RESULT_OK';
+        }    	
+        
+        $this->getResponse()->setBody($result);
+    }
+    
     function rightupmenuAction()
     {
         $modelUser = App_Model_Show_User::show()->getUserById($this->_getParam('id'));

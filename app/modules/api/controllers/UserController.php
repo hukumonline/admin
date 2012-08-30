@@ -172,6 +172,7 @@ class Api_UserController extends Zend_Controller_Action
 			$ii=0;
 			foreach ($rowset as $row) 
 			{
+				$a['users'][$ii]['checkbox'] 	= "<input type='checkbox' name='kopel[]' id='kopel' value='$row->kopel' class='check_me'>";
 				$a['users'][$ii]['kopel']		= $row->kopel;
 				$a['users'][$ii]['username']	= $row->username;
 				$a['users'][$ii]['company']		= $row->company; 
