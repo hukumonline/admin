@@ -9,7 +9,7 @@
         <!-- Main navigation -->
         <nav id="menu">
             <ul class="sf-menu sf-js-enabled sf-shadow">
-                <li class="current"><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
+                <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
                 <? if ($this->isAllowed('store','all')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
@@ -18,7 +18,7 @@
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/acl">Access Control</a></li>
                 <? } if ($this->aclCheck('action','all','content','all-access')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search">Search</a></li>
-                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/setting">Setting</a></li>
+                <li class="current"><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/setting">Setting</a></li>
                 <? } ?>
             </ul>
         </nav>
@@ -38,7 +38,7 @@
 <!-- Page title -->
 <div id="pagetitle">
     <div class="wrapper">
-        <h1>Dashboard</h1>
+        <h1>Setting</h1>
         <!-- Quick search box -->
         <form id="frmSearch" method="get" action="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/dms/browse">
 			<select name="category" id="category">

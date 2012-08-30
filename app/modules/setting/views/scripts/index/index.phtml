@@ -1,0 +1,107 @@
+<!-- Left column/section -->
+<section class="column width6 first">
+
+    <div class="colgroup leading">
+        <div class="column width6 first">
+            <?
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3><br />
+            <?php if ($this->getLanguage() == 'id') : ?>
+            <form method="POST" name="formsetting">
+            	<table class='display stylized'>
+            		<tr>
+            			<td><label>Web Admin Status</label></td>
+            			<td>
+            				<select name="status">
+            				<?php 
+            				for ($i=0;$i<4;$i++) : 
+            				$sel = ($i == $this->rowset['status']) ? " selected" : "";
+            				?>
+           					<option value="<?php echo $i; ?>"<?php echo $sel; ?>><?php echo $i; ?></option>
+            				<?php endfor; ?>
+            				</select>
+            				<br><small>Keterangan:</small>
+            				<br><small>0: status Off</small>
+            				<br><small>1: status hukumonline indonesia offline</small>
+            				<br><small>2: status hukumonline english offline</small>
+            				<br><small>3: status dua-duanya offline</small>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td><label>Status hukumonline.com</label></td>
+            			<td>
+            				<select name="frontend">
+            				<?php 
+            				for ($i=0;$i<2;$i++) : 
+            				$sel = ($i == $this->rowset['frontend']) ? " selected" : "";
+            				?>
+           					<option value="<?php echo $i; ?>"<?php echo $sel; ?>><?php echo $i; ?></option>
+            				<?php endfor; ?>
+            				</select>
+            				<br><small>Keterangan:</small>
+            				<br><small>0: status Off</small>
+            				<br><small>1: status hukumonline indonesia offline</small>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td><label>Status search.hukumonline.com</label></td>
+            			<td>
+            				<select name="searchend">
+            				<?php 
+            				for ($i=0;$i<4;$i++) : 
+            				$sel = ($i == $this->rowset['searchend']) ? " selected" : "";
+            				?>
+           					<option value="<?php echo $i; ?>"<?php echo $sel; ?>><?php echo $i; ?></option>
+            				<?php endfor; ?>
+            				</select>
+            				<br><small>Keterangan:</small>
+            				<br><small>0: status Off</small>
+            				<br><small>1: status hukumonline indonesia offline</small>
+            				<br><small>2: status hukumonline english offline</small>
+            				<br><small>3: status dua-duanya offline</small>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td><label>Status id.hukumonline.com</label></td>
+            			<td>
+            				<select name="logstat">
+            				<?php 
+            				for ($i=0;$i<2;$i++) : 
+            				$sel = ($i == $this->rowset['logstat']) ? " selected" : "";
+            				?>
+           					<option value="<?php echo $i; ?>"<?php echo $sel; ?>><?php echo $i; ?></option>
+            				<?php endfor; ?>
+            				</select>
+            				<br><small>Keterangan:</small>
+            				<br><small>0: status Off</small>
+            				<br><small>1: status hukumonline-id offline</small>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td colspan="2"><input type="submit" value="Save" class="btn btn-blue big" /></td>
+            		</tr>
+            	
+            	</table>
+            </form>
+            <?php endif; ?>
+        </div>
+    </div>
+
+
+
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+
+<div class="clear">&nbsp;</div>
