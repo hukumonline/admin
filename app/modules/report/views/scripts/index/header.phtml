@@ -1,3 +1,11 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: header.phtml 1 2012-08-29 13:32Z $
+ */
+?>
 <!-- Header -->
 <header id="top">
     <div class="wrapper">
@@ -9,7 +17,7 @@
         <!-- Main navigation -->
         <nav id="menu">
             <ul class="sf-menu sf-js-enabled sf-shadow">
-                <li class="current"><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
+                <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>">Dashboard</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms">Dms</a></li>
                 <? if ($this->isAllowed('store','all')) { ?>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/store">Store</a></li>
@@ -20,7 +28,7 @@
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search">Search</a></li>
                 <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/setting">Setting</a></li>
                 <? } ?>
-                <li><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/report">Report</a></li>
+                <li class="current"><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/report">Report</a></li>
             </ul>
         </nav>
         <!-- End of Main navigation -->
@@ -39,7 +47,7 @@
 <!-- Page title -->
 <div id="pagetitle">
     <div class="wrapper">
-        <h1>Dashboard</h1>
+        <h1>Report</h1>
         <!-- Quick search box -->
         <form id="frmSearch" method="get" action="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/dms/browse">
 			<select name="category" id="category">

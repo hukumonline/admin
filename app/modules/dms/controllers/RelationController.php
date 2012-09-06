@@ -17,6 +17,13 @@ class Dms_RelationController extends Zend_Controller_Action
         
         $identity = Pandamp_Application::getResource('identity');
 
+        $loginUrl = $identity->loginUrl;
+        
+		$multidb = Pandamp_Application::getResource('multidb');
+		$multidb->init();
+		
+		$db = $multidb->getDb('db2');
+		
         $sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
         $sReturn = base64_encode($sReturn);
 
@@ -25,7 +32,6 @@ class Dms_RelationController extends Zend_Controller_Action
 
         if (!$auth->hasIdentity()) {
             //$this->_forward('login','account','admin');
-			$loginUrl = $identity->loginUrl;
 			
 			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);   
         }
@@ -38,7 +44,8 @@ class Dms_RelationController extends Zend_Controller_Action
             $acl = Pandamp_Acl::manager();
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
-                $this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                //$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
+                $this->_forward('restricted','error','admin',array('lang'=>$zl->getLanguage()));
             }
             
 			// [TODO] else: check if user has access to admin page and status website is online
@@ -61,11 +68,22 @@ class Dms_RelationController extends Zend_Controller_Action
 						}
 					}
 				}
-				else 
-				{
-					return;
-				}
 			}
+			
+			// check session expire
+			$timeLeftTillSessionExpires = $_SESSION['__ZF']['Zend_Auth']['ENT'] - time();
+
+			if (Pandamp_Lib_Formater::diff('now', $this->_user->dtime) > $timeLeftTillSessionExpires) {
+				$db->update('KutuUser',array('ses'=>'*'),"ses='".Zend_Session::getId()."'");
+		        $flashMessenger->addMessage('Session Expired');
+		        Pandamp_Lib_Formater::updateUserLog();
+		        $auth->clearIdentity();
+		        
+		        $this->_redirect($loginUrl.'?returnUrl='.$sReturn);     
+			}
+			
+			$dat = Pandamp_Lib_Formater::now();
+			$db->update('KutuUser',array('dtime'=>$dat),"ses='".Zend_Session::getId()."'");
         }
     }
     function searchAction()

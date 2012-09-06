@@ -205,4 +205,21 @@ class Pandamp_Lib_Formater
             $id = substr($id,8,2).".".substr($id,5,2).".".substr($id,2,2)." ".substr($id,11,2).":".substr($id,14,2);
             return $id;
     }
+    
+	/**
+	 * @return current date and time
+	 */
+	function now() {
+		$dat = getdate(strtotime('now'));
+		return "$dat[year]-$dat[mon]-$dat[mday] $dat[hours]:$dat[minutes]:00";
+	}
+	
+	/**
+	 * calculate different date
+	 */
+	function diff($date1, $date2) {
+		$a1 = getdate(strtotime($date1));
+		$a2 = getdate(strtotime($date2));
+		return ($a1['year']-$a2['year'])*525600 + ($a1['mon']-$a2['mon'])*43200 + ($a1['mday']-$a2['mday'])*1440 + ($a1['hours']-$a2['hours'])*60 + ($a1['minutes']-$a2['minutes']);
+	}
 }

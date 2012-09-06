@@ -1,17 +1,16 @@
 <?php
 /**
  * @author	2012-2013 Nihki Prihadi <nihki@madaniyah.com>
- * @version $Id: IndexController.php 1 2012-08-29 15:42Z $
+ * @version $Id: IndexController.php 1 2012-08-29 13:20Z $
  */
 
-
-class Setting_IndexController extends Zend_Controller_Action
+class Report_IndexController extends Zend_Controller_Action 
 {
     protected $_user;
 
     function  preDispatch()
     {
-        $this->_helper->layout->setLayout('layout-setting');
+        $this->_helper->layout->setLayout('layout-report');
 
         $auth = Zend_Auth::getInstance();
         
@@ -82,34 +81,12 @@ class Setting_IndexController extends Zend_Controller_Action
 			$db->update('KutuUser',array('dtime'=>$dat),"ses='".Zend_Session::getId()."'");
         }
     }
+    
     function indexAction()
     {
-    	$request = $this->getRequest();
     	
-		$tblSetting = new App_Model_Db_Table_Setting();
-		$rowset = $tblSetting->find(1)->current();
-		
-		if ($request->isPost()) {
-	        $data = array(
-	        	'status' => $request->getPost('status'),
-	        	'frontend' => $request->getPost('frontend'),
-	            'searchend' => $request->getPost('searchend'),
-	            'logstat' => $request->getPost('logstat')
-	        );
-	
-	        $tblSetting->update($data, "id=1");
-	        
-	        
-			$rowset = $tblSetting->find(1)->current();
-			
-			$this->view->assign('rowset',$rowset);			
-		}
-		
-		if ($rowset)
-		{
-			$this->view->assign('rowset',$rowset);
-		}		
-    }	
+    }
+    
     function headerAction()
     {
         $r = $this->getRequest();
