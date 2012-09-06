@@ -144,12 +144,12 @@ class Api_UserController extends Zend_Controller_Action
 			}
 			
 			$sWhere = substr_replace($sWhere,"",-3);
-			$sWhere .= " AND gag.id IN (14,15,16,17,18)";
+			$sWhere .= " AND ku.packageId IN (14,15,16,17,18)";
 		}
 		else 
 		{
 			//$sWhere = "1=1";
-			$sWhere = "gag.id IN (14,15,16,17,18)";
+			$sWhere = "ku.packageId IN (14,15,16,17,18)";
 		}
 		
 		$start 		= ($request->getParam('start'))? $request->getParam('start') : 0;
@@ -340,12 +340,12 @@ class Api_UserController extends Zend_Controller_Action
 			}
 			
 			$sWhere = substr_replace($sWhere,"",-3);
-			$sWhere .= " AND gag.id IN (14,15,16,17,18)";
+			$sWhere .= " AND ku.packageId IN (14,15,16,17,18)";
 		}
 		else 
 		{
 			//$sWhere = "1=1";
-			$sWhere = "gag.id IN (14,15,16,17,18)";
+			$sWhere = "ku.packageId IN (14,15,16,17,18)";
 		}
 		
 		$tblUser = new App_Model_Db_Table_User();
