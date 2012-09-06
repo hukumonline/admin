@@ -349,7 +349,7 @@ class Api_UserController extends Zend_Controller_Action
 		}
 		
 		$tblUser = new App_Model_Db_Table_User();
-		$row = App_Model_Show_User::show()->countUser($sWhere." AND ses!='*'");
+		$row = App_Model_Show_User::show()->countUser($sWhere." AND ku.ses!='*'");
 		echo $row; 
 		die();
 	}

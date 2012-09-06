@@ -1003,9 +1003,9 @@ class Customer_UserController extends Zend_Controller_Action
 
         $this->_helper->layout->setLayout('layout-customer-credential');
 
-    	$rowset = App_Model_Show_User::show()->fetchUser("gag.id IN (14,15,16,17,18) AND ku.ses!='*'");
-    	
-		$a['totalCount'] = count($rowset);
+		$rowset = App_Model_Show_User::show()->countUser("gag.id IN (14,15,16,17,18) AND ku.ses!='*'");    	
+		
+		$a['totalCount'] = $rowset;
 		$limit = 25;
 		$a['limit'] = $limit;
 		
