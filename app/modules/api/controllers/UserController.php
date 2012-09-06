@@ -134,7 +134,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'ku.email', 'gag.value', 'kus.status' );
 		
-		$sWhere = "";
+		$sWhere = "(";
 		if ($request->getParam('q'))
 		{
 			$q = base64_decode($request->getParam('q'));
@@ -144,7 +144,7 @@ class Api_UserController extends Zend_Controller_Action
 			}
 			
 			$sWhere = substr_replace($sWhere,"",-3);
-			$sWhere .= " AND ku.packageId IN (14,15,16,17,18)";
+			$sWhere .= ") AND (ku.packageId IN (14,15,16,17,18))";
 		}
 		else 
 		{
@@ -159,7 +159,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$a = array();
 		
-		$rowset = App_Model_Show_User::show()->fetchUser($sWhere." AND ku.ses!='*'", $start, $limit);
+		$rowset = App_Model_Show_User::show()->fetchUser($sWhere." AND (ku.ses!='*')", $start, $limit);
 		
 		if(count($rowset)==0)
 		{
@@ -330,7 +330,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$pColumns = array( 'ku.kopel', 'ku.username', 'ku.company', 'gag.value' );
 		
-		$sWhere = "";
+		$sWhere = "(";
 		if ($r->getParam('q'))
 		{
 			$q = base64_decode($r->getParam('q'));
@@ -340,16 +340,16 @@ class Api_UserController extends Zend_Controller_Action
 			}
 			
 			$sWhere = substr_replace($sWhere,"",-3);
-			$sWhere .= " AND ku.packageId IN (14,15,16,17,18)";
+			$sWhere .= ") AND (ku.packageId IN (14,15,16,17,18))";
 		}
 		else 
 		{
 			//$sWhere = "1=1";
-			$sWhere = "ku.packageId IN (14,15,16,17,18)";
+			$sWhere = "(ku.packageId IN (14,15,16,17,18))";
 		}
 		
 		$tblUser = new App_Model_Db_Table_User();
-		$row = App_Model_Show_User::show()->countUser($sWhere." AND ku.ses!='*'");
+		$row = App_Model_Show_User::show()->countUser($sWhere." AND (ku.ses!='*')");
 		echo $row; 
 		die();
 	}
