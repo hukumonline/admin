@@ -77,8 +77,8 @@ class Dms_CatalogController extends Zend_Controller_Action
 
 			if (Pandamp_Lib_Formater::diff('now', $this->_user->dtime) > $timeLeftTillSessionExpires) {
 				$db->update('KutuUser',array('ses'=>'*'),"ses='".Zend_Session::getId()."'");
+				$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 		        $flashMessenger->addMessage('Session Expired');
-		        Pandamp_Lib_Formater::updateUserLog();
 		        $auth->clearIdentity();
 		        
 		        $this->_redirect($loginUrl.'?returnUrl='.$sReturn);     

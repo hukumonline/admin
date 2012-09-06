@@ -77,7 +77,6 @@ class Customer_UserController extends Zend_Controller_Action
 				$db->update('KutuUser',array('ses'=>'*'),"ses='".Zend_Session::getId()."'");
 				$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 		        $flashMessenger->addMessage('Session Expired');
-		        Pandamp_Lib_Formater::updateUserLog();
 		        $auth->clearIdentity();
 		        
 		        $this->_redirect($loginUrl.'?returnUrl='.$sReturn);     
