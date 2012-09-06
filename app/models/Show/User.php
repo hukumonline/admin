@@ -100,8 +100,8 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
 			->where("$where")
 			->order('kopel DESC')->limit($end, $start);
     	
-		$sql = $select->__toString();
-    	print_r($sql);exit();
+		//$sql = $select->__toString();
+    	//print_r($sql);exit();
     	
         $conn = self::$_db;
 

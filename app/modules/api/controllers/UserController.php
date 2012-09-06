@@ -159,7 +159,7 @@ class Api_UserController extends Zend_Controller_Action
 		
 		$a = array();
 		
-		$rowset = App_Model_Show_User::show()->fetchUser($sWhere." AND ses!='*'", $start, $limit);
+		$rowset = App_Model_Show_User::show()->fetchUser($sWhere." AND ku.ses!='*'", $start, $limit);
 		
 		if(count($rowset)==0)
 		{
