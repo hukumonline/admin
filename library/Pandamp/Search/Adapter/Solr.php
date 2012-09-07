@@ -706,7 +706,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		break;
 	  	  	  	case 'ptsJenisLembaga':
 	  	  	  		$part->regulationType = $rowAttr->value;
-	  	  	  		echo 'jenis: '.$rowAttr->value. '<br>';
+	  	  	  		//echo 'jenis: '.$rowAttr->value. '<br>';
 	  	  	  		switch(strtolower($part->regulationType))
 	  	  	  		{
 	  	  	  			case 'ma':
