@@ -30,13 +30,13 @@ class Admin_IndexController extends Zend_Controller_Action
         //$sso = new Pandamp_Session_Remote();
         //$user = $sso->getInfo();
 
-        if (!$auth->hasIdentity()) {
+        if (!$auth->hasIdentity()) {die('1');
             //$this->_forward('login','account','admin');
             
 			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);     
         }
         else
-        {
+        {die('2');
             $this->_user = $auth->getIdentity();
 			
 			$logoutUrl = $identity->logoutUrl;
