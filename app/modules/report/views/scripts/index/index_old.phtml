@@ -1,0 +1,42 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: index.phtml 1 2012-08-29 13:35Z $
+ */
+?>
+<!-- Left column/section -->
+<section class="column width6 first">
+    <div class="colgroup leading">
+    	<div class="column width6 first">
+            <?php
+            if ($this->getLanguage() == 'id')
+                $tag = "www.hukumonline.com";
+            else
+                $tag = "en.hukumonline.com";
+            ?>
+            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3><br />
+			<dl>
+				<dd><a href="">Semua Divisi</a></dd>
+			</dl>
+			<?php
+            if ($this->getLanguage() == 'id')
+                echo $this->action('list','hol','report');
+            else
+                echo $this->action('list','hole','report');
+			?>  
+    	</div>
+    </div>
+</section>
+<!-- End of Left column/section -->
+
+<!-- Right column/section -->
+<aside class="column width2">
+    <div id="rightmenu">
+        <?=$this->action('sidebar','user','customer');?>
+    </div>
+</aside>
+<!-- End of Right column/section -->
+
+<div class="clear">&nbsp;</div>

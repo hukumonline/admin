@@ -6,28 +6,157 @@
  * @version		$Id: index.phtml 1 2012-08-29 13:35Z $
  */
 ?>
-<!-- Left column/section -->
-<section class="column width6 first">
-    <div class="colgroup leading">
-    	<div class="column width6 first">
-            <?
-            if ($this->getLanguage() == 'id')
-                $tag = "www.hukumonline.com";
-            else
-                $tag = "en.hukumonline.com";
-            ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3><br />
-    	</div>
-    </div>
+<!-- section category -->
+<section class="column first">
+	<?php if ($this->printmode <> 1) : ?>
+	<div class="clear">&nbsp;</div>
+	<div class="width8">
+		<p>You can use following conditions to filter the list of profile</p>
+	</div>
+	<?php endif; ?>
+	<div class="clear">&nbsp;</div>
+	<div class="colgroup" id="filterContainer">
+		<form method="GET" name="report">
+			<div class="column width1 first">
+				<label>Profile</label>
+			</div>
+			<div class="column width7">
+				<?php if ($this->printmode == 1) :
+				echo ': '.$this->profname;
+				else :
+				echo $this->helperLoader('report')->selectProf(array('id' => 'prof', 'name' => 'prof', 'class' => 'no-class', 'selected' => $this->prof));
+				endif; ?>
+			</div>
+			<div class="clear">&nbsp;</div>
+			<div class="column width1 first">
+				<label>Tahun</label>
+			</div>
+			<div class="column width7">
+				<?php if ($this->printmode == 1) :
+				echo ': '.$this->y;
+				else :
+				echo $this->helperLoader('report')->selectYear(array('id' => 'year', 'name' => 'year', 'class' => 'no-class', 'selected' => $this->y));
+				endif; ?>
+			</div>
+			<div class="clear">&nbsp;</div>
+			<div class="column width1 first">
+				<label>Tampilkan</label>
+			</div>
+			<div class="column width7">
+				<?php if ($this->printmode == 1) :
+				echo ': '.$this->showname;
+				else :
+				echo $this->helperLoader('report')->selectShow(array('id' => 'show', 'name' => 'show', 'class' => 'no-class', 'selected' => $this->show));
+				endif; ?>
+			</div>
+		</form>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<?php if ($this->printmode <> 1) : ?>
+	<div class="align-right">
+		<a href="<?php echo $this->uri; ?>&printmode=1" target="_blank"><img border="0" src="<?php echo $this->cdn('styles'); ?>/images/printer.gif"></a>
+	</div>
+	<div style="clear:both"></div>
+	<?php endif; ?>
+	<hr />	
+	<div class="width8">
+		<?php if ($this->show == 1) : ?>
+		<table class="display stylized" id="report_graph">
+		<!-- BEGIN row_graphic -->
+		<tr>
+			<td align="center"><img src="<?php echo $this->graph_url; ?>" alt="<?php echo $this->graph_alt; ?>"></td>
+		</tr>
+		<!-- END row_graphic -->
+		</table>
+		<?php else : ?>
+		<table class="display stylized" id="report">
+			<thead>
+				<tr>
+					<th class="ta-center" colspan="2">REPORTS</th>
+					<th class="ta-center" colspan="12">MONTH</th>
+					<th class="ta-center">YEAR</th>
+				</tr>
+				<tr>
+					<th>No.</th>
+					<th>Division</th>
+					<th>Jan</th>
+					<th>Feb</th>
+					<th>Mar</th>
+					<th>Apr</th>
+					<th>Mei</th>
+					<th>Jun</th>
+					<th>Jul</th>
+					<th>Agt</th>
+					<th>Sep</th>
+					<th>Okt</th>
+					<th>Nov</th>
+					<th>Des</th>
+					<th><?php echo $this->y; ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if ($this->prof == 0 || $this->prof == 1) { ?>
+				<tr>
+					<td rowspan="3">1</td>
+					<td colspan="14"><abbr>Data Center</abbr></td>
+				</tr>
+				<tr>
+					<td><abbr>Peraturan</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->p);$i++) : ?>
+					<td>
+						<?php if ($this->printmode == 1) :
+						echo $this->p[$i];
+						else : ?>
+						<a href=""><?php echo $this->p[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th><?php echo $this->yp; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>Putusan</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->put);$i++) : ?>
+					<td>
+						<?php if ($this->printmode == 1) :
+						echo $this->put[$i];
+						else : ?>
+						<a href=""><?php echo $this->put[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th><?php echo $this->yput; ?></th>
+				</tr>
+				<?php } if ($this->prof == 0 || $this->prof == 2) { ?>
+				<tr>
+					<td>2</td>
+					<td><abbr>Redaksi</abbr></td>
+					<td colspan="13">&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td><abbr>Article</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->art);$i++) : ?>
+					<td>
+						<?php if ($this->printmode == 1) :
+						echo $this->art[$i];
+						else : ?>
+						<a href=""><?php echo $this->art[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th><?php echo $this->yart; ?></th>
+				</tr>
+				<?php } ?>
+				<tr>
+					<th>&nbsp;</th>
+					<th><abbr>Total</abbr></th>
+					<?php for ($i=0;$i<count($this->sum);$i++) : ?>
+					<th><?php echo $this->sum[$i]; ?></th>
+					<?php endfor; ?>
+					<th><?php echo $this->sumrep; ?></th>
+				</tr>
+			</tbody>
+		</table>
+		<?php endif; ?>
+	</div>
 </section>
-<!-- End of Left column/section -->
-
-<!-- Right column/section -->
-<aside class="column width2">
-    <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
-    </div>
-</aside>
-<!-- End of Right column/section -->
-
-<div class="clear">&nbsp;</div>

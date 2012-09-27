@@ -1,0 +1,42 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: category.phtml 1 2012-09-25 16:27Z $
+ */
+?>
+<!-- section category -->
+<section class="column first">
+	<div class="clear">&nbsp;</div>
+	<div class="width8">
+		<p>You can use following conditions to filter the list of profile</p>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="colgroup" id="filterContainer">
+		<div class="column width1 first">
+			<label>profile</label>
+		</div>
+		<div class="column width7">
+			<?php echo $this->helperLoader('report')->selectProfile(array('id' => 'profile', 'name' => 'profile', 'class' => 'no-class')); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+		<div class="column width1 first">
+			<label>Tahun</label>
+		</div>
+		<div class="column width7">
+			<?php echo $this->helperLoader('report')->selectYear(array('id' => 'year', 'name' => 'year', 'class' => 'no-class', 'selected' => $this->now['year'])); ?>
+		</div>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="colgroup">
+		<div class="column width1 first">
+			<label>&nbsp;</label>
+		</div>
+		<div class="column width7">
+			<button type="button" id="filterButton" class="btn btn-green big"><span>Filter</span></button>
+		</div>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<hr />	
+</section>

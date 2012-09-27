@@ -160,5 +160,64 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
 
         return $rows;
     }
+    
+	public function getProfile($profileId = null, $offset = null, $count = null)
+	{
+		$db = parent::_dbSelect();
+		$select = $db->from('KutuProfile');
+							
+		$conn = self::$_db;
+		
+		if (isset($profileId)) {
+			$select->where('guid = ?', $profileId);
+			$rs = $conn->fetchRow($select);
+			return (null == $rs) ? null : $rs;
+		}
+		else 
+		{
+			if (is_int($offset) && is_int($count)) {
+				$select->limit($count, $offset);
+			}
+			$select->order('guid desc');
+			$rs = $conn->fetchAll($select);
+			return $rs;							
+		}
+	}
+
+    public function getYear()
+    {
+        $db = parent::_dbSelect();
+        $statement = $db->from('KutuCatalog',array('YEAR( `createdDate` ) as cd'))
+                ->group('YEAR( `createdDate` )')
+                ->order('cd desc');
+
+        $conn = self::$_db;
+
+        $row = $conn->fetchAll($statement);
+
+        return $row;
+    }
+    
+    public function getCatalogByMonth($profile,$mon)
+    {
+        $db = parent::_dbSelect();
+        $statement = $db->from('KutuCatalog',array('COUNT(*) as count'))
+                ->where("createdDate LIKE '%".$mon."%'");
+                
+        if ($profile == 'peraturan')
+        	$statement->where("profileGuid IN ('kutu_peraturan','kutu_peraturan_kolonial','kutu_rancangan_peraturan')");
+        else if ($profile == 'article')
+        	$statement->where("profileGuid IN ('article','isuhangat')");
+       	else
+        	$statement->where('profileGuid=?', $profile);
+
+    	/*$sql = $statement->__toString();
+    	print_r($sql);exit();*/
+    		
+        $conn = self::$_db;
+
+    	$row = $conn->fetchRow($statement);
+    	
+    	return ($row !== null) ? $row['count'] : 0;
+    }
 }
-?>

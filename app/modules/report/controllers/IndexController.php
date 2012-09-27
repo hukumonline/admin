@@ -84,7 +84,91 @@ class Report_IndexController extends Zend_Controller_Action
     
     function indexAction()
     {
+    	$request = $this->getRequest();
     	
+    	$printmode = $request->getParam('printmode');
+    	
+    	if ($printmode == 1)
+    		$this->_helper->layout->setLayout('layout-report-print');
+    	
+    	$now = getdate();
+    	
+    	$y 		= ($request->getParam('year'))? $request->getParam('year') : $now['year'];
+    	$show 	= ($request->getParam('show'))? $request->getParam('show') : 0;
+    	$prof 	= ($request->getParam('prof'))? $request->getParam('prof') : 0;
+    	
+    	$uri 	= $request->getRequestUri();
+		
+    	if ($show == 0)
+    		$showname = "Table";
+    	else
+    		$showname = "Graph";
+    	
+    		
+		$yearper = 0;
+		$yearput = 0;
+		$yearart = 0;
+		
+		$sumrep = 0;
+		
+		$sum = array(0,0,0,0,0,0,0,0,0,0,0,0);
+		
+		$url = "";
+		
+		$mon = array("$y-01","$y-02","$y-03","$y-04","$y-05","$y-06","$y-07","$y-08","$y-09","$y-10","$y-11","$y-12");
+		for($i=0; $i<count($mon); $i++) { 
+			$peraturan[] = App_Model_Show_Catalog::show()->getCatalogByMonth('peraturan',$mon[$i]);
+			$yearper += $peraturan[$i];
+			$putusan[] = App_Model_Show_Catalog::show()->getCatalogByMonth('kutu_putusan',$mon[$i]);
+			$yearput += $putusan[$i];
+			$article[] = App_Model_Show_Catalog::show()->getCatalogByMonth('article',$mon[$i]);
+			$yearart += $article[$i];
+			
+			if ($prof == 0) 			// all
+				$sum[$i] = $peraturan[$i] + $putusan[$i] + $article[$i];
+			else if ($prof == 1) 		// Data Center
+				$sum[$i] = $peraturan[$i] + $putusan[$i];
+			else if ($prof == 2)		// Redaksi
+				$sum[$i] = $article[$i];
+				
+				
+			$sumrep += $sum[$i];
+			
+            $url .= "&x[$i]=".Pandamp_Lib_Calendar::get_month_name($i+1,"%b")
+                 . "&y1[$i]=".$sum[$i];
+                 
+		}
+		
+		if ($prof == 0) 			
+			$profname = "All Profile";
+		else if ($prof == 1) 		
+			$profname = "Data Center";
+		else if ($prof == 2)		
+			$profname = "Redaksi";
+					
+		$url = "tabtitle1=Division Reports of $y&tabtitle2=Total Records $sumrep&tabtitle3=$profname&y1legend=Value (record)&showvalue=1".$url;
+		
+		$this->view->assign('y',$y);
+		$this->view->assign('show',$show);
+		$this->view->assign('showname',$showname);
+		$this->view->assign('prof',$prof);
+		$this->view->assign('profname',$profname);
+		$this->view->assign('p',$peraturan);
+		$this->view->assign('yp',$yearper);
+		$this->view->assign('put',$putusan);
+		$this->view->assign('yput',$yearput);
+		$this->view->assign('art',$article);
+		$this->view->assign('yart',$yearart);
+		
+		$this->view->assign('sum',$sum);
+		$this->view->assign('sumrep',$sumrep);
+		
+		$this->view->assign('uri',$uri);
+		
+		$this->view->assign('printmode',$printmode);
+		
+		$this->view->assign('graph_url', ROOT_URL."/data/graph/graph.view.php?type=5&$url");
+		$this->view->assign('graph_alt', "Division Reports");
     }
     
     function headerAction()
