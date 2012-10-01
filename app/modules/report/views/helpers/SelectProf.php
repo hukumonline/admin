@@ -15,8 +15,8 @@ class Report_View_Helper_SelectProf
 		
 		$output = "<select onchange='javascript:document.report.submit();' class='$attributes[class]' name='$attributes[name]' id='$attributes[id]'>" . self::EOL;
 		
-		$show = array('All','Data Center','Redaksi');
-		for ($i=0;$i<3;$i++) {
+		$show = array('All','Data Center','Redaksi','Klinik','Redaksi-EN','Layanan');
+		for ($i=0;$i<6;$i++) {
 			$selected = ($selectedId == null || $selectedId != $i) ? '' : ' selected="selected"';
 			$disable  = ($disableId == null || $disableId != $i) ? '' : ' disabled';
 			$output  .= sprintf('<option value="%s"%s%s>%s</option>', $i, $selected, $disable, $show[$i]) . self::EOL;

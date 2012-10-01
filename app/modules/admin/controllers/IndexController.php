@@ -47,7 +47,7 @@ class Admin_IndexController extends Zend_Controller_Action
 			$zl  = Zend_Registry::get("Zend_Locale");
 			
             $acl = Pandamp_Acl::manager();
-            if (!($acl->checkAcl("site",'all','user', $this->_user->username, false,false)))
+            if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
                 //$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
                 header(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');

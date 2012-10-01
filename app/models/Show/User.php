@@ -126,4 +126,21 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
     	
     	return ($dataFetch[0]['count']);
     }
+    
+    public function getUserByMonth($packageId,$mon)
+    {
+        $db = parent::_dbSelect();
+        $statement = $db->from('KutuUser',array('COUNT(*) as count'))
+                ->where("packageId=$packageId")
+                ->where("createdDate LIKE '%".$mon."%'");
+
+    	/*$sql = $statement->__toString();
+    	print_r($sql);exit();*/
+    		
+        $conn = self::$_db;
+
+    	$row = $conn->fetchRow($statement);
+    	
+    	return ($row !== null) ? $row['count'] : 0;
+    }
 }

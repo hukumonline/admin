@@ -1,0 +1,27 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: dc.phtml 1 2012-10-01 19:29Z $
+ */
+?>
+<?php
+$this->headLink()->appendStylesheet($this->cdn('scripts').'/hol/jquery/DataTables-1.9.0/media/css/demo_table_jui.css');
+
+$this->headScript()->appendFile($this->cdn('scripts').'/hol/jquery/DataTables-1.9.0/media/js/jquery.dataTables.min.js', $type = 'text/javascript', $attrs = array());
+
+echo $this->headLink();
+echo $this->headScript();
+?>
+<style type="text/css" media="screen">
+.ui-button .ui-button-text, .ui-button-text-icon .ui-button-text, .ui-button-text-icons .ui-button-text {
+	padding: .1em 5px .1em 27px;
+}
+.ui-button-text-only .ui-button-text, .ui-button-text-icons .ui-button-text {
+	padding: .1em 5px .1em 5px;
+}
+.ui-widget {
+    font-size: 1em;
+}
+</style>

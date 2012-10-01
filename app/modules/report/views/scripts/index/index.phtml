@@ -54,14 +54,14 @@
 	<div class="clear">&nbsp;</div>
 	<?php if ($this->printmode <> 1) : ?>
 	<div class="align-right">
-		<a href="<?php echo $this->uri; ?>&printmode=1" target="_blank"><img border="0" src="<?php echo $this->cdn('styles'); ?>/images/printer.gif"></a>
+		<a href="<?php echo $this->uri.$this->sAddition; ?>printmode=1" target="_blank"><img border="0" src="<?php echo $this->cdn('styles'); ?>/images/printer.gif"></a>
 	</div>
 	<div style="clear:both"></div>
 	<?php endif; ?>
 	<hr />	
 	<div class="width8">
 		<?php if ($this->show == 1) : ?>
-		<table class="display stylized" id="report_graph">
+		<table <?php if ($this->printmode <> 1) : ?>class="display stylized"<?php else : ?>class="full" cellspacing="0" border="1"<?php endif; ?> id="report_graph">
 		<!-- BEGIN row_graphic -->
 		<tr>
 			<td align="center"><img src="<?php echo $this->graph_url; ?>" alt="<?php echo $this->graph_alt; ?>"></td>
@@ -69,7 +69,7 @@
 		<!-- END row_graphic -->
 		</table>
 		<?php else : ?>
-		<table class="display stylized" id="report">
+		<table <?php if ($this->printmode <> 1) : ?>class="display stylized"<?php else : ?>class="full" cellspacing="0" border="1"<?php endif; ?> id="report">
 			<thead>
 				<tr>
 					<th class="ta-center" colspan="2">REPORTS</th>
@@ -91,32 +91,32 @@
 					<th>Okt</th>
 					<th>Nov</th>
 					<th>Des</th>
-					<th><?php echo $this->y; ?></th>
+					<th class="ta-center"><?php echo $this->y; ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php if ($this->prof == 0 || $this->prof == 1) { ?>
 				<tr>
-					<td rowspan="3">1</td>
+					<td rowspan="3" class="ta-center">1</td>
 					<td colspan="14"><abbr>Data Center</abbr></td>
 				</tr>
 				<tr>
-					<td><abbr>Peraturan</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<td><abbr>Peraturan</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/report/hol/dc">[detail]</a><?php endif; ?></td>
 					<?php for ($i=0;$i<count($this->p);$i++) : ?>
-					<td>
+					<td class="ta-center">
 						<?php if ($this->printmode == 1) :
 						echo $this->p[$i];
 						else : ?>
-						<a href=""><?php echo $this->p[$i]; ?></a>
+						<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/report/hol/dc"><?php echo $this->p[$i]; ?></a>
 						<?php endif; ?>
 					</td>
 					<?php endfor; ?>
-					<th><?php echo $this->yp; ?></th>
+					<th class="ta-center"><?php echo $this->yp; ?></th>
 				</tr>
 				<tr>
 					<td><abbr>Putusan</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
 					<?php for ($i=0;$i<count($this->put);$i++) : ?>
-					<td>
+					<td class="ta-center">
 						<?php if ($this->printmode == 1) :
 						echo $this->put[$i];
 						else : ?>
@@ -124,19 +124,17 @@
 						<?php endif; ?>
 					</td>
 					<?php endfor; ?>
-					<th><?php echo $this->yput; ?></th>
+					<th class="ta-center"><?php echo $this->yput; ?></th>
 				</tr>
 				<?php } if ($this->prof == 0 || $this->prof == 2) { ?>
 				<tr>
-					<td>2</td>
-					<td><abbr>Redaksi</abbr></td>
-					<td colspan="13">&nbsp;</td>
+					<td rowspan="2" class="ta-center">2</td>
+					<td colspan="14"><abbr>Redaksi</abbr></td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
 					<td><abbr>Article</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
 					<?php for ($i=0;$i<count($this->art);$i++) : ?>
-					<td>
+					<td class="ta-center">
 						<?php if ($this->printmode == 1) :
 						echo $this->art[$i];
 						else : ?>
@@ -144,16 +142,200 @@
 						<?php endif; ?>
 					</td>
 					<?php endfor; ?>
-					<th><?php echo $this->yart; ?></th>
+					<th class="ta-center"><?php echo $this->yart; ?></th>
+				</tr>
+				<?php } if ($this->prof == 0 || $this->prof == 3) { ?>
+				<tr>
+					<td rowspan="2" class="ta-center">3</td>
+					<td colspan="14"><abbr>Klinik</abbr></td>
+				</tr>
+				<tr>
+					<td><abbr>All Questions</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->clinic);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->clinic[$i];
+						else : ?>
+						<a href=""><?php echo $this->clinic[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->ykli; ?></th>
+				</tr>
+				<?php } if ($this->prof == 0 || $this->prof == 4) { ?>
+				<tr>
+					<td rowspan="4" class="ta-center">4</td>
+					<td colspan="14"><abbr>Redaksi English</abbr></td>
+				</tr>
+				<tr>
+					<td><abbr>News</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->enews);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->enews[$i];
+						else : ?>
+						<a href=""><?php echo $this->enews[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->yenews; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>ILB</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->eilb);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->eilb[$i];
+						else : ?>
+						<a href=""><?php echo $this->eilb[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->yeilb; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>ILD</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->eild);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->eild[$i];
+						else : ?>
+						<a href=""><?php echo $this->eild[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->yeild; ?></th>
+				</tr>
+				<?php } if ($this->prof == 0 || $this->prof == 5) { ?>
+				<tr>
+					<td rowspan="10" class="ta-center">5</td>
+					<td colspan="14"><abbr>Layanan</abbr></td>
+				</tr>
+				<tr>
+					<td><abbr>New Member Free</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user[$i];
+						else : ?>
+						<a href=""><?php echo $this->user[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member Individual</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_individual);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_individual[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_individual[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_individual; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member Corporate</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_corporate);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_corporate[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_corporate[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_corporate; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member ILB</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_ilb);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_ilb[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_ilb[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_ilb; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member ILD</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_ild);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_ild[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_ild[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_ild; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member COMPLETE</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_complete);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_complete[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_complete[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_complete; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member PROFESSIONAL</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_professional);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_professional[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_professional[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_professional; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member PREMIUM</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_premium);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_premium[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_premium[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_premium; ?></th>
+				</tr>
+				<tr>
+					<td><abbr>New Member EXECUTIVE</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<?php for ($i=0;$i<count($this->user_exec);$i++) : ?>
+					<td class="ta-center">
+						<?php if ($this->printmode == 1) :
+						echo $this->user_exec[$i];
+						else : ?>
+						<a href=""><?php echo $this->user_exec[$i]; ?></a>
+						<?php endif; ?>
+					</td>
+					<?php endfor; ?>
+					<th class="ta-center"><?php echo $this->year_user_executive; ?></th>
 				</tr>
 				<?php } ?>
 				<tr>
 					<th>&nbsp;</th>
 					<th><abbr>Total</abbr></th>
 					<?php for ($i=0;$i<count($this->sum);$i++) : ?>
-					<th><?php echo $this->sum[$i]; ?></th>
+					<th class="ta-center"><?php echo $this->sum[$i]; ?></th>
 					<?php endfor; ?>
-					<th><?php echo $this->sumrep; ?></th>
+					<th class="ta-center"><?php echo $this->sumrep; ?></th>
 				</tr>
 			</tbody>
 		</table>

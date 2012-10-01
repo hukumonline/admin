@@ -220,4 +220,29 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
     	
     	return ($row !== null) ? $row['count'] : 0;
     }
+    
+    public function getEnglishCatalogByMonth($profile,$mon)
+    {
+        $db = parent::_dbSelect();
+        $statement = $db->from('KutuCatalog',array('COUNT(*) as count'))
+                ->where("createdDate LIKE '%".$mon."%'");
+                
+        if ($profile == 'news')
+        	$statement->where("profileGuid IN ('news','article','hot_news')");
+        else if ($profile == 'ilb')
+        	$statement->where("profileGuid IN ('ilb','hot_issue_ilb','executive_alert','consumer_goods','financial_services','general_corporate','manufacturing_&_industry','oil_and_gas','telecommunications_and_media')");
+        else if ($profile == 'ild')
+        	$statement->where("profileGuid IN ('ild','hot_issue_ild','executive_summary')");
+       	else
+        	$statement->where('profileGuid=?', $profile);
+
+    	/*$sql = $statement->__toString();
+    	print_r($sql);exit();*/
+    		
+        $conn = Zend_Registry::get('db3');
+
+    	$row = $conn->fetchRow($statement);
+    	
+    	return ($row !== null) ? $row['count'] : 0;
+    }
 }
