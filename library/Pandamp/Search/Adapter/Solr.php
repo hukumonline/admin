@@ -1548,6 +1548,16 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 		return $solr;
 	}
 	
+	public function ping()
+	{
+		$solr = &$this->_solr;
+		if ( $solr->ping() ) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	function clean_string_input($input)
 	{
 	    $interim = strip_tags($input);

@@ -4,7 +4,7 @@
  * @version $Id: HolController.php 1 2012-09-25 16:12Z $
  */
 
-class Report_HolController extends Pandamp_Controller_Datatable 
+class Report_HolController extends Zend_Controller_Action  
 {
     protected $_user;
 
@@ -84,8 +84,95 @@ class Report_HolController extends Pandamp_Controller_Datatable
         parent::preDispatch();
     }
     
-    public function init() {
-        parent::init();
-    }
+	public function dcAction()
+	{
+		$request 	= $this->getRequest();
+		
+		$y			= $request->getParam('y');
+		
+		$pageIndex 	= $request->getParam('page', 1);
+		$perPage 	= 20;
+		$offset	 	= ($pageIndex - 1) * $perPage;
+		$pageRange 	= 10;
+		
+		$querySolr = "profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan) createdDate:$y*;date desc";
+		
+		/*
+        $db = Zend_Db_Table::getDefaultAdapter()->query
+        ("SELECT guid from KutuCatalog where profileGuid IN ('kutu_peraturan','kutu_peraturan_kolonial','kutu_rancangan_peraturan') AND YEAR(createdDate)='". $y ."'");
 
+        $rowset = $db->fetchAll(Zend_Db::FETCH_OBJ);
+
+        $numi = count($rowset);
+        */
+        
+        $solrAdapter = Pandamp_Search::manager();
+        
+        /*
+        $sSolr = "id:(";
+        for($i=0;$i<$numi;$i++)
+        {
+            $row = $rowset[$i];
+            $sSolr .= $row->guid .' ';
+        }
+        $sSolr .= ')';
+
+        if(!$numi)
+			$sSolr="id:(hfgjhfdfka)";
+		*/
+		
+		$solrResult = $solrAdapter->find($querySolr, $offset, $perPage);			
+		$solrNumFound = count($solrResult->response->docs);
+		
+		/*$solrResult = $solrAdapter->findAndSort($sSolr,$offset,$perPage, 'date desc');
+        $solrNumFound = $solrResult->response->numFound;*/
+     
+		$content = 0;
+		$data = array();
+		
+        if($solrNumFound==0)
+        {}
+        else
+        {
+            for($ii=0;$ii<$solrNumFound;$ii++)
+            {
+            	if(isset($solrResult->response->docs[$ii]))
+            	{
+            		$row = $solrResult->response->docs[$ii];
+            		if(!empty($row))
+            		{
+            			$data[$ii][0] = $row->id;
+            			$data[$ii][1] = $row->title;
+			            $data[$ii][2] = $row->createdDate;
+			            $data[$ii][3] = $row->modifiedDate;
+			            $data[$ii][4] = $row->createdBy;
+			            $data[$ii][5] = $row->modifiedBy;
+            		}
+            	}            	
+            }
+            
+			/**
+			 * Paginator
+			 */
+			$paginator = Zend_Paginator::factory($solrResult->response->numFound);
+			$paginator->setCurrentPagenumber($pageIndex);
+			$paginator->setItemCountPerPage($perPage);
+			$paginator->setPageRange($pageRange);
+			$scrollType = 'Sliding'; //change this to 'All', 'Elastic', 'Sliding' or 'Jumping' to test all scrolling types
+			$paginator = get_object_vars($paginator->getPages($scrollType));
+			
+			
+			$this->view->assign('pageIndex', $pageIndex);
+			$this->view->assign('paginator', $paginator);
+			
+			$this->view->assign('data', $data);
+			$this->view->assign('numberOfRows', $solrNumFound);
+        }
+        
+        
+        $this->view->assign('y', $y);
+        
+        //$this->view->assign('totalOfRows', $numi);
+        $this->view->assign('totalOfRows', $solrResult->response->numFound);
+	}
 }
