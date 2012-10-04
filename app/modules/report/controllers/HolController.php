@@ -90,12 +90,14 @@ class Report_HolController extends Zend_Controller_Action
 		
 		$y			= $request->getParam('y');
 		
+		$sort		= ($request->getParam('sort'))? $request->getParam('sort') : 'date desc';
+		
 		$pageIndex 	= $request->getParam('page', 1);
 		$perPage 	= 20;
 		$offset	 	= ($pageIndex - 1) * $perPage;
 		$pageRange 	= 10;
 		
-		$querySolr = "profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan) createdDate:$y*;date desc";
+		$querySolr = "profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan) createdDate:$y*;$sort";
 		
 		/*
         $db = Zend_Db_Table::getDefaultAdapter()->query
@@ -147,6 +149,14 @@ class Report_HolController extends Zend_Controller_Action
 			            $data[$ii][3] = $row->modifiedDate;
 			            $data[$ii][4] = $row->createdBy;
 			            $data[$ii][5] = $row->modifiedBy;
+			            
+			            $rowAssetDesktop = App_Model_Show_AssetSetting::show()->getHits($row->id,'pusatdata');
+			            $rowAssetMobile = App_Model_Show_AssetSetting::show()->getHits($row->id,'pusatdata-mobile');
+			            $data[$ii][6] = ($rowAssetDesktop)? $rowAssetDesktop['valueInt']. ' hits' : '';
+			            $data[$ii][7] = ($rowAssetMobile)? $rowAssetMobile['valueInt']. ' hits' : '';
+			            
+			            $data[$ii][8] = (isset($row->number))? $row->number : '';
+			            $data[$ii][9] = $row->year;
             		}
             	}            	
             }
@@ -171,6 +181,7 @@ class Report_HolController extends Zend_Controller_Action
         
         
         $this->view->assign('y', $y);
+        $this->view->assign('sort', $sort);
         
         //$this->view->assign('totalOfRows', $numi);
         $this->view->assign('totalOfRows', $solrResult->response->numFound);

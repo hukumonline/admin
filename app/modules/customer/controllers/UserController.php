@@ -1070,8 +1070,11 @@ class Customer_UserController extends Zend_Controller_Action
 			        	/**
 			        	 * Destroy any active session identified by sessionId
 			        	 */
-			        	session_id($rowSession->sessionId);
-			        	session_destroy();
+			        	try {
+			        		session_id($rowSession->sessionId);
+			        		session_destroy();
+			        	}
+			        	catch (Exception $e) {}
 			        }
         		}        		
         	}
