@@ -10,7 +10,7 @@ class Pandamp_Core_Hol_Auth
     var $user;
     var $user_pw;
     var $save_login = "no";
-    var $cookie_name = "HUKUMONLINE";
+    var $cookie_name = "CMSHOL";
     var $cookie_path = "/";
     var $is_cookie;
 

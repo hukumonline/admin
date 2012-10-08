@@ -81,21 +81,6 @@ class Admin_IndexController extends Zend_Controller_Action
 				}
 				*/
 			}
-			
-			// check session expire
-			$timeLeftTillSessionExpires = $_SESSION['__ZF']['Zend_Auth']['ENT'] - time();
-
-			if (Pandamp_Lib_Formater::diff('now', $this->_user->dtime) > $timeLeftTillSessionExpires) {
-				$db->update('KutuUser',array('ses'=>'*'),"ses='".Zend_Session::getId()."'");
-				$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-		        $flashMessenger->addMessage('Session Expired');
-		        $auth->clearIdentity();
-		        
-		        $this->_redirect($loginUrl.'?returnUrl='.$sReturn);     
-			}
-			
-			$dat = Pandamp_Lib_Formater::now();
-			$db->update('KutuUser',array('dtime'=>$dat),"ses='".Zend_Session::getId()."'");
         }
     }
     function indexAction()

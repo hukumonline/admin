@@ -1,0 +1,106 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: login.phtml 1 2012-10-05 14:45Z $
+ */
+?>
+<h3>Login</h3>
+<hr />
+<?php
+$my_access = new Pandamp_Core_Hol_Auth();
+$my_access->login_reader();
+?>
+<form id="loginform">
+<p>
+	<label class="required" for="username">Username:</label><br/>
+	<input name="username" id="username" class="full" tabindex="1" value="<?php echo $my_access->user; ?>" type="text">
+</p>
+<p>
+	<label class="required" for="password">Password:</label><br/>
+	<input id="password" name="password" class="full" tabindex="2" type="password" value="<?php echo $my_access->user_pw; ?>">
+</p>
+
+<p>
+	<input id="remember" name="remember" tabindex="3" type="checkbox" value="yes"<?php ($my_access->is_cookie == true) ? " checked" : ""; ?>>
+	<label class="choice" for="remember">Remember me?</label>
+</p>
+
+<p>
+	<input name="returnUrl" id="returnUrl" type="hidden" value="<?php echo $this->returnUrl; ?>" />
+	<input type="submit" class="btn btn-green big" value="Login"/>
+</p>
+<div class="clear">&nbsp;</div>
+</form>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	var waitId		=	'#wait';							
+	var formId		=	'#loginform';						
+	var userId		=	'#username';						
+	var passId		=	'#password';						
+	var returnTo	=	'#returnUrl';						
+	var remember	=	'#remember:checked';						
+	
+	var waitNote	=	'Loading...';						
+	var jsErrMsg	=	'User or password is not valid';	
+	
+	var postFile	=	'<?php echo $this->url(array(), 'klogin'); ?>';
+	
+	var autoRedir	=	false;								
+	
+	// hide first
+	$(waitId).hide(); 
+
+	// FirstLoad
+	$(waitId).html(waitNote).fadeIn('fast',function(){
+		$(waitId).fadeOut('fast',function(){
+			$(formId).submit( function() {
+				$(waitId).html(waitNote).fadeIn();
+				
+				var _u = $(userId).val();
+				var _p = $(passId).val();
+				var _r = $(returnTo).val();
+				var _s = $(remember).val();
+				
+				if(_u.length<4) 
+				{
+					$(waitId).html(jsErrMsg).fadeIn('fast',function(){
+						$(userId).focus();
+					});
+				}
+				else
+				{
+					if(_p.length<4)
+					{
+						$(waitId).html(jsErrMsg).fadeIn('fast',function(){
+							$(passId).focus();
+						});
+					}
+					else
+					{
+						$.post(postFile, { u: _u, p: _p, r: _r, s: _s }, function(data) {
+							if(data.success==true) {
+								$(waitId).html(data.msg).slideDown('fast', function(){
+									//location.reload(true);
+									window.location = data.message;
+								});
+							}
+							else
+							{
+								$(waitId).html(data.error).slideDown('fast', function(){
+									$(userId).focus();
+								});
+							}
+						},'json');
+					}
+				}
+				return false;
+			});
+			$(userId).focus();
+		}).html();
+	});
+});
+</script>
+

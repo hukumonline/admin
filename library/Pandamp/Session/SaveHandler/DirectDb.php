@@ -17,4 +17,3 @@ class Pandamp_Session_SaveHandler_DirectDb extends Zend_Session_SaveHandler_DbTa
         parent::__construct($config);
     }
 }
-?>

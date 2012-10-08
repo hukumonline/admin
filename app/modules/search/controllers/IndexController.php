@@ -19,10 +19,12 @@ class Search_IndexController extends Zend_Controller_Action
 
         $loginUrl = $identity->loginUrl;
         
+        /*
 		$multidb = Pandamp_Application::getResource('multidb');
 		$multidb->init();
 		
 		$db = $multidb->getDb('db2');
+		*/
 		
         $sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
         $sReturn = base64_encode($sReturn);
@@ -72,6 +74,7 @@ class Search_IndexController extends Zend_Controller_Action
 			}
 			
 			// check session expire
+			/*
 			$timeLeftTillSessionExpires = $_SESSION['__ZF']['Zend_Auth']['ENT'] - time();
 
 			if (Pandamp_Lib_Formater::diff('now', $this->_user->dtime) > $timeLeftTillSessionExpires) {
@@ -85,6 +88,7 @@ class Search_IndexController extends Zend_Controller_Action
 			
 			$dat = Pandamp_Lib_Formater::now();
 			$db->update('KutuUser',array('dtime'=>$dat),"ses='".Zend_Session::getId()."'");
+			*/
         }
     }
     function indexAction()

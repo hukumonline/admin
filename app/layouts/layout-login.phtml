@@ -1,0 +1,83 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: layout-login.phtml 1 2012-10-05 18:24Z $
+ */
+?>
+<?php echo $this->doctype();?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>CMS Hukumonline</title>
+    <link href="<?php echo $this->cdn('styles')?>/favicon.ico" rel="shortcut icon" type="image/ico" />
+    <link href="<?php echo $this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<?php echo $this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.4.2.min.js,hol/jquery/form/jquery.validate.pack.js" ></script>
+	
+    <!-- Internet Explorer Fixes -->
+    <!--[if IE]>
+
+    <link rel="stylesheet" type="text/css" media="all" href="<?php echo $this->cdn('styles')?>/ie.css"/>
+
+    <script src="<?php echo $this->cdn('scripts')?>/hol/html5.js"></script>
+
+    <![endif]-->
+    <!--Upgrade MSIE5.5-7 to be compatible with MSIE8: http://ie7-js.googlecode.com/svn/version/2.1(beta3)/IE8.js -->
+    <!--[if lt IE 8]>
+
+    <script src="<?php echo $this->cdn('scripts')?>/hol/IE8.js"></script>
+
+    <![endif]-->
+    <style type="text/css">
+	#wait{font-size:.885em;position:absolute;top:0;right:0;background:#F00;color:#fff;padding:10px;}
+
+
+	</style>
+</head>
+<body>
+	<div id="wait"></div>
+    <!-- Header -->
+    <header id="top">
+        <div class="wrapper-login">
+            <div id="title"><img src="<?php echo $this->cdn('images');?>/logo.png" alt="hukumonline" /><!--<span>CMS Hukumonline</span>--></div>
+            <!-- Main navigation -->
+            <nav id="menu">
+                <ul class="sf-menu sf-js-enabled sf-shadow">
+                    <li class="current"><a href="<?php echo ROOT_URL;?>">Login</a></li>
+                </ul>
+            </nav>
+            <!-- End of Main navigation -->
+        </div>
+    </header>
+    <!-- End of Header -->
+	<!-- Page title -->
+	<div id="pagetitle">
+            <div class="wrapper-login"></div>
+	</div>
+	<!-- End of Page title -->
+
+	<!-- Page content -->
+	<div id="page">
+            <!-- Wrapper -->
+            <div class="wrapper-login">
+                <!-- Login form -->
+                <section class="full">
+                    <?php echo $this->layout()->content;?>
+                </section>
+                <!-- End of login form -->
+
+            </div>
+            <!-- End of Wrapper -->
+	</div>
+	<!-- End of Page content -->
+
+	<!-- Page footer -->
+	<footer id="bottom">
+            <div class="wrapper-login">
+                <p>.:CMS Hukumonline:.</p>
+            </div>
+	</footer>
+	<!-- End of Page footer -->
+</body>
+</html>

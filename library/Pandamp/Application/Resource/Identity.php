@@ -15,13 +15,18 @@ class Pandamp_Application_Resource_Identity extends Zend_Application_Resource_Re
 		$identity->remembermeEnable = $options['rememberme']['enable'];
 		
 		$sAuthAdapter = $options['auth']['adapter'];
+		
 		switch (strtolower($sAuthAdapter))
 		{
+			case 'direct':
+					$db = Zend_Db::factory($options['auth']['db']['adapter'], $options['auth']['db']['params']);
+					$authAdapter = new Pandamp_Auth_Adapter_DbTable($db,'KutuUser','username','password');
+				break;
+				
 			case 'remote':
-			case 'directdb':
 			default:
-				$db = Zend_Db::factory($options['auth']['db']['adapter'], $options['auth']['db']['params']);
-				$authAdapter = new Pandamp_Auth_Adapter_Remote($db,'KutuUser','username','password');
+					$db = Zend_Db::factory($options['auth']['db']['adapter'], $options['auth']['db']['params']);
+					$authAdapter = new Pandamp_Auth_Adapter_Remote($db,'KutuUser','username','password');
 				break;
 		}
 		$identity->authAdapter =  $authAdapter;

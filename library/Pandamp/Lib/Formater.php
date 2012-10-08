@@ -222,4 +222,34 @@ class Pandamp_Lib_Formater
 		$a2 = getdate(strtotime($date2));
 		return ($a1['year']-$a2['year'])*525600 + ($a1['mon']-$a2['mon'])*43200 + ($a1['mday']-$a2['mday'])*1440 + ($a1['hours']-$a2['hours'])*60 + ($a1['minutes']-$a2['minutes']);
 	}
+	
+	static function writeLog()
+	{
+		$auth = Zend_Auth::getInstance();
+		$identity = $auth->getIdentity();
+		
+        //$userId = Zend_Auth::getInstance()->getIdentity()->kopel;
+        $userId = $identity->kopel;
+		
+        $model = new App_Model_Db_Table_UserLog();
+        $model->addUserLog(array(
+        	'user_id' => $userId,
+        	'user_ip' => self::getRealIpAddr(),
+        	'login' => new Zend_Db_Expr('NOW()')
+        ));
+	}
+	
+	static function updateUserLog()
+	{
+		$auth = Zend_Auth::getInstance();
+		$identity = $auth->getIdentity();
+		
+        //$userId = Zend_Auth::getInstance()->getIdentity()->kopel;
+        $userId = $identity->kopel;
+		
+        $model = new App_Model_Db_Table_UserLog();
+        $model->updateUserLog($userId,array(
+        	'lastlogin' => new Zend_Db_Expr('NOW()')
+        ));
+	}
 }
