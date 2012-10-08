@@ -8,6 +8,8 @@ class Report_View_Helper_TranslateSolrDate
 {
 	public function translateSolrDate($date)
 	{
+		if (empty($date)) return;
+		
 		$aDateTime = str_replace(array('T','Z'),' ',$date);
 		$mysqlDate = date('d.m.y H:i:s',strtotime(trim($aDateTime)));
 		

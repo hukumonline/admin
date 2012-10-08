@@ -213,6 +213,7 @@ class Report_IndexController extends Zend_Controller_Action
 		$url = "tabtitle1=Division Reports of $y&tabtitle2=Total Records $sumrep&tabtitle3=$profname&y1legend=Value (record)&novalue=0&decimal=1".$url;
 		
 		$this->view->assign('y',$y);
+		$this->view->assign('m',$mon);
 		$this->view->assign('sAddition',$sAddition);
 		$this->view->assign('show',$show);
 		$this->view->assign('showname',$showname);

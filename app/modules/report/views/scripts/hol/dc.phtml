@@ -16,19 +16,23 @@
 	<tr>
 		<td><label>Urutkan Berdasarkan:</label></td>
 		<td><?php echo $this->helperLoader('report')->selectSorting(array('id' => 'sort', 'name' => 'sort', 'class' => 'no-class', 'selected' => $this->sort)); ?></td>
+		<td><label>Show</label></td>
+		<td><?php echo $this->helperLoader('report')->selectPerpage(array('id' => 'perpage', 'name' => 'perpage', 'class' => 'no-class', 'selected' => $this->perpage, 'totalnum' => $this->totalOfRows)); ?></td>
 	</tr>
 	</table>
 	</form>
-	<table class="display stylized full">
+	<table class="display stylized full" width="100%">
 	<thead>
 		<tr>
 			<th>Title</th>
+			<th>Tgl. Ditetapkan</th>
+			<th>Jenis Peraturan</th>
 			<th>Number</th>
 			<th>Year</th>
-			<th nowrap>Created Date</th>
-			<th nowrap>Modified Date</th>
-			<th nowrap>Created By</th>
-			<th nowrap>Modified By</th>
+			<th>Created Date</th>
+			<th>Modified Date</th>
+			<th>Created By</th>
+			<th>Modified By</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -72,12 +76,14 @@
 				<small>id:<?php echo $this->data[$i][0]; ?></small>
 			</div>
 			</td>
-			<td nowrap><?php echo $this->data[$i][8]; ?></td>
-			<td nowrap><?php echo $this->data[$i][9]; ?></td>
-			<td nowrap><?php echo $this->helperLoader('report')->translateSolrDate($this->data[$i][2]); ?></td>
-			<td nowrap><?php echo $this->helperLoader('report')->translateSolrDate($this->data[$i][3]); ?></td>
-			<td nowrap><?php echo $this->data[$i][4]; ?></td>
-			<td nowrap><?php echo $this->data[$i][5]; ?></td>
+			<td><?php echo $this->helperLoader('report')->translateSolrDate($this->data[$i][10]); ?></td>
+			<td><abbr><?php echo $this->data[$i][11]; ?></abbr></td>
+			<td><?php echo $this->data[$i][8]; ?></td>
+			<td><?php echo $this->data[$i][9]; ?></td>
+			<td><?php echo $this->helperLoader('report')->translateSolrDate($this->data[$i][2]); ?></td>
+			<td><?php echo $this->helperLoader('report')->translateSolrDate($this->data[$i][3]); ?></td>
+			<td><?php echo $this->data[$i][4]; ?></td>
+			<td><?php echo $this->data[$i][5]; ?></td>
 		</tr>
 		<?php endfor; ?>
 	</tbody>

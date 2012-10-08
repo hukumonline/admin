@@ -94,10 +94,10 @@ class Report_HolController extends Zend_Controller_Action
 		
 		$y			= $request->getParam('y');
 		
-		$sort		= ($request->getParam('sort'))? $request->getParam('sort') : 'date desc';
+		$sort		= ($request->getParam('sort'))? $request->getParam('sort') : '';
 		
 		$pageIndex 	= $request->getParam('page', 1);
-		$perPage 	= 20;
+		$perPage 	= $request->getParam('perpage', 20);
 		$offset	 	= ($pageIndex - 1) * $perPage;
 		$pageRange 	= 10;
 		
@@ -161,6 +161,8 @@ class Report_HolController extends Zend_Controller_Action
 			            
 			            $data[$ii][8] = (isset($row->number))? $row->number : '';
 			            $data[$ii][9] = $row->year;
+			            $data[$ii][10] = (isset($row->date))? $row->date : '';
+			            $data[$ii][11] = (isset($row->regulationType))? $row->regulationType : '';
             		}
             	}            	
             }
@@ -186,6 +188,7 @@ class Report_HolController extends Zend_Controller_Action
         
         $this->view->assign('y', $y);
         $this->view->assign('sort', $sort);
+        $this->view->assign('perpage', $perPage);
         
         //$this->view->assign('totalOfRows', $numi);
         $this->view->assign('totalOfRows', $solrResult->response->numFound);
