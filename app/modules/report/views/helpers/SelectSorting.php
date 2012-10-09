@@ -15,10 +15,10 @@ class Report_View_Helper_SelectSorting
 		
 		$output = "<select onchange='javascript:document.peraturan.submit();' class='$attributes[class]' name='$attributes[name]' id='$attributes[id]'>" . self::EOL;
 		
-		$show 	= array('All','Year A to Z','Year Z TO A','Number A to Z','Number Z to A','Fixed Date A to Z','Fixed Date Z to A','Regulation Type A to Z','Regulation Type Z to A');
-		$v 		= array('','year asc','year desc','number asc','number desc','date asc','date desc','regulationOrder asc','regulationOrder desc');
+		$show 	= array('All','Year A to Z','Year Z TO A','Number A to Z','Number Z to A','Fixed Date A to Z','Fixed Date Z to A','Regulation Type A to Z','Regulation Type Z to A','Created Date A to Z','Created Date Z to A');
+		$v 		= array('','year asc','year desc','number asc','number desc','date asc','date desc','regulationOrder asc','regulationOrder desc','createdDate asc','createdDate desc');
 		
-		for ($i=0;$i<9;$i++) {
+		for ($i=0;$i<11;$i++) {
 			$selected = ($selectedId == null || $selectedId != $v[$i]) ? '' : ' selected="selected"';
 			$disable  = ($disableId == null || $disableId != $v[$i]) ? '' : ' disabled';
 			$output  .= sprintf('<option value="%s"%s%s>%s</option>', $v[$i], $selected, $disable, $show[$i]) . self::EOL;

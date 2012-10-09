@@ -1,0 +1,8 @@
+2012-10-09
+===================
+[SOLR]
+	- Changed schema.xml
+		modify:
+		<field name="number" type="text" indexed="true" stored="true"/>
+		<field name="number_sort" type="string" indexed="true" stored="false"/>
+		<copyField source="number" dest="number_sort"/>

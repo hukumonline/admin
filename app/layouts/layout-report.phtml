@@ -39,6 +39,35 @@
 			
 			/* expandable rows */
 			Administry.expandableRows();
+			
+			/**
+			 * Select/Deselect all rows handler
+			 */
+			$('#sdc').click(function() {
+				$('input[type="checkbox"].check_me').attr('checked', $(this).attr('checked'));
+			});	
+			
+			$('#choose').change(function(){
+				checkValues = new Array();
+				a=0;
+				$("input.check_me:checked").each(function(){
+				 checkValues[a]=$(this).val();
+				 a++;
+				});
+				if ($("#choose").val() == "export")
+				{
+					if(checkValues.length==0)
+					{
+						alert('NO CATALOG SELECTED');
+						$("#choose").val("");
+						return false;
+					}
+					else
+					{
+						window.location.href = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/report/export/dc/format/excel/guid/" + checkValues;
+					}
+				}
+			});			
 		});
 		
 		</script>

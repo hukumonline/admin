@@ -85,7 +85,7 @@ class Report_HolController extends Zend_Controller_Action
 			*/
         }
         
-        parent::preDispatch();
+        //parent::preDispatch();
     }
     
 	public function dcAction()
@@ -95,13 +95,39 @@ class Report_HolController extends Zend_Controller_Action
 		$y			= $request->getParam('y');
 		
 		$sort		= ($request->getParam('sort'))? $request->getParam('sort') : '';
+		$p			= ($request->getParam('p'))? $request->getParam('p') : '';
+		$by			= ($request->getParam('by'))? $request->getParam('by') : '';
+		$regulation	= ($request->getParam('regulation'))? $request->getParam('regulation') : '';
 		
 		$pageIndex 	= $request->getParam('page', 1);
-		$perPage 	= $request->getParam('perpage', 20);
+		$perPage 	= $request->getParam('perpage', 10);
 		$offset	 	= ($pageIndex - 1) * $perPage;
 		$pageRange 	= 10;
 		
-		$querySolr = "profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan) createdDate:$y*;$sort";
+		
+		if ($sort)
+			$sort = ';'.$sort;
+		else 
+			$sort = '';
+		
+		if ($by)
+			$createdBy = ' createdBy:'.$by;
+		else 
+			$createdBy = '';
+		
+		if ($regulation) 
+			$regulationType = ' regulationType:'.$regulation;
+		else 
+			$regulationType = '';
+
+			
+		if ($p == 'peraturan')			
+			$profile = 'profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan)';
+		else 
+			$profile = 'profile:kutu_putusan';
+			
+			
+		$querySolr = $profile.$regulationType.$createdBy." createdDate:$y*$sort";
 		
 		/*
         $db = Zend_Db_Table::getDefaultAdapter()->query
@@ -167,6 +193,14 @@ class Report_HolController extends Zend_Controller_Action
             	}            	
             }
             
+			$this_url = $this->getRequest()->getRequestUri();
+			$this_url = str_replace("&page=$pageIndex", "", $this_url);
+			
+			if(strpos($this_url,'?'))
+				$sAddition = '&';
+			else 
+				$sAddition = '?';
+				
 			/**
 			 * Paginator
 			 */
@@ -178,6 +212,7 @@ class Report_HolController extends Zend_Controller_Action
 			$paginator = get_object_vars($paginator->getPages($scrollType));
 			
 			
+			$this->view->assign('this_url',$this_url.$sAddition);
 			$this->view->assign('pageIndex', $pageIndex);
 			$this->view->assign('paginator', $paginator);
 			
@@ -187,8 +222,11 @@ class Report_HolController extends Zend_Controller_Action
         
         
         $this->view->assign('y', $y);
+        $this->view->assign('p', $p);
+        $this->view->assign('by', $by);
         $this->view->assign('sort', $sort);
         $this->view->assign('perpage', $perPage);
+        $this->view->assign('regulation', $regulation);
         
         //$this->view->assign('totalOfRows', $numi);
         $this->view->assign('totalOfRows', $solrResult->response->numFound);

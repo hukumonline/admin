@@ -245,4 +245,21 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
     	
     	return ($row !== null) ? $row['count'] : 0;
     }
+    
+    public function getCatalogBy($profileGuid)
+    {
+    	$db = parent::_dbSelect();
+    	$sql = $db->from('KutuCatalog',array('guid', 'createdBy'))
+    			->where("profileGuid = ?", $profileGuid)
+    			->group('createdBy');
+    			
+//    	$sql = $sql->__toString();
+//    	print_r($sql);exit();
+    		
+        $conn = self::$_db;
+
+        $row = $conn->fetchAll($sql);
+
+        return $row;
+    }
 }

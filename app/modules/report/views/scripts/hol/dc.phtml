@@ -9,18 +9,29 @@
 <!-- section category -->
 <section class="column first">
 <div class="width8">
-	<?php if ($this->totalOfRows > 0) : ?>
-	<h4>Jumlah peraturan tahun <?php echo $this->y; ?> : <?php echo $this->totalOfRows; ?></h4>
-	<form name="peraturan" id="peraturan" method="POST">
+	<h4>Jumlah <?php echo $this->p; ?> tahun <?php echo $this->y; ?> : <?php echo $this->totalOfRows; ?></h4>
+	<form name="peraturan" id="peraturan" method="GET">
 	<table width="100%">
 	<tr>
 		<td><label>Urutkan Berdasarkan:</label></td>
 		<td><?php echo $this->helperLoader('report')->selectSorting(array('id' => 'sort', 'name' => 'sort', 'class' => 'no-class', 'selected' => $this->sort)); ?></td>
+		<?php if ($this->p == 'peraturan') : ?>
+		<td>&nbsp;</td>
+		<td><?php echo $this->helperLoader('report')->selectBy(array('id' => 'by', 'name' => 'by', 'class' => 'no-class', 'selected' => $this->by, 'profile' => 'kutu_peraturan')); ?></td>
+		<td>&nbsp;</td>
+		<td><?php echo $this->helperLoader('report')->selectRegulation(array('id' => 'regulation', 'name' => 'regulation', 'class' => 'no-class', 'selected' => $this->regulation, 'profile' => 'kutu_peraturan', 'prtJenis' => 'prtJenis')); ?></td>
+		<?php else : ?>
+		<td>&nbsp;</td>
+		<td><?php echo $this->helperLoader('report')->selectBy(array('id' => 'by', 'name' => 'by', 'class' => 'no-class', 'selected' => $this->by, 'profile' => 'kutu_putusan')); ?></td>
+		<td>&nbsp;</td>
+		<td><?php echo $this->helperLoader('report')->selectRegulation(array('id' => 'regulation', 'name' => 'regulation', 'class' => 'no-class', 'selected' => $this->regulation, 'profile' => 'kutu_putusan', 'prtJenis' => 'ptsJenisLembaga')); ?></td>
+		<?php endif; ?>
 		<td><label>Show</label></td>
 		<td><?php echo $this->helperLoader('report')->selectPerpage(array('id' => 'perpage', 'name' => 'perpage', 'class' => 'no-class', 'selected' => $this->perpage, 'totalnum' => $this->totalOfRows)); ?></td>
 	</tr>
 	</table>
 	</form>
+	<?php if ($this->totalOfRows > 0) : ?>
 	<table class="display stylized full" width="100%">
 	<thead>
 		<tr>
@@ -33,11 +44,12 @@
 			<th>Modified Date</th>
 			<th>Created By</th>
 			<th>Modified By</th>
+			<th><input name='sdc' id='sdc' type='checkbox'></th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php for ($i=0;$i<$this->numberOfRows;$i++) : ?>
-		<tr>
+		<tr id="row_<?php echo $this->data[$i][0]; ?>">
 			<td class="title">
 			<div>
 				<a href="#"><b><?php echo $this->data[$i][1]; ?></b></a>
@@ -84,6 +96,7 @@
 			<td><?php echo $this->helperLoader('report')->translateSolrDate($this->data[$i][3]); ?></td>
 			<td><?php echo $this->data[$i][4]; ?></td>
 			<td><?php echo $this->data[$i][5]; ?></td>
+			<td><input type='checkbox' name='guid[]' id='guid' value='<?php echo $this->data[$i][0]; ?>' class='check_me'></td>
 		</tr>
 		<?php endfor; ?>
 	</tbody>
@@ -91,13 +104,13 @@
 	<?php if (isset($this->paginator['next']) || isset($this->paginator['previous'])) : ?>
 	<div class="paginator">
 		<?php if(isset($this->paginator['previous'])): ?>
-		<a href="<?php echo $this->url(array($this->nodeText => $this->folderGuid, 'page' => $this->paginator['previous']), $this->pager); ?>">&laquo; Sebelumnya</a>
+		<a href="<?php echo $this->this_url; ?>page=<?php echo $this->paginator['previous'] ?>">&laquo; Sebelumnya</a>
 		<?php else: ?>
 			<span class="ui_disable">&laquo; Sebelumnya</span>
 		<?php endif ?>
 		
 		<?php if($this->paginator['firstPageInRange'] > $this->paginator['first']): ?>
-			<a href="<?php echo $this->url(array($this->nodeText => $this->folderGuid, 'page' => $this->paginator['first']), $this->pager); ?>"><?php echo $this->paginator['first'] ?></a>
+			<a href="<?php echo $this->this_url; ?>page=<?php echo $this->paginator['first'] ?>"><?php echo $this->paginator['first'] ?></a>
 			<span>...</span>
 		<?php endif ?>
 		
@@ -105,17 +118,17 @@
 			<?php if($page == $this->paginator['current']): ?>
 				<span class="ui_active"><?php echo $page ?></span>
 			<?php else: ?>
-				<a href="<?php echo $this->url(array($this->nodeText => $this->folderGuid, 'page' => $page), $this->pager); ?>"><?php echo $page ?></a>
+				<a href="<?php echo $this->this_url; ?>page=<?php echo $page ?>"><?php echo $page ?></a>
 			<?php endif ?>
 		<?php endforeach ?>
 		
 		<?php if($this->paginator['lastPageInRange'] < $this->paginator['last']): ?>
 			<span>...</span>
-			<a href="<?php echo $this->url(array($this->nodeText => $this->folderGuid, 'page' => $this->paginator['last']), $this->pager); ?>"><?php echo $this->paginator['last'] ?></a>
+			<a href="<?php echo $this->this_url; ?>page=<?php echo $this->paginator['last'] ?>"><?php echo $this->paginator['last'] ?></a>
 		<?php endif ?>
 		
 		<?php if(isset($this->paginator['next'])): ?>
-			<a href="<?php echo $this->url(array($this->nodeText => $this->folderGuid, 'page' => $this->paginator['next']), $this->pager); ?>">Berikutnya &raquo;</a>
+			<a href="<?php echo $this->this_url; ?>page=<?php echo $this->paginator['next'] ?>">Berikutnya &raquo;</a>
 		<?php else: ?>
 			<span class="ui_disable">Berikutnya &raquo;</span>
 		<?php endif ?>
@@ -123,6 +136,21 @@
 	<?php endif ?>
 	
 	<div class='clear'>&nbsp;</div>
+	<form id="action">
+		<table>
+		<tr>
+			<td><label>With Selected</label>&nbsp;</td>
+			<td>
+			<select name="choose" id="choose">
+				<option value="">---</option>
+				<option value="delete">Delete</option>
+				<option value="export">Export</option>
+			</select>
+			</td>
+		</tr>
+		</table>
+	</form>
 	<?php endif ?>
+	<div class='clear'>&nbsp;</div>
 </div>
 </section>
