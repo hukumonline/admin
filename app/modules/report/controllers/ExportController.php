@@ -37,6 +37,7 @@ class Report_ExportController extends Zend_Controller_Action
         $contextSwitch->addActionContext('dc', 'excel')
                       ->initContext();
     }
+    
     function preDispatch()
     {
         $auth = Zend_Auth::getInstance();
@@ -94,6 +95,7 @@ class Report_ExportController extends Zend_Controller_Action
 		$request = $this->getRequest();
 		
 		$data = explode(',',$request->getParam('guid'));
-		Pandamp_Debug::manager($data);
+		
+		$this->view->assign('data',$data);
 	}
 }

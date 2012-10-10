@@ -13,10 +13,10 @@ class Pandamp_Application_Resource_Session extends Zend_Application_Resource_Res
 		$aServerName = explode('.', $_SERVER['SERVER_NAME']);
 
 		$count = count($aServerName);
-		$domainName = '.'.$aServerName[$count-2].'.'.$aServerName[$count-1];
+		//$domainName = '.'.$aServerName[$count-2].'.'.$aServerName[$count-1];
 		
         //session_set_cookie_params($cookie_timeout, '/', $domainName);
-        session_set_cookie_params(0, '/', $domainName);
+        //session_set_cookie_params(0, '/', $domainName);
         ini_set('session.gc_maxlifetime', $garbage_timeout);
         ini_set('session.cookie_lifetime',$garbage_timeout); 
 

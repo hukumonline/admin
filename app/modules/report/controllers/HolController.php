@@ -123,6 +123,8 @@ class Report_HolController extends Zend_Controller_Action
 			
 		if ($p == 'peraturan')			
 			$profile = 'profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan)';
+		else if ($p == 'article')			
+			$profile = 'profile:(article OR isuhangat)';
 		else 
 			$profile = 'profile:kutu_putusan';
 			
@@ -180,15 +182,28 @@ class Report_HolController extends Zend_Controller_Action
 			            $data[$ii][4] = $row->createdBy;
 			            $data[$ii][5] = $row->modifiedBy;
 			            
-			            $rowAssetDesktop = App_Model_Show_AssetSetting::show()->getHits($row->id,'pusatdata');
-			            $rowAssetMobile = App_Model_Show_AssetSetting::show()->getHits($row->id,'pusatdata-mobile');
-			            $data[$ii][6] = ($rowAssetDesktop)? $rowAssetDesktop['valueInt']. ' hits' : '';
-			            $data[$ii][7] = ($rowAssetMobile)? $rowAssetMobile['valueInt']. ' hits' : '';
+			            if ($p == 'peraturan') {
+			            	
+				            $rowAssetDesktop = App_Model_Show_AssetSetting::show()->getHits($row->id,'pusatdata');
+				            $rowAssetMobile = App_Model_Show_AssetSetting::show()->getHits($row->id,'pusatdata-mobile');
+				            $data[$ii][6] = ($rowAssetDesktop)? $rowAssetDesktop['valueInt']. ' hits' : '';
+				            $data[$ii][7] = ($rowAssetMobile)? $rowAssetMobile['valueInt']. ' hits' : '';
+				            
+				            $data[$ii][8] = (isset($row->number))? $row->number : '';
+				            $data[$ii][9] = $row->year;
+				            $data[$ii][10] = (isset($row->date))? $row->date : '';
+				            $data[$ii][11] = (isset($row->regulationType))? $row->regulationType : '';
 			            
-			            $data[$ii][8] = (isset($row->number))? $row->number : '';
-			            $data[$ii][9] = $row->year;
-			            $data[$ii][10] = (isset($row->date))? $row->date : '';
-			            $data[$ii][11] = (isset($row->regulationType))? $row->regulationType : '';
+			            } else if ($p == 'article') {
+			            	
+				            $rowAssetDesktop = App_Model_Show_AssetSetting::show()->getHits($row->id,'TICKER');
+				            $rowAssetMobile = App_Model_Show_AssetSetting::show()->getHits($row->id,'TICKER-MOBILE');
+				            $data[$ii][6] = ($rowAssetDesktop)? $rowAssetDesktop['valueInt']. ' hits' : '';
+				            $data[$ii][7] = ($rowAssetMobile)? $rowAssetMobile['valueInt']. ' hits' : '';
+				            
+			            	$data[$ii][8] = (isset($row->publishedDate))? $row->publishedDate : '';
+			            	$data[$ii][9] = (isset($row->author))? $row->author : '';
+			            }
             		}
             	}            	
             }

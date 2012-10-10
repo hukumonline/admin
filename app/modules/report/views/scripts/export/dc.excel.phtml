@@ -17,3 +17,84 @@ require_once("Spreadsheet/Excel/Writer/Workbook.php");
 require_once("Spreadsheet/Excel/Writer/Parser.php");
 require_once("Spreadsheet/Excel/Writer.php");
 
+$workbook = new Spreadsheet_Excel_Writer_Workbook("-");
+$worksheet = &$workbook->addWorksheet('Peraturan');
+
+/* set judul */
+$judul =& $workbook->addformat();
+$judul->setsize(12);
+$judul->setbold();
+$judul->setalign('center');
+
+/* set for each header judul */
+$judul1 =& $workbook->addformat();
+$judul1->setsize(8);
+$judul1->setbold();
+$judul1->setalign('center');
+$judul1->setalign('vcenter');
+$judul1->setborder(1);
+
+$judul2 =& $workbook->addformat();
+$judul2->setsize(8);
+$judul2->setalign('center');
+$judul2->setalign('vcenter');
+
+$judul3 =& $workbook->addformat();
+$judul3->setsize(8);
+$judul3->setalign('left');
+$judul3->setTextWrap();
+$judul3->setalign('vcenter');
+
+/* set for each header judul */
+$judul5 =& $workbook->addformat();
+$judul5->setsize(8);
+$judul5->setbold();
+$judul5->setalign('center');
+$judul5->setalign('vcenter');
+$judul5->setborder(1);
+
+/* set value for line */
+$judul7 =& $workbook->addformat();
+$judul7->setsize(8);
+$judul7->setbold();
+$judul7->setborder(1);
+
+$worksheet->writestring(0, 0, "Daftar Peraturan",$judul);
+$worksheet->mergecells(0,0,0,3);
+
+$worksheet->writestring(2, 0, "No.",$judul5);
+$worksheet->writestring(3, 0, "",$judul7);
+$worksheet->mergecells(2,0,3,0);
+$worksheet->setColumn(0,0,5);
+
+$worksheet->writestring(2,1, "Title",$judul1);
+$worksheet->writestring(3,1,"",$judul7);
+$worksheet->mergecells(2,1,3,1);
+$worksheet->setColumn(1,1,100);
+
+$worksheet->writestring(2,2,"Hits Desktop",$judul1);
+$worksheet->writestring(3,2,"",$judul7);
+$worksheet->mergecells(2,2,3,2);
+
+$worksheet->writestring(2,3,"Hits Mobile",$judul1);
+$worksheet->writestring(3,3,"",$judul7);
+$worksheet->mergecells(2,3,3,3);
+
+$j=0;
+$i=5;
+
+foreach ($this->data as $guid) {
+	$worksheet->writenumber($i, 0, ++$j,$judul2);
+	$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle');
+	$worksheet->writestring($i, 1, "$title",$judul3);
+	$rowAssetDesktop = App_Model_Show_AssetSetting::show()->getHits($guid,'pusatdata');
+	$rad = ($rowAssetDesktop)? $rowAssetDesktop['valueInt'] : '';
+	$worksheet->writestring($i, 2, $rad,$judul2);
+	$rowAssetMobile = App_Model_Show_AssetSetting::show()->getHits($guid,'pusatdata-mobile');
+	$ram = ($rowAssetMobile)? $rowAssetMobile['valueInt'] : '';
+	$worksheet->writestring($i, 3, $ram,$judul2);
+	$i++;
+}
+
+
+$workbook->close();		

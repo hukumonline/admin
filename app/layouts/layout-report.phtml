@@ -54,7 +54,44 @@
 				 checkValues[a]=$(this).val();
 				 a++;
 				});
-				if ($("#choose").val() == "export")
+                if ($("#choose").val() == "delete")
+                {
+                    if(checkValues.length==0)
+                    {
+                        alert('NO CATALOG SELECTED');
+                        $("#choose").val("");
+                        return false;
+                    }
+                    else
+                    {
+                        if(confirm ('Are you sure ?'))
+                        {
+                            var parent = $(this).parent();
+                            $.ajax({
+                                type:"post"
+                                ,url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/delete"
+                                ,data: "guid=" + checkValues
+                                ,beforeSend: function()
+                                {
+                                    $('#row_'+checkValues).empty().fadeOut('slow').append('<p id="loading">&nbsp;</p>');
+                                }
+                                ,success: function()
+                                {
+                                    $('#row_'+checkValues).fadeOut("slow");
+                                    $("input.check_me:checked").each(function(){
+                                        $(this).parent().parent().remove();
+                                    });
+                                }
+                            }
+                            );
+                        }
+
+                    }
+
+                    return false;
+
+                }
+				else if ($("#choose").val() == "export")
 				{
 					if(checkValues.length==0)
 					{
