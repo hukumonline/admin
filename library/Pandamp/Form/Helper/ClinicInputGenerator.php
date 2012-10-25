@@ -80,7 +80,7 @@ class Pandamp_Form_Helper_ClinicInputGenerator
 		$aBaseAttributes['guid']['description'] = 'guid';
 		$aBaseAttributes['guid']['form'] = $rowCatalog->guid."<input type='hidden' name='guid' id='guid' value='$rowCatalog->guid'>";
 		$aBaseAttributes['shortTitle']['description'] = 'shortTitle';
-		$aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1'' cols='50' readonly>$rowCatalog->shortTitle</textarea>";
+		$aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1'' cols='50'>$rowCatalog->shortTitle</textarea>";
 		$aBaseAttributes['profileGuid']['description'] = 'profile';
 		$aBaseAttributes['profileGuid']['form'] = $rowCatalog->profileGuid."<input type='hidden' name='profileGuid' id='profileGuid' value='$rowCatalog->profileGuid'>";
 		
