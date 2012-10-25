@@ -259,7 +259,7 @@ class Pandamp_Form_Attribute_Renderer
 	        case 8 :
 	        	
 				$tblCatalog = new App_Model_Db_Table_Catalog();
-				$rowset = $tblCatalog->fetchAll("profileGuid='$this->other'");
+				$rowset = $tblCatalog->fetchAll("profileGuid='$this->other'",'shortTitle asc');
 				$i = 0;
 				$a = array();
 				$data = array();
@@ -306,7 +306,7 @@ class Pandamp_Form_Attribute_Renderer
 	        case 12:
 	        	
 				$tblCatalog = new App_Model_Db_Table_Catalog();
-				$rowset = $tblCatalog->fetchAll("profileGuid='$this->profileGuid'");
+				$rowset = $tblCatalog->fetchAll("profileGuid='$this->profileGuid'",'shortTitle asc');
 				
 				$i = 0;
 				$a = array();
@@ -316,7 +316,7 @@ class Pandamp_Form_Attribute_Renderer
 				{
 					$rowsetCatalogAttribute = $row->findDependentRowsetCatalogAttribute();
 					$rowCatalogAttribute = $rowsetCatalogAttribute->findByAttributeGuid('fixedTitle');
-					$a[$i]['label']= ((is_object($rowCatalogAttribute)) ? $rowCatalogAttribute->value : '');
+					$a[$i]['label']= ((is_object($rowCatalogAttribute)) ? trim($rowCatalogAttribute->value) : '');
 					$a[$i]['value']= "$row->guid";
 					$a[$i]['selected']= ($i==0)? "true" : "false";
 					$i++;
@@ -340,7 +340,7 @@ class Pandamp_Form_Attribute_Renderer
 	        case 13:
 	        	
 				$tblCatalog = new App_Model_Db_Table_Catalog();
-				$rowset = $tblCatalog->fetchAll("profileGuid='kategoriklinik'");
+				$rowset = $tblCatalog->fetchAll("profileGuid='kategoriklinik'",'shortTitle asc');
 				
 				$i = 0;
 				$a = array();

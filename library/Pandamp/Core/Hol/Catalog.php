@@ -16,6 +16,17 @@ class Pandamp_Core_Hol_Catalog
         if(empty($aData['profileGuid']))
             throw new Zend_Exception('Catalog Profile can not be EMPTY!');
 
+            
+        $profileGuid = $aData['profileGuid'];
+            
+        if ($profileGuid == 'klinik')
+        	$title 	= $aData['fixedCommentTitle'];
+        else 
+        	$title 	= $aData['fixedTitle'];
+     
+        
+        $slug = Pandamp_Utility_String::removeSign($title, '-', true);
+        	
         $tblCatalog = new App_Model_Db_Table_Catalog();
 
         $gman = new Pandamp_Core_Guid();
@@ -28,7 +39,7 @@ class Pandamp_Core_Hol_Catalog
         {
             $rowCatalog = $tblCatalog->find($catalogGuid)->current();
 
-            $rowCatalog->shortTitle = (isset($aData['shortTitle']))?$aData['shortTitle']:$rowCatalog->shortTitle;
+            $rowCatalog->shortTitle = ($aData['shortTitle'])?$aData['shortTitle']:$slug;
             $rowCatalog->publishedDate = (isset($aData['publishedDate']))?$aData['publishedDate']:$rowCatalog->publishedDate;
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))?$aData['expiredDate']:$rowCatalog->expiredDate;
             $rowCatalog->status = (isset($aData['status']))?$aData['status']:$rowCatalog->status;
@@ -40,8 +51,8 @@ class Pandamp_Core_Hol_Catalog
             $rowCatalog = $tblCatalog->fetchNew();
 
             $rowCatalog->guid = $catalogGuid;
-            $rowCatalog->shortTitle = (isset($aData['shortTitle']))?$aData['shortTitle']:'';
-            $rowCatalog->profileGuid = $aData['profileGuid'];
+            $rowCatalog->shortTitle = (isset($aData['shortTitle']))?$aData['shortTitle']:$slug;
+            $rowCatalog->profileGuid = $profileGuid;
             $rowCatalog->publishedDate = (isset($aData['publishedDate']))? $aData['publishedDate']:'0000-00-00 00:00:00';
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))? $aData['expiredDate'] : '0000-00-00 00:00:00';
             $rowCatalog->createdBy = (isset($aData['username']))?$aData['username']:'';
@@ -62,7 +73,7 @@ class Pandamp_Core_Hol_Catalog
         }
 
         $tableProfileAttribute = new App_Model_Db_Table_ProfileAttribute();
-        $profileGuid = $rowCatalog->profileGuid;
+        //$profileGuid = $rowCatalog->profileGuid;
         $where = $tableProfileAttribute->getAdapter()->quoteInto('profileGuid=?', $profileGuid);
         $rowsetProfileAttribute = $tableProfileAttribute->fetchAll($where,'viewOrder ASC');
 
@@ -97,9 +108,47 @@ class Pandamp_Core_Hol_Catalog
         $indexingEngine = Pandamp_Search::manager();
         $indexingEngine->indexCatalog($catalogGuid);
 
+        // create shortener url
+        $kopel 	= Zend_Auth::getInstance()->getIdentity()->kopel;
+        
+        $cfg 	= Pandamp_Config::getConfig();
+        
+		$config = Pandamp_Application::getOption('resources');
+		$indexingConfig = $config['indexing']['solr']['write'];
+		$hukumn = new Pandamp_Search_Adapter_Solrh($indexingConfig['host'], $indexingConfig['port'], $indexingConfig['dir3']);
+		
+		$url_content = $cfg->web->url->base.'/berita/baca/'.$catalogGuid.'/'.$slug;
+		
+		$q = "url:\"".$url_content."\" kopel:".$kopel;
+		
+		$db = Zend_Registry::get('db4');
+		
+		$data = array('url' => $url_content,
+		 			  'createdate' => date("Y-m-d h:i:s"),
+					  'remoteip' => Pandamp_Lib_Formater::getRealIpAddr(),
+					  'kopel' => $kopel);
+					  
+		$hits = $hukumn->find($q,0,1);
+		if (isset($hits->response->docs[0])) 
+		{
+			$row = $hits->response->docs[0];
+			$hid = $row->id;
+			
+			$db->update('urls',$data,"id=$hid");
+		}
+		else 
+		{
+			$insert = $db->insert('urls', $data);
+			
+			$hid = $db->lastInsertId('urls', 'id');
+		}
+		
+		// indexing shortener url
+		$hukumn->indexCatalog($hid);
+		        
+        
 		try {
 			
-			$url_content = ROOT_URL.'/berita/baca/'.$catalogGuid.'/'.$rowCatalog->shortTitle;
 		    $url = 'http://developers.facebook.com/tools/lint/?url={'.$url_content.'}&format=json';
 		    $ch = curl_init($url);
 		    curl_setopt($ch, CURLOPT_NOBODY, true);
@@ -111,12 +160,13 @@ class Pandamp_Core_Hol_Catalog
 		}
 		catch (Exception $e)
 		{
-			die($e->getMessage());
+			//die($e->getMessage());
 		}
 		
         //after indexing, update isIndex and indexedDate in table KutuCatalog
         return $catalogGuid;
     }
+    
     public function getFolders($catalogGuid)
     {
         $tblCatalog = new App_Model_Db_Table_Catalog();

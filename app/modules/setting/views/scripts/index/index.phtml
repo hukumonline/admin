@@ -82,6 +82,22 @@
             			</td>
             		</tr>
             		<tr>
+            			<td><label>Status huku.mn</label></td>
+            			<td>
+            				<select name="shortstat">
+            				<?php 
+            				for ($i=0;$i<2;$i++) : 
+            				$sel = ($i == $this->rowset['shortstat']) ? " selected" : "";
+            				?>
+           					<option value="<?php echo $i; ?>"<?php echo $sel; ?>><?php echo $i; ?></option>
+            				<?php endfor; ?>
+            				</select>
+            				<br><small>Keterangan:</small>
+            				<br><small>0: status Off</small>
+            				<br><small>1: status huku.mn offline</small>
+            			</td>
+            		</tr>
+            		<tr>
             			<td colspan="2"><input type="submit" value="Save" class="btn btn-blue big" /></td>
             		</tr>
             	

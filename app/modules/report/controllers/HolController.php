@@ -97,6 +97,7 @@ class Report_HolController extends Zend_Controller_Action
 		$sort		= ($request->getParam('sort'))? $request->getParam('sort') : '';
 		$p			= ($request->getParam('p'))? $request->getParam('p') : '';
 		$by			= ($request->getParam('by'))? $request->getParam('by') : '';
+		$author		= ($request->getParam('author'))? $request->getParam('author') : '';
 		$regulation	= ($request->getParam('regulation'))? $request->getParam('regulation') : '';
 		
 		$pageIndex 	= $request->getParam('page', 1);
@@ -115,6 +116,11 @@ class Report_HolController extends Zend_Controller_Action
 		else 
 			$createdBy = '';
 		
+		if ($author)
+			$fauthor = ' author:'.$author;
+		else 
+			$fauthor = '';
+		
 		if ($regulation) 
 			$regulationType = ' regulationType:'.$regulation;
 		else 
@@ -129,7 +135,7 @@ class Report_HolController extends Zend_Controller_Action
 			$profile = 'profile:kutu_putusan';
 			
 			
-		$querySolr = $profile.$regulationType.$createdBy." createdDate:$y*$sort";
+		$querySolr = $profile.$regulationType.$createdBy.$fauthor." createdDate:$y*$sort";
 		
 		/*
         $db = Zend_Db_Table::getDefaultAdapter()->query
@@ -240,6 +246,7 @@ class Report_HolController extends Zend_Controller_Action
         $this->view->assign('p', $p);
         $this->view->assign('by', $by);
         $this->view->assign('sort', $sort);
+        $this->view->assign('author', $author);
         $this->view->assign('perpage', $perPage);
         $this->view->assign('regulation', $regulation);
         

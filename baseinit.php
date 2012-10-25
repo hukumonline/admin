@@ -5,6 +5,7 @@ define('PS', PATH_SEPARATOR);
 define('ROOT_DIR',dirname(__FILE__));
 define('ROOT_PATH',dirname(__FILE__));
 define('LIB_PATH' , ROOT_PATH . '/library') ;
+define('TEMP_DIR', ROOT_DIR . DS . 'data');
 define('APPLICATION_PATH', ROOT_PATH . '/app');
 define('MODULE_PATH' , ROOT_PATH . '/app/modules') ;
 

@@ -98,7 +98,8 @@ class Setting_IndexController extends Zend_Controller_Action
 	        	'status' => $request->getPost('status'),
 	        	'frontend' => $request->getPost('frontend'),
 	            'searchend' => $request->getPost('searchend'),
-	            'logstat' => $request->getPost('logstat')
+	            'logstat' => $request->getPost('logstat'),
+	            'shortstat' => $request->getPost('shortstat')
 	        );
 	
 	        $tblSetting->update($data, "id=1");

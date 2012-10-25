@@ -262,4 +262,27 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
 
         return $row;
     }
+    
+    public function getAuthor($profile)
+    {
+    	if ($profile == 'article')
+    		$pg = "kc.`profileGuid` IN ('article', 'isuhangat')";
+    	else 
+    		$pg = "kc.`profileGuid` = '$profile'";
+    		
+    	$sql = "SELECT MIN(
+CASE WHEN kca.attributeGuid = 'fixedAuthor'
+THEN kca.value
+END ) AS 'author'
+FROM `KutuCatalog` kc
+LEFT JOIN KutuCatalogAttribute kca ON kc.guid = kca.catalogGuid
+AND $pg
+GROUP BY kca.value
+ORDER BY kc.createdDate ASC";
+    	$conn = self::$_db;
+    	$statement = $conn->query($sql);
+    	$result = $statement->fetchAll(Zend_Db::FETCH_ASSOC);
+    	
+    	return $result;
+    }
 }

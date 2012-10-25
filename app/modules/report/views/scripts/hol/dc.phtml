@@ -25,6 +25,7 @@
 		<?php } else if ($this->p == 'article') { ?>
 		<td>&nbsp;</td>
 		<td><?php echo $this->helperLoader('report')->selectBy(array('id' => 'by', 'name' => 'by', 'class' => 'no-class', 'selected' => $this->by, 'profile' => 'article')); ?></td>
+		<td><?php echo $this->helperLoader('report')->selectAuthor(array('id' => 'author', 'name' => 'author', 'class' => 'no-class', 'selected' => $this->author, 'profile' => 'article')); ?></td>
 		
 		<?php } else { ?>
 		<td>&nbsp;</td>
