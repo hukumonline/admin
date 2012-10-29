@@ -119,7 +119,8 @@ class Pandamp_Core_Hol_Catalog
 		
 		$url_content = $cfg->web->url->base.'/berita/baca/'.$catalogGuid.'/'.$slug;
 		
-		$q = "url:\"".$url_content."\" kopel:".$kopel;
+		//$q = "url:\"".$url_content."\" kopel:".$kopel;
+		$q = "url:\"".$url_content."\"";
 		
 		$db = Zend_Registry::get('db4');
 		
