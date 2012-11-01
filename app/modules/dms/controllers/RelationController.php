@@ -149,9 +149,12 @@ class Dms_RelationController extends Zend_Controller_Action
             $aResult['isError'] = true;
             $aResult['msg'] = 'No relatedGuid specified!';
         }
-
+        
         if(is_array($item))
         {
+	        $item = implode(',',$item);
+	        $item = explode(',',$item);
+	
             foreach($item as $guid)
             {
                 $rowCatalog = $tblCatalog->find($guid)->current();

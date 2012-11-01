@@ -186,13 +186,13 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
     }
     public function relateTo($relatedGuid, $as='RELATED_ITEM', $valRelation = 0)
     {
-        $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
-
         if(empty($this->guid))
             throw new Zend_Exception('Can not relate to empty GUID');
         if(empty($relatedGuid))
             throw new Zend_Exception('Can not relate to empty related GUID');
 
+            
+        $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
         $rowsetRelatedItem = $tblRelatedItem->find($this->guid, $relatedGuid, $as);
         if(count($rowsetRelatedItem) > 0)
         {

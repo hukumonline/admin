@@ -110,8 +110,14 @@
                                     $('#message').fadeIn("slow", function(){
                                         $(this).html("Row " + checkValues + " " + response.msg).delay(2000).fadeOut(1000);
                                     });
+                                    
+                                    $("#relate").val('');
                                }
                              });
+                        }
+                        else
+                        {
+                        	$("#relate").val('');
                         }
                     }
                     return false;

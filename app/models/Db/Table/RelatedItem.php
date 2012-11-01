@@ -33,6 +33,10 @@ class App_Model_Db_Table_RelatedItem extends Zend_Db_Table_Abstract
 
         parent::_setupDatabaseAdapter();
     }
+    public function insert (array $data)
+    {
+    	return parent::insert($data);
+    }
     function createNew()
     {
     	return $this->createRow(array('itemGuid'=>'', 'relatedGuid'=>'','relateAs'=>''));
