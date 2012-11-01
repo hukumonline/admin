@@ -522,6 +522,8 @@ class Dms_CatalogController extends Zend_Controller_Action
         require_once($modDir.'/components/Menu/FolderBreadcrumbs.php');
         $w = new Dms_Menu_FolderBreadcrumbs($folderGuid);
         $this->view->widget2 = $w;
+        
+        $this->view->profile = $profileGuid;
 
         $generatorForm = new Pandamp_Form_Helper_CatalogInputGenerator();
         $aRender = $generatorForm->generateFormAdd(strtolower($profileGuid), $folderGuid);
@@ -545,7 +547,19 @@ class Dms_CatalogController extends Zend_Controller_Action
 	            $message = "Data was successfully saved.";
 				$this->_helper->getHelper('FlashMessenger')
 					->addMessage($message);
-				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$folderGuid);
+					
+					
+				if (!empty($aData['fixedKeywords']))
+				{
+					if (in_array($profileGuid,array('article','clinic'))) {
+					$keywords = base64_encode(trim($aData['fixedKeywords']));
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/relatedcatalog/guid/'.$id.'/profile/'.$profileGuid.'/keywords/'.$keywords.'/node/'.$folderGuid);
+					}
+				}
+				else 
+				{
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$folderGuid);
+				}
             }
         }
     }
@@ -658,7 +672,8 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$keywords = base64_decode($request->getParam('keywords'));
     	$keywords = explode(',',$keywords);
     	$keywords = array_filter(array_map('trim', $keywords));
-    	$keywords = implode(' OR ',$keywords);
+    	$keywords = implode(' ',$keywords);
+    	//$keywords = implode(' OR ',$keywords);
     	
     	$querySolr = $keywords.' title:[" " TO *] profile:'.$profile.' -id:'.$catalogGuid.' -profile:kutu_doc;publishedDate desc';
     	
@@ -675,7 +690,6 @@ class Dms_CatalogController extends Zend_Controller_Action
         $hits = $indexingEngine->find($sQuery,$nOffset, $nLimit);
 
             
-        $this->view->assign('sQuery',$sQuery);
         $this->view->assign('nOffset', $nOffset);
         $this->view->assign('nLimit', $nLimit);
         $this->view->assign('hits',$hits);
