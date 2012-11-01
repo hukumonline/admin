@@ -12,12 +12,12 @@ class App_Model_Db_Table_RelatedItem extends Zend_Db_Table_Abstract
     protected $_referenceMap    = array(
         'Catalog' => array(
             'columns'           => 'itemGuid',
-            'refTableClass'     => 'Kutu_Core_Orm_Table_Catalog',
+            'refTableClass'     => 'App_Model_Db_Table_Catalog',
             'refColumns'        => 'guid'
         ),
         'RelatedCatalog' => array(
             'columns'           => 'relatedGuid',
-            'refTableClass'     => 'Kutu_Core_Orm_Table_Catalog',
+            'refTableClass'     => 'App_Model_Db_Table_Catalog',
             'refColumns'        => 'guid'
         )
     );

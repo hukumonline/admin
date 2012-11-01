@@ -155,6 +155,7 @@ class Dms_RelationController extends Zend_Controller_Action
             foreach($item as $guid)
             {
                 $rowCatalog = $tblCatalog->find($guid)->current();
+                
                 $rowCatalog->relateTo($relatedItem, $as);
 
                 $aResult['isError'] = false;
@@ -164,6 +165,7 @@ class Dms_RelationController extends Zend_Controller_Action
         else
         {
             $rowCatalog = $tblCatalog->find($item)->current();
+            
             $rowCatalog->relateTo($relatedItem, $as);
 
             $aResult['isError'] = false;

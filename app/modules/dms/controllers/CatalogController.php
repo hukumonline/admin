@@ -571,6 +571,9 @@ class Dms_CatalogController extends Zend_Controller_Action
         $this->view->widget2 = $w;
 
         $modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
+        
+        $this->view->profile = $modelCatalog['profileGuid'];
+        
         if ($modelCatalog['profileGuid'] == "klinik") {
             $this->_forward('answer.clinic','clinic','dms',array('guid'=>$catalogGuid));
         }
@@ -617,6 +620,13 @@ class Dms_CatalogController extends Zend_Controller_Action
 						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$modelCatalog['status'].'/node/'.$sessHistory->currentNode);
 					}
 				}
+				else if (!empty($aData['fixedKeywords']))
+				{
+					if (in_array($modelCatalog['profileGuid'],array('article','clinic'))) {
+					$keywords = base64_encode(trim($aData['fixedKeywords']));
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/relatedcatalog/guid/'.$id.'/profile/'.$modelCatalog['profileGuid'].'/keywords/'.$keywords.'/node/'.$sessHistory->currentNode);
+					}
+				}
 				else 
 				{
 					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$sessHistory->currentNode);
@@ -630,5 +640,50 @@ class Dms_CatalogController extends Zend_Controller_Action
         $sessHistory->urlReferer = $urlReferer;
         
         $this->view->urlReferer = $sessHistory->urlReferer;
+    }
+    
+    /**
+     * Related article
+     */
+    function relatedcatalogAction()
+    {
+    	$this->_helper->layout->setLayout('layout-dms-relation');
+    	
+    	$request  = $this->getRequest();
+    	
+    	$catalogGuid 	= $request->getParam('guid');
+    	$profile 		= $request->getParam('profile');
+    	$node 			= $request->getParam('node');
+    	
+    	$keywords = base64_decode($request->getParam('keywords'));
+    	$keywords = explode(',',$keywords);
+    	$keywords = array_filter(array_map('trim', $keywords));
+    	$keywords = implode(' OR ',$keywords);
+    	
+    	$querySolr = $keywords.' title:[" " TO *] profile:'.$profile.' -id:'.$catalogGuid.' -profile:kutu_doc;publishedDate desc';
+    	
+    	$sQuery	 = $request->getParam('sQuery',$querySolr);
+    	$nOffset = $request->getParam('nOffset',0);
+    	$nLimit	 = $request->getParam('nLimit',50);
+    	
+        $withSelected = ($request->getParam('relate'))?$request->getParam('relate'):"relateas";
+        $this->view->assign('withSelected', $withSelected);
+
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+        $hits = $indexingEngine->find($sQuery,$nOffset, $nLimit);
+
+            
+        $this->view->assign('sQuery',$sQuery);
+        $this->view->assign('nOffset', $nOffset);
+        $this->view->assign('nLimit', $nLimit);
+        $this->view->assign('hits',$hits);
+        $this->view->assign('query',$sQuery);
+    	$this->view->assign('profile',$profile);
+    	$this->view->assign('guid',$catalogGuid);
+    	$this->view->assign('node',$node);
+    	
+    	$this->_helper->layout()->headerTitle = "Related Article";
     }
 }

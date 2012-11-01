@@ -1,0 +1,113 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2012-2013 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: relatedcatalog.phtml 1 2012-10-30 17:20Z
+ */
+?>
+<?php 
+$this->headTitle('Related:'.$this->getCatalogAttribute($this->guid,'fixedTitle'));
+?>
+
+<section class="column first">
+    <?
+    if ($this->getLanguage() == 'id')
+        $tag = "www.hukumonline.com";
+    else
+        $tag = "en.hukumonline.com";
+    ?>
+    <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+    <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/edit/guid/<?php echo $this->guid; ?>/node/<?php echo $this->node; ?>">Back to Origin Page</a>
+	<h3><?php echo $this->getCatalogAttribute($this->guid,'fixedTitle'); ?></h3>
+	<div class="width8">
+        <form id="frmSearchRelation" name="frmSearchRelation" method="post">
+            <input type="hidden" id="sQuery" name="sQuery" class="half" value='<?=$this->query;?>'>
+            <input type="hidden" id="nLimit" name="nLimit" value="50">
+            <input type="hidden" id="nOffset" name="nOffset" value="<?echo $this->nOffset;?>">
+            <input type="hidden" id="guid" name="guid" value="<?echo $this->guid;?>">
+        </form>
+        <h5>Search Result: <?=$this->hits->response->numFound;?> Record(s)</h5>
+        <div id="spinner" style="color:red; display:none;"><img src="<?=$this->cdn('images');?>/index.gif" border="0"> Sending Request</div>
+        <div class="box box-success" id="message"></div>
+		<form id="frmCatalogRelation" name="frmCatalogRelation" method="post">
+        <div class="align-right">
+        <select id="relate" name="relate">
+            <option value="">Relate As:</option>
+            <option value="RELATED_OTHER">Article</option>
+            <option value="RELATED_Clinic" disabled>Clinic</option>
+        </select>
+        </div>
+        <div style="display:none"></div>
+		<table class="display stylized" id="catalogrelation">
+        <thead>
+            <tr>
+                <th><input name="select_deselect" value="1" type="checkbox"></th>
+                <th>Title</th>
+                <th>Published</th>
+                <th>Created on</th>
+            </tr>
+        </thead>
+        <tbody>
+        <? foreach ($this->hits->response->docs as $hit) : ?>
+		<tr id="row_<?=$hit->id;?>">
+			<td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$hit->id;?>' class="check_me"></td>
+            <td>
+                <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit->id;?>/node/<?=$this->currentNode;?>" title="<?=$hit->subTitle;?>"><?php try {echo $hit->title;} catch (Exception $e) {echo 'No-Title';}?></a>
+                <br><small>id:<?=$hit->id;?> - by: <?=$hit->createdBy;?>&nbsp;<span class="subtitle"><?=$hit->publishedDate;?></span></small>
+            </td>
+            <td>
+                <?
+                $now = date('Y-m-d H:i:s');
+                $t = str_replace("Z", "", $hit->publishedDate);
+                $d = explode("T", $t);
+                $publishedDate = $d[0].' '.$d[1];
+
+                $et = str_replace("Z", "", $hit->expiredDate);
+                $ed = explode("T", $et);
+                $expiredDate = $ed[0].' '.$ed[1];
+                if ($expiredDate == "1999-12-31 00:00:00") $expiredDate = '0000-00-00 00:00:00';
+
+                if ($now <= $publishedDate && $hit->status == 99) {
+                    $status = "publish_y";
+                    $ht = "Published, but is Pending";
+                }
+				else if (($now <= $expiredDate || $expiredDate == '0000-00-00 00:00:00') && $hit->status == 99) {
+                    $status = "publish_g";
+                    $ht = "Published and is Current";
+				}
+				else if ($now > $expiredDate && $hit->status == 99) {
+                    $status = "publish_r";
+                    $ht = "Published, but has Expired";
+				}
+				else if ($hit->status == 0) {
+                    $status = "publish_x";
+                    $ht = "Not Published";
+				}
+				else if ($hit->status == -1) {
+                    $status = "disabled";
+                    $ht = "Archived";
+				}
+                ?>
+
+                <div class="ta-center" title="<?=$ht;?>">
+                    <img src="<?=$this->cdn('images');?>/<?=$status;?>.png">
+                </div>
+            </td>
+            <td nowrap>
+                <?=date('d.m.y H:i:s',strtotime($hit->createdDate));?><br>
+                <small>modifiedDate:<?=date('d.m.y H:i:s',strtotime($hit->modifiedDate));?> by <?=$hit->modifiedBy;?></small>
+            </td>
+		</tr>        
+        <? endforeach; ?>
+        </tbody>		
+		</table>
+		</form>
+        <table width='100%'>
+        <tr>
+            <td align=right><div id='catalogRelatePagination' class="pagination"></div></td>
+        </tr>
+        </table>
+	</div>
+</section>
+
