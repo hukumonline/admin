@@ -14,10 +14,10 @@ class Dev_AclController extends Zend_Controller_Action
 
         $acl = Pandamp_Acl::manager();
         
-//        if ($acl->isAllowed('dedi','dms','create'))
-//            echo 'ALLOWED';
-//        else
-//            echo 'NO ACCESS';
+        if ($acl->isAllowed('nurul-cs2','dms','aclist'))
+            echo 'ALLOWED';
+        else
+            echo 'NO ACCESS';
             
 
 //		$aReturn = $acl->getUserGroupIds('zapatista'); 
@@ -26,10 +26,10 @@ class Dev_AclController extends Zend_Controller_Action
 //		else 
 //			echo 'NO ACCESS';
 
-		if ($acl->checkAcl('site', 'all', 'user', 'dedi',false,false))
-			echo 'ALLOWED';
-		else 
-			echo 'NO ACCESS';
+//		if ($acl->checkAcl('site', 'all', 'user', 'dedi',false,false))
+//			echo 'ALLOWED';
+//		else 
+//			echo 'NO ACCESS';
 		
 		
     }
