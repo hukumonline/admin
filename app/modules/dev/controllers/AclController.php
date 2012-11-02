@@ -26,7 +26,7 @@ class Dev_AclController extends Zend_Controller_Action
 //		else 
 //			echo 'NO ACCESS';
 
-		if ($acl->checkAcl('action', 'all', 'user', 'nurul-cs2','content','aclist'))
+		if ($acl->checkAcl('action', 'all', 'user', 'amrie.hakim','content','aclist'))
 			echo 'ALLOWED';
 		else 
 			echo 'NO ACCESS';
