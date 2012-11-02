@@ -14,7 +14,7 @@ class Dev_AclController extends Zend_Controller_Action
 
         $acl = Pandamp_Acl::manager();
         
-        if ($acl->isAllowed('nurul-cs2','dms','aclist'))
+        if ($acl->isAllowed('seyimut','dms','aclist'))
             echo 'ALLOWED';
         else
             echo 'NO ACCESS';
