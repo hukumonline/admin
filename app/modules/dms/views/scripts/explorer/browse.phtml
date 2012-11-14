@@ -86,6 +86,10 @@
                                     <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit['guid'];?>/node/<?=$this->currentNode;?>" title="<?=$this->getCatalogAttribute($hit['guid'],'fixedDescription');?>"><?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedTitle');} catch (Exception $e) {echo 'No-Title';}?></a>
                                 <? } ?>
                                 <br><small>id:<?=$hit['guid'];?> - by: <?=$hit['createdBy'];?>&nbsp;<span class="subtitle"><?=$hit['publishedDate'];?></span></small>
+                                <?php if ($hit['profileGuid'] == 'clinic') : ?>
+                                <?php $rowUser = App_Model_Show_User::show()->getUserByName($hit['createdBy']); ?>
+                                <br><small><?php echo $rowUser['email']; ?></small>
+                                <?php endif; ?>
                             </td>
                             <td><abbr><?=$hit['profileGuid'];?></abbr></td>
                             <td>

@@ -70,6 +70,8 @@
                                     <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit['guid'];?>/node/<?=$this->currentNode;?>" title="<?=$rowUser['email'];?>"><?php try {echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle');} catch (Exception $e) {echo 'No-Title';}?></a>
                                 <? } ?>
                                     <br><small>id:<?=$hit['guid'];?> - by: <?=$hit['createdBy'];?>&nbsp;<span class="subtitle"><?=$hit['publishedDate'];?></span></small>
+	                                <?php $rowUser = App_Model_Show_User::show()->getUserByName($hit['createdBy']); ?>
+	                                <br><small><?php echo $rowUser['email']; ?></small>
                             </td>
                             <td><?=$hit['profileGuid'];?></td>
                             <td>
