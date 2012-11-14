@@ -29,6 +29,10 @@
                             <td>
                                 <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$this->data[$i][0];?>/node/<?=$this->data[$i][2];?>" title="publishedDate: <?=$this->data[$i][8];?>"><?php try {echo $this->data[$i][1];} catch (Exception $e) {echo 'No-Title';}?></a>
                                 <br><small>by: <?=$this->data[$i][5];?></small>
+                                <?php if ($this->data[$i][3] == 'klinik') : ?>
+                                <?php $rowUser = App_Model_Show_User::show()->getUserByName($this->data[$i][5]); ?>
+                                <br><small><?php echo $rowUser['email']; ?></small>
+                                <?php endif; ?>
                             </td>
                             <td><abbr><?=$this->data[$i][3];?></abbr></td>
                             <td>
