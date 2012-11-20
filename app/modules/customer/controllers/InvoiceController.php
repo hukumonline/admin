@@ -273,6 +273,12 @@ class Customer_InvoiceController extends Zend_Controller_Action
 
         $this->_redirect(ROOT_URL."/".$zl->getLanguage().'/customer/user/invoicelist/id/'.$kopel);
 	}
+	
+	/**
+	 * @modifiedDate: 2012-11-20 15:25
+	 * @todo Changed $temptime = strtotime($rowset->expirationDate)
+	 *
+	 */
 	function renewAction()
 	{
         if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
