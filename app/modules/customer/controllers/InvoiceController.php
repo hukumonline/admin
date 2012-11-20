@@ -305,7 +305,8 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowUser = App_Model_Show_User::show()->getUserById($rowset->uid);
 			
 			// get expiration date
-			$temptime = time();
+			//$temptime = time();
+			$temptime = strtotime($rowset->expirationDate);
 			$temptime = Pandamp_Lib_Formater::DateAdd('m',$rowUser['paymentId'],$temptime);
 			$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
 			$rowInvoice->save();
