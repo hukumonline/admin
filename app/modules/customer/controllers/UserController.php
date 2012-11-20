@@ -888,13 +888,16 @@ class Customer_UserController extends Zend_Controller_Action
         
         /**
          * UPDATED:July 25, 2012
+         * @modifiedDate: 2012-11-20 15:10N
+         * @todo Invoice can add more than one
+         * comment line 897-899
          */
         if ($this->getRequest()->isPost()) {
 			$tblInvoice = new App_Model_Db_Table_Invoice();
-			$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$this->getRequest()->getPost('kopel'));
-			$rowInvoice = $tblInvoice->fetchAll($where);
-			if (count($rowInvoice) <= 0)
-			{
+//			$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$this->getRequest()->getPost('kopel'));
+//			$rowInvoice = $tblInvoice->fetchAll($where);
+//			if (count($rowInvoice) <= 0)
+//			{
 				$rowInvoice = $tblInvoice->fetchNew();
 				$rowInvoice->uid = $this->getRequest()->getPost('kopel');
 				$rowInvoice->price = $this->getRequest()->getPost('price');
@@ -908,7 +911,7 @@ class Customer_UserController extends Zend_Controller_Action
 				$rowInvoice->save();
 				
 				$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/invoicelist/id/'.$this->getRequest()->getPost('kopel'));
-			}
+//			}
         }
     }
     function delassAction()
