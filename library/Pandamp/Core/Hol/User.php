@@ -84,6 +84,8 @@ class Pandamp_Core_Hol_User
 	
 	/**
 	 * _writeInvoice : Individual & Korporasi
+	 * @modifiedDate : 2012-11-20 12:53N
+	 * @todo Changed invoiceOutDate with createdDate from User Table
 	 * @return 
 	 */
 	function _writeInvoice($memberId, $totalPromo, $discPromo, $payment, $access='')
@@ -95,21 +97,23 @@ class Pandamp_Core_Hol_User
 		$rowInvoice = $tblInvoice->fetchAll($where);
 		if (count($rowInvoice) <= 0)
 		{
+			$tblUser = new App_Model_Db_Table_User();
+			$rowUser = $tblUser->fetchRow("kopel='".$memberId."'");
+				
 			$rowInvoice = $tblInvoice->fetchNew();
 			$rowInvoice->uid = $memberId;
 			$rowInvoice->price = $totalPromo;
 			$rowInvoice->discount = $discPromo;
-			$rowInvoice->invoiceOutDate = date("Y-m-d");
+			//$rowInvoice->invoiceOutDate = date("Y-m-d");
+			$rowInvoice->invoiceOutDate = date("Y-m-d",strtotime($rowUser->createdDate));
 			$rowInvoice->invoiceConfirmDate = "0000-00-00";
 			
-			$temptime = time();
+			//$temptime = time();
+			$temptime = strtotime($rowUser->createdDate);
 			$temptime = Pandamp_Lib_Formater::DateAdd('d',5,$temptime);
 			
 			$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
 			
-			$tblUser = new App_Model_Db_Table_User();
-			$rowUser = $tblUser->fetchRow("kopel='".$memberId."'");
-				
 			if (empty($access))
 			{
 				$rowInvoice->save();
