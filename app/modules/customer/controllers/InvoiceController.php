@@ -257,7 +257,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				// Get total promo
 				//$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
 				$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
-				$formater->_writeInvoice($rowset->kopel,$total,$disc,$rowset->paymentId);
+				$formater->_writeInvoice($rowset->kopel,$total,0,$rowset->paymentId);
 	        }
 	        else 
 	        {
@@ -305,14 +305,26 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowInvoice = $tblInvoice->fetchNew();
 			
 			$rowInvoice->uid 				= $rowset->uid;
-			$rowInvoice->price				= $rowset->price;
+			
+			$rowUser = App_Model_Show_User::show()->getUserById($rowset->uid);
+			
+			$tblPackage = new App_Model_Db_Table_Package();
+			$rowPackage = $tblPackage->fetchRow("packageId=".$rowUser['packageId']."");
+			if ($rowUser['paymentId'] == 12) {
+				$price = $rowPackage->charge * 11;
+			}
+			else 
+			{
+				$price = $rowPackage->charge * $rowUser['paymentId'];
+			}
+			
+			//$rowInvoice->price				= $rowset->price;
+			$rowInvoice->price				= $price;
 			$rowInvoice->discount			= $rowset->discount;
 			$rowInvoice->invoiceOutDate 	= $rowset->expirationDate;
 			$rowInvoice->invoiceConfirmDate	= date("Y-m-d");
 			$rowInvoice->clientBankAccount	= $rowset->clientBankAccount;
 			$rowInvoice->isPaid				= 'Y';
-			
-			$rowUser = App_Model_Show_User::show()->getUserById($rowset->uid);
 			
 			// get expiration date
 			//$temptime = time();
