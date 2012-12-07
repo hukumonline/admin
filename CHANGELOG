@@ -6,3 +6,14 @@
 		<field name="number" type="text" indexed="true" stored="true"/>
 		<field name="number_sort" type="string" indexed="true" stored="false"/>
 		<copyField source="number" dest="number_sort"/>
+		
+2012-12-07
+===================
+[USER]
+	- Changed payment subscription - delete old formula (discount)
+		modify:
+			Pandamp_Core_Hol_User
+			AccountController
+			InvoiceController
+			UserController
+			user/invoicelist.phtml
