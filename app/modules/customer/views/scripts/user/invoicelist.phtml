@@ -25,9 +25,14 @@ $this->headLink()
             	<fieldset>
             		<legend>CREATE NEW INVOICE</legend>
             		<?php 
+            		/**
+            		 * @modifiedDate: December 07, 2012
+            		 */
             		$formater = new Pandamp_Core_Hol_User(); 
-            		$disc = $formater->checkPromoValidation('Disc',$this->user['packageId'],$this->user['promotionId'],$this->user['paymentId']);
-            		$total = $formater->checkPromoValidation('Total',$this->user['packageId'],$this->user['promotionId'],$this->user['paymentId']);
+            		//$disc = $formater->checkPromoValidation('Disc',$this->user['packageId'],$this->user['promotionId'],$this->user['paymentId']);
+            		$disc = 0;
+            		//$total = $formater->checkPromoValidation('Total',$this->user['packageId'],$this->user['promotionId'],$this->user['paymentId']);
+            		$total = $formater->checkPromoValidation($this->user['packageId'],$this->user['paymentId']);
             		?>
             		<table class='display stylized'>
             		<tr>

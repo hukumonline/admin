@@ -17,9 +17,29 @@ class Pandamp_Core_Hol_User
 	/**
 	 * checkPromoValidation : Individual & Korporasi
 	 * @return disc :: Total
+	 * @modifiedDate: December 07, 2012
 	 */
-	function checkPromoValidation($whatPromo,$package,$promotionId='',$payment=0)
+	//function checkPromoValidation($whatPromo,$package,$promotionId='',$payment=0)
+	function checkPromoValidation($package,$payment=0)
 	{
+		/* ======================= NEW ============== 
+		 * December 07, 2012
+		*/
+		$tblPackage = new App_Model_Db_Table_Package();
+		$rowPackage = $tblPackage->fetchRow("packageId=$package");
+		if ($payment == 12) {
+			$total = $rowPackage->charge * 11;
+		}
+		else 
+		{
+			$total = $rowPackage->charge * $payment;
+		}
+		
+		return $total;
+		
+		/* ======================= END-NEW ============== */
+		
+		/*
 		$tblPackage = new App_Model_Db_Table_Package();
 		$rowPackage = $tblPackage->fetchRow("packageId=$package");
 		$periode = $rowPackage->charge * $payment;
@@ -27,7 +47,6 @@ class Pandamp_Core_Hol_User
 		$tblPromosi = new App_Model_Db_Table_Promotion();
 		$rowPromo = $tblPromosi->find($promotionId)->current();
 		
-		// check promotionID if exist then dischard query
 		if (isset($rowPromo)) {
 			
 			if ($payment == 6) {
@@ -80,6 +99,7 @@ class Pandamp_Core_Hol_User
 				return $total;
 			break;
 		}
+		*/
 	}
 	
 	/**

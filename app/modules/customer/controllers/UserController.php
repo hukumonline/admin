@@ -375,12 +375,17 @@ class Customer_UserController extends Zend_Controller_Action
 				if ((in_array($rowset->packageId,array(14,15,16,17,18,36,37,38))) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
 				{
 					$formater = new Pandamp_Core_Hol_User();
+					/**
+					 * @modifiedDate: Dec 07, 2012
+					 */
 					// GET disc promo
-					$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+					//$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
 					// GET total promo
-					$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+					//$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
+					$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
 					// WRITE invoice
-					$r = $formater->_writeInvoice($rowset->kopel, $total, $disc, $rowset->paymentId,'admin');
+					//$r = $formater->_writeInvoice($rowset->kopel, $total, $disc, $rowset->paymentId,'admin');
+					$r = $formater->_writeInvoice($rowset->kopel, $total, 0, $rowset->paymentId,'admin');
 					
 					$result = $r;
 				}
