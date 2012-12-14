@@ -349,16 +349,16 @@ class Admin_StoreController extends Zend_Controller_Action
         $where ='';
 
         if(!empty($sStatus)){
-            $where .= " AND KO.ordersStatus LIKE '%$sStatus%'";
+            $where .= " AND KO.orderStatus LIKE '%$sStatus%'";
         }
         if(!empty($sStatus)){
             $where .= " AND KU.username LIKE '%$sUsername%'";
         }
         if(!empty($fdate)){
-            $where .= " AND datePurchased > '$fdate'";
+            $where .= " AND KO.datePurchased > '$fdate'";
         }
         if(!empty($ldate)){
-            $where .= " AND datePurchased < '$ldate'  ";
+            $where .= " AND KO.datePurchased < '$ldate'  ";
         }
 
         $rowset = App_Model_Show_PaymentConfirmation::show()->unconfirmList($where,$limit, $offset);
