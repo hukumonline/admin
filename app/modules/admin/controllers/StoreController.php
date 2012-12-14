@@ -337,7 +337,7 @@ class Admin_StoreController extends Zend_Controller_Action
         $this->view->itemsPerPage = $itemsPerPage;
         $offset = ($this->_request->getParam('offset'))?$this->_request->getParam('offset'):0;
         $this->view->offset = $offset;
-        $sStatus = ($this->_request->getPost('sStatus'))? $this->_request->getPost('sStatus') : '';
+        $sStatus = ($this->_request->getPost('sStatus'))? $this->_request->getPost('sStatus') : 4;
         $this->view->sStatus = $sStatus;
         $sUsername = ($this->_request->getPost('sUsername'))? $this->_request->getPost('sUsername') : '';
         $this->view->sUsername = $sUsername;
@@ -349,7 +349,7 @@ class Admin_StoreController extends Zend_Controller_Action
         $where ='';
 
         if(!empty($sStatus)){
-            $where .= " AND KOS.ordersStatus LIKE '%$sStatus%'";
+            $where .= " AND KO.ordersStatus LIKE '%$sStatus%'";
         }
         if(!empty($sStatus)){
             $where .= " AND KU.username LIKE '%$sUsername%'";
