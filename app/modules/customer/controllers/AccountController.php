@@ -166,6 +166,7 @@ class Customer_AccountController extends Zend_Controller_Action
 			,'createdDate'		=> date('Y-m-d H:i:s')
 			,'createdBy'		=> $value['createdBy']
 			,'isContact'		=> ($isContact == 1)? 'Y' : 'N'
+			,'notes'			=> $value['notes']
 		);
 		
 		return $data;
