@@ -822,6 +822,7 @@ class Customer_UserController extends Zend_Controller_Action
                 ,'modifiedBy'		=> $r->getParam('modifiedBy')
                 ,'isActive'		=> $r->getParam('isactive')
                 ,'isContact'		=> ($isContact == 1)? 'Y' : 'N'
+                ,'notes'			=> $r->getParam('notes')
             );
 
             $modelUser = new App_Model_Db_Table_User();

@@ -156,6 +156,10 @@
                     </p>
                 </fieldset>
                 <p>
+                    <label for="notes">Notes:</label><br>
+                    <textarea name="notes" class="medium" cols="30" rows="5"><?=$this->user['notes'];?></textarea>
+                </p>
+                <p>
                     <label for="userstatus">User Status</label>
                     <?=$this->uStatus($this->user['periodeId']);?>
                 </p>
