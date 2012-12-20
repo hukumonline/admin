@@ -798,17 +798,17 @@ class Customer_UserController extends Zend_Controller_Action
             }
 
             $data = array(
-                'fullName'		=> $r->getParam('fullname')
-                ,'birthday'		=> $year.'-'.$month.'-'.$day
-                ,'phone'		=> $r->getParam('phone')
-                ,'fax'			=> $r->getParam('fax')
-                ,'gender'		=> $gender
-                ,'email'		=> $r->getParam('email')
-                ,'address'		=> $r->getParam('address')
-                ,'city'			=> $r->getParam('city')
-                ,'state'		=> ($r->getParam('province'))? $r->getParam('province') : 7
+                'fullName'			=> $r->getParam('fullname')
+                ,'birthday'			=> $year.'-'.$month.'-'.$day
+                ,'phone'			=> $r->getParam('phone')
+                ,'fax'				=> $r->getParam('fax')
+                ,'gender'			=> $gender
+                ,'email'			=> $r->getParam('email')
+                ,'address'			=> $r->getParam('address')
+                ,'city'				=> $r->getParam('city')
+                ,'state'			=> ($r->getParam('province'))? $r->getParam('province') : 7
                 ,'countryId'		=> ($r->getParam('countryId'))? $r->getParam('countryId') : 'ID'
-                ,'zip'			=> $r->getParam('zip')
+                ,'zip'				=> $r->getParam('zip')
                 ,'newArticle'		=> ($newArticle == 1)? 'Y' : 'N'
                 ,'weeklyList'		=> ($newWRegulation == 1)? 'Y' : 'N'
                 ,'monthlyList'		=> ($newRegulation == 1)? 'Y' : 'N'
@@ -816,11 +816,12 @@ class Customer_UserController extends Zend_Controller_Action
                 ,'educationId'		=> ($r->getParam('education'))? $r->getParam('education') : 0
                 ,'expenseId'		=> ($r->getParam('expense'))? $r->getParam('expense') : 0
                 ,'paymentId'		=> ($r->getParam('payment'))? $r->getParam('payment') : 0
+                ,'trialInDays'		=> $r->getParam('trial')
                 ,'businessTypeId'	=> ($r->getParam('businessType'))? $r->getParam('businessType') : 0
                 ,'periodeId'		=> $r->getParam('ustatus')
                 ,'modifiedDate'		=> date('Y-m-d h:i:s')
                 ,'modifiedBy'		=> $r->getParam('modifiedBy')
-                ,'isActive'		=> $r->getParam('isactive')
+                ,'isActive'			=> $r->getParam('isactive')
                 ,'isContact'		=> ($isContact == 1)? 'Y' : 'N'
                 ,'notes'			=> $r->getParam('notes')
             );
