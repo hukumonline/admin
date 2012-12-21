@@ -161,7 +161,7 @@ class Customer_AccountController extends Zend_Controller_Action
 			,'educationId'		=> ($value['education'])? $value['education'] : 0
 			,'expenseId'		=> ($value['expense'])? $value['expense'] : 0
 			,'paymentId'		=> ($value['payment'])? $value['payment'] : 0
-			,'trialInDays'		=> $value['trial']
+			,'trialInDays'		=> ($value['trial'])? $value['trial'] : 0
 			,'businessTypeId'	=> ($value['businessType'])? $value['businessType'] : 0
 			,'periodeId'		=> 1
 			,'createdDate'		=> date('Y-m-d H:i:s')
