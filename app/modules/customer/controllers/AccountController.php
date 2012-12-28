@@ -78,11 +78,13 @@ class Customer_AccountController extends Zend_Controller_Action
 						$total = $formater->checkPromoValidation($value['aro_groups'],$payment);
 						
 						//$m = $formater->_writeConfirmIndividualEmail($mailcontent,$value['fullname'],$value['username'],$value['password'],$payment,$disc,$total,base64_encode($id),$value['email']);
-						$m = $formater->_writeConfirmIndividualEmail($mailcontent,$value['fullname'],$value['username'],$value['password'],$payment,0,$total,base64_encode($id),$value['email']);
+						$m = $formater->_writeConfirmIndividualEmail($mailcontent,$value['aro_groups'],$value['fullname'],$value['username'],$value['password'],$payment,0,$total,base64_encode($id),$value['email']);
 						
 						break;
 						
-					case 15: // corporate
+					case 15: // corporate/basic
+					case 16: // standard
+					case 18: // professional
 						
 						$mailcontent = $formater->getMailContent('konfirmasi-email-korporasi');
 						//$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
@@ -90,7 +92,7 @@ class Customer_AccountController extends Zend_Controller_Action
 						$total = $formater->checkPromoValidation($value['aro_groups'],$payment);
 						
 						//$m = $formater->_writeConfirmCorporateEmail($mailcontent,$value['fullname'],$value['company'],$payment,$disc,$total,$value['username'],base64_encode($id),$value['email']);
-						$m = $formater->_writeConfirmCorporateEmail($mailcontent,$value['fullname'],$value['company'],$payment,0,$total,$value['username'],base64_encode($id),$value['email']);
+						$m = $formater->_writeConfirmCorporateEmail($mailcontent,$value['aro_groups'],$value['fullname'],$value['company'],$payment,0,$total,$value['username'],base64_encode($id),$value['email']);
 						
 						break;
 						

@@ -2,7 +2,7 @@
 
 class App_Model_Store_Mailer
 {
-	public function sendReceiptToUser($orderId, $paymentMethod='', $statusText='')
+	public function sendReceiptToUser($orderId, $paymentMethod='')
 	{
 		$config = new Zend_Config_Ini(CONFIG_PATH.'/mail.ini', 'mail');
 		
@@ -50,7 +50,7 @@ class App_Model_Store_Mailer
 	    
 	    $holConfig = Pandamp_Config::getConfig();
 		
-		switch(strtolower($paymentMethod))
+		switch(strtolower($rowOrder->paymentMethod))
 		{
 			case 'paypal':
 			case 'manual':

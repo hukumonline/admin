@@ -11,8 +11,8 @@
 			<div class="align-left">
 				&nbsp;&nbsp;&nbsp;&nbsp;<input name='select_deselect' id='select_deselect' type='checkbox'>&nbsp;<abbr>Select All</abbr> |
 				<a href="javascript: void(0);" class="activateAction">Activation</a> |
+				<!--<a href="javascript: void(0);" class="invoiceAction">Invoice</a> |-->
 				<a href="javascript: void(0);" class="confirmAction">Confirm</a> |
-				<a href="javascript: void(0);" class="invoiceAction">Invoice</a> |
 				<a href="javascript: void(0);" class="dlAction">Delete</a> 
 			</div>
 			<div class="align-right">
@@ -239,8 +239,7 @@
 										
 										$('#kopel_' + ids[i]).append($('<span/>').html('<small><b>'+response+'</b></small>'))
 											.removeClass('t_a_ui_helper_loading');
-											
-											//window.location.reload();
+											window.location.reload();
 								}
 								
 							});
@@ -293,6 +292,8 @@
 										
 										$('#kopel_' + ids[i]).append($('<span/>').html('<small><b>'+response+'</b></small>'))
 											.removeClass('t_a_ui_helper_loading');
+											
+										window.location.reload();
 								}
 								
 							});
@@ -346,7 +347,7 @@
 										$('#kopel_' + ids[i]).append($('<span/>').html('<small><b>'+response+'</b></small>'))
 											.removeClass('t_a_ui_helper_loading');
 											
-									//window.location.reload();
+									window.location.reload();
 								}
 								
 							});

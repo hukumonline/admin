@@ -3,7 +3,7 @@
     <legend>Order No : <?=$this->id;?></legend>
     <div class="width8" align="right">
         <form style="z-index:1;overflow:hidden;">
-        <input class="btn btn-green big" type="button" value="Edit" onclick="window.location.href='<?=ROOT_URL?>/admin/store/editOrder/id/<?=$this->id;?>'" />
+        <input class="btn btn-green big" type="button" value="Edit" onclick="window.location.href='<?php echo ROOT_URL;?>/<?php echo $this->getLanguage(); ?>/store/editOrder/orderId/<?php echo $this->id; ?>'" />
         &nbsp;
         <input class="btn btn-green big" type="button" value="Back" onclick="javascript:history.back();" />
         &nbsp;&nbsp;&nbsp;&nbsp;

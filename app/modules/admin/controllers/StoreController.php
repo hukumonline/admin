@@ -195,7 +195,7 @@ class Admin_StoreController extends Zend_Controller_Action
     }
     public function editorderAction()
     {
-        $idOrder = $this->_request->getParam('id');
+        $idOrder = $this->_request->getParam('orderId');
 
         $rowset = App_Model_Show_Order::show()->getOrder($idOrder);
 
@@ -207,7 +207,7 @@ class Admin_StoreController extends Zend_Controller_Action
         $this->view->rowsStatus = $rowsStatus;
 
         if($this->_request->isPost($this->_request->getParam('save'))){
-            $id = $this->_request->getParam('id');
+            $id = $this->_request->getParam('orderId');
             $data['invoiceNumber'] = $this->_request->getParam('invoiceNumber');
             $data['userId'] = $this->_request->getParam('userId');
             $data['taxNumber'] = $this->_request->getParam('taxNumber');
@@ -233,8 +233,11 @@ class Admin_StoreController extends Zend_Controller_Action
 
             $tblOrder = new App_Model_Db_Table_Order();
             $update = $tblOrder->update($data, 'orderId = '.$id);
-            $redirector = $this->_helper->getHelper('redirector');
-            $redirector->gotoSimple(array('order', 'store', 'admin', 'order'));
+            
+            //$redirector = $this->_helper->getHelper('redirector');
+            //$redirector->gotoSimple(array('detailorder', 'store', 'admin', 'order'));
+            
+            $this->_redirect($this->view->serverUrl() . '/' . $this->view->getLanguage() . '/store/detailOrder/orderId/' . $id);
         }
 
     }
@@ -248,7 +251,7 @@ class Admin_StoreController extends Zend_Controller_Action
         $offset = ($r->getParam('offset'))?$r->getParam('offset'):0;
         $this->view->offset = $offset;
 
-        $idOrder = $r->getParam('id');
+        $idOrder = $r->getParam('orderId');
 
         $rowset = App_Model_Show_Order::show()->getOrderAndStatus($idOrder);
         
@@ -369,7 +372,7 @@ class Admin_StoreController extends Zend_Controller_Action
     }
     public function payconfirmAction()
     {
-		$idOrder = $this->_request->getParam('id');
+		$idOrder = $this->_request->getParam('orderId');
 		
 		$tblOrder = new App_Model_Db_Table_Order();
         $tblOrderDetail = new App_Model_Db_Table_OrderDetail();
@@ -392,7 +395,7 @@ class Admin_StoreController extends Zend_Controller_Action
 		$this->_helper->viewRenderer->setNoRender(TRUE);
 		print_r($this->_request->getParams());
 		
-		$id = $this->_request->getParam('id');
+		$id = $this->_request->getParam('orderId');
 		
 		$tblOrder = new App_Model_Db_Table_Order();
 		$tblHistory = new App_Model_Db_Table_OrderHistory();
@@ -423,19 +426,18 @@ class Admin_StoreController extends Zend_Controller_Action
 		//mailer 
 		//$this->Mailer($id, 'user-confirm', 'user');
 		$mod = new App_Model_Store_Mailer();
-		$mod->sendReceiptToUser($id,'Bank Transfer');
+		if ($date[0]->paymentMethod == 'bank') {
+			$mod->sendReceiptToUser($id,'Bank Transfer');
+		}
 		
 		//redirect to confirmation page
-		$zl = Zend_Registry::get('Zend_Locale');
-		$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/store/confirm');
-			
-		
+		$this->_redirect($this->view->serverUrl() . '/' . $this->view->getLanguage() . '/store/confirm');
 	}
 	public function payconfirmnoAction()
 	{
 		$this->_helper->viewRenderer->setNoRender(TRUE);
 		
-		$id = $this->_request->getParam('id');
+		$id = $this->_request->getParam('orderId');
 		
 		$method = 6;
 		
@@ -465,11 +467,12 @@ class Admin_StoreController extends Zend_Controller_Action
 		$dataHistory->save();
 		
 		$mod = new App_Model_Store_Mailer();
-		$mod->sendReceiptToUser($id,'Bank Transfer', "REJECTED");
+		if ($date[0]->paymentMethod == 'bank') {
+			$mod->sendReceiptToUser($id,'Bank Transfer');
+		}
 		
 		//redirect to confirmation page
-		$zl = Zend_Registry::get('Zend_Locale');
-		$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/store/confirm');
+		$this->_redirect($this->view->serverUrl() . '/' . $this->view->getLanguage() . '/store/confirm');
 	}
     public function trdetailAction()
     {

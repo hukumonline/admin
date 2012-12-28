@@ -51,7 +51,7 @@
                         Transfer Amount : <?=$row['amount'];?><br/>
                         Payment Date : <?=Pandamp_Lib_Formater::get_date($row['paymentDate']);?><br/>
                     </td>
-                    <td><a href="<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'payconfirm', 'id'=>$row['orderId']),'segwact');?>">confirm</a></td>
+                    <td><a href="<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'payconfirm', 'orderId'=>$row['orderId']),'segwact');?>">confirm</a></td>
                 </tr>
                 <? $i++; endforeach;?>
             </tbody>

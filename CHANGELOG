@@ -17,3 +17,29 @@
 			InvoiceController
 			UserController
 			user/invoicelist.phtml
+			
+2012-12-21
+===================
+[USER]
+	- Changed email confirmation for individual package
+		- old:http://id.hukumonline.com/membership/user/activate/$guid
+		  new:http://id.hukumonline.com/user/activate/$guid
+		- old:Rp. 200.000,-
+		  new:Rp. $packageprice
+	- Changed email confirmation for corporate package
+		- old:http://id.hukumonline.com/membership/user/activate/$guid
+		  new:http://id.hukumonline.com/user/activate/$guid
+		- old:Rp. 1000.000,-
+		  new:Rp. $packageprice
+		- old:Korporasi -> package hardcode
+		  new:$packagename
+
+2012-12-27
+===================
+[USER]
+	- di INVOICE bedanya jika trial account habis kolom "Paid" jadi D artinya downgrade
+	  tapi "Paid Date" nya kosong.
+    - Tapi jika dia sudah bayar	dan sudah lewat expirenya maka kolom "Paid" jadi D
+      dan "Paid Date" nya terisi
+      
+       		  

@@ -130,7 +130,13 @@ class Pandamp_Core_Hol_User
 			
 			//$temptime = time();
 			$temptime = strtotime($rowUser->createdDate);
-			$temptime = Pandamp_Lib_Formater::DateAdd('d',5,$temptime);
+			
+			if ($rowUser->trialInDays == 0)
+				$trial = 5;
+			else 
+				$trial = $rowUser->trialInDays;
+				
+			$temptime = Pandamp_Lib_Formater::DateAdd('d',$trial,$temptime);
 			
 			$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
 			
@@ -168,7 +174,7 @@ class Pandamp_Core_Hol_User
 	 * _writeConfirmIndividualEmail
 	 * @return JSON
 	 */
-	function _writeConfirmIndividualEmail($mailcontent, $fullname, $username, $password, $payment, $disc, $total, $guid, $email)
+	function _writeConfirmIndividualEmail($mailcontent, $package, $fullname, $username, $password, $payment, $disc, $total, $guid, $email)
 	{
 		$obj 			= new Pandamp_Crypt_Password();
 		
@@ -177,6 +183,12 @@ class Pandamp_Core_Hol_User
 		$mailcontent 	= str_replace('$password',$password,$mailcontent);
 		$mailcontent 	= str_replace('$disc',$disc,$mailcontent);
 		$mailcontent 	= str_replace('$timeline',$payment,$mailcontent);
+		
+		$tblPackage = new App_Model_Db_Table_Package();
+		$rowPackage = $tblPackage->fetchRow("packageId=$package");
+		
+		$mailcontent 	= str_replace('$packageprice',number_format($rowPackage->charge),$mailcontent);
+		
 		$mailcontent 	= str_replace('$price',number_format($total),$mailcontent);
 		$mailcontent 	= str_replace('$guid',$guid,$mailcontent);
 		
@@ -224,14 +236,24 @@ class Pandamp_Core_Hol_User
 	 * _writeConfirmCorporateEmail
 	 * @return JSON
 	 */
-	function _writeConfirmCorporateEmail($mailcontent, $fullname, $company, $payment, $disc, $total, $username, $guid, $email)
+	function _writeConfirmCorporateEmail($mailcontent, $package, $fullname, $company, $payment, $disc, $total, $username, $guid, $email)
 	{
 		$obj 			= new Pandamp_Crypt_Password();
 		
 		$mailcontent 	= str_replace('$fullname',$fullname,$mailcontent);
 		$mailcontent 	= str_replace('$company',$company,$mailcontent);
+		
+		$pn = App_Model_Show_AroGroup::show()->getUserGroup($package);
+		
+		$mailcontent 	= str_replace('$packagename',$pn['name'],$mailcontent);
 		$mailcontent 	= str_replace('$timeline',$payment,$mailcontent);
 		$mailcontent 	= str_replace('$disc',$disc,$mailcontent);
+		
+		$tblPackage = new App_Model_Db_Table_Package();
+		$rowPackage = $tblPackage->fetchRow("packageId=$package");
+		
+		$mailcontent 	= str_replace('$packageprice',number_format($rowPackage->charge),$mailcontent);
+		
 		$mailcontent 	= str_replace('$price',number_format($total),$mailcontent);
 		$mailcontent 	= str_replace('$username1',$username,$mailcontent);
 		$mailcontent 	= str_replace('$guid',$guid,$mailcontent);

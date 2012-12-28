@@ -148,7 +148,7 @@ class Customer_UserController extends Zend_Controller_Action
 					$rowset = $modelUser->find($id)->current();
 					if ($rowset != null) 
 					{
-				        if (in_array($rowset->packageId,array(14,15,16,17,18,36,37,38)))
+				        if (in_array($rowset->packageId,array(14,15,16,17,18)))
 				        {
 				        	$periodeId = 2;
 							// Get disc promo
@@ -247,8 +247,11 @@ class Customer_UserController extends Zend_Controller_Action
 					{
 						if (($rowset->isActive == 0)) 
 						{
-					        if (in_array($rowset->packageId,array(14,15,16,17,18,36,37,38)))
+					        if (in_array($rowset->packageId,array(14,15,16,17,18)))
 					        {
+					        	$formater = new Pandamp_Core_Hol_User();
+					        	$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
+					        	$formater->_writeInvoice($rowset->kopel, $total, 0, $rowset->paymentId,'admin');
 					        	$periodeId = 2;
 					        }
 					        else 
@@ -265,6 +268,7 @@ class Customer_UserController extends Zend_Controller_Action
 						}
 						
 				        $data = array(
+				        	'activationDate' => date("Y-m-d h:i:s"),
 				        	'periodeId' => $periodeId,
 				        	'modifiedDate' => date("Y-m-d h:i:s"),
 				        	'modifiedBy' => $this->_user->username,
@@ -307,7 +311,7 @@ class Customer_UserController extends Zend_Controller_Action
 						->where('ku.kopel=?',$id);
 			
 					$rowUser = $modelUser->fetchRow($sql);
-   		        	if (in_array($rowUser->packageId,array(14,15,16,17,18,36,37,38))) {
+   		        	if (in_array($rowUser->packageId,array(14,15,16,17,18))) {
    		        		
 						$tblInvoice = new App_Model_Db_Table_Invoice();
 						$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$id);
@@ -372,7 +376,7 @@ class Customer_UserController extends Zend_Controller_Action
         		
    		        $modelUser = new App_Model_Db_Table_User();
         		$rowset = $modelUser->fetchRow("kopel='".$id."'");
-				if ((in_array($rowset->packageId,array(14,15,16,17,18,36,37,38))) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
+				if ((in_array($rowset->packageId,array(14,15,16,17,18))) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
 				{
 					$formater = new Pandamp_Core_Hol_User();
 					/**
@@ -948,13 +952,23 @@ class Customer_UserController extends Zend_Controller_Action
         if($r->isPost()){
 
             $newGroup = $r->getParam('aro_groups');
-            $data = array(
-                'packageId' => $newGroup
-            );
-
+            
             $id = $r->getParam('id');
             
             $oldUser = App_Model_Show_User::show()->getUserById($id);
+
+            $groupName = App_Model_Show_AroGroup::show()->getUserGroup($newGroup);
+            
+	    	$package = App_Model_Show_AroGroup::show()->getUserGroup($oldUser['packageId']);
+	    	
+			$notes = date("Y-m-d h:i:s") . " - Changed package " . $package['name'] . " TO " . $groupName['name'];
+			$notes = ($oldUser['notes'])? $oldUser['notes']."\n".$notes : $notes;
+            $data = array(
+                 'packageId' 	=> $newGroup
+                ,'notes'	 	=> $notes
+                ,'modifiedDate'	=> date("Y-m-d h:i:s")
+                ,'modifiedBy'	=> Zend_Auth::getInstance()->getIdentity()->username
+            );
 
             $modelUser = new App_Model_Db_Table_User();
             $modelUser->update($data, "kopel='".$id."'");
@@ -982,12 +996,11 @@ class Customer_UserController extends Zend_Controller_Action
 
             $username = $r->getParam('username');
             $acl = Pandamp_Acl::manager();
-            //$acl->deleteUser($username);
+            $acl->deleteUser($username);
             //$acl->removeUserFromGroup($username, $oldUser['packageId']);
 
-            $groupName = App_Model_Show_AroGroup::show()->getUserGroup($newGroup);
-            //$acl->addUser($username,$groupName['name']);
-            $acl->addUserToGroup($username, $groupName['name']);
+            $acl->addUser($username,$groupName['name']);
+            //$acl->addUserToGroup($username, $groupName['name']);
 
             $this->view->message = "Package was sucessfully changed.";
         }
