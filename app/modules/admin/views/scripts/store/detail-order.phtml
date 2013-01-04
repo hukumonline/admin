@@ -89,7 +89,7 @@
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Payment Date</b></div>
-        <div class="column width2"><?=(!empty($row['paidDate']))?strftime("%Y-%m-%d",strtotime($row['paidDate'])):'undefined'; ?>&nbsp;</div>
+        <div class="column width2"><?=$row['paymentDate']; ?>&nbsp;</div>
         <div class="column width2"><input type="hidden" name="id" value="<?=$this->id;?>"></div>
 
     </div>

@@ -42,36 +42,23 @@
                     </td>
                     <td><?=$row->paymentMethod;?></td>
                     <td class="center"><?=strftime("%Y-%m-%d", strtotime($row->datePurchased));?></td>
-                    <td><?=(!empty($row->lastModified))?strftime("%Y-%m-%d",strtotime($row->lastModified)):'undefined';?></td>
+                    <td><?=strftime("%Y-%m-%d",strtotime($row->lastModified));?></td>
                     <td><?=$row->ordersStatus;?></td>
                     <td><?=$row->orderTotal;?></td>
                     <td><?=$row->countTotal;?></td>
                     <td>
                        <a href="<? echo $this->url(array('controller'=>'store',
-                            'action'=>'editOrder', 'id'=>$row->orderId));?>">edit</a>
+                            'action'=>'editOrder', 'orderId'=>$row->orderId));?>">edit</a>
                        <a href="<? echo $this->url(array('controller'=>'store',
-                            'action'=>'trdetail', 'id'=>$row->orderId));?>">detail</a>
+                            'action'=>'trdetail', 'orderId'=>$row->orderId));?>">detail</a>
                        <? if($row->orderStatus == 3){?>
                        <a href="<? echo $this->url(array('controller'=>'store',
-                            'action'=>'refund', 'id'=>$row->orderId));?>">refund</a>
+                            'action'=>'refund', 'orderId'=>$row->orderId));?>">refund</a>
                        <?}?>
                     </td>
                 </tr>
                 <? $i++; endforeach;?>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>No</th>
-                    <th>Description</th>
-                    <th>Payment Method</th>
-                    <th>Purchasing Date</th>
-                    <th>Modified Date</th>
-                    <th>Order Status</th>
-                    <th>Total Price</th>
-                    <th>Qty</th>
-                    <th>Action</th>
-                </tr>
-            </tfoot>
         </table>
 
 

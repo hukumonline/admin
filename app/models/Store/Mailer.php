@@ -82,7 +82,7 @@ HUKUMONLINE
 		}
 		
 		$this->send($config->mail->sender->support->email, $config->mail->sender->support->name, 
-				$userEmail, 'Layanan Hukumonline', "[HUKUMONLINE] Receipt Invoice# ". $rowOrder->invoiceNumber, $message);
+				$userEmail, $userFullname, "[HUKUMONLINE] Receipt Invoice# ". $rowOrder->invoiceNumber, $message);
 	}
     public function send($mailFrom, $fromName, $mailTo, $mailToName, $subject, $body)
     {

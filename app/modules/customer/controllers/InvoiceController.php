@@ -248,6 +248,8 @@ class Customer_InvoiceController extends Zend_Controller_Action
 	        
 	        if (in_array($rowset->packageId,array(14,15,16,17,18)))
 	        {
+	        	if (isset($rowset->paymentId) && ($rowset->paymentId <> 0))
+	        	{
 	        	$periodeId = 2;
 	        	/**
 	        	 * @modifiedDate: Dec 07, 2012
@@ -258,6 +260,11 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				//$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
 				$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
 				$formater->_writeInvoice($rowset->kopel,$total,0,$rowset->paymentId);
+	        	}
+	        	else 
+	        	{
+	        		die('Lamanya berlangganan kosong');
+	        	}
 	        }
 	        else 
 	        {
@@ -307,7 +314,8 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowInvoice->uid 				= $rowset->uid;
 			
 			$rowUser = App_Model_Show_User::show()->getUserById($rowset->uid);
-			
+			if (isset($rowUser['paymentId']) && ($rowUser['paymentId'] <> 0))
+			{
 			$tblPackage = new App_Model_Db_Table_Package();
 			$rowPackage = $tblPackage->fetchRow("packageId=".$rowUser['packageId']."");
 			if ($rowUser['paymentId'] == 12) {
@@ -335,6 +343,12 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
             $aResult['isError'] = true;
             $aResult['msg'] = 'Invoice has been updated';
+			}
+			else 
+			{
+            $aResult['isError'] = true;
+            $aResult['msg'] = 'Lamanya berlangganan kosong';
+			}
 		}
 		else 
 		{

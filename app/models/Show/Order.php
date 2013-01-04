@@ -98,4 +98,18 @@ class App_Model_Show_Order extends App_Model_Db_DefaultAdapter
 
         return $result;
     }
+
+    public function getOrderDetail($orderId)
+    {
+        $db = parent::_getDefaultAdapter();
+        $query = $db->query("SELECT KO.*, KOD.*
+                                FROM KutuOrder AS KO
+                                JOIN KutuOrderDetail AS KOD
+                                ON KOD.orderId = KO.orderId
+                                WHERE KO.orderId = $orderId");
+
+        $result = $query->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        return $result;
+    }
 }

@@ -42,4 +42,10 @@
     - Tapi jika dia sudah bayar	dan sudah lewat expirenya maka kolom "Paid" jadi D
       dan "Paid Date" nya terisi
       
+2013-01-04
+===================
+[USER]
+	- Pada saat klik Activation jika field 'subscription' nya kosong/0 maka 
+	  periode status nya masih tetap 'waiting' lihat field 'notes' untuk
+	  lebih jelasnya
        		  

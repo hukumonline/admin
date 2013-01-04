@@ -79,11 +79,11 @@
 </tr>
 <tr>
 	<td>Terakhir di modifikasi</td>
-	<td><?=(!($row['lastModified']=="0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($row['lastModified'])):'undefined'; ?></td>
+	<td><?=$row['lastModified']; ?></td>
 </tr>
 <tr>
 	<td>Tanggal pembelian</td>
-	<td><?=(!($row['datePurchased']))?strftime("%d-%m-%Y",strtotime($row['datePurchased'])):'undefined'; ?></td>
+	<td><?=($row['datePurchased'])?strftime("%d-%m-%Y",strtotime($row['datePurchased'])):'undefined'; ?></td>
 </tr>
 <tr>
 	<td><abbr>Status Pesanan</abbr></td>
@@ -91,7 +91,7 @@
 </tr>
 <tr>
 	<td>Pesanan selesai tanggal</td>
-	<td><?=(!($row['dateOrderFinished']=="0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($row['dateOrderFinished'])):'undefined'; ?></td>
+	<td><?=$row['dateOrderFinished']; ?></td>
 </tr>
 <tr>
 	<td>Mata Uang</td>
@@ -182,10 +182,10 @@
 	<td><b><font color="<?=$col?>"><?=$ext?></font></b></td>
 	<td>
 <a class="success" href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 
-            'action'=>'payconfirmyes', 'id'=>$this->idOrder),'segwact');?>">
+            'action'=>'payconfirmyes', 'orderId'=>$this->idOrder),'segwact');?>">
             Accept [Confirm] </a>&nbsp;  
 <a class="error" href="<? echo $this->url(array('controller'=>'store', 
-            'action'=>'payconfirmno', 'method'=>$rowConfirm->paymentMethod, 'id'=>$this->idOrder ));?>">Reject </a> &nbsp;
+            'action'=>'payconfirmno', 'orderId'=>$this->idOrder ));?>">Reject </a> &nbsp;
 <a class="notice" href="#" id="<?=$rowConfirm->id;?>">Delete</a>
 	</td>
 </tr>
@@ -203,7 +203,7 @@ $(document).ready(function(){
 	$(".notice").live('click',function(){
 		if (confirm("Are you sure?")) {
 			var iId = $(this).attr('id');
-            $.post('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/store/deleteconfirm/id/'+iId,function(){
+            $.post('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/store/deleteconfirm/orderId/'+iId,function(){
                 $('#row_'+iId).fadeOut("slow");
                 $('#message').fadeIn("slow", function(){
                     $(this).html("Row "+iId+" Deleted Successfully").delay(2000).fadeOut(1000);

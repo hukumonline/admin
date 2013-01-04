@@ -3,7 +3,7 @@
 <legend>NO. PESANAN: <?=$this->id;?></legend>
 <div class="width8" align="right">
     <form style="z-index:1;overflow:hidden;">
-    <input class="btn btn-green big" type="button" value="Refund" onclick="window.location.href='<?=ROOT_URL?>/<?=$this->getLanguage();?>/store/refunded/id/<?=$this->id?>'" />
+    <input class="btn btn-green big" type="button" value="Refund" onclick="window.location.href='<?=ROOT_URL?>/<?=$this->getLanguage();?>/store/refunded/orderId/<?=$this->id?>'" />
     &nbsp;
     <input class="btn btn-green big" type="button" value="Back" onclick="javascript:history.back();" />
     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -68,7 +68,7 @@
 	?>&nbsp;
 	</div>
 	<div class="column width2">Telp.</div>
-	<div class="column width2"><?=$row['taxPhone'];?>&nbsp;</div>
+	<div class="column width2"><?=(isset($row['taxPhone']))?$row['taxPhone']:'';?>&nbsp;</div>
 	
 	<div class="clear">&nbsp;</div>
 	

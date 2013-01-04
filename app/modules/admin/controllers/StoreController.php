@@ -390,10 +390,11 @@ class Admin_StoreController extends Zend_Controller_Action
 		$this->view->rowsetDetail = $rowsetDetail;
 		$this->view->rowsetConfirm = $rowsetConfirm;
     }
+    
 	public function payconfirmyesAction()
 	{
 		$this->_helper->viewRenderer->setNoRender(TRUE);
-		print_r($this->_request->getParams());
+		//print_r($this->_request->getParams());
 		
 		$id = $this->_request->getParam('orderId');
 		
@@ -401,6 +402,52 @@ class Admin_StoreController extends Zend_Controller_Action
 		$tblHistory = new App_Model_Db_Table_OrderHistory();
         $tblConfirm = new App_Model_Db_Table_PaymentConfirmation();
 		
+        $rowOrder = $tblOrder->find($id)->current();
+        if ($rowOrder->paymentMethodNote == 'membership') {
+        	$oldUser = App_Model_Show_User::show()->getUserById($rowOrder->userId);
+        	$oldpackage = App_Model_Show_AroGroup::show()->getUserGroup($oldUser['packageId']);
+        	
+        	$newGroup = App_Model_Show_AroGroup::show()->getUserGroup($rowOrder->note);
+        	
+        	$notes = date("Y-m-d h:i:s") . " - Changed package " . $oldpackage['name'] . " TO " . $newGroup['name'];
+        	$notes = ($oldUser['notes'])? $oldUser['notes']."\n".$notes : $notes;
+            $dataUser = array(
+                 'packageId' 	=> $rowOrder->note
+                ,'notes'	 	=> $notes
+                ,'modifiedDate'	=> date("Y-m-d h:i:s")
+                ,'modifiedBy'	=> Zend_Auth::getInstance()->getIdentity()->username
+            );
+            
+            $modelUser = new App_Model_Db_Table_User();
+            $modelUser->update($dataUser, "kopel='".$rowOrder->userId."'");
+            
+            $dataUserDetail = array(
+            	'userId'			=> $oldUser['kopel']
+            	,'packageId'		=> $oldUser['packageId']
+            	,'promotionId'		=> $oldUser['promotionId']
+            	,'educationId'		=> $oldUser['educationId']
+            	,'expenseId'		=> $oldUser['expenseId']
+            	,'paymentId'		=> $oldUser['paymentId']
+            	,'businessTypeId'	=> $oldUser['businessTypeId']
+            	,'periodeId'		=> $oldUser['periodeId']
+            	,'activationDate'	=> $oldUser['activationDate']
+            	,'createdDate'		=> $oldUser['createdDate']
+            	,'createdBy'		=> $oldUser['createdBy']
+            	,'modifiedDate'		=> $oldUser['modifiedDate']
+            	,'modifiedBy'		=> $oldUser['modifiedBy']
+            	,'isActive'			=> $oldUser['isActive']
+            	,'isContact'		=> $oldUser['isContact']
+            );
+            
+            $modelUserDetail = new App_Model_Db_Table_UserDetail();
+            $modelUserDetail->insert($dataUserDetail);
+
+            $acl = Pandamp_Acl::manager();
+            $acl->deleteUser($oldUser['username']);
+
+        	$acl->addUser($oldUser['username'],$newGroup['name']);
+        }
+        
 		//select payment date from paymentconfirmation
 		$date = $tblConfirm->fetchAll("orderId = ". $id." AND confirmed = 0");
 		
@@ -426,9 +473,7 @@ class Admin_StoreController extends Zend_Controller_Action
 		//mailer 
 		//$this->Mailer($id, 'user-confirm', 'user');
 		$mod = new App_Model_Store_Mailer();
-		if ($date[0]->paymentMethod == 'bank') {
-			$mod->sendReceiptToUser($id,'Bank Transfer');
-		}
+		$mod->sendReceiptToUser($id,ucwords($date[0]->paymentMethod));
 		
 		//redirect to confirmation page
 		$this->_redirect($this->view->serverUrl() . '/' . $this->view->getLanguage() . '/store/confirm');
@@ -467,16 +512,14 @@ class Admin_StoreController extends Zend_Controller_Action
 		$dataHistory->save();
 		
 		$mod = new App_Model_Store_Mailer();
-		if ($date[0]->paymentMethod == 'bank') {
-			$mod->sendReceiptToUser($id,'Bank Transfer');
-		}
+		$mod->sendReceiptToUser($id,ucwords($date[0]->paymentMethod));
 		
 		//redirect to confirmation page
 		$this->_redirect($this->view->serverUrl() . '/' . $this->view->getLanguage() . '/store/confirm');
 	}
     public function trdetailAction()
     {
-	    $orderId = $this->_request->getParam('id');
+	    $orderId = $this->_request->getParam('orderId');
         
 		$tblOrder = new App_Model_Db_Table_Order();
 		$tblOrderDetail = new App_Model_Db_Table_OrderDetail();
@@ -499,7 +542,7 @@ class Admin_StoreController extends Zend_Controller_Action
 	}
     public function refundAction()
     {
-        $orderId = $this->_request->getParam('id');
+        $orderId = $this->_request->getParam('orderId');
         
         $tblOrder = new App_Model_Db_Table_Order();
         $tblOrderDetail = new App_Model_Db_Table_OrderDetail();
@@ -513,9 +556,9 @@ class Admin_StoreController extends Zend_Controller_Action
 	public function refundedAction()
 	{
 		$this->_helper->viewRenderer->setNoRender(TRUE);
-        $orderId = $this->_request->getParam('id');
+        $orderId = $this->_request->getParam('orderId');
         
-        print_r($this->_request->getParams());
+        //print_r($this->_request->getParams());
         
         $tblOrder = new App_Model_Db_Table_Order();
         $tblOrderDetail = new App_Model_Db_Table_OrderDetail();
@@ -531,15 +574,14 @@ class Admin_StoreController extends Zend_Controller_Action
         $data2['note'] = 'Refund Payment on process';
         $updateHistory = $tblOrderHistory->insert($data2);
         
-		$zl = Zend_Registry::get('Zend_Locale');
-		$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/store/transaction');
+		$this->_redirect(ROOT_URL.'/'.$this->view->getLanguage().'/store/transaction');
     }
 	public function deleteconfirmAction()
 	{
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(TRUE);
 		
-		$id = $this->_request->getParam('id');
+		$id = $this->_request->getParam('orderId');
 		
 		$modelPc = new App_Model_Db_Table_PaymentConfirmation();
 		$rowPc = $modelPc->find($id)->current();

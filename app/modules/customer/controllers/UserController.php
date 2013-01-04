@@ -249,13 +249,26 @@ class Customer_UserController extends Zend_Controller_Action
 						{
 					        if (in_array($rowset->packageId,array(14,15,16,17,18)))
 					        {
-					        	$formater = new Pandamp_Core_Hol_User();
-					        	$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
-					        	$formater->_writeInvoice($rowset->kopel, $total, 0, $rowset->paymentId,'admin');
-					        	$periodeId = 2;
+					        	if (isset($rowset->paymentId) && ($rowset->paymentId <> 0))
+					        	{
+						        	$formater = new Pandamp_Core_Hol_User();
+						        	$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
+						        	$formater->_writeInvoice($rowset->kopel, $total, 0, $rowset->paymentId,'admin');
+						        	$periodeId = 2;
+						        	
+						        	$notes = date("Y-m-d h:i:s") . " - Invoice has been created succesfully";
+					        	}
+					        	else 
+					        	{
+									$notes = date("Y-m-d h:i:s") . " - Created invoice " . $rowset->username . " Failed.";
+									$notes = ($rowset->notes)? $rowset->notes."\n".$notes : $notes;
+					        		
+					        		$periodeId = 1;
+					        	}
 					        }
 					        else 
 					        {
+					        	$notes = date("Y-m-d h:i:s") . " - Package has been activated";
 					        	$periodeId = 3;
 					        }
 					        
@@ -263,6 +276,7 @@ class Customer_UserController extends Zend_Controller_Action
 						}
 						else 
 						{
+							$notes = date("Y-m-d h:i:s") . " - Status is not active";
 							$periodeId = 1;
 							$isActive = 0;
 						}
@@ -272,7 +286,8 @@ class Customer_UserController extends Zend_Controller_Action
 				        	'periodeId' => $periodeId,
 				        	'modifiedDate' => date("Y-m-d h:i:s"),
 				        	'modifiedBy' => $this->_user->username,
-				            'isActive' => $isActive
+				            'isActive' => $isActive,
+				            'notes' => $notes
 				        );
 				
 				        $modelUser->update($data, "kopel='".$id."'");
@@ -904,6 +919,8 @@ class Customer_UserController extends Zend_Controller_Action
          * comment line 897-899
          */
         if ($this->getRequest()->isPost()) {
+        	if (isset($user['paymentId']) && ($user['paymentId'] <> 0))
+        	{
 			$tblInvoice = new App_Model_Db_Table_Invoice();
 //			$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$this->getRequest()->getPost('kopel'));
 //			$rowInvoice = $tblInvoice->fetchAll($where);
@@ -920,7 +937,12 @@ class Customer_UserController extends Zend_Controller_Action
 				$rowInvoice->expirationDate = $this->getRequest()->getPost('expirationDate');
 				
 				$rowInvoice->save();
-				
+        	}
+        	else 
+        	{
+        		die('Lamanya berlangganan kosong, silahkan edit dulu data pelanggan');
+        	}
+        	
 				$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/invoicelist/id/'.$this->getRequest()->getPost('kopel'));
 //			}
         }

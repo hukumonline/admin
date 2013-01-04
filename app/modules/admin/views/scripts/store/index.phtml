@@ -34,8 +34,8 @@
                     <td class="center"><?=$rowset[$i][$x]->orderTotal;?></td>
                     <td class="center"><?=$rowset[$i][$x]->countTotal;?></td>
                     <td class="center">
-                        <a href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'editOrder', 'id'=>$rowset[$i][$x]->orderId),'segwact');?>">Edit</a>
-                        <a href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'detailOrder', 'id'=>$rowset[$i][$x]->orderId),'segwact');?>">Detail</a>
+                        <a href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'editOrder', 'orderId'=>$rowset[$i][$x]->orderId),'segwact');?>">Edit</a>
+                        <a href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'detailOrder', 'orderId'=>$rowset[$i][$x]->orderId),'segwact');?>">Detail</a>
                     </td>
                 </tr>
                 <?}?>
