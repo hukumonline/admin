@@ -150,13 +150,13 @@
 					<td colspan="14"><abbr>Klinik</abbr></td>
 				</tr>
 				<tr>
-					<td><abbr>All Questions</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="">[detail]</a><?php endif; ?></td>
+					<td><abbr>All Questions</abbr><?php if ($this->printmode <> 1) : ?>&nbsp;<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/report/hol/dc/y/<?php echo $this->y; ?>/p/klinik" target="_blank">[detail]</a><?php endif; ?></td>
 					<?php for ($i=0;$i<count($this->clinic);$i++) : ?>
 					<td class="ta-center">
 						<?php if ($this->printmode == 1) :
 						echo $this->clinic[$i];
 						else : ?>
-						<a href=""><?php echo $this->clinic[$i]; ?></a>
+						<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/report/hol/dc/y/<?php echo $this->m[$i]; ?>/p/klinik" target="_blank"><?php echo $this->clinic[$i]; ?></a>
 						<?php endif; ?>
 					</td>
 					<?php endfor; ?>

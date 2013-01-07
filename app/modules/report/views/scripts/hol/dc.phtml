@@ -27,6 +27,11 @@
 		<td><?php echo $this->helperLoader('report')->selectBy(array('id' => 'by', 'name' => 'by', 'class' => 'no-class', 'selected' => $this->by, 'profile' => 'article')); ?></td>
 		<td><?php echo $this->helperLoader('report')->selectAuthor(array('id' => 'author', 'name' => 'author', 'class' => 'no-class', 'selected' => $this->author, 'profile' => 'article')); ?></td>
 		
+		<?php } else if ($this->p == 'klinik') { ?>
+		<td>&nbsp;</td>
+		<td><?php echo $this->helperLoader('report')->selectBy(array('id' => 'by', 'name' => 'by', 'class' => 'no-class', 'selected' => $this->by, 'profile' => 'klinik')); ?></td>
+		<td><?php echo $this->helperLoader('report')->selectAuthorClinic(array('id' => 'authorclinic', 'name' => 'authorclinic', 'class' => 'no-class', 'selected' => $this->authorclinic)); ?></td>
+		
 		<?php } else { ?>
 		<td>&nbsp;</td>
 		<td><?php echo $this->helperLoader('report')->selectBy(array('id' => 'by', 'name' => 'by', 'class' => 'no-class', 'selected' => $this->by, 'profile' => 'kutu_putusan')); ?></td>
