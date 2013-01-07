@@ -131,6 +131,8 @@ class Report_HolController extends Zend_Controller_Action
 			$profile = 'profile:(kutu_peraturan OR kutu_peraturan_kolonial OR kutu_rancangan_peraturan)';
 		else if ($p == 'article')			
 			$profile = 'profile:(article OR isuhangat)';
+		else if ($p == 'klinik')
+			$profile = 'profile:klinik';
 		else 
 			$profile = 'profile:kutu_putusan';
 			
