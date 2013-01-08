@@ -71,7 +71,7 @@
                                 <? } ?>
                                     <br><small>id:<?=$hit['guid'];?> - by: <?=$hit['createdBy'];?>&nbsp;<span class="subtitle"><?=$hit['publishedDate'];?></span></small>
 	                                <?php $rowUser = App_Model_Show_User::show()->getUserByName($hit['createdBy']); ?>
-	                                <br><small><?php echo $rowUser['email']; ?></small>
+	                                <br><small><a href="mailto:<?php echo $rowUser['email']; ?>"><?php echo $rowUser['email']; ?></a></small>
                             </td>
                             <td><?=$hit['profileGuid'];?></td>
                             <td>
