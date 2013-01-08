@@ -82,6 +82,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 			try {
 				$solr->addDocuments( $documents );
 				$solr->commit();
+				//$solr->optimize();
 			}
 			catch ( Exception $e ) {
 				throw new Zend_Exception($e->getMessage());
