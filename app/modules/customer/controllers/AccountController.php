@@ -69,16 +69,18 @@ class Customer_AccountController extends Zend_Controller_Action
 				{
 					/**
 					 * @modifiedDate: December 07, 2012
+					 * @modifiedDate-2: January 29, 2013
 					 */
 					case 14: // individual
 						
 						$mailcontent = $formater->getMailContent('konfirmasi-email-individual');
 						//$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
 						//$total = $formater->checkPromoValidation('Total',$value['aro_groups'],$promotionCode,$payment);
-						$total = $formater->checkPromoValidation($value['aro_groups'],$payment);
+						$total = $formater->checkPromoValidation('Total',$value['aro_groups'],$payment);
+						$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$payment);
 						
 						//$m = $formater->_writeConfirmIndividualEmail($mailcontent,$value['fullname'],$value['username'],$value['password'],$payment,$disc,$total,base64_encode($id),$value['email']);
-						$m = $formater->_writeConfirmIndividualEmail($mailcontent,$value['aro_groups'],$value['fullname'],$value['username'],$value['password'],$payment,0,$total,base64_encode($id),$value['email']);
+						$m = $formater->_writeConfirmIndividualEmail($mailcontent,$value['aro_groups'],$value['fullname'],$value['username'],$value['password'],$payment,$disc,$total,base64_encode($id),$value['email']);
 						
 						break;
 						
@@ -89,10 +91,11 @@ class Customer_AccountController extends Zend_Controller_Action
 						$mailcontent = $formater->getMailContent('konfirmasi-email-korporasi');
 						//$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$promotionCode,$payment);
 						//$total = $formater->checkPromoValidation('Total',$value['aro_groups'],$promotionCode,$payment);
-						$total = $formater->checkPromoValidation($value['aro_groups'],$payment);
+						$total = $formater->checkPromoValidation('Total',$value['aro_groups'],$payment);
+						$disc = $formater->checkPromoValidation('Disc',$value['aro_groups'],$payment);
 						
 						//$m = $formater->_writeConfirmCorporateEmail($mailcontent,$value['fullname'],$value['company'],$payment,$disc,$total,$value['username'],base64_encode($id),$value['email']);
-						$m = $formater->_writeConfirmCorporateEmail($mailcontent,$value['aro_groups'],$value['fullname'],$value['company'],$payment,0,$total,$value['username'],base64_encode($id),$value['email']);
+						$m = $formater->_writeConfirmCorporateEmail($mailcontent,$value['aro_groups'],$value['fullname'],$value['company'],$payment,$disc,$total,$value['username'],base64_encode($id),$value['email']);
 						
 						break;
 						

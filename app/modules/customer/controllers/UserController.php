@@ -252,8 +252,10 @@ class Customer_UserController extends Zend_Controller_Action
 					        	if (isset($rowset->paymentId) && ($rowset->paymentId <> 0))
 					        	{
 						        	$formater = new Pandamp_Core_Hol_User();
-						        	$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
-						        	$formater->_writeInvoice($rowset->kopel, $total, 0, $rowset->paymentId,'admin');
+									$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->paymentId);
+									$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->paymentId);
+									
+						        	$formater->_writeInvoice($rowset->kopel, $total, $disc, $rowset->paymentId,'admin');
 						        	$periodeId = 2;
 						        	
 						        	$notes = date("Y-m-d h:i:s") . " - Invoice has been created succesfully";
@@ -401,10 +403,11 @@ class Customer_UserController extends Zend_Controller_Action
 					//$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
 					// GET total promo
 					//$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
-					$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
+					$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->paymentId);
+					$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->paymentId);
 					// WRITE invoice
 					//$r = $formater->_writeInvoice($rowset->kopel, $total, $disc, $rowset->paymentId,'admin');
-					$r = $formater->_writeInvoice($rowset->kopel, $total, 0, $rowset->paymentId,'admin');
+					$r = $formater->_writeInvoice($rowset->kopel, $total, $disc, $rowset->paymentId,'admin');
 					
 					$result = $r;
 				}

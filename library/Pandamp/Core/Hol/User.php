@@ -20,22 +20,26 @@ class Pandamp_Core_Hol_User
 	 * @modifiedDate: December 07, 2012
 	 */
 	//function checkPromoValidation($whatPromo,$package,$promotionId='',$payment=0)
-	function checkPromoValidation($package,$payment=0)
+	function checkPromoValidation($whatPromo,$package,$payment=0)
 	{
 		/* ======================= NEW ============== 
 		 * December 07, 2012
+		 * @modifiedDate-2 January 29, 2013
 		*/
 		$tblPackage = new App_Model_Db_Table_Package();
 		$rowPackage = $tblPackage->fetchRow("packageId=$package");
 		if ($payment == 12) {
-			$total = $rowPackage->charge * 11;
+			$price = $rowPackage->charge * 11;
+			$total = ($price + (0.1 * $price));
+			$disc  = $rowPackage->charge;
 		}
 		else 
 		{
 			$total = $rowPackage->charge * $payment;
+			$disc  = 0;
 		}
 		
-		return $total;
+		//return $total;
 		
 		/* ======================= END-NEW ============== */
 		
@@ -89,6 +93,7 @@ class Pandamp_Core_Hol_User
 				
 			}
 		}
+		*/
 		
 		switch ($whatPromo)
 		{
@@ -99,7 +104,7 @@ class Pandamp_Core_Hol_User
 				return $total;
 			break;
 		}
-		*/
+		
 	}
 	
 	/**

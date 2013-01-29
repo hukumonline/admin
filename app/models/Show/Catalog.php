@@ -285,4 +285,41 @@ ORDER BY kc.createdDate ASC";
     	
     	return $result;
     }
+    
+    public function fetchNewsCatalog($profileGuid, $start = null , $end = null)
+    {
+    	$data = $this->implode_with_keys(", ", $profileGuid, "'");
+    	
+    	$db = parent::_dbSelect();
+    	
+    	$select = $db->from('KutuCatalog')
+    				->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array('folderGuid'))
+    				->where('KutuCatalog.status=?',99);
+    	
+    	$select->where("KutuCatalog.profileGuid IN ($data)") 
+    			->order('KutuCatalog.publishedDate DESC');
+    				
+    	if (is_int($start) && is_int($end)) {
+    		$select->limit($end,$start);
+    	}
+    	
+    	/*$sql = $select->__toString();
+    	print_r($sql);die;*/
+    	
+    	$conn = self::$_db;
+    	
+    	$rows = $conn->fetchAll($select);
+	    	
+    	return $rows;
+    }
+    
+    public function implode_with_keys($glue, $array, $valwrap)
+    {
+    	if (is_array($array)) {
+    		foreach ($array as $key => $value) {
+    			$ret[] = $valwrap.$value.$valwrap;
+    		}
+    		return implode($glue,$ret);
+    	}
+    }
 }

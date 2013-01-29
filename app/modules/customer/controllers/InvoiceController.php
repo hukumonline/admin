@@ -258,8 +258,10 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				//$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
 				// Get total promo
 				//$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->promotionId,$rowset->paymentId);
-				$total = $formater->checkPromoValidation($rowset->packageId,$rowset->paymentId);
-				$formater->_writeInvoice($rowset->kopel,$total,0,$rowset->paymentId);
+				$total = $formater->checkPromoValidation('Total',$rowset->packageId,$rowset->paymentId);
+				$disc = $formater->checkPromoValidation('Disc',$rowset->packageId,$rowset->paymentId);
+				
+				$formater->_writeInvoice($rowset->kopel,$total,$disc,$rowset->paymentId);
 	        	}
 	        	else 
 	        	{
