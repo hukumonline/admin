@@ -35,7 +35,8 @@ class Pandamp_Core_Hol_User
 		}
 		else 
 		{
-			$total = $rowPackage->charge * $payment;
+			$price = $rowPackage->charge * $payment;
+			$total = ($price + (0.1 * $price));
 			$disc  = 0;
 		}
 		
