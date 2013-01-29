@@ -346,7 +346,7 @@ class Pandamp_Core_Hol_Catalog
             if(isset($files['uploadedFile'.$x]))
             {
                     $file = $files['uploadedFile'.$x];
-                    $this->checkTitle($aDataCatalog['fixedTitle'.$x]);
+                    //$this->checkTitle($aDataCatalog['fixedTitle'.$x]);
             }
 
             $type = ($aDataCatalog['fixedType'.$x])? $aDataCatalog['fixedType'.$x] : '';
