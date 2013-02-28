@@ -98,7 +98,7 @@ class App_Model_Show_User extends App_Model_Db_DefaultAdapter
 			->joinLeft(array('kus' => 'KutuUserStatus'),
 			'ku.periodeId = kus.accountStatusId','kus.status')
 			->where("$where")
-			->order('kopel DESC')->limit($end, $start);
+			->order('ku.kopel DESC')->limit($end, $start);
     	
 		//$sql = $select->__toString();
     	//print_r($sql);exit();
