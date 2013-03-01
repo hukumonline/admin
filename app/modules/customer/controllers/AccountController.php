@@ -181,7 +181,7 @@ class Customer_AccountController extends Zend_Controller_Action
 	{
 		$rowset = App_Model_Show_Number::show()->getNumber();
 		$num = $rowset['user'];
-		$totdigit = 5;
+		$totdigit = 6;
 		$num = strval($num);
 		$jumdigit = strlen($num);
 		$kopel = str_repeat("0",$totdigit-$jumdigit).$num;
