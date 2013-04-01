@@ -48,6 +48,8 @@ class App_Model_Store_Mailer
 	    $config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
 	    $store = $config->getOption('store');
 	    
+	    $cEmail = new Zend_Config_Ini(CONFIG_PATH.'/mail.ini', 'mail');
+	    
 	    $holConfig = Pandamp_Config::getConfig();
 		
 		switch(strtolower($rowOrder->paymentMethod))
@@ -81,7 +83,7 @@ HUKUMONLINE
 
 		}
 		
-		$this->send($config->mail->sender->support->email, $config->mail->sender->support->name, 
+		$this->send($cEmail->mail->sender->support->email, $cEmail->mail->sender->support->name, 
 				$userEmail, $userFullname, "[HUKUMONLINE] Receipt Invoice# ". $rowOrder->invoiceNumber, $message);
 	}
     public function send($mailFrom, $fromName, $mailTo, $mailToName, $subject, $body)
