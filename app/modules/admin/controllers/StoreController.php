@@ -446,6 +446,13 @@ class Admin_StoreController extends Zend_Controller_Action
             $acl->deleteUser($oldUser['username']);
 
         	$acl->addUser($oldUser['username'],$newGroup['name']);
+        	
+        	$formater = new Pandamp_Core_Hol_User();
+        	
+			$total = $formater->checkPromoValidation('Total',$rowOrder->note,$oldUser['paymentId']);
+			$disc = $formater->checkPromoValidation('Disc',$rowOrder->note,$oldUser['paymentId']);
+			
+        	$formater->_writeInvoice($oldUser['kopel'], $total, $disc, $oldUser['paymentId'],'admin');
         }
         
 		//select payment date from paymentconfirmation
