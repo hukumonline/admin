@@ -58,11 +58,11 @@
                         <?
                         if($row->orderStatus == 4){
                                 echo "<a href=".$this->url(array('controller'=>'store',
-                                        'action'=> 'payconfirm', 'id'=>$row->orderId)).">Action</a>";
+                                        'action'=> 'payconfirm', 'orderId'=>$row->orderId)).">Action</a>";
                         }
                         ?>
                         <a href="<? echo $this->url(array('controller'=>'store',
-                    'action'=>$anchor, 'id'=>$row->orderId));?>">detail</a>
+                    'action'=>$anchor, 'orderId'=>$row->orderId));?>">detail</a>
                         <?
                         if($row->orderStatus !=5 && $row->orderStatus !=2 && $row->orderStatus !=3 ){
                                 echo "<a href=".$this->url(array('controller'=>'store',
