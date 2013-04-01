@@ -419,8 +419,7 @@ class Admin_StoreController extends Zend_Controller_Action
             );
             
             $modelUser = new App_Model_Db_Table_User();
-            $modelUser->update($dataUser, "kopel='".$rowOrder->userId."'");
-            
+                        
             $dataUserDetail = array(
             	'userId'			=> $oldUser['kopel']
             	,'packageId'		=> $oldUser['packageId']
@@ -447,12 +446,22 @@ class Admin_StoreController extends Zend_Controller_Action
 
         	$acl->addUser($oldUser['username'],$newGroup['name']);
         	
-        	$formater = new Pandamp_Core_Hol_User();
+        	$tblInvoice = new App_Model_Db_Table_Invoice();
+        	$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$rowOrder->userId);
+        	$rowInvoice = $tblInvoice->fetchRow($where);
+        	if ($rowInvoice) {
+        		$rowInvoice->invoiceConfirmDate = date("Y-m-d");
+        		$rowInvoice->isPaid = 'Y';
+        		// get expiration date
+        		$temptime = time();
+        		$temptime = Pandamp_Lib_Formater::DateAdd('m',$oldUser['paymentId'],$temptime);
+        		$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
+        		$rowInvoice->save();
+        		
+        		$dataUser['periodeId'] = 3;
+        	}
         	
-			$total = $formater->checkPromoValidation('Total',$rowOrder->note,$oldUser['paymentId']);
-			$disc = $formater->checkPromoValidation('Disc',$rowOrder->note,$oldUser['paymentId']);
-			
-        	$formater->_writeInvoice($oldUser['kopel'], $total, $disc, $oldUser['paymentId'],'admin');
+        	$modelUser->update($dataUser, "kopel='".$rowOrder->userId."'");
         }
         
 		//select payment date from paymentconfirmation
