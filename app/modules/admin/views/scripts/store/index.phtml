@@ -11,7 +11,7 @@
             <b>Status : <?=$status[$i];?>, Total : <?=$this->total[$i];?></b>
         </div>
         <div class="dataTables_filter">
-            <a href="<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'Order', 'status'=>$this->statusId[$i]),'segwact');?>">View All <?=$status[$i];?> Orders</a>
+            <a href="<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'order', 'status'=>$this->statusId[$i]),'segwact');?>">View All <?=$status[$i];?> Orders</a>
         </div>
         <div class="clear">&nbsp;</div>
         <table id="report" class="display stylized">
