@@ -456,7 +456,7 @@ class Pandamp_Core_Hol_Catalog
                                         }
                                         else
                                         {
-                                            move_uploaded_file($files['uploadedFile'.$x]['tmp_name'], ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$catalogGuid.".".$ext);
+                                            move_uploaded_file($files['uploadedFile'.$x]['tmp_name'], $sDir.DIRECTORY_SEPARATOR.$catalogGuid.".".$ext);
                                             //chmod($target_path,0644);
                                             Pandamp_Lib_Formater::createthumb($thumb_mode,$sDir.'/tn_'.$catalogGuid.".".$ext,130,130);
                                         }
