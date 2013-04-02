@@ -338,7 +338,7 @@ class Pandamp_Core_Hol_Catalog
         $id = 1 + ($aDataCatalog['id'] - 1);
 
         for ($x=1;$x < $id; $x++) {
-            $title = ($aDataCatalog['fixedTitle'.$x])? $aDataCatalog['fixedTitle'.$x] : 'No-Title';
+            $title = ($aDataCatalog['fixedTitle'.$x])? $aDataCatalog['fixedTitle'.$x] : '';
 
             $registry = Zend_Registry::getInstance();
             $files = $registry->get('files');
