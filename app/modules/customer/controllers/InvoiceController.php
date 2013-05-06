@@ -307,7 +307,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 		$id = ($this->_request->getParam('id'))? $this->_request->getParam('id') : '';
 		
 		$tblInvoice = new App_Model_Db_Table_Invoice();
-		$rowset = $tblInvoice->fetchRow("invoiceId=".$id." AND isPaid='Y'");
+		$rowset = $tblInvoice->fetchRow("invoiceId=".$id."");
 		
 		if ($rowset)
 		{
