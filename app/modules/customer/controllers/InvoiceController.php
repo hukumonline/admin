@@ -290,7 +290,6 @@ class Customer_InvoiceController extends Zend_Controller_Action
 	/**
 	 * @modifiedDate: 2012-11-20 15:25
 	 * @todo Changed $temptime = strtotime($rowset->expirationDate)
-	 * After renew, please change group according to his/her package
 	 *
 	 */
 	function renewAction()
@@ -308,7 +307,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 		$id = ($this->_request->getParam('id'))? $this->_request->getParam('id') : '';
 		
 		$tblInvoice = new App_Model_Db_Table_Invoice();
-		$rowset = $tblInvoice->fetchRow("invoiceId=".$id."");
+		$rowset = $tblInvoice->fetchRow("invoiceId=".$id." AND isPaid='Y'");
 		
 		if ($rowset)
 		{
@@ -322,13 +321,13 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$tblPackage = new App_Model_Db_Table_Package();
 			$rowPackage = $tblPackage->fetchRow("packageId=".$rowUser['packageId']."");
 			if ($rowUser['paymentId'] == 12) {
-				$price = $rowPackage['charge'] * 11;
+				$price = $rowPackage->charge * 11;
 			}
 			else 
 			{
-				$price = $rowPackage['charge'] * $rowUser['paymentId'];
+				$price = $rowPackage->charge * $rowUser['paymentId'];
 			}
-			Pandamp_Debug::manager('price : ' . $price . ' charge : ' . $rowPackage['charge'] . $rowUser['paymentId']);
+			
 			//$rowInvoice->price				= $rowset->price;
 			$rowInvoice->price				= $price;
 			$rowInvoice->discount			= $rowset->discount;
