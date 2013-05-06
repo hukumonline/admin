@@ -290,6 +290,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 	/**
 	 * @modifiedDate: 2012-11-20 15:25
 	 * @todo Changed $temptime = strtotime($rowset->expirationDate)
+	 * After renew, please change group according to his/her package
 	 *
 	 */
 	function renewAction()
