@@ -328,7 +328,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			{
 				$price = $rowPackage['charge'] * $rowUser['paymentId'];
 			}
-			
+			Pandamp_Debug::manager('price : ' . $price . ' charge : ' . $rowPackage['charge'] . $rowUser['paymentId']);
 			//$rowInvoice->price				= $rowset->price;
 			$rowInvoice->price				= $price;
 			$rowInvoice->discount			= $rowset->discount;
