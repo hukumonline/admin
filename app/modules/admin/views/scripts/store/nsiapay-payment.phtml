@@ -31,8 +31,8 @@
                     <td><?=$row->orderTotal;?></td>
                     <td><?=$row->countTotal;?></td>
                     <td class="center">
-                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'editOrder', 'id'=>$row->orderId));?>">edit</a>
-                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'trdetail', 'id'=>$row->orderId));?>">detail</a>
+                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'editorder', 'orderId'=>$row->orderId));?>">edit</a>
+                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'trdetail', 'orderId'=>$row->orderId));?>">detail</a>
                     </td>
                 </tr>
                 <? $i++; endforeach;?>
