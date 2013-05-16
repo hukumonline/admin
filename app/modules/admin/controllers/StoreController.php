@@ -384,7 +384,7 @@ class Admin_StoreController extends Zend_Controller_Action
 		$rowsetConfirm = $tblConfirm->fetchAll("orderId = ". $idOrder);
 		$Paid = $tblConfirm->fetchAll("orderId = ". $idOrder,'id DESC',1,0);
 		
-        $this->view->Paid = $Paid[0]->paymentDate;
+        $this->view->Paid = (isset($Paid[0]))?$Paid[0]->paymentDate:'';
 		$this->view->idOrder = $idOrder;
 		$this->view->rowset = $rowset;
 		$this->view->rowsetDetail = $rowsetDetail;
