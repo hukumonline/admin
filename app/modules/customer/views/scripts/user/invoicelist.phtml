@@ -58,7 +58,7 @@ $this->headLink()
             		<tr>
             			<td nowrap><label>Invoice Confirm Date:</label></td>
             			<td nowrap>
-            				<input type="text" value="0000-00-00" name="invoiceConfirmDate" id="invoiceConfirmDate"/>
+            				<input type="text" value="<?php echo date("Y-m-d"); ?>" name="invoiceConfirmDate" id="invoiceConfirmDate"/>
             				<a href="javascript:NewCal('invoiceConfirmDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
             			</td>
             		</tr>
