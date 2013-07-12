@@ -7,8 +7,8 @@
         <link href="<?=$this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="<?=$this->cdn('styles')?>/adm/style.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="<?=$this->cdn('styles')?>/pagination.css" media="screen" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.4.2.min.js,hol/jquery/jquery.cookie.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/paging/jquery.pagination.js,hol/smooth.scroller.js" ></script>
-        
+		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.4.2.min.js,hpdia/jquery/jquery.json/jquery.json.min.js,hpdia/jquery/jquery.ajaxq/jquery.ajaxq.min.js,hol/jquery/jquery.cookie.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/paging/jquery.pagination.js,hol/smooth.scroller.js" ></script>
+		
         <!-- Internet Explorer Fixes -->
         <!--[if IE]>
 
@@ -73,6 +73,41 @@
 
                     return false;
                 });
+
+                $('#deleteAction').click(function() {
+                	var numSelected = $('input[type="checkbox"].check_me:checked').length;
+                	var self = this;
+                	if (0 == numSelected) {
+                    	alert('Please select at least one comment');
+                	}
+                	else
+                	{
+            			var ids = new Array();
+            			$('input[type="checkbox"].check_me:checked').each(function() {
+            				ids.push($(this).val());
+            			});
+            			
+            			$.ajaxq('comment_article_delete', {
+            				url: "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/comment/catalog/delcom",
+            				type: 'POST',
+            				data: { id: $.toJSON(ids) },
+                            beforeSend: function()
+                            {
+            					for (var i in ids) {
+            						$('#row_' + ids[i]).addClass('loading').text('processing...');
+            					}
+                            },
+            				success: function(response) {
+            					if ('RESULT_OK' == response) {
+            						for (var i in ids) {
+            							$('#row_' + ids[i]).fadeOut('slow').removeClass('loading').text('delete');
+            						}
+            					}
+            				}
+            			});
+                	
+                	}
+                });    
 
                 $('.status').live('click', function(){
                     var removeId = $(this).attr('href');

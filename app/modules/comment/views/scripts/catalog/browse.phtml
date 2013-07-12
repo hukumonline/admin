@@ -12,10 +12,11 @@
 
             <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
             <h5>Hukumonline Comment</h5>
+            <h6><a href="javascript:void(0);" id="deleteAction">delete</a></h6>
             <div class="box box-success" id="message"></div>
             <table class="display stylized" id="holcomment">
                 <thead>
-                    <th>No</th>
+                    <th width="5%"><input name="select_deselect" id="select_deselect" type="checkbox"></th>
                     <th>Comment</th>
                     <th>Created on</th>
                     <th>Status</th>
@@ -24,7 +25,7 @@
 
                     <? $i=$this->offset+1; foreach ($this->commentList as $comment) { ?>
                     <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$comment->id;?>">
-                        <td><?=$i;?></td>
+                        <td><input type='checkbox' name='cid[]' id='cid' value='<?=$comment->id;?>' class="check_me"></td>
                         <td>
                             <a href="http://www.hukumonline.com/berita/baca/<?=$comment->object_id;?>/<?=$this->getCatalogShortTitle($comment->object_id);?>#comments" title="<?=$comment->email;?>" target="_blank"><?=$comment->title;?></a>
                             <br><small>id:<?=$comment->id;?> - by: <?=$comment->name;?></small>
@@ -58,7 +59,7 @@
         </div>
     </div>
 
-
+	<div id="confirmDialog" style="display:none"></div>
     <div class="clear">&nbsp;</div>
 
 </section>

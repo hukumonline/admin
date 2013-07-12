@@ -33,7 +33,7 @@ class Comment_CatalogController extends Zend_Controller_Action
         if (!$auth->hasIdentity()) {
             //$this->_forward('login','account','admin');
 			
-			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);    
+// 			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);    
         }
         else
         {
@@ -45,7 +45,7 @@ class Comment_CatalogController extends Zend_Controller_Action
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
                 //$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
-                $this->_forward('restricted','error','admin',array('lang'=>$zl->getLanguage()));
+//                 $this->_forward('restricted','error','admin',array('lang'=>$zl->getLanguage()));
             }
             
 			// [TODO] else: check if user has access to admin page and status website is online
@@ -110,6 +110,38 @@ class Comment_CatalogController extends Zend_Controller_Action
 
         $this->_helper->layout()->headerTitle = "Comment";
     }
+    
+    public function delcomAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    	$result  = 'RESULT_ERROR';
+    	if ($request->isPost()) {
+    		$id = $request->getPost('id');
+    		$ids = array();
+    		$ids = Zend_Json::decode($id);
+    		foreach ($ids as $articleId) {
+    			try {
+    				$modelComment = new App_Model_Db_Table_Comment();
+    				$rowset = $modelComment->find($articleId)->current();
+    				$rowset->delete();
+    			}
+    			catch (Exception $e)
+    			{
+    				throw new Zend_Exception($e->getMessage());
+    			}
+    
+    
+    		}
+    			
+    		$result = 'RESULT_OK';
+    	}
+    
+    	$this->getResponse()->setBody($result);
+    }
+    
     function deleteAction()
     {
         $this->_helper->viewRenderer->setNoRender(true);
