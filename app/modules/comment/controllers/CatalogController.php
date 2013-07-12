@@ -33,7 +33,7 @@ class Comment_CatalogController extends Zend_Controller_Action
         if (!$auth->hasIdentity()) {
             //$this->_forward('login','account','admin');
 			
-// 			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);    
+			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);    
         }
         else
         {
@@ -45,7 +45,7 @@ class Comment_CatalogController extends Zend_Controller_Action
             if (!$acl->checkAcl("site",'all','user', $this->_user->username, false,false))
             {
                 //$this->_redirect(ROOT_URL.'/'.$zl->getLanguage().'/error/restricted');
-//                 $this->_forward('restricted','error','admin',array('lang'=>$zl->getLanguage()));
+                $this->_forward('restricted','error','admin',array('lang'=>$zl->getLanguage()));
             }
             
 			// [TODO] else: check if user has access to admin page and status website is online
