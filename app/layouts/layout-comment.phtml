@@ -74,6 +74,13 @@
                     return false;
                 });
 
+                $("input[name=select_deselect]").click(function(){
+                    var checked_status = this.checked;
+                    $("input[class=check_me]").each(function(){
+                        this.checked = checked_status;
+                    });
+               });
+                                
                 $('#deleteAction').click(function() {
                 	var numSelected = $('input[type="checkbox"].check_me:checked').length;
                 	var self = this;
