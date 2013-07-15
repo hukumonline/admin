@@ -96,7 +96,7 @@ class Comment_CatalogController extends Zend_Controller_Action
         }
         
         $r = $this->getRequest();
-        $limit = ($r->getParam('limit'))?$r->getParam('limit'):25;
+        $limit = ($r->getParam('limit'))?$r->getParam('limit'):10;
         $this->view->limit =$limit;
         $itemsPerPage = $limit;
         $this->view->itemsPerPage = $itemsPerPage;
