@@ -68,7 +68,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	{
 		$solr = &$this->_solr;
 		
-		$tbl = new Core_Models_Db_Table_Catalog();
+		$tbl = new App_Model_Db_Table_Catalog();
 		
 		$rowset = $tbl->find($guid);
 		if(count($rowset))
@@ -100,7 +100,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 		
 //		$formater = new Pandamp_Lib_Formater();
 		
-		$catalogAttribute = new Core_Models_Db_Table_CatalogAttribute();
+		$title = new Pandamp_Controller_Action_Helper_GetCatalogTitle();
 		
 //		$tbl = new Pandamp_Core_Orm_Table_Catalog();
 //		$rowset = $tbl->fetchAll(); //("profileGuid='Pandamp_peraturan'");
@@ -134,7 +134,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 			else
 				$modified = ''; 
 			
-			echo '<li><span style="font:11px verdana,arial,helvetica,sans-serif;">[urutan:'.$iCount.']&nbsp;indexing:<font color=green>'.$catalogAttribute->getCatalogAttributeValue($row->guid,'fixedTitle').'</font>[current guid: '.$row->guid.'  '.'next guid: '.$nextRow->guid.'][author:<i>'.$row->createdBy.'</i>]&nbsp;'.$modified.'[createdDate:<i>'.$row->createdDate.'</i>]</span></li>';
+			echo '<li><span style="font:11px verdana,arial,helvetica,sans-serif;">[urutan:'.$iCount.']&nbsp;indexing:<font color=green>'.$title->getCatalogTitle($row->guid,'fixedTitle').'</font>[current guid: '.$row->guid.'  '.'next guid: '.$nextRow->guid.'][author:<i>'.$row->createdBy.'</i>]&nbsp;'.$modified.'[createdDate:<i>'.$row->createdDate.'</i>]</span></li>';
 			
 		  	$documents[] = $this->_createSolrDocument($row);
 		  	
@@ -217,13 +217,14 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	$part->createdDate = $this->getDateInSolrFormat($row->createdDate);
 	  	$part->modifiedBy = $row->modifiedBy;
 	  	$part->modifiedDate = $this->getDateInSolrFormat($row->modifiedDate);
-	  	$part->status = (!$row->status==null)? $row->status : 0;
-	  	/*$part->url = ''; 
+	  	if(!$row->status==null)
+	  		$part->status = $row->status;
+	  	$part->url = ''; //TODO what to input here as the URL???
 	  	
 	  	if ($this->_lang == "id")
 	  		$part->serviceId = 'hol';
 	  	else 
-	  		$part->serviceId = "en";*/
+	  		$part->serviceId = "en";
 	  		
 	  		
 	  	  
@@ -286,7 +287,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  	case 'fixedDate':
 	  	  	  	case 'prtDisahkan':
 	  	  	  	case 'ptsDibaca':
-	  	  	  		$part->fixedDate = $this->getDateInSolrFormat($rowAttr->value);
+	  	  	  		$part->date = $this->getDateInSolrFormat($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedLanguage':
 	  	  	  		$part->language = $rowAttr->value;
@@ -295,10 +296,10 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 //	  	  	  		$part->commentTitle = $rowAttr->value;
 //	  	  	  		break;
 	  	  	  	case 'fixedCommentQuestion':
-	  	  	  		$part->question = $this->clean_string_input($rowAttr->value);
+	  	  	  		$part->commentQuestion = $this->clean_string_input($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedAnswer':
-	  	  	  		$part->answer = $this->clean_string_input($rowAttr->value);
+	  	  	  		$part->jawaban = $this->clean_string_input($rowAttr->value);
 	  	  	  		break;
 //	  	  	  	case 'fixedJudul':
 //	  	  	  		$part->judul = $rowAttr->value;
@@ -783,7 +784,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 		
 		$solr = &$this->_solr;
 		
-		$tbl = new Core_Models_Db_Table_Catalog();
+		$tbl = new App_Model_Db_Table_Catalog();
 		$rowset = $tbl->fetchAll(); //("profileGuid='kutu_peraturan'");
 		  
 		$documents = array();
@@ -849,8 +850,8 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	$part->modifiedDate = $this->getDateInSolrFormat($row->modifiedDate);
 	  	if(!$row->status==null)
 	  		$part->status = $row->status;
-	  	/*$part->url = ''; 
-	  	$part->serviceId = '';*/
+	  	$part->url = ''; //TODO what to input here as the URL???
+	  	$part->serviceId = '';
 	  	
 	  	  
 	  	$rowsetAttr = $row->findDependentRowsetCatalogAttribute();
@@ -1227,13 +1228,13 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		// $part->fileSize = $rowAttr->value; //TODO conver to float first
 	  	  	  		break;
 	  	  	  	default:
-					if(isset($part->content))
+					if(isset($part->all))
 					{
-						$part->content .= ' '.$rowAttr->value;
+						$part->all .= ' '.$rowAttr->value;
 					}
 					else 
 					{
-						$part->content = $rowAttr->value;
+						$part->all = $rowAttr->value;
 					}
 			}
 			$rowsetAttr->next();
@@ -1511,7 +1512,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
    		$solr->commit();
 	}
 	
-	public function find($query,$start = 0 ,$end = 2000,$sortField=null)
+	public function find($query,$start = 0 ,$end = 2000)
 	{
             $solr = &$this->_solr;
             $querySolr = $query;
@@ -1520,18 +1521,16 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
                 'hl'=>'true',
                 'hl.simple.pre' =>'<mark>',
                 'hl.simple.post' =>'</mark>',
-                'hl.fl' =>'question,kategori,description,title,subTitle',
+                'hl.fl' =>'commentQuestion,kategori,description,title,subTitle',
                 'fl'=>'*,score',
                 'facet'=>'true',
-                'facet.field'=>array('profile','kategoriklinik','regulationType','createdBy','modifiedBy'),
+                'facet.field'=>array('profile','kategoriklinik','regulationType','createdBy'),
                 'facet.sort'=>'true',
                 'facet.method'=>'enum',
                 'facet.limit'=>'-1',
                 'debugQuery'=>'true',
-                'sort'=>$sortField,
-                'spellcheck'=>'true',            	            	
-            	'qt'=>'spellCheckCompRH',			
-            	'spellcheck.q'=>$querySolr,
+                'qt'=>'spellCheckCompRH',
+                'spellcheck'=>'true',
                 'spellcheck.collate'=>'true');
 
             return $solr->search( $querySolr,$start, $end, $aParams);
