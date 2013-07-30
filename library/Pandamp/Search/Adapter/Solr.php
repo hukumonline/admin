@@ -100,7 +100,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 		
 //		$formater = new Pandamp_Lib_Formater();
 		
-		$catalogAttribute = new Core_Models_Db_Table_CatalogAttribute();
+		$title = new Pandamp_Controller_Action_Helper_GetCatalogTitle();
 		
 //		$tbl = new Pandamp_Core_Orm_Table_Catalog();
 //		$rowset = $tbl->fetchAll(); //("profileGuid='Pandamp_peraturan'");
@@ -134,7 +134,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 			else
 				$modified = ''; 
 			
-			echo '<li><span style="font:11px verdana,arial,helvetica,sans-serif;">[urutan:'.$iCount.']&nbsp;indexing:<font color=green>'.$catalogAttribute->getCatalogAttributeValue($row->guid,'fixedTitle').'</font>[current guid: '.$row->guid.'  '.'next guid: '.$nextRow->guid.'][author:<i>'.$row->createdBy.'</i>]&nbsp;'.$modified.'[createdDate:<i>'.$row->createdDate.'</i>]</span></li>';
+			echo '<li><span style="font:11px verdana,arial,helvetica,sans-serif;">[urutan:'.$iCount.']&nbsp;indexing:<font color=green>'.$title->getCatalogTitle($row->guid,'fixedTitle').'</font>[current guid: '.$row->guid.'  '.'next guid: '.$nextRow->guid.'][author:<i>'.$row->createdBy.'</i>]&nbsp;'.$modified.'[createdDate:<i>'.$row->createdDate.'</i>]</span></li>';
 			
 		  	$documents[] = $this->_createSolrDocument($row);
 		  	
