@@ -68,7 +68,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	{
 		$solr = &$this->_solr;
 		
-		$tbl = new Core_Models_Db_Table_Catalog();
+		$tbl = new App_Model_Db_Table_Catalog();
 		
 		$rowset = $tbl->find($guid);
 		if(count($rowset))
