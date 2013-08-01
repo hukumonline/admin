@@ -675,7 +675,7 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$keywords = implode(' ',$keywords);
     	//$keywords = implode(' OR ',$keywords);
     	
-    	$querySolr = $keywords.' title:[" " TO *] profile:'.$profile.' -id:'.$catalogGuid.' -profile:kutu_doc;publishedDate desc';
+    	$querySolr = $keywords.' title:[" " TO *] profile:'.$profile.' -id:'.$catalogGuid.' -profile:kutu_doc';
     	
     	$sQuery	 = $request->getParam('sQuery',$querySolr);
     	$nOffset = $request->getParam('nOffset',0);
@@ -687,7 +687,7 @@ class Dms_CatalogController extends Zend_Controller_Action
     	
     	$indexingEngine = Pandamp_Search::manager();
     	
-        $hits = $indexingEngine->find($sQuery,$nOffset, $nLimit);
+        $hits = $indexingEngine->find($sQuery,$nOffset, $nLimit,"publishedDate desc");
 
             
         $this->view->assign('nOffset', $nOffset);
