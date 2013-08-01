@@ -93,9 +93,9 @@ class Search_DmsController extends Zend_Controller_Action
     function browseAction()
     {
         $r = $this->getRequest();
-        $sOffset = $r->getParam('sOffset');
+        $sOffset = ($r->getParam('sOffset'))? $r->getParam('sOffset') : 0;
         $this->view->sOffset = $sOffset;
-        $sLimit = $r->getParam('sLimit');
+        $sLimit = ($r->getParam('sLimit'))? $r->getParam('sLimit') : 0;
         $this->view->sLimit = $sLimit;
         
         $category = ($r->getParam('category'))? $r->getParam('category') : '';
