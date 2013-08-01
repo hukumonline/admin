@@ -222,12 +222,10 @@ class Pandamp_Search_Adapter_Solrh extends Pandamp_Search_Adapter_Abstract
 		return false;
 	}
 	
-	public function find($query,$start = 0 ,$end = 2000)
+	/*public function find($query,$start = 0 ,$end = 2000)
 	{
             $solr = &$this->_solr;
             $querySolr = $query;
-
-            //$aParams = array('qt'=>'spellCheckCompRH', 'spellcheck'=>'true','spellcheck.collate'=>'true');
 
             $aParams = array(
                 'hl'=>'true',
@@ -245,7 +243,24 @@ class Pandamp_Search_Adapter_Solrh extends Pandamp_Search_Adapter_Abstract
                 'spellcheck.collate'=>'true');
 
             return $solr->search( $querySolr,$start, $end, $aParams);
+	}*/
+	
+	public function find($query,$start = 0 ,$end = 2000,$sortField=null)
+	{
+		$solr = &$this->_solr;
+		$querySolr = $query;
+		$aParams = array(
+				'sort'=>$sortField,
+				'spellcheck'=>'true',
+				'qt'=>'spellCheckCompRH',
+				'spellcheck.q'=>$querySolr,
+				'spellcheck.collate'=>'true');
+	
+		return $solr->search( $querySolr,$start, $end, $aParams);
 	}
+	
+	
+	
 	public function findAndSort($query, $start=0, $limit=20, $sortField)
 	{
             $solr = &$this->_solr;
