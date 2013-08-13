@@ -97,7 +97,7 @@ class Search_DmsController extends Zend_Controller_Action
         $this->view->sOffset = $sOffset;
         $sLimit = ($r->getParam('sLimit'))? $r->getParam('sLimit') : 0;
         $this->view->sLimit = $sLimit;
-        print_r($r->getParams());
+        
         $category = ($r->getParam('category'))? $r->getParam('category') : '';
         
 		if ($category=="all")

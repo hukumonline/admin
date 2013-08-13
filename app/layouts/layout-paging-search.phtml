@@ -33,7 +33,7 @@
                 var itemsPerPage = 25;
                 var currentQuery = $("#q").val();
                 var category = '<?php echo $this->layout()->categorySearchQuery; ?>';
-console.info(category);
+
                 var tmpCurrentPage = $("#sOffset").val()/itemsPerPage;
 
                 $("#catalogSearchPagination").pagination(<?=$this->totalItems;?>,
