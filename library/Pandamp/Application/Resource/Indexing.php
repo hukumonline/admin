@@ -20,7 +20,7 @@ class Pandamp_Application_Resource_Indexing extends Zend_Application_Resource_Re
                 if ($pos !== false) 
                     $solrHomeDir = $aWrite['dir2'];
                 else
-                    $solrHomeDir = $aWrite['dir4'];
+                    $solrHomeDir = $aWrite['dir1'];
 
                 Zend_Registry::set("Solr_WriteDir", $solrHost.':'.$solrPort.$solrHomeDir);
 
