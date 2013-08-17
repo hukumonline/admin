@@ -144,4 +144,15 @@ class Dev_SearchController extends Zend_Controller_Action
             sleep(30);
     	}
     }
+    
+    function indexAction()
+    {
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	$title = "<h4>HUKUMONLINE INDONESIA: <small>search</small></h4><hr/>";
+    	
+    	echo $title.'<br>';
+
+    	$solrAdapter = Pandamp_Search_Engine::factory(array('host'=>'202.153.129.35', 'port'=>'8983','homedir'=>'/solr/core-catalog'));
+    	$solrAdapter->reIndexCatalog();
+    }
 }
