@@ -112,7 +112,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 //                }
 
                 //$query="SELECT * FROM KutuCatalog WHERE profileGuid NOT IN ('about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup','kategoriklinik','comment','partner','author')";
-                $query="SELECT * FROM KutuCatalog";
+                $query="SELECT * FROM KutuCatalog WHERE profileGuid='article'";
 		
 		$results = $this->_conn->query($query);
 		
