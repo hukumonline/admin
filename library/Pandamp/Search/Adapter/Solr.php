@@ -138,7 +138,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 			
 		  	$documents[] = $this->_createSolrDocument($row);
 		  	
-  			if($iCount%1000 == 0)
+  			if($iCount%500 == 0)
 		  	{
 			  	try 
 			  	{
