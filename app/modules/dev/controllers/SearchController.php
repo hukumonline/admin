@@ -147,6 +147,9 @@ class Dev_SearchController extends Zend_Controller_Action
     
     function indexAction()
     {
+    	set_time_limit(0);
+    	ini_set('max_execution_time', '0'); 
+    	
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     	$title = "<h4>HUKUMONLINE INDONESIA: <small>search</small></h4><hr/>";
     	
