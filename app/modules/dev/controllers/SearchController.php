@@ -179,7 +179,7 @@ class Dev_SearchController extends Zend_Controller_Action
     	
     	$db = Zend_Registry::get('db1');
     	 
-    	$query="SELECT * FROM KutuCatalog WHERE guid IN ('lt5211b14b3a8d3','lt5211080b37428','lt521171a36de5a','lt5211688402a73','lt5211687076062','lt52115e64d4ba3','lt5210f69837806','lt5210f5f56ffce','lt5210f5684c406','lt5210e4f025409','lt5210d691c0525','lt52109cefa3611')";
+    	$query="SELECT * FROM KutuCatalog WHERE guid IN ('lt5211a9dc6dda3','lt5211a831ab303','lt5211a6dbc1fd7','lt521182ee9af96','lt52117c0a1da99','lt5211b4d284ae1')";
     	
     	$results = $db->query($query);
     	$rowset = $results->fetchAll(PDO::FETCH_OBJ);
