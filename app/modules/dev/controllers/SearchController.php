@@ -155,7 +155,59 @@ class Dev_SearchController extends Zend_Controller_Action
     	
     	echo $title.'<br>';
 
-    	$solrAdapter = Pandamp_Search_Engine::factory(array('host'=>'202.153.129.35', 'port'=>'8983','homedir'=>'/solr/core-catalog'));
+    	$solrAdapter = Pandamp_Search_Engine::factory(array('host'=>'localhost', 'port'=>'8983','homedir'=>'/solr/core-catalog'));
     	$solrAdapter->reIndexCatalog();
+    }
+    
+    function ibgAction()
+    {
+    	set_time_limit(0);
+    	ini_set('max_execution_time', '0');
+    	 
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	$title = "<h4>HUKUMONLINE INDONESIA: <small>search</small></h4><hr/>";
+    	
+    	echo $title.'<br>';
+    	
+    	$solr = new Apache_Solr_Service( '202.153.129.35', '8983', '/solr/core-catalog' );
+    	if ( ! $solr->ping() ) {
+    		echo 'Solr service not responding.';
+    		exit;
+    	}
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+    	$db = Zend_Registry::get('db1');
+    	 
+    	$query="SELECT * FROM KutuCatalog WHERE guid IN ('lt5211080b37428','lt521171a36de5a','lt5211688402a73','lt5211687076062','lt52115e64d4ba3','lt5210f69837806','lt5210f5f56ffce','lt5210f5684c406','lt5210e4f025409','lt5210d691c0525','lt52109cefa3611')";
+    	
+    	$results = $db->query($query);
+    	$rowset = $results->fetchAll(PDO::FETCH_OBJ);
+    	$rowCount = count($rowset);
+    	echo $rowCount.'<br><br>';
+    	for($iCount=0;$iCount<$rowCount;$iCount++) {
+    		$row = $rowset[$iCount];
+    		$nextRow = $rowset[$iCount+1];
+    	
+    		$indexingEngine->indexCatalog($row->guid);
+    	
+    		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($row->guid);
+    	
+    		if ($modelCatalog['profileGuid'] == "klinik")
+    			$sTitle = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, "fixedCommentTitle");
+    		else
+    			$sTitle = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->guid, "fixedTitle");
+    	
+    	
+    		$message = "
+    		<div class='box box-info closeable'>
+    		<b>[urutan:$iCount]</b>&nbsp;id&nbsp;:&nbsp;<abbr>".$row->guid." - ".$sTitle."</abbr> data has been successfully indexed.
+                <b>[next guid: ".$nextRow->guid."]</b> - <i>".$modelCatalog['profileGuid']."</i></div>";
+    		echo $message.'<br>';
+    	
+    		flush();
+    		sleep(30);
+    	}
+    	 
     }
 }

@@ -91,8 +91,8 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	}
 	public function reIndexCatalog()
 	{
-		//gc_enable();
-		//$this->emptyIndex();
+		gc_enable();
+		$this->emptyIndex();
 		
 		$time_start = microtime(true);
 		
@@ -112,7 +112,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 //                }
 
                 //$query="SELECT * FROM KutuCatalog WHERE profileGuid NOT IN ('about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup','kategoriklinik','comment','partner','author')";
-                $query="SELECT * FROM KutuCatalog WHERE guid IN ('lt5211080b37428','lt521171a36de5a','lt5211688402a73','lt5211687076062','lt52115e64d4ba3','lt5210f69837806','lt5210f5f56ffce','lt5210f5684c406','lt5210e4f025409','lt5210d691c0525','lt52109cefa3611')";
+                $query="SELECT * FROM KutuCatalog";
 		
 		$results = $this->_conn->query($query);
 		
