@@ -169,7 +169,7 @@ class Dev_SearchController extends Zend_Controller_Action
     	
     	echo $title.'<br>';
     	
-    	$solr = new Apache_Solr_Service( 'localhost', '8983', '/solr/core-catalog' );
+    	$solr = new Apache_Solr_Service( '202.153.129.35', '8983', '/solr/core-catalog' );
     	if ( ! $solr->ping() ) {
     		echo 'Solr service not responding.';
     		exit;
