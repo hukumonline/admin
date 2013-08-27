@@ -210,4 +210,25 @@ class Dev_SearchController extends Zend_Controller_Action
     	}
     	 
     }
+    
+    function deleteAction()
+    {
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	$title = "<h4>HUKUMONLINE INDONESIA: <small>search</small></h4><hr/>";
+    	 
+    	echo $title.'<br>';
+    	 
+    	$solr = new Apache_Solr_Service( '202.153.129.35', '8983', '/solr/core-catalog' );
+    	if ( ! $solr->ping() ) {
+    		echo 'Solr service not responding.';
+    		exit;
+    	}
+    	
+    	$a = array('fl17956','fl1131');
+    	 
+    	foreach ($a as $c) {
+	    	$indexingEngine = Pandamp_Search::manager();
+	    	$indexingEngine->deleteCatalogFromIndex($c);
+    	}
+    }
 }
