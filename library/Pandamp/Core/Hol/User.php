@@ -30,8 +30,8 @@ class Pandamp_Core_Hol_User
 		$rowPackage = $tblPackage->fetchRow("packageId=$package");
 		if ($payment == 12) {
 			$price = $rowPackage->charge * 11;
-			$total = ($price + (0.1 * $price));
-			$disc  = $total - $rowPackage->charge;
+			$total = ($price + (0.1 * $price)) - $rowPackage->charge;
+			$disc  = $rowPackage->charge;
 		}
 		else 
 		{
