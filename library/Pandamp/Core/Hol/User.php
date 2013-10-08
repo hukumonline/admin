@@ -31,7 +31,7 @@ class Pandamp_Core_Hol_User
 		if ($payment == 12) {
 			$price = $rowPackage->charge * 11;
 			$total = ($price + (0.1 * $price));
-			$disc  = $rowPackage->charge;
+			$disc  = $total - $rowPackage->charge;
 		}
 		else 
 		{
