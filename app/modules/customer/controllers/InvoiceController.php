@@ -322,10 +322,12 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowPackage = $tblPackage->fetchRow("packageId=".$rowUser['packageId']."");
 			if ($rowUser['paymentId'] == 12) {
 				$price = $rowPackage->charge * 11;
+				$price = ($price + (0.1 * $price));
 			}
 			else 
 			{
 				$price = $rowPackage->charge * $rowUser['paymentId'];
+				$price = ($price + (0.1 * $price));
 			}
 			
 			//$rowInvoice->price				= $rowset->price;
