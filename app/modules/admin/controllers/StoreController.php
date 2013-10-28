@@ -193,7 +193,7 @@ class Admin_StoreController extends Zend_Controller_Action
         $this->view->rows = $rowset;
         $this->view->where = $where;
     }
-    public function editOrderAction()
+    public function editorderAction()
     {
         $idOrder = $this->_request->getParam('orderId');
 
