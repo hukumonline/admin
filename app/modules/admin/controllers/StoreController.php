@@ -260,7 +260,7 @@ class Admin_StoreController extends Zend_Controller_Action
         $this->view->rowsHistory = App_Model_Show_OrderHistory::show()->getHistory($idOrder);
 
         $this->view->id = $idOrder;
-        $this->view->rows = $rowset;
+        $this->view->rows = $rowset[0];
         $this->view->rowsDetail = $rowsetDetail;
     }
     function deleteorderAction()
