@@ -4,22 +4,22 @@
     <div class="colgroup leading">
         <div class="column width6 first">
             <h3>User Management: Group Associate</h3>
-            <? if (isset($this->message)): ?>
+            <?php if (isset($this->message)) : ?>
             <div class="box box-info closeable">
-                <?= $this->message; ?><br/>
+                <?php echo $this->message; ?><br/>
             </div>
-            <? endif; ?>
+            <?php endif; ?>
 
             <form id="associate" method="post" action="">
                 <fieldset>
                     <legend>Upgrade - Downgrade Package</legend>
                     <p>
                         <label class="required" for="aro_groups">Package:</label><br>
-                        <select name="aro_groups" size="8"><?=$this->groupTree(array($this->user['packageId']));?></select>
+                        <select name="aro_groups" size="8"><?php echo $this->groupTree(array($this->user['packageId'])); ?></select>
                     </p>
                     <p>
-                        <input type="hidden" name="id" id="id" value="<?=$this->user['kopel'];?>">
-                        <input type="hidden" name="username" id="username" value="<?=$this->user['username'];?>">
+                        <input type="hidden" name="id" id="id" value="<?php echo $this->user['kopel']; ?>">
+                        <input type="hidden" name="username" id="username" value="<?php echo $this->user['username']; ?>">
                         <input value="Change Package" type="submit" class="btn btn-blue" />
                     </p>
                 </fieldset>
@@ -33,18 +33,18 @@
         	<fieldset>
         		<legend>ROLE</legend>
         		<div class="box box-success" id="message"></div>
-        		<? if (isset($this->UserRoles)) { ?>
+        		<?php if (isset($this->UserRoles)) { ?>
         		<table class="no-style full">
         		<tbody>
-        		<? for($i=0;$i<count($this->UserRoles);$i++) { ?>
-				<tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=str_replace(' ','_',$this->UserRoles[$i]);?>">
-					<td><abbr><?echo $this->UserRoles[$i];?></abbr></td>
-					<td><input type="button" name="delass" value="Delete" id="<?=$this->UserRoles[$i];?>/uname/<?=$this->user['username'];?>" class="form-button" /></td>
+        		<?php for($i=0;$i<count($this->UserRoles);$i++) { ?>
+				<tr class="<?php echo ($i%2 ? 'gradeX' : 'gradeC'); ?>" id="row_<?php echo str_replace(' ','_',$this->UserRoles[$i]); ?>">
+					<td><abbr><?php echo $this->UserRoles[$i]; ?></abbr></td>
+					<td><input type="button" name="delass" value="Delete" id="<?php echo $this->UserRoles[$i]; ?>/uname/<?php echo $this->user['username']; ?>" class="form-button" /></td>
 				</tr>        		
-        		<? } ?>
+        		<?php } ?>
         		</tbody>
         		</table>
-        		<? } ?>
+        		<?php } ?>
         	</fieldset>
         </div>
     </div>
@@ -58,10 +58,10 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+        <?php echo $this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel'])); ?>
     </div>
     <div class="content-box">
-        <?=$this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel']));?>
+        <?php echo $this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel'])); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
