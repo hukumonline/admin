@@ -241,7 +241,7 @@ class Admin_StoreController extends Zend_Controller_Action
         }
 
     }
-    function detailOrderAction()
+    function detailorderAction()
     {
         $r = $this->getRequest();
         $limit = ($r->getParam('limit'))?$r->getParam('limit'):10;
