@@ -31,7 +31,7 @@
                     <td><?php echo $row->orderTotal; ?></td>
                     <td><?php echo $row->countTotal; ?></td>
                     <td class="center">
-                       <a href="<?php echo $this->url(array('controller'=>'store', 'action'=>'edit-order', 'orderId'=>$row->orderId)); ?>">edit</a>
+                       <a href="<?php echo $this->url(array('controller'=>'store', 'action'=>'editOrder', 'orderId'=>$row->orderId)); ?>">edit</a>
                        <a href="<?php echo $this->url(array('controller'=>'store', 'action'=>'trdetail', 'orderId'=>$row->orderId)); ?>">detail</a>
                     </td>
                 </tr>
