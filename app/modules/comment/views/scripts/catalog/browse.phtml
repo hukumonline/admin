@@ -3,14 +3,14 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
 
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h5>Hukumonline Comment</h5>
             <h6><a href="javascript:void(0);" id="deleteAction">delete</a></h6>
             <div class="box box-success" id="message"></div>
@@ -23,31 +23,31 @@
                 </thead>
                 <tbody>
 
-                    <? $i=$this->offset+1; foreach ($this->commentList as $comment) { ?>
-                    <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$comment->id;?>">
-                        <td><input type='checkbox' name='cid[]' id='cid' value='<?=$comment->id;?>' class="check_me"></td>
+                    <?php $i=$this->offset+1; foreach ($this->commentList as $comment) { ?>
+                    <tr class="<?php echo ($i%2 ? 'gradeX' : 'gradeC'); ?>" id="row_<?php echo $comment->id; ?>">
+                        <td><input type='checkbox' name='cid[]' id='cid' value='<?php echo $comment->id; ?>' class="check_me"></td>
                         <td>
-                            <a href="http://www.hukumonline.com/berita/baca/<?=$comment->object_id;?>/<?=$this->getCatalogShortTitle($comment->object_id);?>#comments" title="<?=$comment->email;?>" target="_blank"><?=$comment->title;?></a>
-                            <br><small>id:<?=$comment->id;?> - by: <?=$comment->name;?></small>
-                            <br><?=$comment->comment;?>
-                            <br><a href="<?=$comment->id;?>" class="delete">delete</a>
+                            <a href="http://www.hukumonline.com/berita/baca/<?php echo $comment->object_id; ?>/<?php echo $this->getCatalogShortTitle($comment->object_id); ?>#comments" title="<?php echo $comment->email; ?>" target="_blank"><?php echo $comment->title; ?></a>
+                            <br><small>id:<?php echo $comment->id; ?> - by: <?php echo $comment->name; ?></small>
+                            <br><?php echo $comment->comment; ?>
+                            <br><a href="<?php echo $comment->id; ?>" class="delete">delete</a>
                         </td>
-                        <td><?=Pandamp_Lib_Formater::get_date($comment->date);?>
-                        <br><small>ip:<?=$comment->ip;?></small>
+                        <td><?php echo Pandamp_Lib_Formater::get_date($comment->date); ?>
+                        <br><small>ip:<?php echo $comment->ip; ?></small>
                         </td>
                         <td nowrap>
-                        <? if ($comment->published == 99) { ?>
+                        <?php if ($comment->published == 99) { ?>
                             
-                            <a href="<?=$comment->id;?>/st/0" class="status">Active</a>
+                            <a href="<?php echo $comment->id; ?>/st/0" class="status">Active</a>
                             
-                        <? } else { ?>
+                        <?php } else { ?>
                             
-                            <a href="<?=$comment->id;?>/st/1" class="status">Not Active</a>
+                            <a href="<?php echo $comment->id; ?>/st/1" class="status">Not Active</a>
                         
-                        <? } ?>
+                        <?php } ?>
                         </td>
                     </tr>
-                    <? $i++; } ?>
+                    <?php $i++; } ?>
 
                 </tbody>
             </table>
@@ -68,8 +68,7 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div><br>
 </aside>
 <!-- End of Right column/section -->
-
