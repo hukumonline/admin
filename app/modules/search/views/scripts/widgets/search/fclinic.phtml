@@ -1,18 +1,18 @@
-<? if (count($this->aData) > 0) : ?>
+<?php if (count($this->aData) > 0) : ?>
 <div class="content-box">
     <header style="cursor: s-resize;">
-        <h3><img src="<?=$this->cdn('images');?>/information.png" alt="" />Kategori Klinik</h3>
+        <h3><img src="<?php echo $this->cdn('images'); ?>/information.png" alt="" />Kategori Klinik</h3>
     </header>
     <section>
-        <form id="frmFcClinic" name="frmFcClinic" method="post" action="<?=$this->baseUrl();?>/cari">
+        <form id="frmFcClinic" name="frmFcClinic" method="post" action="<?php echo $this->baseUrl(); ?>/cari">
         <table class="no-style full">
             <tbody>
-                <? for($i=0; $i<count($this->aData);$i++) : ?>
+                <?php for($i=0; $i<count($this->aData);$i++) : ?>
                 <tr>
-                    <td><a href="<?=$this->aData[$i][0];?>" id="fcClinic"><abbr><?=$this->getCatalogAttribute($this->aData[$i][0],'fixedTitle');?></abbr></a></td>
-                    <td class="ta-right"><?=$this->aData[$i][1];?></td>
+                    <td><a href="<?php echo $this->aData[$i][0]; ?>" id="fcClinic"><abbr><?php echo $this->getCatalogAttribute($this->aData[$i][0],'fixedTitle'); ?></abbr></a></td>
+                    <td class="ta-right"><?php echo $this->aData[$i][1]; ?></td>
                 </tr>
-                <? endfor; ?>
+                <?php endfor; ?>
             </tbody>
         </table>
         <input type="hidden" id="keyword" name="keyword" />
@@ -24,7 +24,7 @@
 $(document).ready(function(){
     $('#fcClinic').live('click', function(){
         var iId = $(this).attr('href');
-        var q = '<?=$this->query.' kategoriklinik:';?>' + iId;
+        var q = '<?php echo $this->query.' kategoriklinik:'; ?>' + iId;
         $("#keyword").val(q);
         $("#frmFcClinic").submit();
 
@@ -34,6 +34,4 @@ $(document).ready(function(){
 
 });
 </script>
-
-
-<? endif; ?>
+<?php endif; ?>

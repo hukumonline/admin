@@ -1,18 +1,18 @@
-<? if (count($this->aData) > 0) : ?>
+<?php if (count($this->aData) > 0) : ?>
 <div class="content-box">
     <header style="cursor: s-resize;">
-        <h3><img src="<?=$this->cdn('images');?>/information.png" alt="" />Berdasarkan Tipe Peraturan</h3>
+        <h3><img src="<?php echo $this->cdn('images'); ?>/information.png" alt="" />Berdasarkan Tipe Peraturan</h3>
     </header>
     <section>
-        <form id="frmFcHold" name="frmFcHold" method="get" action="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/search/dms/browse">
+        <form id="frmFcHold" name="frmFcHold" method="get" action="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse">
         <table class="no-style full">
             <tbody>
-                <? for($i=0; $i<count($this->aData);$i++) : ?>
+                <?php for($i=0; $i<count($this->aData);$i++) : ?>
                 <tr>
-                    <td><a href="<?=$this->regulationType($this->aData[$i][0]);?>" id="fcHold"><abbr><?=$this->aData[$i][0];?></abbr></a></td>
-                    <td class="ta-right"><?=$this->aData[$i][1];?></td>
+                    <td><a href="<?php echo $this->regulationType($this->aData[$i][0]); ?>" id="fcHold"><abbr><?php echo $this->aData[$i][0]; ?></abbr></a></td>
+                    <td class="ta-right"><?php echo $this->aData[$i][1]; ?></td>
                 </tr>
-                <? endfor; ?>
+                <?php endfor; ?>
             </tbody>
         </table>
         <input type="hidden" id="keywordtype" name="q" />
@@ -25,7 +25,7 @@
 $(document).ready(function(){
     $('#fcHold').live('click', function(){
         var iId = $(this).attr('href');
-        var qI = '<?=$this->query.' regulationOrder:';?>' + iId;
+        var qI = '<?php echo $this->query.' regulationOrder:'; ?>' + iId;
         $("#keywordtype").val(qI);
         $("#frmFcHold").submit();
 
@@ -35,6 +35,4 @@ $(document).ready(function(){
 
 });
 </script>
-
-
-<? endif; ?>
+<?php endif; ?>
