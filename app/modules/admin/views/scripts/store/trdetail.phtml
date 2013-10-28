@@ -7,39 +7,39 @@
     </form>
 </div>
 <div class="clear">&nbsp;</div>
-<? foreach($this->listOrder as $value): ?>
+<?php foreach($this->listOrder as $value) { ?>
 <div class="colgroup">
 	<div class="column width2 first">No. Pesanan</div>
-	<div class="column width2"><?=$value['orderId'];?></div>
+	<div class="column width2"><?php echo $value['orderId']; ?></div>
 	<div class="column width2">No. Faktur</div>
-	<div class="column width2"><?=$value['invoiceNumber'];?></div>
+	<div class="column width2"><?php echo $value['invoiceNumber']; ?></div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Kode Pelanggan</div>
-	<div class="column width2"><?=$value['userId'];?></div>
+	<div class="column width2"><?php echo $value['userId']; ?></div>
 	<div class="column width2">NPWP</div>
-	<div class="column width2"><?=$value['taxNumber'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['taxNumber']; ?>&nbsp;</div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Perusahaan</div>
-	<div class="column width2"><?=$value['taxCompany'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['taxCompany']; ?>&nbsp;</div>
 	<div class="column width2">Alamat Penagihan</div>
-	<div class="column width2"><?=$value['taxAddress'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['taxAddress']; ?>&nbsp;</div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Kota</div>
-	<div class="column width2"><?=$value['taxCity'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['taxCity']; ?>&nbsp;</div>
 	<div class="column width2">Kodepos</div>
-	<div class="column width2"><?=$value['taxZip'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['taxZip']; ?>&nbsp;</div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Propinsi</div>
 	<div class="column width2">
-	<?
+	<?php
 	$modelState = new App_Model_Db_Table_State();
 	$rowState = $modelState->find($value['taxProvince'])->current();
 	if ($rowState) {
@@ -54,7 +54,7 @@
 	</div>
 	<div class="column width2">Negara</div>
 	<div class="column width2">
-	<?
+	<?php
 	$config = new Zend_Config_Xml(CONFIG_PATH.'/countries.xml','countries');
 	$aCountries = array();
 	foreach($config->get('country') as $country)
@@ -70,47 +70,47 @@
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Telp.</div>
-	<div class="column width2"><?=$value['telephone'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['telephone']; ?>&nbsp;</div>
 	<div class="column width2">Metode Pembayaran</div>
-	<div class="column width2"><?=$value['paymentMethod'];?></div>
+	<div class="column width2"><?php echo $value['paymentMethod']; ?></div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Catatan</div>
-	<div class="column width2"><?=$value['paymentMethodNote'];?>&nbsp;</div>
+	<div class="column width2"><?php echo $value['paymentMethodNote']; ?>&nbsp;</div>
 	<div class="column width2">Terakhir dimodifikasi</div>
-	<div class="column width2"><?=(!($value['lastModified'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['lastModified'])):'undefined'; ?></div>
+	<div class="column width2"><?php echo (!($value['lastModified'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['lastModified'])):'undefined'; ?></div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Tanggal Pembelian</div>
-	<div class="column width2"><?=(!($value['datePurchased'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['datePurchased'])):'undefined'; ?></div>
+	<div class="column width2"><?php echo (!($value['datePurchased'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['datePurchased'])):'undefined'; ?></div>
 	<div class="column width2">Status Pesanan</div>
-	<div class="column width2"><?=$value['orderStatus'];?></div>
+	<div class="column width2"><?php echo $value['orderStatus']; ?></div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Tanggal Penyelesaian Pesanan</div>
-	<div class="column width2"><?=(!($value['dateOrderFinished'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['dateOrderFinished'])):'undefined'; ?></div>
+	<div class="column width2"><?php echo (!($value['dateOrderFinished'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['dateOrderFinished'])):'undefined'; ?></div>
 	<div class="column width2">Mata Uang</div>
-	<div class="column width2"><?=$value['currency'];?></div>
+	<div class="column width2"><?php echo $value['currency']; ?></div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Total Pesanan</div>
-	<div class="column width2"><?=$value['orderTotal'];?></div>
+	<div class="column width2"><?php echo $value['orderTotal']; ?></div>
 	<div class="column width2">Potongan Pajak</div>
-	<div class="column width2"><?=$value['orderTax'];?></div>
+	<div class="column width2"><?php echo $value['orderTax']; ?></div>
 	
 	<div class="clear">&nbsp;</div>
 	
 	<div class="column width2 first">Alamat IP</div>
-	<div class="column width2"><?=$value['ipAddress'];?></div>
+	<div class="column width2"><?php echo $value['ipAddress']; ?></div>
 	<div class="column width2">Tanggal Pembayaran</div>
-	<div class="column width2"><?=(!($value['paymentDate'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['paymentDate'])):'undefined'; ?></div>
+	<div class="column width2"><?php echo (!($value['paymentDate'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($value['paymentDate'])):'undefined'; ?></div>
 	
 </div>
-<? endforeach; ?>
+<?php } ?>
 </fieldset>
 <fieldset>
 <legend>DETAIL</legend>
@@ -125,17 +125,17 @@
 	<th>Qty</th>
 </thead>
 <tbody>
-<?$i =1; foreach($this->listOrderDetail as $rowDetail): ?>
+<?php $i =1; foreach($this->listOrderDetail as $rowDetail) { ?>
 <tr>
-	<td><?=$i;?></td>
-	<td><?=$rowDetail['itemId'];?></td>
-	<td><?=$rowDetail['documentName'];?></td>
-	<td><?=number_format($rowDetail['price'],2);?></td>
-	<td><?=number_format($rowDetail['finalPrice'],2);?></td>
-	<td><?=number_format($rowDetail['tax'],2); ?> %</td>
-	<td><?=$rowDetail['qty']; ?></td>
+	<td><?php echo $i; ?></td>
+	<td><?php echo $rowDetail['itemId']; ?></td>
+	<td><?php echo $rowDetail['documentName']; ?></td>
+	<td><?php echo number_format($rowDetail['price'],2); ?></td>
+	<td><?php echo number_format($rowDetail['finalPrice'],2); ?></td>
+	<td><?php echo number_format($rowDetail['tax'],2); ?> %</td>
+	<td><?php echo $rowDetail['qty']; ?></td>
 </tr>
-<? $i++; endforeach; ?>
+<?php $i++; } ?>
 </tbody>
 </table>
 
@@ -150,20 +150,20 @@
 	<th>Catatan</th>
 </thead>
 <tbody>
-<? $i=1; foreach($this->rowsetHistory as $valueHistory): ?>
+<?php $i=1; foreach($this->rowsetHistory as $valueHistory) { ?>
 <tr>
-	<td><?=$i;?></td>
-	<td><?=strftime("%d-%m-%Y",strtotime($valueHistory['dateCreated'])); ?></td>
+	<td><?php echo $i; ?></td>
+	<td><?php echo strftime("%d-%m-%Y",strtotime($valueHistory['dateCreated'])); ?></td>
 	<td>
-	<?
+	<?php
 	$modelOrderStatus = new App_Model_Db_Table_OrderStatus();
 	$rowOrderStatus = $modelOrderStatus->find($valueHistory['orderStatusId'])->current();
 	echo $rowOrderStatus->ordersStatus;
 	?>
 	</td>
-	<td><?=$valueHistory['note'];?></td>
+	<td><?php echo $valueHistory['note']; ?></td>
 </tr>
-<? $i++; endforeach; ?>
+<?php $i++; } ?>
 </tbody>
 </table>
 </fieldset>
@@ -177,14 +177,14 @@
 	<th>Status</th>
 </thead>
 <tbody>
-<? $i=1; foreach($this->rowsetNsiapay as $valueNsiapay): ?>
+<?php $i=1; foreach($this->rowsetNsiapay as $valueNsiapay) { ?>
 <tr>
-	<td><?=$i;?></td>
-	<td><?=strftime("%d-%m-%Y",strtotime($valueNsiapay['starttime'])); ?></td>
-	<td><?=(!($valueNsiapay['finishtime'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($valueNsiapay['finishtime'])):'undefined'; ?></td>
-	<td><?=$valueNsiapay['status'];?></td>
+	<td><?php echo $i; ?></td>
+	<td><?php echo strftime("%d-%m-%Y",strtotime($valueNsiapay['starttime'])); ?></td>
+	<td><?php echo (!($valueNsiapay['finishtime'] == "0000-00-00 00:00:00"))?strftime("%d-%m-%Y",strtotime($valueNsiapay['finishtime'])):'undefined'; ?></td>
+	<td><?php echo $valueNsiapay['status']; ?></td>
 </tr>
-<? $i++; endforeach; ?>
+<?php $i++; } ?>
 </tbody>
 </table>
 </fieldset>

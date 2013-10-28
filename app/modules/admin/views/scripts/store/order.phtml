@@ -5,12 +5,12 @@
             <fieldset>
                 <legend>Order Status</legend>
             <p>
-                <label>Status : </label><input id="sStatus" name="sStatus" size=10 value="<?=$this->sStatus;?>">
-                <label>Username : </label<input id="sUsername" name="sUsername" size=10 value="<?=$this->sUsername;?>">
-                <label>Date min : </label><input type="date" id="fdate" name="fdate" value="<?=$this->fdate;?>"/>
-                <label>Date max : </label><input type="date" id="ldate" name="ldate" value="<?=$this->ldate;?>"/>
+                <label>Status : </label><input id="sStatus" name="sStatus" size=10 value="<?php echo $this->sStatus; ?>">
+                <label>Username : </label><input id="sUsername" name="sUsername" size=10 value="<?php echo $this->sUsername; ?>">
+                <label>Date min : </label><input type="date" id="fdate" name="fdate" value="<?php echo $this->fdate; ?>"/>
+                <label>Date max : </label><input type="date" id="ldate" name="ldate" value="<?php echo $this->ldate; ?>"/>
                 <input type="hidden" id="limit" name="limit" value="10">
-                <input type="hidden" id="offset" name="offset" value="<?=$this->offset;?>">
+                <input type="hidden" id="offset" name="offset" value="<?php echo $this->offset; ?>">
                 <input class="btn btn-green big" value="Search" type="submit">
             </p>
             </fieldset>
@@ -33,37 +33,37 @@
                 </tr>
             </thead>
             <tbody>
-                <? $i=$this->offset+1; foreach($this->rows as $row):
+                <?php $i=$this->offset+1; foreach($this->rows as $row) {
                     if($row->orderStatus == 3 or $row->orderStatus == 5){
                         $anchor = 'trdetail';
                         }else{
                         $anchor = 'detailOrder';
                         }
                 ?>
-                <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>" id="row_<?=$row->orderId;?>">
-                    <td><?=$i?></td>
-                    <td class="center"><?=$row->orderId;?></td>
+                <tr class="<?php echo ($i%2 ? 'gradeX' : 'gradeC'); ?>" id="row_<?php echo $row->orderId; ?>">
+                    <td><?php echo $i; ?></td>
+                    <td class="center"><?php echo $row->orderId; ?></td>
                     <td>
-                        User ID : <?=$row->userId;?><br />
-                        Invoice : <?=$row->invoiceNumber;?><br />
-                        Name    : <?=$row->fullName;?><br />
-                        Company : <?=$row->company;?><br />&nbsp;
+                        User ID : <?php echo $row->userId; ?><br />
+                        Invoice : <?php echo $row->invoiceNumber; ?><br />
+                        Name    : <?php echo $row->fullName; ?><br />
+                        Company : <?php echo $row->company; ?><br />&nbsp;
                     </td>
-                    <td><?=$row->paymentMethod;?></td>
-                    <td class="center"><?=strftime("%Y-%m-%d", strtotime($row->datePurchased));?></td>
-                    <td><?=$row->ordersStatus;?></td>
-                    <td><?=$row->orderTotal;?></td>
-                    <td><?=$row->countTotal;?></td>
+                    <td><?php echo $row->paymentMethod; ?></td>
+                    <td class="center"><?php echo strftime("%Y-%m-%d", strtotime($row->datePurchased)); ?></td>
+                    <td><?php echo $row->ordersStatus; ?></td>
+                    <td><?php echo $row->orderTotal; ?></td>
+                    <td><?php echo $row->countTotal; ?></td>
                     <td>
-                        <?
+                        <?php
                         if($row->orderStatus == 4){
                                 echo "<a href=".$this->url(array('controller'=>'store',
                                         'action'=> 'payconfirm', 'orderId'=>$row->orderId)).">Action</a>";
                         }
                         ?>
-                        <a href="<? echo $this->url(array('controller'=>'store',
-                    'action'=>$anchor, 'orderId'=>$row->orderId));?>">detail</a>
-                        <?
+                        <a href="<?php echo $this->url(array('controller'=>'store',
+                    'action'=>$anchor, 'orderId'=>$row->orderId)); ?>">detail</a>
+                        <?php
                         if($row->orderStatus !=5 && $row->orderStatus !=2 && $row->orderStatus !=3 ){
                                 echo "<a href=".$this->url(array('controller'=>'store',
                                         'action'=> 'deleteOrder', 'id'=>$row->orderId)) . " class='delete'>Delete</a>";
@@ -71,7 +71,7 @@
                         ?>
                     </td>
                 </tr>
-                <? $i++; endforeach;?>
+                <?php $i++; } ?>
             </tbody>
             <tfoot>
                 <tr>

@@ -1,18 +1,18 @@
 <fieldset>
-<legend>EDITING DATA with ID NUMBER : <?=$this->id;?></legend>
+<legend>EDITING DATA with ID NUMBER : <?php echo $this->id; ?></legend>
 <form method="POST">
-<?  foreach($this->rows as $row): ?>
+<?php foreach($this->rows as $row) { ?>
 <p>
-	<label for="key">Key: <?=$row->settingKey;?></label><br>
+	<label for="key">Key: <?php echo $row->settingKey; ?></label><br>
 	<label for="value">Value:</label><br>
-	<input type="text" name="value" value="<?=$row->settingValue;?>" size="70" /><br>
+	<input type="text" name="value" value="<?php echo $row->settingValue; ?>" size="70" /><br>
 	<label for="notes">Notes:</label><br>
-	<textarea id="note" cols="20" rows="5" name="note"><?=$row->note;?></textarea>
+	<textarea id="note" cols="20" rows="5" name="note"><?php echo $row->note; ?></textarea>
 </p>
-<? endforeach; ?><br>
+<?php } ?><br>
 <p style="z-index:1;overflow:hidden;">
-<input type="hidden" name="id" value="<?=$this->id;?>" />
-<input type="button" value= "back" class="btn" onclick="document.location.href='<?=ROOT_URL?>/<?=$this->getLanguage();?>/store/paymentsetting'" />
+<input type="hidden" name="id" value="<?php echo $this->id; ?>" />
+<input type="button" value= "back" class="btn" onclick="document.location.href='<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/store/paymentsetting'" />
 <input type="reset" value="reset" class="btn" />
 <input type="submit" name="save" value="save" class="btn" />
 </p>

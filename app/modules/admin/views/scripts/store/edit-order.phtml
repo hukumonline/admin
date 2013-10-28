@@ -1,98 +1,98 @@
 <fieldset>
-    <legend>Editing data number <?=$this->id;?></legend>
+    <legend>Editing data number <?php echo $this->id; ?></legend>
     <form method="post">
         <div class="colgroup">
-            <?  foreach($this->rows as $row): ?>
+            <?php foreach($this->rows as $row) { ?>
             <div class="column width2 first"><b>Invoice</b></div>
-            <div class="column width2"><input type="text" name="invoiceNumber" value="<?=$row['invoiceNumber']; ?>" /></div>
+            <div class="column width2"><input type="text" name="invoiceNumber" value="<?php echo $row['invoiceNumber']; ?>" /></div>
             <div class="column width2"><b>Kode Pelanggan</b></div>
-            <div class="column width2"><input type="text" name="userId" value="<?=$row['userId']; ?>"  /></div>
+            <div class="column width2"><input type="text" name="userId" value="<?php echo $row['userId']; ?>"  /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Tax Number</b></div>
-            <div class="column width2"><input type="text" name="taxNumber" value="<?=$row['taxNumber']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxNumber" value="<?php echo $row['taxNumber']; ?>" /></div>
             <div class="column width2"><b>Company</b></div>
-            <div class="column width2"><input type="text" name="taxCompany" value="<?=$row['taxCompany']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxCompany" value="<?php echo $row['taxCompany']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Address</b></div>
-            <div class="column width2"><input type="text" name="taxAddress" value="<?=$row['taxAddress']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxAddress" value="<?php echo $row['taxAddress']; ?>" /></div>
             <div class="column width2"><b>City</b></div>
-            <div class="column width2"><input type="text" name="taxCity" value="<?=$row['taxCity']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxCity" value="<?php echo $row['taxCity']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>ZIP</b></div>
-            <div class="column width2"><input type="text" name="taxZip" value="<?=$row['taxZip']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxZip" value="<?php echo $row['taxZip']; ?>" /></div>
             <div class="column width2"><b>Province</b></div>
-            <div class="column width2"><input type="text" name="taxProvince" value="<?=$row['taxProvince']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxProvince" value="<?php echo $row['taxProvince']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Country</b></div>
-            <div class="column width2"><input type="text" name="taxCountryId" value="<?=$row['taxCountryId']; ?>" /></div>
+            <div class="column width2"><input type="text" name="taxCountryId" value="<?php echo $row['taxCountryId']; ?>" /></div>
             <div class="column width2"><b>Telephone</b></div>
-            <div class="column width2"><input type="text" name="telephone" value="<?=$row['telephone']; ?>" /></div>
+            <div class="column width2"><input type="text" name="telephone" value="<?php echo $row['telephone']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Payment Method</b></div>
-            <div class="column width2"><input type="text" name="paymentMethod" value="<?=$row['paymentMethod']; ?>" /></div>
+            <div class="column width2"><input type="text" name="paymentMethod" value="<?php echo $row['paymentMethod']; ?>" /></div>
             <div class="column width2"><b>Payment Method Note</b></div>
-            <div class="column width2"><input type="text" name="paymentMethodNote" value="<?=$row['paymentMethodNote']; ?>" /></div>
+            <div class="column width2"><input type="text" name="paymentMethodNote" value="<?php echo $row['paymentMethodNote']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Last Modified</b></div>
-            <div class="column width2"><input type="date" name="lastModified" id="lastModified" value="<?=$row['lastModified']; ?>" /></div>
+            <div class="column width2"><input type="date" name="lastModified" id="lastModified" value="<?php echo $row['lastModified']; ?>" /></div>
             <div class="column width2"><b>Date Purchased</b></div>
-            <div class="column width2"><input type="text" name="datePurchased" id="datePurchased" value="<?=$row['datePurchased']; ?>" /></div>
+            <div class="column width2"><input type="text" name="datePurchased" id="datePurchased" value="<?php echo $row['datePurchased']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Order Status</b></div>
             <div class="column width2">
-		<input type="hidden" name="orderaStatus" value="<?=$row['orderStatus']; ?>"  />
+		<input type="hidden" name="orderaStatus" value="<?php echo $row['orderStatus']; ?>"  />
 
 		<select name="orderStatus">
-		<? foreach($this->rowsStatus as $status):?>
-		<option value="<?=$status['orderStatusId']?>" <? echo ($status['orderStatusId']==$row['orderStatus']?'selected=selected':'') ; ?>><?=$status['ordersStatus']?>
-		<? endforeach;?>
+		<?php foreach($this->rowsStatus as $status) { ?>
+		<option value="<?php echo $status['orderStatusId']; ?>" <?php echo ($status['orderStatusId']==$row['orderStatus']?'selected=selected':'') ; ?>><?php echo $status['ordersStatus']; ?>
+		<?php } ?>
 		</select>
 
             </div>
             <div class="column width2"><b>Date Order Finished</b></div>
-            <div class="column width2"><input type="date" id="dof" name="dateOrderFinished" value="<?=$row['dateOrderFinished']; ?>"  /></div>
+            <div class="column width2"><input type="date" id="dof" name="dateOrderFinished" value="<?php echo $row['dateOrderFinished']; ?>"  /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Currency</b></div>
-            <div class="column width2"><input type="text" name="currency" value="<?=$row['currency']; ?>" /></div>
+            <div class="column width2"><input type="text" name="currency" value="<?php echo $row['currency']; ?>" /></div>
             <div class="column width2"><b>Currency Value</b></div>
-            <div class="column width2"><input type="text" name="currencyValue" value="<?=$row['currencyValue']; ?>" /></div>
+            <div class="column width2"><input type="text" name="currencyValue" value="<?php echo $row['currencyValue']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Order Total</b></div>
-            <div class="column width2"><input type="text" name="orderTotal" value="<?=$row['orderTotal']; ?>" /></div>
+            <div class="column width2"><input type="text" name="orderTotal" value="<?php echo $row['orderTotal']; ?>" /></div>
             <div class="column width2"><b>Order Tax</b></div>
-            <div class="column width2"><input type="text" name="orderTax" value="<?=$row['orderTax']; ?>" /></div>
+            <div class="column width2"><input type="text" name="orderTax" value="<?php echo $row['orderTax']; ?>" /></div>
 
             <div class="clear">&nbsp;</div>
 
             <div class="column width2 first"><b>Paypal IPN ID</b></div>
-            <div class="column width2"><input type="text" name="paypalIpnId" value="<?=$row['paypalIpnId']; ?>" /></div>
+            <div class="column width2"><input type="text" name="paypalIpnId" value="<?php echo $row['paypalIpnId']; ?>" /></div>
             <div class="column width2"><b>IP Address</b></div>
-            <div class="column width2"><input type="text" name="ipAddress" value="<?=$row['ipAddress']; ?>" /></div>
+            <div class="column width2"><input type="text" name="ipAddress" value="<?php echo $row['ipAddress']; ?>" /></div>
 
         </div>
 
-        <input type="hidden" name="orderId" value="<?=$this->id;?>">
-        <input type="hidden" name="offset" value="<?=$this->offset;?>" />
+        <input type="hidden" name="orderId" value="<?php echo $this->id; ?>">
+        <input type="hidden" name="offset" value="<?php echo $this->offset; ?>" />
 
-        <? endforeach;?>
+        <?php } ?>
 
         <div class="clear">&nbsp;</div>
         

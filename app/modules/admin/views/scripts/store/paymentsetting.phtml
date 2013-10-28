@@ -9,16 +9,16 @@
 	<th>Aksi</th>
 </thead>
 <tbody>
-<? $i=1; foreach($this->rows as $row): ?>
+<?php $i=1; foreach($this->rows as $row) { ?>
 <tr>
-	<td><?=$i;?></td>
-	<td><?=$row->settingKey;?></td>
-	<td><?=$row->settingValue;?></td>
-	<td><?=htmlentities($row->note);?></td>
-	<td><a href="<? echo $this->url(array('controller'=>'store', 
-	'action'=>'editPaymentSetting', 'id'=>$row->settingId));?>">edit</a></td>
+	<td><?php echo $i; ?></td>
+	<td><?php echo $row->settingKey; ?></td>
+	<td><?php echo $row->settingValue; ?></td>
+	<td><?php echo htmlentities($row->note); ?></td>
+	<td><a href="<?php echo $this->url(array('controller'=>'store', 
+	'action'=>'editPaymentSetting', 'id'=>$row->settingId)); ?>">edit</a></td>
 </tr>
-<? $i++; endforeach;?>
+<?php $i++; } ?>
 </tbody>
 </table>
 </fieldset>
