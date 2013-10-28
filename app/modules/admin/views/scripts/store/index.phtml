@@ -1,5 +1,5 @@
 <div class="width7">
-    <?
+    <?php
     $statusId = $this->statusId;
     $status = $this->status;
     $rowset = $this->rowset;
@@ -8,10 +8,10 @@
     {
     ?>
         <div class="dataTables_length">
-            <b>Status : <?=$status[$i];?>, Total : <?=$this->total[$i];?></b>
+            <b>Status : <?php echo $status[$i]; ?>, Total : <?php echo $this->total[$i]; ?></b>
         </div>
         <div class="dataTables_filter">
-            <a href="<?=$this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'order', 'status'=>$this->statusId[$i]),'segwact');?>">View All <?=$status[$i];?> Orders</a>
+            <a href="<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'order', 'status'=>$this->statusId[$i]),'segwact'); ?>">View All <?php echo $status[$i]; ?> Orders</a>
         </div>
         <div class="clear">&nbsp;</div>
         <table id="report" class="display stylized">
@@ -26,23 +26,23 @@
                 </tr>
             </thead>
             <tbody>
-                <? for($x=0;$x<count($rowset[$i]);$x++){ ?>
-                <tr class="<?=($x%2 ? 'gradeX even' : 'gradeX odd');?>">
-                    <td><?=$x+1?></td>
-                    <td><?=$rowset[$i][$x]->invoiceNumber;?></td>
-                    <td><?=$rowset[$i][$x]->paymentMethod;?></td>
-                    <td class="center"><?=$rowset[$i][$x]->orderTotal;?></td>
-                    <td class="center"><?=$rowset[$i][$x]->countTotal;?></td>
+                <?php for($x=0;$x<count($rowset[$i]);$x++) { ?>
+                <tr class="<?php echo ($x%2 ? 'gradeX even' : 'gradeX odd'); ?>">
+                    <td><?php echo $x+1; ?></td>
+                    <td><?php echo $rowset[$i][$x]->invoiceNumber; ?></td>
+                    <td><?php echo $rowset[$i][$x]->paymentMethod; ?></td>
+                    <td class="center"><?php echo $rowset[$i][$x]->orderTotal; ?></td>
+                    <td class="center"><?php echo $rowset[$i][$x]->countTotal; ?></td>
                     <td class="center">
-                        <a href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'editOrder', 'orderId'=>$rowset[$i][$x]->orderId),'segwact');?>">Edit</a>
-                        <a href="<? echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'detailOrder', 'orderId'=>$rowset[$i][$x]->orderId),'segwact');?>">Detail</a>
+                        <a href="<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'editOrder', 'orderId'=>$rowset[$i][$x]->orderId),'segwact'); ?>">Edit</a>
+                        <a href="<?php echo $this->url(array('lang'=>$this->getLanguage(), 'controller'=>'store', 'action'=>'detailOrder', 'orderId'=>$rowset[$i][$x]->orderId),'segwact'); ?>">Detail</a>
                     </td>
                 </tr>
-                <?}?>
+                <?php } ?>
             </tbody>
         </table>
         <div class="clear">&nbsp;</div>
-    <?
+    <?php
     }
     ?>
 </div>
