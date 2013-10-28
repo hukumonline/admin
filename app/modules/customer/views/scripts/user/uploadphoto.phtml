@@ -4,16 +4,16 @@
     <div class="colgroup leading">
         <div class="column width6 first">
             <h3>User Management: Upload Photo</h3>
-            <? if (isset($this->message)): ?>
+            <?php if (isset($this->message)) : ?>
             <div class="box box-info closeable">
-                <?= $this->message; ?><br/>
+                <?php echo $this->message; ?><br/>
             </div>
-            <? endif; ?>
+            <?php endif; ?>
 
             <form enctype="multipart/form-data" id="uploadphoto" method="post" action="">
                 <fieldset>
                     <legend>Upload your photo</legend>
-                    <?
+                    <?php
                     $arraypictureformat = array("jpg", "jpeg", "gif");
                     $txt_allowedformat = implode('; ', $arraypictureformat);
                     
@@ -51,18 +51,18 @@
                     ?>
 
                     <p>
-                        <label for="opasswd"><?=$txt_existence; ?></label><br>
-                        <input type="checkbox" name="txt_erase"<?=$dis; ?> />&nbsp;Hapus<br>
+                        <label for="opasswd"><?php echo $txt_existence; ?></label><br>
+                        <input type="checkbox" name="txt_erase"<?php echo $dis; ?> />&nbsp;Hapus<br>
                         <input type="file" name="file_picture" size="25" />&nbsp;(opsional)
                     </p>
                     <p>
                         <label for="size">Ukuran gambar lebar max. 200px dan tinggi max. 250px</label>
                     </p>
                     <p>
-                        <label for="format">Format foto yang diperkenankan: <?=$txt_allowedformat; ?></label><br>
+                        <label for="format">Format foto yang diperkenankan: <?php echo $txt_allowedformat; ?></label><br>
                     </p>
                     <p>
-                        <input type="hidden" name="id" id="id" value="<?=$this->user['kopel'];?>">
+                        <input type="hidden" name="id" id="id" value="<?php echo $this->user['kopel']; ?>">
                         <input value="Upload" type="submit" class="btn btn-blue" />
                     </p>
                 </fieldset>
@@ -73,7 +73,7 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?//=$this->action('approval','user','customer');?>
+            <?php //echo $this->action('approval','user','customer'); ?>
         </div>
     </div>
 
@@ -86,7 +86,7 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+        <?php echo $this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel'])); ?>
     </div>
     <div class="content-box">
         <header style="cursor: s-resize;">
