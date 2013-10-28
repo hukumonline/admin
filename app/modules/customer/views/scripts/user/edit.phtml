@@ -4,63 +4,63 @@
     <div class="colgroup leading">
         <div class="column width6 first">
             <h3>User Management: Edit</h3>
-            <? if (isset($this->message)): ?>
+            <?php if (isset($this->message)) : ?>
             <div class="box box-info closeable">
-                <?= $this->message; ?><br/>
-                <?
+                <?php echo $this->message; ?><br/>
+                <?php
                 echo '<pre>';
                 print_r($this->data);
                 echo '</pre>';
                 ?>
             </div>
-            <? endif; ?>
+            <?php endif; ?>
 
             <form id="edituser" method="post" action="">
                 <fieldset>
                     <legend>Login Info</legend>
                     <p>
                         <label for="username">Username:</label><br>
-                        <?=$this->user['username'];?>
+                        <?php echo $this->user['username']; ?>
                     </p>
                 </fieldset>
                 <fieldset>
                     <legend>User Details</legend>
                     <p>
                         <label for="kopel">Customer Code:</label>
-                        <input type="hidden" name="id" value="<?=$this->user['kopel'];?>" />
-                        <?=$this->user['kopel'];?>
+                        <input type="hidden" name="id" value="<?php echo $this->user['kopel']; ?>" />
+                        <?php echo $this->user['kopel']; ?>
                     </p>
                     <p>
                         <label for="company">Company:</label>
-                        <?=$this->user['company'];?>
+                        <?php echo $this->user['company']; ?>
                     </p>
                     <p>
                         <label for="createdDate">Created Date:</label>
-                        <?=date('l F jS, Y \a\t g:ia',strtotime($this->user['createdDate']));?>
+                        <?php echo date('l F jS, Y \a\t g:ia',strtotime($this->user['createdDate'])); ?>
                     </p>
                     <p>
                         <label for="createdBy">Created By:</label>
-                        <?=$this->user['createdBy'];?>
+                        <?php echo $this->user['createdBy']; ?>
                     </p>
-                    <? if ($this->user['modifiedDate'] !== "0000-00-00 00:00:00") : ?>
+                    <?php if ($this->user['modifiedDate'] !== "0000-00-00 00:00:00") : ?>
                     <p>
                         <label for="modifiedDate">Modified Date:</label>
-                        <?=date('l F jS, Y \a\t g:ia',strtotime($this->user['modifiedDate']));?>
+                        <?php echo date('l F jS, Y \a\t g:ia',strtotime($this->user['modifiedDate'])); ?>
                     </p>
                     <p>
                         <label for="modifiedBy">Modified By:</label>
-                        <?=$this->user['modifiedBy'];?>
+                        <?php echo $this->user['modifiedBy']; ?>
                     </p>
-                    <? endif; ?>
+                    <?php endif; ?>
                     <p>
                         <label for="promotioncode">Promotion Code:</label><br>
-                        <input id="promotioncode" class="small" name="promotioncode" type="text" value="<?=$this->user['promotionId'];?>" />
+                        <input id="promotioncode" class="small" name="promotioncode" type="text" value="<?php echo $this->user['promotionId']; ?>" />
                     </p>
                     <p>
                         <label for="fullname">Full Name:</label><br>
-                        <input id="fullname" class="half" name="fullname" type="text" value="<?=$this->user['fullName'];?>" />
+                        <input id="fullname" class="half" name="fullname" type="text" value="<?php echo $this->user['fullName']; ?>" />
                     </p>
-                    <?
+                    <?php
                     if ($this->user['gender'] == 'L')
                     {
                             $gender = 1;
@@ -76,9 +76,9 @@
                     ?>
                     <p>
                         <label for="chkGender">Gender:</label><br>
-                        <?=$this->gender($gender);?>
+                        <?php echo $this->gender($gender); ?>
                     </p>
-                    <?
+                    <?php
                     $lang['months'] = array("January","February","March","April","May","June","July","August","September","October","November","December");
                     if ($this->user['birthday'] !== "0000-00-00") {
                         $bdate = $this->user['birthday'];
@@ -88,95 +88,95 @@
                     ?>
                     <p>
                         <label for="birthOfDate">Birth Of Date:</label><br>
-                        <?=$this->month($lang['months'],$month).$this->day($day).$this->year($year);?>
+                        <?php echo $this->month($lang['months'],$month).$this->day($day).$this->year($year); ?>
                     </p>
-                    <? } else { ?>
+                    <?php } else { ?>
                     <p>
                         <label for="birthOfDate">Birth Of Date:</label><br>
-                        <?=$this->month($lang['months']).$this->day().$this->year();?>
+                        <?php echo $this->month($lang['months']).$this->day().$this->year(); ?>
                     </p>
-                    <? } ?>
+                    <?php } ?>
                     <p>
                         <label for="education">Education:</label><br>
-                        <?=$this->education($this->user['educationId']);?>
+                        <?php echo $this->education($this->user['educationId']); ?>
                     </p>
                     <p>
                         <label for="expense">Monthly expenses:</label><br>
-                        <?=$this->expense($this->user['expenseId']);?>
+                        <?php echo $this->expense($this->user['expenseId']); ?>
                     </p>
                     <p>
                         <label for="businessType">Business Type:</label><br>
-                        <?=$this->businessType($this->user['businessTypeId']);?>
+                        <?php echo $this->businessType($this->user['businessTypeId']); ?>
                     </p>
                     <p>
                         <label for="address">Address:</label><br>
-                        <textarea name="address" class="medium" cols="30" rows="5"><?=$this->user['address'];?></textarea>
+                        <textarea name="address" class="medium" cols="30" rows="5"><?php echo $this->user['address']; ?></textarea>
                     </p>
                     <p>
                         <label for="city">City:</label><br>
-                        <input id="city" class="half" name="city" type="text" value="<?=$this->user['city'];?>" />
+                        <input id="city" class="half" name="city" type="text" value="<?php echo $this->user['city']; ?>" />
                     </p>
-                    <?
+                    <?php
                     $state = ($this->user['state'])? $this->user['state'] : 7;
                     ?>
                     <p>
                         <label for="province">State:</label><br>
-                        <?=$this->state($state);?>
+                        <?php echo $this->state($state); ?>
                     </p>
-                    <?
+                    <?php
                     $countryId = ($this->user['countryId'])? $this->user['countryId'] : "ID";
                     ?>
                     <p>
                         <label for="country">Country:</label><br>
-                        <?=$this->country("countryId",$countryId);?>
+                        <?php echo $this->country("countryId",$countryId); ?>
                     </p>
                     <p>
                         <label for="zip">PostalCode:</label><br>
-                        <input id="zip" class="small" name="zip" type="text" value="<?=$this->user['zip'];?>" />
+                        <input id="zip" class="small" name="zip" type="text" value="<?php echo $this->user['zip']; ?>" />
                     </p>
                     <p>
                         <label for="phone">Phone:</label><br>
-                        <input id="phone" class="small" name="phone" type="text" value="<?=$this->user['phone'];?>" />
+                        <input id="phone" class="small" name="phone" type="text" value="<?php echo $this->user['phone']; ?>" />
                     </p>
                     <p>
                         <label for="fax">Fax:</label><br>
-                        <input id="fax" class="small" name="fax" type="text" value="<?=$this->user['fax'];?>" />
+                        <input id="fax" class="small" name="fax" type="text" value="<?php echo $this->user['fax']; ?>" />
                     </p>
                     <p>
                         <label for="payment">Subscription:</label><br>
-                        <input id="payment" class="small" name="payment" type="text" size="2" value="<?= ($this->user['paymentId']==0)? "" : $this->user['paymentId'];?>" />&nbsp;month
+                        <input id="payment" class="small" name="payment" type="text" size="2" value="<?php echo ($this->user['paymentId']==0)? "" : $this->user['paymentId']; ?>" />&nbsp;month
                         <small>.:Corporate or Individual Subscriber</small>
                     </p>
 			        <p>
 			            <label for="trial">Trial dalam Hari:</label><br>
-			            <input id="trial" class="small" name="trial" type="text" size="2" value="<?=$this->user['trialInDays'];?>" />&nbsp;days
+			            <input id="trial" class="small" name="trial" type="text" size="2" value="<?php echo $this->user['trialInDays']; ?>" />&nbsp;days
 			        </p>
                 </fieldset>
                 <fieldset>
                     <legend>Enter Your E-mail Address</legend>
                     <p>
                         <label class="required" for="email">E-mail:</label><br>
-                        <input id="email" class="half" name="email" type="text" value="<?=$this->user['email'];?>" />
+                        <input id="email" class="half" name="email" type="text" value="<?php echo $this->user['email']; ?>" />
                     </p>
                 </fieldset>
                 <p>
                     <label for="notes">Notes:</label><br>
-                    <textarea name="notes" class="medium" cols="30" rows="5"><?=$this->user['notes'];?></textarea>
+                    <textarea name="notes" class="medium" cols="30" rows="5"><?php echo $this->user['notes']; ?></textarea>
                 </p>
                 <p>
                     <label for="userstatus">User Status</label>
-                    <?=$this->uStatus($this->user['periodeId']);?>
+                    <?php echo $this->uStatus($this->user['periodeId']); ?>
                 </p>
                 <p>
                     <label for="isActive">Is Active</label>
-                    <?
+                    <?php
                     $arraystatus = array(
                                     0 => "No",
                                     1 => "Yes"
                             );
                     ?>
                     <select name="isactive">
-                    <?
+                    <?php
                     foreach ($arraystatus as $key => $val)
                     {
                         $sel = ($key == $this->user['isActive']) ? " selected" : "";
@@ -185,7 +185,7 @@
                     ?>
                     </select>
                 </p>
-                <?
+                <?php
                 if ($this->user['isContact'] == "Y") {
                     $isContact = 'checked';
                 } else {
@@ -193,10 +193,10 @@
                 }
                 ?>
                 <p>
-                    <input name="iscontact" id="iscontact" type="checkbox" value="1" <?=$isContact;?>>&nbsp;Contact Person<br/><br/>
+                    <input name="iscontact" id="iscontact" type="checkbox" value="1" <?php echo $isContact; ?>>&nbsp;Contact Person<br/><br/>
                 </p>
                 <fieldset>
-                <?
+                <?php
                     if ($this->user['newArticle'] == 'Y') {
                         $newArticlechecked = 'checked';
                     } else {
@@ -214,15 +214,15 @@
                     }
                 ?>
                 <legend>Newsletter</legend>
-                <input type="checkbox" name="newArticle" value="1" <?=$newArticlechecked ?>>&nbsp;News article<br>
-                <input type="checkbox" name="newWeeklyRegulation" value="1" id="newWeeklyRegulation" <?=$weeklyListchecked ?>>&nbsp;Weekly regulations<br>
-                <input type="checkbox" name="newRegulation" value="1" <?=$monthlyListchecked ?>>&nbsp;Monthly regulations
+                <input type="checkbox" name="newArticle" value="1" <?php echo $newArticlechecked; ?>>&nbsp;News article<br>
+                <input type="checkbox" name="newWeeklyRegulation" value="1" id="newWeeklyRegulation" <?php echo $weeklyListchecked; ?>>&nbsp;Weekly regulations<br>
+                <input type="checkbox" name="newRegulation" value="1" <?php echo $monthlyListchecked; ?>>&nbsp;Monthly regulations
                 </fieldset>
-                <input type="hidden" name="modifiedBy" value="<?=$this->identity->username;?>" />
+                <input type="hidden" name="modifiedBy" value="<?php echo $this->identity->username; ?>" />
 
                 <p>
                     <input class="form-button" value="Process" type="submit" />
-                    <input class="form-button" value="Back" type="button" onclick="window.location.href='<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/user/list'" />
+                    <input class="form-button" value="Back" type="button" onclick="window.location.href='<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/customer/user/list'" />
                 </p>
                 <div class="clear">&nbsp;</div>
             </form>
@@ -231,7 +231,7 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?//=$this->action('approval','user','customer');?>
+            <?php //echo $this->action('approval','user','customer'); ?>
         </div>
     </div>
 
@@ -244,10 +244,10 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel']));?>
+        <?php echo $this->action('rightupmenu','user','customer',array('id'=>$this->user['kopel'])); ?>
     </div>
     <div class="content-box">
-        <?=$this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel']));?>
+        <?php echo $this->action('rightdownmenu','user','customer',array('id'=>$this->user['kopel'])); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
