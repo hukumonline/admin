@@ -3,7 +3,7 @@
 	<div class="colgroup leading">
 		<div class="column width6 first">
 			<h3>Who's Online</h3>
-			Number of record(s): <span id="numOfRecords"><?php echo $this->aData['totalCount'];?></span>
+			Number of record(s): <span id="numOfRecords"><?php echo $this->aData['totalCount']; ?></span>
             <div class="clear">&nbsp;</div>
             <div class="box box-success" id="message"></div>
 			
@@ -34,9 +34,9 @@
 				
 				var myPageIndex = 0;
 				var currentEncodedQuery ='';
-				var itemsPerPage = <?php echo $this->aData['limit'];?>
+				var itemsPerPage = <?php echo $this->aData['limit']; ?>
 				
-				$("#wholPagination").pagination(<?php echo $this->aData['totalCount'];?>, 
+				$("#wholPagination").pagination(<?php echo $this->aData['totalCount']; ?>, 
 				{items_per_page:itemsPerPage, callback:handlePaginationClick}
 				);
 				
@@ -44,14 +44,14 @@
 				{
 					
 					myPageIndex = new_page_index;
-					myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+					myStart = (<?php echo $this->aData['limit']; ?> * myPageIndex);
 					
 					if(true)
 					{
 						if($('#tblWholPager-'+myPageIndex).length==0)
 						{
 							//$('#message_box').show();
-							$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getwholuser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', wholJson);
+							$.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/user/getwholuser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit']; ?>', '', wholJson);
 						}
 						else
 							showWholContent();
@@ -63,7 +63,7 @@
 					size = res.users.length;
 					var tblRow = "<a name='a-"+myPageIndex+"' ></a>"+'<div class="tblWholPager" id="tblWholPager-'+myPageIndex+'">';
 					tblRow += "<table class='display stylized'><thead><tr><th>&nbsp;</th><th>Kopel</th><th>Username</th><th>Company</th><th>Group</th><th class='ta-center'>Action</th></tr></thead><tbody>"
-					+"<?$gEx = $this->groupException(11);?>";
+					+"<?php $gEx = $this->groupException(11); ?>";
 					
 					
 					for(i=0;i<size;i++)
@@ -107,7 +107,7 @@
 					var searchQuery = textKeywords;
 					var base64encoded = Base64.encode(searchQuery);
 					currentEncodedQuery = base64encoded;
-					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserwholbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackWholCount);
+					$.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/user/countuserwholbyquery/q/'+base64encoded+'/start/'+myStart+'/limit/<?php echo $this->aData['limit']; ?>', '', callbackWholCount);
 				}
 				function callbackWholCount(res)
 				{
@@ -121,14 +121,14 @@
 				{
 					$("#wholContent").html("");
 					myPageIndex = 0;
-					myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+					myStart = (<?php echo $this->aData['limit']; ?> * myPageIndex);
 					
 					if(true)
 					{
 						if($('#tblWholPager-'+myPageIndex).length==0)
 						{
 							//$('#message_box').show();
-							$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getwholuser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', wholJson);
+							$.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/user/getwholuser/q/'+currentEncodedQuery+'/start/'+myStart+'/limit/<?php echo $this->aData['limit']; ?>', '', wholJson);
 						}
 						else
 							showWholContent();
