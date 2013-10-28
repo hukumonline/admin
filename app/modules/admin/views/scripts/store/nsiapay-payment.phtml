@@ -15,27 +15,27 @@
                 </tr>
             </thead>
             <tbody>
-                <? $i=$this->offset+1; foreach($this->rows as $row): ?>
-                <tr class="<?=($i%2 ? 'gradeX' : 'gradeC');?>">
-                    <td><?=$i?></td>
+                <?php $i=$this->offset+1; foreach($this->rows as $row) { ?>
+                <tr class="<?php echo ($i%2 ? 'gradeX' : 'gradeC'); ?>">
+                    <td><?php echo $i; ?></td>
                     <td>
-                        User ID : <?=$row->userId;?><br />
-                        Invoice : <?=$row->invoiceNumber;?><br />
-                        Name    : <?=$row->fullName;?><br />
-                        Company : <?=$row->company;?><br />&nbsp;
+                        User ID : <?php echo $row->userId; ?><br />
+                        Invoice : <?php echo $row->invoiceNumber; ?><br />
+                        Name    : <?php echo $row->fullName; ?><br />
+                        Company : <?php echo $row->company; ?><br />&nbsp;
                     </td>
-                    <td><?=$row->paymentMethod;?></td>
-                    <td class="center"><?=strftime("%Y-%m-%d",strtotime($row->datePurchased));?></td>
-                    <td><?=(!empty($row->lastModified))?strftime("%Y-%m-%d",strtotime($row->lastModified)):'undefined';?></td>
-                    <td><?=$row->ordersStatus;?></td>
-                    <td><?=$row->orderTotal;?></td>
-                    <td><?=$row->countTotal;?></td>
+                    <td><?php echo $row->paymentMethod; ?></td>
+                    <td class="center"><?php echo strftime("%Y-%m-%d",strtotime($row->datePurchased)); ?></td>
+                    <td><?php echo (!empty($row->lastModified))?strftime("%Y-%m-%d",strtotime($row->lastModified)):'undefined'; ?></td>
+                    <td><?php echo $row->ordersStatus; ?></td>
+                    <td><?php echo $row->orderTotal; ?></td>
+                    <td><?php echo $row->countTotal; ?></td>
                     <td class="center">
-                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'edit-order', 'orderId'=>$row->orderId));?>">edit</a>
-                       <a href="<?=$this->url(array('controller'=>'store', 'action'=>'trdetail', 'orderId'=>$row->orderId));?>">detail</a>
+                       <a href="<?php echo $this->url(array('controller'=>'store', 'action'=>'edit-order', 'orderId'=>$row->orderId)); ?>">edit</a>
+                       <a href="<?php echo $this->url(array('controller'=>'store', 'action'=>'trdetail', 'orderId'=>$row->orderId)); ?>">detail</a>
                     </td>
                 </tr>
-                <? $i++; endforeach;?>
+                <?php $i++; } ?>
             </tbody>
             <tfoot>
                 <tr>
