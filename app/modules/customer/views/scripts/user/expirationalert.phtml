@@ -22,7 +22,7 @@
 						$period = $this->period;
 						foreach ($period_arr as $k => $v) {
 						?>
-						<option <?php if($period == $k) echo "selected='selected'"; ?> value="<?=$k?>"><?=$v?></option>
+						<option <?php if($period == $k) echo "selected='selected'"; ?> value="<?php echo $k; ?>"><?php echo $v; ?></option>
 						<?php } ?>
 						</select>
         			</td>
@@ -69,7 +69,7 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 
 </aside>
