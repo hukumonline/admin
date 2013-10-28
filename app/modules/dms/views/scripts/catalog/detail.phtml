@@ -3,36 +3,36 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="Search <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <fieldset>
                 <legend>Navigation</legend>
-                <?=$this->widget2->render();?>
+                <?php echo $this->widget2->render(); ?>
             </fieldset>
             <fieldset>
                 <legend>Data Center</legend>
-                <h4><?=$this->catalogTitle;?></h4>
-                <h6><?=$this->catalogSubTitle;?></h6>
+                <h4><?php echo $this->catalogTitle; ?></h4>
+                <h6><?php echo $this->catalogSubTitle; ?></h6>
                 <p>
                     <label for="price">Price:</label>
-                    <?=$this->rowCatalog['price'];?>
+                    <?php echo $this->rowCatalog['price']; ?>
                 </p>
                 <hr>
-                <?=$this->widget1->render();?>
+                <?php echo $this->widget1->render(); ?>
             </fieldset>
-            <?//=$this->widgetImageFiles->render();?>
+            <?php //echo $this->widgetImageFiles->render(); ?>
 
             <div class="ta-center">
                 <div id="galleryLoading"></div>
                 <div id="content"></div>
             </div>
 
-            <?
+            <?php
             Zend_Session::sessionExists('cfg') ? Zend_Session::namespaceUnset('cfg') : '';
             $configGallery = new Zend_Session_Namespace("cfg");
             if (sizeof($configGallery->allThumbs) > $configGallery->perPage) {
@@ -42,22 +42,22 @@
                 <tr>
                     <td>
                         <ul id="pagination">
-                            <? for ($j = 1; $j <= ceil(sizeof($configGallery->allThumbs) / $configGallery->perPage); $j++) { ?>
-                            <li id="<?=$j;?>"><?=$j;?></li>
-                            <? } ?>
+                            <?php for ($j = 1; $j <= ceil(sizeof($configGallery->allThumbs) / $configGallery->perPage); $j++) { ?>
+                            <li id="<?php echo $j; ?>"><?php echo $j; ?></li>
+                            <?php } ?>
                         </ul>
                     </td>
                 </tr>
             </table>
 
-            <? } ?>
+            <?php } ?>
 
-            <?=$this->widgetFiles->render();?>
-            <?=$this->widgetHistory->render();?>
-            <?=$this->widgetLegalBasis->render();?>
-            <?=$this->widgetImplementingRegulation->render();?>
-            <?=$this->widget3->render();?>
-            <?=$this->widget4->render();?>
+            <?php echo $this->widgetFiles->render(); ?>
+            <?php echo $this->widgetHistory->render(); ?>
+            <?php echo $this->widgetLegalBasis->render(); ?>
+            <?php echo $this->widgetImplementingRegulation->render(); ?>
+            <?php echo $this->widget3->render(); ?>
+            <?php echo $this->widget4->render(); ?>
         </div>
     </div>
 
@@ -70,10 +70,10 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
-    <?=$this->action('rightdown','catalog','dms',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode));?>
-    <?=$this->action('view','manager','comment',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode));?>
+    <?php echo $this->action('rightdown','catalog','dms',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode)); ?>
+    <?php echo $this->action('view','manager','comment',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode)); ?>
     
 </aside>
 <!-- End of Right column/section -->
@@ -83,7 +83,7 @@ $(document).ready(function(){
     function displayLoad()
     {
         $("#galleryLoading").fadeIn(900,0);
-        $("#galleryLoading").html("<img src='<?=$this->cdn('images');?>/bigLoader.gif' />");
+        $("#galleryLoading").html("<img src='<?php echo $this->cdn('images'); ?>/bigLoader.gif' />");
     }
     function hideLoad()
     {
@@ -94,7 +94,7 @@ $(document).ready(function(){
     $("#pagination li:first").css({'color' : '#FF0084'}).css({'border' : 'none'});
 
     displayLoad();
-    $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>",hideLoad());
+    $("#content").load("<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/gallery/guid/<?php echo $this->catalogGuid; ?>/node/<?php echo $this->currentNode; ?>",hideLoad());
     //Pagination Click
     $("#pagination li").click(function(){
 
@@ -112,7 +112,7 @@ $(document).ready(function(){
             //Loading Data
             var pageNum = this.id;
 
-            $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->currentNode;?>/page/" + pageNum,hideLoad());
+            $("#content").load("<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/gallery/guid/<?php echo $this->catalogGuid; ?>/node/<?php echo $this->currentNode; ?>/page/" + pageNum,hideLoad());
     });
 });
 </script>

@@ -3,24 +3,24 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
-            <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
+            <a href="<?php echo $this->urlReferer; ?>">Back to Origin Page</a>
             <fieldset>
                 <legend>Location:</legend>
-                <?=$this->widget2->render();?>
+                <?php echo $this->widget2->render(); ?>
             </fieldset>
             <fieldset>
                 <legend>From Catalog:</legend>
-                <h4><?=$this->catalogTitle;?></h4>
-                <h6><?=$this->catalogSubTitle;?></h6>
+                <h4><?php echo $this->catalogTitle; ?></h4>
+                <h6><?php echo $this->catalogSubTitle; ?></h6>
             </fieldset>
-            <div id="uploaderSpinner" style="color:red; display:none;"><img src="<?=$this->cdn('images');?>/index.gif" border="0"> Sending Request</div>
+            <div id="uploaderSpinner" style="color:red; display:none;"><img src="<?php echo $this->cdn('images'); ?>/index.gif" border="0"> Sending Request</div>
             <form id="FileUploadForm" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Upload Management</legend>
@@ -42,7 +42,7 @@
                     </select>
                 </p>
                 <input type='hidden' name='profileGuid' id='profileGuid' value='kutu_doc'>
-                <input type='hidden' name='relatedGuid' id='relatedGuid' value='<?=$this->relatedGuid; ?>'>
+                <input type='hidden' name='relatedGuid' id='relatedGuid' value='<?php echo $this->relatedGuid; ?>'>
 
                 <input type="hidden" name="id" id="id" value="2">
 
@@ -66,7 +66,7 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
@@ -74,7 +74,7 @@
 
     var options = {
         type:'post',
-        url: '<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/fileuploader/save',
+        url: '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/fileuploader/save',
         beforeSubmit: prepareData,
         success: showResponse
     };

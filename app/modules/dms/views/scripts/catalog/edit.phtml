@@ -23,18 +23,18 @@ $this->headScript()
 <section class="column width6 first">
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h4>SOLR Dir: <?php echo $this->getSolrDir(); ?></h4>
-            <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
+            <a href="<?php echo $this->urlReferer; ?>">Back to Origin Page</a>
             <fieldset>
                 <legend>LOCATION:</legend>
-                <?=$this->widget2->render();?>
+                <?php echo $this->widget2->render(); ?>
             </fieldset>
             <form id="catalogInputForm" name="catalogInputForm" method="POST">
                 <fieldset>
@@ -54,22 +54,22 @@ $this->headScript()
                     <?php //endif; ?>
                     
                     
-					<? foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
-					<? if (isset($a['description']) && isset($a['form'])) : ?>
+					<?php foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
+					<?php if (isset($a['description']) && isset($a['form'])) : ?>
 					<p>
-						<label><?=$a['description']; ?></label><br>
-						<?=$a['form']; ?>
+						<label><?php echo $a['description']; ?></label><br>
+						<?php echo $a['form']; ?>
 					</p>
-					<? endif; ?>
-					<? endforeach; ?>
-					<? foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
-					<? if (isset($a['description']) && isset($a['form'])) : ?>
+					<?php endif; ?>
+					<?php endforeach; ?>
+					<?php foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
+					<?php if (isset($a['description']) && isset($a['form'])) : ?>
 					<p>
-						<label><?=$a['description']; ?></label><br>
-						<?=$a['form']; ?>
+						<label><?php echo $a['description']; ?></label><br>
+						<?php echo $a['form']; ?>
 					</p>
-					<? endif; ?>
-					<? endforeach; ?>
+					<?php endif; ?>
+					<?php endforeach; ?>
 					<p>
                     	<input type="submit" name="save" id="save" value="Save" class="btn btn-blue big" />
                     </p>
@@ -87,7 +87,7 @@ $this->headScript()
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->

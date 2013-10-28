@@ -24,35 +24,35 @@ $this->headScript()
 	<h3><?php echo $this->flashMessenger(); ?></h3>
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
-            <a href="<?=$this->urlReferer;?>">Back to Origin Page</a>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
+            <a href="<?php echo $this->urlReferer; ?>">Back to Origin Page</a>
             <fieldset>
                 <legend>LOCATION:</legend>
-                <?=$this->widget2->render();?>
+                <?php echo $this->widget2->render(); ?>
             </fieldset>
             <form id="answerClinicForm" name="answerClinicForm" method="POST">
                 <fieldset>
                     <legend>CLINIC</legend>
-					<? foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
+					<?php foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
 					<p>
-						<label><?=$a['description']; ?></label><br>
-						<?=$a['form']; ?>
+						<label><?php echo $a['description']; ?></label><br>
+						<?php echo $a['form']; ?>
 					</p>
-					<? endforeach; ?>
-					<? foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
-					<? if (isset($a['description']) && isset($a['form'])) : ?>
+					<?php endforeach; ?>
+					<?php foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
+					<?php if (isset($a['description']) && isset($a['form'])) : ?>
 					<p>
-						<label><?=$a['description']; ?></label><br>
-						<?=$a['form']; ?>
+						<label><?php echo $a['description']; ?></label><br>
+						<?php echo $a['form']; ?>
 					</p>
-					<? endif; ?>
-					<? endforeach; ?>
+					<?php endif; ?>
+					<?php endforeach; ?>
 					<p>
                     	<input type="submit" name="save" id="save" value="Save" class="btn btn-blue big" />
 					</p>
@@ -68,7 +68,7 @@ $this->headScript()
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->

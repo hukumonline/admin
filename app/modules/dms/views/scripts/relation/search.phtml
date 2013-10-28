@@ -3,32 +3,32 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <a href="javascript:history.back();">Back to Origin Page</a>
             <fieldset>
                 <legend>Location:</legend>
-                <?=$this->widget2->render();?>
+                <?php echo $this->widget2->render(); ?>
             </fieldset>
             <fieldset>
                 <legend>Data Center</legend>
-                <h4><?=$this->catalogTitle;?></h4>
-                <h6><?=$this->catalogSubTitle;?></h6>
+                <h4><?php echo $this->catalogTitle; ?></h4>
+                <h6><?php echo $this->catalogSubTitle; ?></h6>
             </fieldset>
             <form id="frmSearchRelation" name="frmSearchRelation" method="GET">
-                <input id="sQuery" name="sQuery" class="half" value='<?=$this->sQuery;?>'>
+                <input id="sQuery" name="sQuery" class="half" value='<?php echo $this->sQuery; ?>'>
                 <input type="hidden" id="nLimit" name="nLimit" value="25">
-                <input type="hidden" id="nOffset" name="nOffset" value="<?echo $this->nOffset;?>">
-                <input type="hidden" id="relatedGuid" name="relatedGuid" value="<?echo $this->relatedGuid;?>">
+                <input type="hidden" id="nOffset" name="nOffset" value="<?php echo $this->nOffset; ?>">
+                <input type="hidden" id="relatedGuid" name="relatedGuid" value="<?php echo $this->relatedGuid; ?>">
                 <input type="submit" id="btnGoSearch" value="Search" class="btn btn-blue big" />
             </form>
-            <h5>Search Result: <?=$this->hits->response->numFound;?> Record(s)</h5>
-            <div id="spinner" style="color:red; display:none;"><img src="<?=$this->cdn('images');?>/index.gif" border="0"> Sending Request</div>
+            <h5>Search Result: <?php echo $this->hits->response->numFound; ?> Record(s)</h5>
+            <div id="spinner" style="color:red; display:none;"><img src="<?php echo $this->cdn('images'); ?>/index.gif" border="0"> Sending Request</div>
             <div class="box box-success" id="message"></div>
             <form id="frmCatalogRelation" name="frmCatalogRelation" method="post">
                 <div class="align-right">
@@ -55,20 +55,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <? foreach ($this->hits->response->docs as $hit) { ?>
+                    <?php foreach ($this->hits->response->docs as $hit) { ?>
                         <tr>
-                            <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$hit->id;?>' class="check_me"></td>
+                            <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?php echo $hit->id; ?>' class="check_me"></td>
                             <td>
-                                <? if($hit->profile == 'kutu_doc'){?>
-                                    <a href="<?=ROOT_URL;?>/browser/downloadfile/guid/<?=$hit->id;?>"><div class="searchResultTitle">File: <?php try {echo $hit->title.' ['.$hit->id.']';} catch (Exception $e) {echo '';}?></div></a>
-                                <? } else { ?>
-                                    <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/detail/guid/<?=$hit->id;?>/node/<?=$this->currentNode;?>" title="<?=$hit->subTitle;?>"><?php try {echo $hit->title;} catch (Exception $e) {echo 'No-Title';}?></a>
-                                <? } ?>
-                                <br><small>id:<?=$hit->id;?> - by: <?=$hit->createdBy;?>&nbsp;<span class="subtitle"><?=$hit->publishedDate;?></span></small>
+                                <?php if($hit->profile == 'kutu_doc') { ?>
+                                    <a href="<?php echo ROOT_URL; ?>/browser/downloadfile/guid/<?php echo $hit->id; ?>"><div class="searchResultTitle">File: <?php try { echo $hit->title.' ['.$hit->id.']'; } catch (Exception $e) { echo ''; } ?></div></a>
+                                <?php } else { ?>
+                                    <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $hit->id; ?>/node/<?php echo $this->currentNode; ?>" title="<?php echo $hit->subTitle; ?>"><?php try { echo $hit->title; } catch (Exception $e) { echo 'No-Title'; } ?></a>
+                                <?php } ?>
+                                <br><small>id:<?php echo $hit->id; ?> - by: <?php echo $hit->createdBy; ?>&nbsp;<span class="subtitle"><?php echo $hit->publishedDate; ?></span></small>
                             </td>
-                            <td><?=$hit->profile;?></td>
+                            <td><?php echo $hit->profile; ?></td>
                             <td>
-                                <?
+                                <?php
                                 $now = date('Y-m-d H:i:s');
                                 $t = str_replace("Z", "", $hit->publishedDate);
                                 $d = explode("T", $t);
@@ -101,16 +101,16 @@
 				}
                                 ?>
 
-                                <div class="ta-center" title="<?=$ht;?>">
-                                    <img src="<?=$this->baseUrl();?>/resources/images/silk/icons/<?=$status;?>.png">
+                                <div class="ta-center" title="<?php echo $ht; ?>">
+                                    <img src="<?php echo $this->baseUrl(); ?>/resources/images/silk/icons/<?php echo $status; ?>.png">
                                 </div>
                             </td>
                             <td nowrap>
-                                <?=date('d.m.y H:i:s',strtotime($hit->createdDate));?><br>
-                                <small>modifiedBy: <?=$hit->modifiedBy;?></small>
+                                <?php echo date('d.m.y H:i:s',strtotime($hit->createdDate)); ?><br>
+                                <small>modifiedBy: <?php echo $hit->modifiedBy; ?></small>
                             </td>
                         </tr>
-                    <? } ?>
+                    <?php } ?>
                     </tbody>
                 </table>
             </form>
@@ -131,7 +131,7 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->

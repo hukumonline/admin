@@ -3,39 +3,39 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <a href="javascript:history.back();">Back to Folder</a>
             <fieldset>
                 <legend>Location:</legend>
-                <?=$this->widget2->render();?>
+                <?php echo $this->widget2->render(); ?>
             </fieldset>
             <form id="frmEditFolder" method="post">
                 <fieldset>
                     <legend>Folder Info</legend>
                     <p>
                         <label class="required" for="title">Folder Title</label><br>
-                        <input id="title" name="title" class="required half" value="<?=$this->row->title;?>" />
+                        <input id="title" name="title" class="required half" value="<?php echo $this->row->title; ?>" />
                     </p>
                     <p>
                         <label for="description">Description</label><br>
-                        <textarea id="description" name="description" class="medium" cols=35 rows="1"><?=$this->row->description;?></textarea>
+                        <textarea id="description" name="description" class="medium" cols=35 rows="1"><?php echo $this->row->description; ?></textarea>
                     </p>
                     <p>
                         <label for="viewOrder">Menu View Order</label><br>
-                        <input id="viewOrder" name="viewOrder" class="half" value="<?=$this->row->viewOrder;?>" />
+                        <input id="viewOrder" name="viewOrder" class="half" value="<?php echo $this->row->viewOrder; ?>" />
                     </p>
                     <p>
                         <label for="cmsParams">Cms Parameters</label><br>
-                        <?
+                        <?php
                         $prm = Zend_Json::decode($this->row->cmsParams);
                         ?>
-                        <input id="cmsParams" name="cmsParams" class="half" value="<?=$prm['st'];?>" />
+                        <input id="cmsParams" name="cmsParams" class="half" value="<?php echo $prm['st']; ?>" />
                     </p>
                     <p>
                         <label for="typeoffolder">Type of Folder</label><br>
@@ -52,7 +52,7 @@
                         </select>
                     </p>
                     <p>
-                        <input type="hidden" id="node" name="node" value="<?=$this->currentNode;?>">
+                        <input type="hidden" id="node" name="node" value="<?php echo $this->currentNode; ?>">
                         <input type="submit" value="Save" class="btn btn-blue big" />
                     </p>
 
@@ -70,15 +70,15 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#tof").val('<?=$this->row->type;?>');
-    var message = "<?echo $this->message;?>";
+    $("#tof").val('<?php echo $this->row->type; ?>');
+    var message = "<?php echo $this->message; ?>";
     if(message!="")
     {
         alert (message);

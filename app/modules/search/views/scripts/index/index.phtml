@@ -3,19 +3,19 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="Search <?=$tag;?>"><?=$tag;?></a></h3><br />
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="Search <?php echo $tag; ?>"><?php echo $tag; ?></a></h3><br />
             <p>
                 <a href="" id="indexing" class="btn">Indexing</a>
             </p><br>
             <p>
                 <label for="loadsolr">Load http://</label>
-                <input id="url" class="half" value="<?=$this->solrWriteDir;?>" readonly />
+                <input id="url" class="half" value="<?php echo $this->solrWriteDir; ?>" readonly />
             </p>
             <p>
                 <label for="timeout">with&nbsp;timeout </label>
@@ -36,8 +36,7 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
-

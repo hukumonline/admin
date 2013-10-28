@@ -3,13 +3,13 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h4>DELETE CONFIRM:</h4>
             <table class="display stylized" id="delcatalog">
                 <thead>
@@ -19,32 +19,32 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
-                    <?
+                    <?php
                     if (is_array($this->catalogGuid))
                     {
                         $i = 1;
                         foreach ($this->catalogGuid as $guid) :
                     ?>
 
-                    <tr id="row_<?=$guid;?>">
-                        <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$guid;?>' class="check_me"></td>
+                    <tr id="row_<?php echo $guid; ?>">
+                        <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?php echo $guid; ?>' class="check_me"></td>
                         <td>
                             <div>
-                            <?
+                            <?php
 							$rowset = App_Model_Show_Catalog::show()->getCatalogByGuid($guid);
 							if ($rowset['profileGuid'] == 'kutu_doc') {
-								?><strong>File</strong>&nbsp;&raquo;&nbsp;<?=$this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;								
+								?><strong>File</strong>&nbsp;&raquo;&nbsp;<?php echo $this->getCatalogTitle($guid,'fixedTitle'); ?> :<?php echo $guid;								
 							}
 							else if ($rowset['profileGuid'] == 'klinik') {
-								echo $this->getCatalogTitle($guid,'fixedCommentTitle');?> :<?=$guid;
+								echo $this->getCatalogTitle($guid,'fixedCommentTitle'); ?> :<?php echo $guid;
 							}
 							else 
 							{
-								echo $this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;
+								echo $this->getCatalogTitle($guid,'fixedTitle'); ?> :<?php echo $guid;
 							}
                             ?>
-                            <?//=$this->getCatalogTitle($guid,'fixedTitle');?> :<?=$guid;?>
-                            <?
+                            <?php //echo $this->getCatalogTitle($guid,'fixedTitle'); ?> :<?php echo $guid; ?>
+                            <?php
                             $bpm = new Pandamp_Core_Hol_Relation();
                             $aData = $bpm->getFiles($guid);
                             if (count($aData) > 0) :
@@ -53,24 +53,24 @@
                                 <div class="pad">
                                     <b>Additional information</b>
                                     <ul>
-                                        <? foreach ($aData as $data) { ?>
+                                        <?php foreach ($aData as $data) { ?>
                                         <li style="list-style:none;">
-                                            <?=$this->GetCatalogDocType($data->itemGuid); ?>&nbsp;
-                                            <a href="#"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a>&nbsp;
-                                            <?=$this->GetCatalogDocSize($data->itemGuid); ?>
+                                            <?php echo $this->GetCatalogDocType($data->itemGuid); ?>&nbsp;
+                                            <a href="#"><abbr><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a>&nbsp;
+                                            <?php echo $this->GetCatalogDocSize($data->itemGuid); ?>
                                         </li>
-                                        <? } ?>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div>
-                            <? endif; ?>
+                            <?php endif; ?>
                             </div>
                         </td>
                     </tr>
 
-                    <? $i++; endforeach; ?>
+                    <?php $i++; endforeach; ?>
 
-                    <? } ?>
+                    <?php } ?>
                     <tr>
                         <td colspan="2">
                             <select id="ws" name="ws">
@@ -94,11 +94,10 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
     <div class="content-box">
-        <?=$this->action('rightdown','misc','dms');?>
+        <?php echo $this->action('rightdown','misc','dms'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
-

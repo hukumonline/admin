@@ -1,12 +1,12 @@
 <div id='editupload' style="display:none;">
     <h3>Edit Upload form</h3>
-    <?
+    <?php
     if ($this->getLanguage() == 'id')
         $tag = "www.hukumonline.com";
     else
         $tag = "en.hukumonline.com";
     ?>
-    <h5>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h5>
+    <h5>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h5>
     
 	<form id="FileUploadFormEd" enctype="multipart/form-data">
 		
@@ -23,8 +23,8 @@
 		
 		?>
 		
-		<input type='file' name='uploadedFile<?=$i;?>' id='uploadedFile' size='50'/><br>
-		<input type='hidden' name='itemGuid<?=$i;?>' id='itemGuid' value='<?=$cid;?>'>
+		<input type='file' name='uploadedFile<?php echo $i; ?>' id='uploadedFile' size='50'/><br>
+		<input type='hidden' name='itemGuid<?php echo $i; ?>' id='itemGuid' value='<?php echo $cid; ?>'>
 		
 		<?php 
 		$i++;
@@ -32,8 +32,8 @@
 		?>
 		
 		<input type='hidden' name='profileGuid' id='profileGuid' value='kutu_doc'>
-		<input type='hidden' name='relatedGuid' id='relatedGuid' value='<?=$this->relatedGuid;?>'>
-		<input type="hidden" name="id" id="id" value="<?=$this->numberOfRows;?>">
+		<input type='hidden' name='relatedGuid' id='relatedGuid' value='<?php echo $this->relatedGuid; ?>'>
+		<input type="hidden" name="id" id="id" value="<?php echo $this->numberOfRows; ?>">
 					
 		<br>
 		<p style="z-index:1;overflow:hidden;">
@@ -41,12 +41,11 @@
 		<input type="button" name="cancel" id="cancel" value="Cancel" class="btn nyroModalClose" />
 		</p>
 	</form>
-<div id="uploaderSpinner" style="color:red; display:none;"><img src="<?=$this->cdn('images');?>/index.gif" border="0"> Sending Request</div>
+<div id="uploaderSpinner" style="color:red; display:none;"><img src="<?php echo $this->cdn('images'); ?>/index.gif" border="0"> Sending Request</div>
 <script type="text/javascript">
-
 	var options = {
 		type:'post',
-		url: '<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/fileuploader/edit',
+		url: '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/fileuploader/edit',
 		beforeSubmit: prepareData,
 		success: showResponse
 	};
@@ -62,9 +61,5 @@
 	        
 	    $('#uploaderSpinner').hide();
 	}
-	
-	
-
 </script>
 </div>
-

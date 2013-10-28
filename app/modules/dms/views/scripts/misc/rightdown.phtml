@@ -3,29 +3,29 @@
 </header>
 <section>
     <dl>
-        <dd><a href="<?=$this->urlReferer;?>#chooseprofile" class="nyroModal" title="Create New Catalog""><abbr>New Catalog</abbr></a></dd>
-        <dd><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/comment/catalog/browse"><abbr>Comment</abbr></a></dd>
-        <dd><a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/dms/catalog/recyclebin"><abbr>Recycle Bin</abbr></a></dd>
+        <dd><a href="<?php echo $this->urlReferer; ?>#chooseprofile" class="nyroModal" title="Create New Catalog"><abbr>New Catalog</abbr></a></dd>
+        <dd><a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/browse"><abbr>Comment</abbr></a></dd>
+        <dd><a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/recyclebin"><abbr>Recycle Bin</abbr></a></dd>
     </dl>
 </section>
 <div id='chooseprofile' style='display: none;'>
     <h3>Profile Catalog</h3>
-    <?
+    <?php
     if ($this->getLanguage() == 'id')
         $tag = "www.hukumonline.com";
     else
         $tag = "en.hukumonline.com";
     ?>
-    <h5>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h5>
+    <h5>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h5>
     <form id="frmProfile">
         <fieldset>
             <legend>INFORMATION:</legend>
             <p>
                 <label class="required" for="cp">Select Profile:</label>
-                <?=$this->profile();?>
+                <?php echo $this->profile(); ?>
             </p>
             <p>
-                <input type="hidden" id="folderGuid" name="folderGuid" value="<?=$this->currentNode;?>" />
+                <input type="hidden" id="folderGuid" name="folderGuid" value="<?php echo $this->currentNode; ?>" />
                 <input type="submit" value="Continue" class="btn btn-blue big" />
             </p>
         </fieldset>

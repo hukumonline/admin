@@ -1,12 +1,12 @@
-<link rel="stylesheet" type="text/css" href="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.css" />
-<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/_lib/css.js"></script>
-<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/tree_component.css" />
+<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/_lib/css.js"></script>
+<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/tree_component.js"></script>
 <script>
 $(document).ready(function() {
     $("#ctf").tree({
           data  : {
             type  : "json",
-            url   : "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/folder/getchildreninjson",
+            url   : "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/folder/getchildreninjson",
             async : true,
             async_data : function (NODE) { return { id : $(NODE).attr("id") || 0, my_param : "my_value" } }
           },
@@ -20,7 +20,7 @@ $(document).ready(function() {
         });
 
 
-    var message = "<?=$this->message;?>";
+    var message = "<?php echo $this->message; ?>";
     if(message!="")
     {
         alert (message);
@@ -40,14 +40,14 @@ $(document).ready(function() {
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
-            <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/<?=$this->backToNode;?>">Back to Folder</a>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
+            <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->backToNode; ?>">Back to Folder</a>
         </div>
     </div>
     <div class="colgroup leading">
@@ -58,7 +58,7 @@ $(document).ready(function() {
         <div class="column width3">
             <fieldset>
                 <legend>You will copy the following folders:</legend>
-                <strong><?=$this->folderTitle;?></strong>
+                <strong><?php echo $this->folderTitle; ?></strong>
             </fieldset>
             <form id="frmMoveToFolder" method="post">
 		<fieldset>
@@ -67,8 +67,8 @@ $(document).ready(function() {
                         <label for="targetNode">Target Folder</label>
                         <input type="text" id="targetNodeTitle" name="targetNodeTitle" value="">
                         <input type="hidden" id="targetNode" name="targetNode" value="">
-                        <input type="hidden" id="guid" name="guid" value="<?=$this->guid;?>">
-                        <input type="hidden" id="backToNode" name="backToNode" value="<?=$this->backToNode;?>">
+                        <input type="hidden" id="guid" name="guid" value="<?php echo $this->guid; ?>">
+                        <input type="hidden" id="backToNode" name="backToNode" value="<?php echo $this->backToNode; ?>">
                     </p>
                     <p>
                         <label for="Save">&nbsp;</label>
@@ -89,7 +89,7 @@ $(document).ready(function() {
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
