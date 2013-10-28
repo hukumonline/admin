@@ -1,6 +1,6 @@
-<?  foreach($this->rows as $row): ?>
+<?php foreach($this->rows as $row) { ?>
 <fieldset>
-    <legend>Order No : <?=$this->id;?></legend>
+    <legend>Order No : <?php echo $this->id; ?></legend>
     <div class="width8" align="right">
         <form style="z-index:1;overflow:hidden;">
         <input class="btn btn-green big" type="button" value="Edit" onclick="window.location.href='<?php echo ROOT_URL;?>/<?php echo $this->getLanguage(); ?>/store/editOrder/orderId/<?php echo $this->id; ?>'" />
@@ -12,90 +12,90 @@
     <div class="clear">&nbsp;</div>
     <div class="colgroup">
         <div class="column width2 first"><b>Invoice</b></div>
-        <div class="column width2"><?=$row['invoiceNumber']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['invoiceNumber']; ?>&nbsp;</div>
         <div class="column width2"><b>Kode Pelanggan</b></div>
-        <div class="column width2"><?=$row['userId']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['userId']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Tax Number</b></div>
-        <div class="column width2"><?=$row['taxNumber']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxNumber']; ?>&nbsp;</div>
         <div class="column width2"><b>Company</b></div>
-        <div class="column width2"><?=$row['taxCompany']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxCompany']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Address</b></div>
-        <div class="column width2"><?=$row['taxAddress']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxAddress']; ?>&nbsp;</div>
         <div class="column width2"><b>City</b></div>
-        <div class="column width2"><?=$row['taxCity']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxCity']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>ZIP</b></div>
-        <div class="column width2"><?=$row['taxZip']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxZip']; ?>&nbsp;</div>
         <div class="column width2"><b>Province</b></div>
-        <div class="column width2"><?=$row['taxProvince']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxProvince']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Country</b></div>
-        <div class="column width2"><?=$row['taxCountryId']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['taxCountryId']; ?>&nbsp;</div>
         <div class="column width2"><b>Telephone</b></div>
-        <div class="column width2"><?=$row['telephone']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['telephone']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Payment Method</b></div>
-        <div class="column width2"><?=$row['paymentMethod']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['paymentMethod']; ?>&nbsp;</div>
         <div class="column width2"><b>Payment Method Note</b></div>
-        <div class="column width2"><?=$row['paymentMethodNote']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['paymentMethodNote']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Last Modified</b></div>
-        <div class="column width2"><?=(!empty($row['lastModified']))?strftime("%Y-%m-%d",strtotime($row['lastModified'])):'undefined'; ?>&nbsp;</div>
+        <div class="column width2"><?php echo (!empty($row['lastModified'])) ? strftime("%Y-%m-%d",strtotime($row['lastModified'])) : 'undefined'; ?>&nbsp;</div>
         <div class="column width2"><b>Date Purchased</b></div>
-        <div class="column width2"><?=(!empty($row['datePurchased']))?strftime("%Y-%m-%d",strtotime($row['datePurchased'])):'undefined'; ?>&nbsp;</div>
+        <div class="column width2"><?php echo (!empty($row['datePurchased'])) ? strftime("%Y-%m-%d",strtotime($row['datePurchased'])) : 'undefined'; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Order Status</b></div>
-        <div class="column width2"><?=$row['ordersStatus']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['ordersStatus']; ?>&nbsp;</div>
         <div class="column width2"><b>Date Order Finished</b></div>
-        <div class="column width2"><?=(!empty($row['dateOrderFinished']))?strftime("%Y-%m-%d",strtotime($row['dateOrderFinished'])):'undefined'; ?>&nbsp;</div>
+        <div class="column width2"><?php echo (!empty($row['dateOrderFinished'])) ? strftime("%Y-%m-%d",strtotime($row['dateOrderFinished'])) : 'undefined'; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Currency</b></div>
-        <div class="column width2"><?=$row['currency']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['currency']; ?>&nbsp;</div>
         <div class="column width2"><b>Currency Value</b></div>
-        <div class="column width2"><?=$row['currencyValue']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['currencyValue']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Order Total</b></div>
-        <div class="column width2"><?=$row['orderTotal']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['orderTotal']; ?>&nbsp;</div>
         <div class="column width2"><b>Order Tax</b></div>
-        <div class="column width2"><?=$row['orderTax']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['orderTax']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Paypal IPN ID</b></div>
-        <div class="column width2"><?=$row['paypalIpnId']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['paypalIpnId']; ?>&nbsp;</div>
         <div class="column width2"><b>IP Address</b></div>
-        <div class="column width2"><?=$row['ipAddress']; ?>&nbsp;</div>
+        <div class="column width2"><?php echo $row['ipAddress']; ?>&nbsp;</div>
 
         <div class="clear">&nbsp;</div>
 
         <div class="column width2 first"><b>Payment Date</b></div>
-        <div class="column width2"><?=$row['paymentDate']; ?>&nbsp;</div>
-        <div class="column width2"><input type="hidden" name="id" value="<?=$this->id;?>"></div>
+        <div class="column width2"><?php echo $row['paymentDate']; ?>&nbsp;</div>
+        <div class="column width2"><input type="hidden" name="id" value="<?php echo $this->id; ?>"></div>
 
     </div>
 
 </fieldset>
-<? endforeach;?>
+<?php } ?>
 <fieldset>
     <legend>Detail</legend>
     <table class="stylized full">
@@ -111,17 +111,17 @@
             </tr>
         </thead>
         <tbody>
-            <?$i =1; foreach($this->rowsDetail as $rowDetail): ?>
+            <?php $i =1; foreach($this->rowsDetail as $rowDetail) { ?>
             <tr>
-                <td><?=$i;?></td>
-                <td><?=$rowDetail['itemId']; ?></td>
-                <td><?=$rowDetail['documentName']; ?></td>
-                <td><?=number_format($rowDetail['price'],2); ?></td>
-                <td><?=number_format($rowDetail['finalPrice'],2); ?></td>
-                <td><?=number_format($rowDetail['tax'],2); ?> %</td>
-                <td><?=$rowDetail['qty']; ?></td>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $rowDetail['itemId']; ?></td>
+                <td><?php echo $rowDetail['documentName']; ?></td>
+                <td><?php echo number_format($rowDetail['price'],2); ?></td>
+                <td><?php echo number_format($rowDetail['finalPrice'],2); ?></td>
+                <td><?php echo number_format($rowDetail['tax'],2); ?> %</td>
+                <td><?php echo $rowDetail['qty']; ?></td>
             </tr>
-            <? $i++; endforeach; ?>
+            <?php $i++; } ?>
         </tbody>
     </table>
 </fieldset>
