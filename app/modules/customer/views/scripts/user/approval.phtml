@@ -1,19 +1,19 @@
-<?
-if ($this->aData['totalCount'] > 0) :
+<?php
+if ($this->aData['totalCount'] > 0) {
 ?>
 <h4>Queue List</h4>
 <hr/>
 
 	<div class="align-right">
-	Number of record(s): <span id="numOfRecords"><? echo $this->aData['totalCount'];?></span>
+	Number of record(s): <span id="numOfRecords"><?php echo $this->aData['totalCount']; ?></span>
 	</div>
-	<?php if ($this->isAllowed('membership','all')) : ?>
+	<?php if ($this->isAllowed('membership','all')) { ?>
 	<div class="align-left">
 		&nbsp;&nbsp;&nbsp;&nbsp;<input name='select_deselect' id='select_deselect' type='checkbox'>&nbsp;<abbr>Select All</abbr> |
 		<a href="javascript: void(0);" class="approvedAction">Approved</a> |
 		<a href="javascript: void(0);" class="suspendedAction">Suspended</a>
 	</div>
-	<?php endif; ?>
+	<?php } ?>
 	<div id='catalogContent'>
 		
 	</div>
@@ -32,9 +32,9 @@ if ($this->aData['totalCount'] > 0) :
 		var isFirstTime = 1;
 		
 		var myPageIndex = 0;
-		var itemsPerPage = <?php echo $this->aData['limit'];?>
+		var itemsPerPage = <?php echo $this->aData['limit']; ?>
 		
-		$("#catalogPagination").pagination(<?php echo $this->aData['totalCount'];?>, 
+		$("#catalogPagination").pagination(<?php echo $this->aData['totalCount']; ?>, 
 		{items_per_page:itemsPerPage, callback:handlePaginationClick}
 		);
 		
@@ -42,14 +42,14 @@ if ($this->aData['totalCount'] > 0) :
 		{
 			
 			myPageIndex = new_page_index;
-			myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+			myStart = (<?php echo $this->aData['limit']; ?> * myPageIndex);
 			
 			if(true)
 			{
 				if($('#tblCatalogPager-'+myPageIndex).length==0)
 				{
 					//$('#message_box').show();
-					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getappuser/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+					$.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/user/getappuser/start/'+myStart+'/limit/<?php echo $this->aData['limit']; ?>', '', testJson);
 				}
 				else
 					showCatalogContent();
@@ -67,9 +67,9 @@ if ($this->aData['totalCount'] > 0) :
 			{
 				tblRow += 
 					"<tr id='row_"+res.users[i].kopel+"' class="+(i%2 ? 'gradeX' : 'gradeC')+">"
-					<?php if ($this->isAllowed('membership','all')) : ?>
+					<?php if ($this->isAllowed('membership','all')) { ?>
 					+"<td>"+res.users[i].checkbox+"</td>"
-					<?php endif; ?>
+					<?php } ?>
 					+"<td>"+res.users[i].kopel+"</td>"
 					+"<td>"+res.users[i].username+"</td>"
 					+"<td width='25%'>"+res.users[i].company+"</td>"
@@ -98,7 +98,7 @@ if ($this->aData['totalCount'] > 0) :
 		
 		function testCount()
 		{
-			$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/countuserappbyquery/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', callbackTestCount);
+			$.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/user/countuserappbyquery/start/'+myStart+'/limit/<?php echo $this->aData['limit']; ?>', '', callbackTestCount);
 		}
 		function callbackTestCount(res)
 		{
@@ -112,14 +112,14 @@ if ($this->aData['totalCount'] > 0) :
 		{
 			$("#catalogContent").html("");
 			myPageIndex = 0;
-			myStart = (<?php echo $this->aData['limit'];?> * myPageIndex);
+			myStart = (<?php echo $this->aData['limit']; ?> * myPageIndex);
 			
 			if(true)
 			{
 				if($('#tblCatalogPager-'+myPageIndex).length==0)
 				{
 					//$('#message_box').show();
-					$.getJSON('<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/user/getalluser/start/'+myStart+'/limit/<?php echo $this->aData['limit'];?>', '', testJson);
+					$.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/user/getalluser/start/'+myStart+'/limit/<?php echo $this->aData['limit']; ?>', '', testJson);
 				}
 				else
 					showCatalogContent();
@@ -230,4 +230,4 @@ if ($this->aData['totalCount'] > 0) :
     });
     </script>
 
-<? endif; ?>
+<?php } ?>

@@ -1,5 +1,5 @@
 <div id="topnav">
-    <?
+    <?php
     $arraypictureformat = array("jpg", "jpeg", "gif");
     $txt_allowedformat = implode('; ', $arraypictureformat);
     $registry = Zend_Registry::getInstance();
@@ -31,9 +31,9 @@
         $txt_existence = "<img src=\"".$this->cdn('images')."/user_32.png\" class=\"avatar\" border=\"0\" />";
     }
     ?>
-    <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/user/edit/id/<?=$this->user->kopel;?>"><?=$txt_existence; ?></a>
-    Logged in as <b><?=$this->userGroup($this->user->packageId);?></b>
+    <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/customer/user/edit/id/<?php echo $this->user->kopel; ?>"><?php echo $txt_existence; ?></a>
+    Logged in as <b><?php echo $this->userGroup($this->user->packageId); ?></b>
     <span>|</span> <a href="#">Settings</a>
-    <span>|</span> <a href="#" onclick="window.location='<?=$this->logout;?>';return false;">Logout</a><br>
+    <span>|</span> <a href="#" onclick="window.location='<?php echo $this->logout; ?>';return false;">Logout</a><br>
     <small>You have <a href="#" class="high"><b>1</b> new message!</a></small>
 </div>
