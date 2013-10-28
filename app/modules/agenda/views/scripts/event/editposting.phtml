@@ -3,40 +3,40 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
 
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h5>Hukumonline Events</h5>
             <form id="frmEditEvent" method="post" action="">
                 <fieldset>
                     <legend>Add New Event:</legend>
                     <p>
                         <label for="date">Date:</label><br>
-                        <input type="date" id="datepick" class="" value="<?=$this->dateOfEvent;?>" name="dateOfEvent"/>
+                        <input type="date" id="datepick" class="" value="<?php echo $this->dateOfEvent; ?>" name="dateOfEvent"/>
                     </p>
                     <p>
                         <label class="required" for="title">Title:</label><br>
-                        <input type="text" id="title" name="title" value="<?=$this->title; ?>" class="half" />
+                        <input type="text" id="title" name="title" value="<?php echo $this->title; ?>" class="half" />
                     </p>
                     <p>
                         <label for="wysiwyg">HTML editor:</label><br/>
-                        <textarea id="wysiwyg" class="full wysiwyg" name="text" rows="5" cols="47"><?=$this->text; ?></textarea>
+                        <textarea id="wysiwyg" class="full wysiwyg" name="text" rows="5" cols="47"><?php echo $this->text; ?></textarea>
                     </p>
                     <p>
                         <label class="required" for="start">Start:</label><br/>
-                        <input type="text" style="width: 70px;" id="timepicker_1" name="starttime" value="<?=$this->starttime; ?>" />
+                        <input type="text" style="width: 70px;" id="timepicker_1" name="starttime" value="<?php echo $this->starttime; ?>" />
                     </p>
                     <p>
                         <label class="required" for="end">End:</label><br/>
-                        <input type="text" style="width: 70px;" id="timepicker_2" name="endtime" value="<?=$this->endtime; ?>" />
+                        <input type="text" style="width: 70px;" id="timepicker_2" name="endtime" value="<?php echo $this->endtime; ?>" />
                     </p>
                     <p>
-                        <input type="hidden" name="cid" value="<?=$this->pid;?>" />
+                        <input type="hidden" name="cid" value="<?php echo $this->pid; ?>" />
                         <input type="submit" value="Continue" class="btn btn-blue big" />
                     </p>
                 </fieldset>
@@ -53,10 +53,10 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div><br>
     <div id="showDiv1" style="width:100%;text-align:center;">
-        <?=$this->action('browse','manager','agenda');?>
+        <?php echo $this->action('browse','manager','agenda'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
@@ -73,4 +73,3 @@ $(document).ready(function(){
 
 });
 </script>
-

@@ -3,20 +3,20 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
 
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h5>Hukumonline Events</h5>
             <hr>
             <table cellspadding="0" cellspacing="0" border="0" width="600" align="center">
             <tr>
-                    <td><span style="font-size:16px; font-family:arial, helvetica; font-weight:bold;"><?=$this->dateline; ?></span></td>
-                    <td align="right"><span style="font-size:16px; font-family:arial, helvetica; font-weight:bold"><?=$this->wday; ?></span></td>
+                    <td><span style="font-size:16px; font-family:arial, helvetica; font-weight:bold;"><?php echo $this->dateline; ?></span></td>
+                    <td align="right"><span style="font-size:16px; font-family:arial, helvetica; font-weight:bold"><?php echo $this->wday; ?></span></td>
             </tr>
             </table>
             <table cellspacing="0" cellpadding="0" border="0" width="600" align="center">
@@ -27,9 +27,9 @@
                         <td style="background-color:#2663E2;">
                             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td width="100%"><span style="font-size:12px; font-family:arial, helvetica; color:#FFFFFF; font-weight:bold">&nbsp;<?=$this->title; ?></span></td>
-                                <td><img src="<?=$this->cdn('images');?>/clear.gif" width="20" height="1" border="0"></td>
-                                <td align="right" nowrap="yes"><span style="font-size:12px; font-family:arial, helvetica; color:#FFFFFF; font-weight:bold"><?=$this->timestr; ?>&nbsp;</span></td>
+                                <td width="100%"><span style="font-size:12px; font-family:arial, helvetica; color:#FFFFFF; font-weight:bold">&nbsp;<?php echo $this->title; ?></span></td>
+                                <td><img src="<?php echo $this->cdn('images'); ?>/clear.gif" width="20" height="1" border="0"></td>
+                                <td align="right" nowrap="yes"><span style="font-size:12px; font-family:arial, helvetica; color:#FFFFFF; font-weight:bold"><?php echo $this->timestr; ?>&nbsp;</span></td>
                             </tr>
                             </table>
                         </td>
@@ -38,13 +38,13 @@
                         <td style="background-color:#EDECD8">
                             <table cellspacing="1" cellpadding="1" border="0" width="100%">
                             <tr>
-                                <td><span style="font-size:12px; font-family:arial, helvetica; color:#000000"><?=$this->body; ?></span></td>
+                                <td><span style="font-size:12px; font-family:arial, helvetica; color:#000000"><?php echo $this->body; ?></span></td>
                             </tr>
                             <tr>
-                                <td align="right"><span style="font-size:10px; font-family:verdana, helvetica, arial; color:#999999; font-weight:bold"><?=$this->postedby; ?></td>
+                                <td align="right"><span style="font-size:10px; font-family:verdana, helvetica, arial; color:#999999; font-weight:bold"><?php echo $this->postedby; ?></td>
                             </tr>
                             <tr>
-                                <td align="right"><?= $this->editstr; ?></td>
+                                <td align="right"><?php echo  $this->editstr; ?></td>
                             </tr>
                             </table>
                         </td>
@@ -66,11 +66,11 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div><br>
     <div id="showDiv1" style="width:100%;text-align:center;">
-    <?=$this->action('browse','manager','agenda');?>
-    <?//=$this->ajaxActionRenderer(ROOT_URL.'/'.$this->getLanguage().'/agenda/manager/browse');?>
+    <?php echo $this->action('browse','manager','agenda'); ?>
+    <?php //echo $this->ajaxActionRenderer(ROOT_URL.'/'.$this->getLanguage().'/agenda/manager/browse'); ?>
     </div>
 </aside>
 <!-- End of Right column/section -->
