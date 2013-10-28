@@ -15,22 +15,22 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>CMS Hukumonline</title>
-        <link href="<?=$this->baseUrl();?>/resources/images/hole_small.ico" rel="shortcut icon" type="image/ico" />
-        <link href="<?=$this->baseUrl();?>/resources/css/administry.css" media="screen" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="<?=$this->baseUrl();?>/js/jquery/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="<?=$this->baseUrl();?>/js/jquery/form/jquery.validate.pack.js"></script>
+        <link href="<?php echo $this->baseUrl(); ?>/resources/images/hole_small.ico" rel="shortcut icon" type="image/ico" />
+        <link href="<?php echo $this->baseUrl(); ?>/resources/css/administry.css" media="screen" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/js/jquery/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/js/jquery/form/jquery.validate.pack.js"></script>
         <!-- Internet Explorer Fixes -->
         <!--[if IE]>
 
-        <link rel="stylesheet" type="text/css" media="all" href="<?=$this->baseUrl();?>/resources/css/ie.css"/>
+        <link rel="stylesheet" type="text/css" media="all" href="<?php echo $this->baseUrl(); ?>/resources/css/ie.css"/>
 
-        <script src="<?=$this->baseUrl();?>/js/html5.js"></script>
+        <script src="<?php echo $this->baseUrl(); ?>/js/html5.js"></script>
 
         <![endif]-->
         <!--Upgrade MSIE5.5-7 to be compatible with MSIE8: http://ie7-js.googlecode.com/svn/version/2.1(beta3)/IE8.js -->
         <!--[if lt IE 8]>
 
-        <script src="<?=$this->baseUrl();?>/js/IE8.js"></script>
+        <script src="<?php echo $this->baseUrl(); ?>/js/IE8.js"></script>
 
         <![endif]-->
 
@@ -64,12 +64,12 @@
         <!-- Header -->
         <header id="top">
             <div class="wrapper-login">
-                <div id="title"><img src="<?=$this->cdn('images');?>/logo.png" alt="hukumonline" /><!--<span>CMS Hukumonline</span>--></div>
+                <div id="title"><img src="<?php echo $this->cdn('images'); ?>/logo.png" alt="hukumonline" /><!--<span>CMS Hukumonline</span>--></div>
                 <!-- Main navigation -->
                 <nav id="menu">
                     <ul class="sf-menu sf-js-enabled sf-shadow">
-                        <li class="current"><a href="<?=ROOT_URL;?>">Login</a></li>
-                        <li><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/customer/account/register">Register</a></li>
+                        <li class="current"><a href="<?php echo ROOT_URL; ?>">Login</a></li>
+                        <li><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/customer/account/register">Register</a></li>
                     </ul>
                 </nav>
                 <!-- End of Main navigation -->
@@ -91,28 +91,28 @@
 
                     <h3>Login</h3>
 
-                    <? if (isset($this->message)): ?>
+                    <?php if (isset($this->message)) : ?>
                     <div class="box box-error">
-                        <?= $this->message; ?>
+                        <?php echo  $this->message; ?>
                     </div>
-                    <? endif; ?>
+                    <?php endif; ?>
 
                     <?php
                     $my_access = new Pandamp_Core_Hol_Auth();
                     $my_access->login_reader();
                     ?>
-                    <form id="loginform" method="post" action="<?php $_SERVER['PHP_SELF'];?>">
+                    <form id="loginform" method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 
                         <p>
                             <label class="required" for="username">Username:</label><br>
-                            <input id="username" class="full" name="username" value="<?=$my_access->user; ?>" type="text" />
+                            <input id="username" class="full" name="username" value="<?php echo $my_access->user; ?>" type="text" />
                         </p>
 
                         <p>
                             <label class="required" for="password">Password:</label><br>
-                            <input id="password" class="full" value="<?=$my_access->user_pw; ?>" name="password" type="password" />
+                            <input id="password" class="full" value="<?php echo $my_access->user_pw; ?>" name="password" type="password" />
                         </p>
-                        <?
+                        <?php
                         $lang = array(
                             'id'=>'Indonesia',
                             'en'=>'English'
@@ -121,7 +121,7 @@
                         <p>
                             <label for="langselector">Language:</label><br>
                                 <select name="langselector">
-                                    <?
+                                    <?php
                                     foreach ($lang as $key=>$val) {
                                         $sel = ($key == $this->getLanguage())? " selected" : "";
                                         echo '<option value='.$key . $sel.'>'.$val.'</option>';
@@ -131,14 +131,14 @@
                         </p>
 
                         <p>
-                            <input id="remember" class="" value="yes"<?=($my_access->is_cookie == true) ? " checked" : ""; ?> name="remember" type="checkbox" />
+                            <input id="remember" class="" value="yes"<?php echo ($my_access->is_cookie == true) ? " checked" : ""; ?> name="remember" type="checkbox" />
                             <label class="choice" for="remember">Remember me?</label>
                         </p>
 
                         <p>
                             <input class="btn btn-green big" value="Login" type="submit" /> &nbsp; <a href="javascript:%20//;" onclick="$('#emailform').slideDown(); return false;">Forgot password?</a> or <a href="#">Need help?</a>
                         </p>
-                        <input name="broker" type="hidden" value="<?=$this->broker; ?>" />
+                        <input name="broker" type="hidden" value="<?php echo $this->broker; ?>" />
                         <div class="clear">&nbsp;</div>
 
                     </form>

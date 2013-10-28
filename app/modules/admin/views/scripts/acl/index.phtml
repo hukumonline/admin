@@ -3,17 +3,17 @@
 
     <div class="colgroup leading">
         <div class="column width8 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
 
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h5>Hukumonline ACL</h5>
             <hr>
-            <iframe align="left" frameborder="0" src="<?=ROOT_URL;?>/library/phpgacl/admin" width="100%" height="600" scrolling="yes"> </iframe>
+            <iframe align="left" frameborder="0" src="<?php echo ROOT_URL; ?>/library/phpgacl/admin" width="100%" height="600" scrolling="yes"> </iframe>
         </div>
     </div>
 
