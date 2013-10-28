@@ -1,19 +1,19 @@
-<? if (count($this->aData) > 0) { ?>
+<?php if (count($this->aData) > 0) { ?>
 <fieldset>
     <legend>RELATED ITEMS</legend>
     <ul id="ppline">
-        <? foreach ($this->aData as $data) { ?>
+        <?php foreach ($this->aData as $data) { ?>
         <li>
-            <? if($data['node']==$this->catalogGuid) { ?>
-            <img src="<?=$this->cdn('images'); ?>/page_right.gif">
-            <? } ?>
-            <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search/catalog/detail/guid/<?=$data['node'];?>/node/<?=$this->folderGuid; ?>"><?=$data['title']; ?></a><br>
-            <?=$data['subTitle']; ?>
-            <? if ($data['description']) { ?>
-            <br><strong>Notes: </strong><?=$data['description']; ?>
-            <? } ?>
+            <?php if($data['node']==$this->catalogGuid) { ?>
+            <img src="<?php echo $this->cdn('images'); ?>/page_right.gif">
+            <?php } ?>
+            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/search/catalog/detail/guid/<?php echo $data['node']; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $data['title']; ?></a><br>
+            <?php echo $data['subTitle']; ?>
+            <?php if ($data['description']) { ?>
+            <br><strong>Notes: </strong><?php echo $data['description']; ?>
+            <?php } ?>
         </li>
-        <? } ?>
+        <?php } ?>
     </ul>
 </fieldset>
-<? } ?>
+<?php } ?>

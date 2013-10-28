@@ -1,4 +1,4 @@
-<? if (sizeof($this->allThumbs) !== 0) : ?>
+<?php if (sizeof($this->allThumbs) !== 0) : ?>
 <table cellspacing="2" cellpadding="0" class="full" id="gal">
     <tbody>
         <tr>
@@ -9,7 +9,7 @@
             </td>
         </tr>
         <tr>
-            <?
+            <?php
             $n=1;
             $end = min(($this->page * $this->perPage), sizeof($this->allThumbs));
             for ($i = (($this->page - 1) * $this->perPage);  $i < $end; $i++) :
@@ -18,18 +18,18 @@
                 <table border="0" cellspacing="1" cellpadding="0">
                     <tr>
                         <td>
-                            <div style="cursor: pointer;" id="gvID<?=$i;?>">
-                                <a href="<?=$this->sdir;?>/<?=$this->allThumbs[$i];?>">
-                                    <img src="<?=$this->sdir;?>/<?=$this->allThumbs[$i];?>" /><br>
+                            <div style="cursor: pointer;" id="gvID<?php echo $i; ?>">
+                                <a href="<?php echo $this->sdir; ?>/<?php echo $this->allThumbs[$i]; ?>">
+                                    <img src="<?php echo $this->sdir; ?>/<?php echo $this->allThumbs[$i]; ?>" /><br>
                                 </a>
-                                <?
+                                <?php
                                 $ext = explode(".",$this->allThumbs[$i]);
                                 $ext = strtolower(array_pop($ext));
                                 $th = str_replace(array('tn_','.'.$ext), "", $this->allThumbs[$i])
                                 ?>
                                 <div style="top:-16px;opacity:0.75;">
-                                    <small><?=$this->getCatalogTitle($th,'fixedTitle');?></small>&nbsp;<a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/edit/guid/<?=$th;?>/node/<?=$this->folderGuid;?>" target="_blank">[edit]</a><br>
-                                    <small>delete:</small>&nbsp;<a href="javascript:;" onclick="remove('<?=$th;?>', '<?=$this->catalogGuid;?>', 'RELATED_IMAGE');return false;"><?=$th;?></a>
+                                    <small><?php echo $this->getCatalogTitle($th,'fixedTitle'); ?></small>&nbsp;<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/edit/guid/<?php echo $th; ?>/node/<?php echo $this->folderGuid; ?>" target="_blank">[edit]</a><br>
+                                    <small>delete:</small>&nbsp;<a href="javascript:;" onclick="remove('<?php echo $th; ?>', '<?php echo $this->catalogGuid; ?>', 'RELATED_IMAGE');return false;"><?php echo $th; ?></a>
                                 </div><br/>
                             </div>
                         </td>
@@ -37,12 +37,12 @@
                 </table>
                 
             </td>
-            <?
+            <?php
             if (($n % 4) == 0 && ($n != $this->perPage)) {
             ?>
                 </tr>
                 <tr align='center'>
-            <?
+            <?php
             }
             $n++;
             endfor;
@@ -54,7 +54,7 @@
     function displayLoad()
     {
         $("#gal").fadeIn(900,0);
-        $("#gal").html("<img src='<?=$this->cdn('images');?>/bigLoader.gif' />");
+        $("#gal").html("<img src='<?php echo $this->cdn('images'); ?>/bigLoader.gif' />");
     }
     function hideLoad()
     {
@@ -65,7 +65,7 @@
         if(confirm ('Are you sure ?')) {
         $.ajax({
             type:"post"
-            ,url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/relation/delete"
+            ,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/delete"
             ,data: "itemGuid="+ itemGuid + "&relatedGuid="+ relatedGuid +"&relateAs="+ relateAs
             ,beforeSend: function()
             {
@@ -73,7 +73,7 @@
             }
             ,success: function()
             {
-                $("#content").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/gallery/guid/<?=$this->catalogGuid;?>/node/<?=$this->folderGuid;?>",hideLoad());
+                $("#content").load("<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/gallery/guid/<?php echo $this->catalogGuid; ?>/node/<?php echo $this->folderGuid; ?>",hideLoad());
             }
         });
         }
@@ -81,4 +81,4 @@
         return false;
     }
 </script>
-<? endif; ?>
+<?php endif; ?>

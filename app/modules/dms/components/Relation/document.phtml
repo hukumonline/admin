@@ -1,4 +1,4 @@
-<? if (count($this->aData) > 0) { ?>
+<?php if (count($this->aData) > 0) { ?>
 <fieldset>
     <legend>DOWNLOADABLE FILE(s)</legend>
     <table class="display stylized" id="catalog">
@@ -11,14 +11,14 @@
         </tr>
     </thead>
 	<tbody>
-	<? foreach ($this->aData as $data) { ?>
-	<tr id="row_<?=$data->itemGuid;?>">
-		<td width="5%"><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?=$data->itemGuid;?>' class="check_me"></td>
-		<td width="5%"><?=$this->GetCatalogDocType($data->itemGuid); ?></td>
-		<td><a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/browser/download-file/guid/<?=$data->itemGuid;?>/parent/<?=$data->relatedGuid;?>"><abbr><?=$this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a></td>
-		<td><?=$this->GetCatalogDocSize($data->itemGuid); ?></td>
+	<?php foreach ($this->aData as $data) { ?>
+	<tr id="row_<?php echo $data->itemGuid; ?>">
+		<td width="5%"><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?php echo $data->itemGuid; ?>' class="check_me"></td>
+		<td width="5%"><?php echo $this->GetCatalogDocType($data->itemGuid); ?></td>
+		<td><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/browser/download-file/guid/<?php echo $data->itemGuid; ?>/parent/<?php echo $data->relatedGuid; ?>"><abbr><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></abbr></a></td>
+		<td><?php echo $this->GetCatalogDocSize($data->itemGuid); ?></td>
 	</tr>
-	<? } ?>
+	<?php } ?>
     <tr>
         <td colspan="4">
             <select id="uof" name="uof">
@@ -55,8 +55,7 @@
                         else
                         {
                         	
-							//var sHref = '<?//=ROOT_URL;?>/<?//=$this->getLanguage();?>/dms/catalog/detail/guid/<?//=$this->catalogGuid;?>/node/<?//=$this->folderGuid;?>#editupload';
-							var sHref = '<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/editdocument/guid/'+checkValues+'/relatedGuid/<?=$this->catalogGuid;?>#editupload';
+							var sHref = '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/editdocument/guid/'+checkValues+'/relatedGuid/<?php echo $this->catalogGuid; ?>#editupload';
 							$('#d1').attr('href',sHref);
 							if(this.value != '')
 								$('#d1').click();
@@ -70,14 +69,11 @@
                     }
 					else if ($("#uof").val() == "delete")
 					{
-						window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/delete-confirm/guid/"+checkValues;
+						window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/delete-confirm/guid/"+checkValues;
 					}
                     
 					return false;
                 });
-                
-    	
     });
 </script>
-
-<? } ?>
+<?php } ?>

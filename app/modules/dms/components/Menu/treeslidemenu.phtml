@@ -1,6 +1,6 @@
-<link rel="stylesheet" type="text/css" href="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.css" />
-<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/_lib/css.js"></script>
-<script type="text/javascript" src="<?=$this->cdn('scripts');?>/hol/jquery/jstree/tree_component.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/tree_component.css" />
+<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/_lib/css.js"></script>
+<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/tree_component.js"></script>
 <script>
 /*
 *****************************************
@@ -54,7 +54,7 @@ $(document).ready(function(){
 	$("#dmsTreeSlideMenu").tree({
 	      data  : {
 	        type  : "json", // or "xml_nested" or "xml_nested"
-	        url   : "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/folder/getchildreninjson",
+	        url   : "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/folder/getchildreninjson",
 	        async : true,
 	        async_data : function (NODE) { return { id : $(NODE).attr("id") || 0, my_param : "my_value" } }
 	      },
@@ -65,22 +65,22 @@ $(document).ready(function(){
                                                                 switch(TREE_OBJ.selected.text())
                                                                 {
                                                                     case "Approved":
-                                                                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/clinic/browse/status/1/node/"+TREE_OBJ.selected.attr("id");
+                                                                        window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/1/node/"+TREE_OBJ.selected.attr("id");
                                                                     break;
                                                                     case "Draft":
-                                                                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/clinic/browse/status/0/node/"+TREE_OBJ.selected.attr("id");
+                                                                        window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/0/node/"+TREE_OBJ.selected.attr("id");
                                                                     break;
                                                                     case "NA":
-                                                                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/clinic/browse/status/2/node/"+TREE_OBJ.selected.attr("id");
+                                                                        window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/2/node/"+TREE_OBJ.selected.attr("id");
                                                                     break;
                                                                     case "Published":
-                                                                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/clinic/browse/status/99/node/"+TREE_OBJ.selected.attr("id");
+                                                                        window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/99/node/"+TREE_OBJ.selected.attr("id");
                                                                     break;
                                                                     case "Selected":
-                                                                    	window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/clinic/browse/status/9/node/"+TREE_OBJ.selected.attr("id");
+                                                                    	window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/9/node/"+TREE_OBJ.selected.attr("id");
                                                                     break;
                                                                     default:
-                                                                        window.location = "<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/"+TREE_OBJ.selected.attr("id");
+                                                                        window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/"+TREE_OBJ.selected.attr("id");
                                                                 }
 							treeFirstTime = 0;
 						}

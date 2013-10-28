@@ -1,13 +1,13 @@
-<? if (count($this->rowsetRegulation) > 0) { ?>
+<?php if (count($this->rowsetRegulation) > 0) { ?>
 <fieldset>
     <legend>IMPLEMENTING REGULATIONS</legend>
     <ul id="ppline">
-        <? foreach ($this->rowsetRegulation as $data) { ?>
+        <?php foreach ($this->rowsetRegulation as $data) { ?>
         <li>
-            <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/search/catalog/detail/guid/<?=$data->relatedGuid;?>/node/<?=$this->folderGuid; ?>"><?=$this->getCatalogTitle($data->relatedGuid,'fixedTitle'); ?></a><br>
-            <?=$this->getCatalogTitle($data->relatedGuid,'fixedSubTitle'); ?>
+            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/search/catalog/detail/guid/<?php echo $data->relatedGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->relatedGuid,'fixedTitle'); ?></a><br>
+            <?php echo $this->getCatalogTitle($data->relatedGuid,'fixedSubTitle'); ?>
         </li>
-        <? } ?>
+        <?php } ?>
     </ul>
 </fieldset>
-<? } ?>
+<?php } ?>

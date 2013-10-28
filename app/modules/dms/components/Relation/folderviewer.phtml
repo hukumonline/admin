@@ -1,17 +1,17 @@
-<? if (count($this->rowsetFolder) > 0) { ?>
+<?php if (count($this->rowsetFolder) > 0) { ?>
 <div id="content_rfolder">
 <fieldset>
     <legend>RELATED FOLDERS</legend>
     <ul id="dhline" style="list-style:none;">
-        <? foreach ($this->rowsetFolder as $row) { ?>
+        <?php foreach ($this->rowsetFolder as $row) { ?>
         <li>
-            <? if($row->guid==$this->folderGuid) { ?>
-            <img src="<?=$this->cdn('images'); ?>/page_right.gif">
-            <? } ?>
-            <a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/explorer/browse/node/<?=$row->guid;?>"><?=$row->title; ?></a>
-            - [<?=$row->guid;?>]&nbsp;<a href="javascript:;" onclick="remfol('<?=$this->catalogGuid;?>', '<?=$row->guid;?>');return false;">Remove</a>
+            <?php if($row->guid==$this->folderGuid) { ?>
+            <img src="<?php echo $this->cdn('images'); ?>/page_right.gif">
+            <?php } ?>
+            <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $row->guid; ?>"><?php echo $row->title; ?></a>
+            - [<?php echo $row->guid; ?>]&nbsp;<a href="javascript:;" onclick="remfol('<?php echo $this->catalogGuid; ?>', '<?php echo $row->guid; ?>');return false;">Remove</a>
         </li>
-        <? } ?>
+        <?php } ?>
     </ul>
 </fieldset>
 </div>
@@ -19,7 +19,7 @@
     function displayLoad()
     {
         $("#dhline").fadeIn(900,0);
-        $("#dhline").html("<img src='<?=$this->cdn('images');?>/wait.gif' />");
+        $("#dhline").html("<img src='<?php echo $this->cdn('images'); ?>/wait.gif' />");
     }
     function hideLoad()
     {
@@ -30,7 +30,7 @@
         if(confirm ('Are you sure ?')) {
         $.ajax({
             type:"post"
-            ,url:"<?=ROOT_URL;?>/<?=$this->getLanguage();?>/api/catalog/remove-from-folder"
+            ,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/remove-from-folder"
             ,data: "guid=" + guid + "&folderGuid=" + folderGuid
             ,beforeSend: function()
             {
@@ -38,7 +38,7 @@
             }
             ,success: function(response)
             {
-            	$("#content_rfolder").load("<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/catalog/render-folder/guid/<?=$this->catalogGuid;?>/node/<?=$this->folderGuid;?>",hideLoad());
+            	$("#content_rfolder").load("<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/render-folder/guid/<?php echo $this->catalogGuid; ?>/node/<?php echo $this->folderGuid; ?>",hideLoad());
             }
         });
         }
@@ -46,4 +46,4 @@
         return false;
     }
 </script>
-<? } ?>
+<?php } ?>
