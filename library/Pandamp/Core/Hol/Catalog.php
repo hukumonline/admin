@@ -164,6 +164,15 @@ class Pandamp_Core_Hol_Catalog
 			//die($e->getMessage());
 		}
 		
+		/**
+		 * Updated Dec 10, 2013 06:01
+		 */
+		$dir = $cfg->cdn->hol->static->url . DS . 'temp' . DS . 'cache';
+		Pandamp_Core_FileCache::clear($dir . DS . 'url');
+		Pandamp_Core_FileCache::clear($dir . DS . 'action');
+		
+		
+		
         //after indexing, update isIndex and indexedDate in table KutuCatalog
         return $catalogGuid;
     }
