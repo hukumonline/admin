@@ -1,12 +1,12 @@
 <h3>Register</h3>
 
-<? if (isset($this->message)): ?>
+<?php if (isset($this->message)) : ?>
 <div class="box box-info closeable">
-    <?= $this->message; ?>
+    <?php echo $this->message; ?>
 </div>
-<? endif; ?>
+<?php endif; ?>
 
-<? if (isset($this->error_message)): ?>
+<?php if (isset($this->error_message)) : ?>
 <div class="box box-error">ERROR</div>
 <div class="box box-error-msg">
     <ol>
@@ -14,88 +14,88 @@
         <li>We truly apologize for the inconvenience.</li>
     </ol>
 </div>
-<? endif; ?>
+<?php endif; ?>
 
-<form id="registerform" method="post" action="<?php $_SERVER['PHP_SELF'];?>" style="z-index:1;overflow:hidden;">
+<form id="registerform" method="post" action="<?php $_SERVER['PHP_SELF']; ?>" style="z-index:1;overflow:hidden;">
 
     <fieldset>
         <legend>Get started with hukumonlineID</legend>
 
         <p>
             <label for="promotioncode">Promotion Code:</label><br>
-            <input id="promotioncode" class="full" name="promotioncode" type="text" value="<?=$this->value['promotioncode'];?>" />
+            <input id="promotioncode" class="full" name="promotioncode" type="text" value="<?php echo $this->value['promotioncode']; ?>" />
         </p>
         <p>
             <label class="required" for="fullname">Full Name:</label><br>
-            <input id="fullname" class="full" name="fullname" type="text" value="<?=$this->value['fullname'];?>" />
+            <input id="fullname" class="full" name="fullname" type="text" value="<?php echo $this->value['fullname']; ?>" />
         </p>
         <p>
             <label for="chkGender">Gender:</label><br>
-            <?=$this->gender();?>
+            <?php echo $this->gender(); ?>
         </p>
-        <? $lang['months'] = array("January","February","March","April","May","June","July","August","September","October","November","December"); ?>
+        <?php $lang['months'] = array("January","February","March","April","May","June","July","August","September","October","November","December"); ?>
         <p>
             <label for="birthOfDate">Birth Of Date:</label><br>
-            <?=$this->month($lang['months']).$this->day().$this->year();?>
+            <?php echo $this->month($lang['months']).$this->day().$this->year(); ?>
         </p>
         <p>
             <label for="education">Education:</label><br>
-            <?=$this->education();?>
+            <?php echo $this->education(); ?>
         </p>
         <p>
             <label for="expense">Monthly expenses:</label><br>
-            <?=$this->expense();?>
+            <?php echo $this->expense(); ?>
         </p>
         <p>
             <label for="company">Company:</label><br>
-            <input id="company" class="full" name="company" type="text" value="<?=$this->value['company'];?>" />
+            <input id="company" class="full" name="company" type="text" value="<?php echo $this->value['company']; ?>" />
         </p>
         <p>
             <label for="businessType">Business Type:</label><br>
-            <?=$this->businessType($this->value['businessType']);?>
+            <?php echo $this->businessType($this->value['businessType']); ?>
         </p>
         <p>
             <label for="address">Address:</label><br>
-            <textarea name="address" class="medium" cols="30" rows="5"><?=$this->value['address'];?></textarea>
+            <textarea name="address" class="medium" cols="30" rows="5"><?php echo $this->value['address']; ?></textarea>
         </p>
         <p>
             <label for="city">City:</label><br>
-            <input id="city" class="full" name="city" type="text" value="<?=$this->value['city'];?>" />
+            <input id="city" class="full" name="city" type="text" value="<?php echo $this->value['city']; ?>" />
         </p>
-        <?
+        <?php
         $state = ($this->value['province'])? $this->value['province'] : 7;
         ?>
         <p>
             <label for="province">State:</label><br>
-            <?=$this->state($state);?>
+            <?php echo $this->state($state); ?>
         </p>
-        <?
+        <?php
         $countryId = ($this->value['countryId'])? $this->value['countryId'] : "ID";
         ?>
         <p>
             <label for="country">Country:</label><br>
-            <?=$this->country("countryId",$countryId);?>
+            <?php echo $this->country("countryId",$countryId); ?>
         </p>
         <p>
             <label for="zip">PostalCode:</label><br>
-            <input id="zip" class="small" name="zip" type="text" value="<?=$this->value['zip'];?>" />
+            <input id="zip" class="small" name="zip" type="text" value="<?php echo $this->value['zip']; ?>" />
         </p>
         <p>
             <label for="phone">Phone:</label><br>
-            <input id="phone" class="small" name="phone" type="text" value="<?=$this->value['phone'];?>" />
+            <input id="phone" class="small" name="phone" type="text" value="<?php echo $this->value['phone']; ?>" />
         </p>
         <p>
             <label for="fax">Fax:</label><br>
-            <input id="fax" class="small" name="fax" type="text" value="<?=$this->value['fax'];?>" />
+            <input id="fax" class="small" name="fax" type="text" value="<?php echo $this->value['fax']; ?>" />
         </p>
         <p>
             <label for="payment">Subscription:</label><br>
-            <input id="payment" class="small" name="payment" type="text" size="2" value="<?=$this->value['payment'];?>" />&nbsp;month
+            <input id="payment" class="small" name="payment" type="text" size="2" value="<?php echo $this->value['payment']; ?>" />&nbsp;month
             <small>.:Corporate or Individual Subscriber</small>
         </p>
         <p>
             <label for="trial">Trial dalam Hari:</label><br>
-            <input id="trial" class="small" name="trial" type="text" size="2" value="<?=$this->value['trial'];?>" />&nbsp;days
+            <input id="trial" class="small" name="trial" type="text" size="2" value="<?php echo $this->value['trial']; ?>" />&nbsp;days
         </p>
     </fieldset>
 
@@ -103,20 +103,20 @@
         <legend>Enter Your E-mail Address</legend>
         <p>
             <label class="required" for="email">E-mail:</label><br>
-            <input id="email" class="full" name="email" type="text" value="<?=$this->value['email'];?>" />
+            <input id="email" class="full" name="email" type="text" value="<?php echo $this->value['email']; ?>" />
         </p>
     </fieldset>
 
     <fieldset>
         <legend>Choose Your GROUP PACKAGE</legend>
-        <?
+        <?php
         $selected_group = isset($this->value['aro_groups'])? $this->value['aro_groups'] : '';
         ?>
         <label class="required" for="aro_groups">Package:</label><br>
-        <select name="aro_groups" size="8"><?=$this->groupTree(array($selected_group));?></select>
+        <select name="aro_groups" size="8"><?php echo $this->groupTree(array($selected_group)); ?></select>
     </fieldset>
 
-    <?
+    <?php
     if (isset($this->value['iscontact']) == 1) {
         $isContact = 'checked';
     } else {
@@ -126,7 +126,7 @@
     <fieldset>
         <legend>Choose Your Username</legend>
         <p>
-            <input name="iscontact" id="iscontact" type="checkbox" value="1" <?=$isContact;?>>&nbsp;Contact Person<br/><br/>
+            <input name="iscontact" id="iscontact" type="checkbox" value="1" <?php echo $isContact; ?>>&nbsp;Contact Person<br/><br/>
             <label class="required" for="username">Username:</label><br>
             <input id="username" class="full" name="username" type="text" />
         </p>
@@ -138,11 +138,11 @@
 
         <p>
             <label for="notes">Notes:</label><br>
-            <textarea name="notes" class="medium" cols="30" rows="5"><?=$this->value['notes'];?></textarea>
+            <textarea name="notes" class="medium" cols="30" rows="5"><?php echo $this->value['notes']; ?></textarea>
         </p>
     </fieldset>
     
-    <?
+    <?php
     if (isset($this->value['newArticle']) == 1) {
         $newArticlechecked = 'checked';
     } else {
@@ -162,13 +162,13 @@
     <fieldset>
         <legend>Newsletter</legend>
         <p>
-            <input type="checkbox" name="newArticle" value="1" <?=$newArticlechecked;?>>&nbsp;News article<br>
-            <input type="checkbox" name="newWeeklyRegulation" value="1" <?=$weeklyListchecked;?>>&nbsp;Weekly regulations<br>
-            <input type="checkbox" name="newRegulation" value="1" <?=$monthlyListchecked;?>>&nbsp;Monthly regulations
+            <input type="checkbox" name="newArticle" value="1" <?php echo $newArticlechecked; ?>>&nbsp;News article<br>
+            <input type="checkbox" name="newWeeklyRegulation" value="1" <?php echo $weeklyListchecked; ?>>&nbsp;Weekly regulations<br>
+            <input type="checkbox" name="newRegulation" value="1" <?php echo $monthlyListchecked; ?>>&nbsp;Monthly regulations
         </p>
     </fieldset>
 
-    <?
+    <?php
     if (isset($this->value['ec']) == 1) {
         $emailSend = 'checked';
     } else {
@@ -178,11 +178,11 @@
     <fieldset>
         <legend>Email Confirmation</legend>
         <p>
-            <input type="checkbox" name="ec" value="1" <?=$emailSend;?>>&nbsp;Send
+            <input type="checkbox" name="ec" value="1" <?php echo $emailSend; ?>>&nbsp;Send
         </p>
     </fieldset>
 
-    <?
+    <?php
     $auth = Zend_Auth::getInstance();
     if ($auth->hasIdentity()) {
     	$identity = $auth->getIdentity();
@@ -193,7 +193,7 @@
         $createdBy = "";
     }
     ?>
-    <input type="hidden" name="createdBy" value="<?=$createdBy;?>" />
+    <input type="hidden" name="createdBy" value="<?php echo $createdBy; ?>" />
     <p>
         <input class="btn btn-green big" value="Process" type="submit" />
         <input class="btn btn-green big" value="Reset" type="reset" />
