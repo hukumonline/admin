@@ -12,9 +12,9 @@ class Customer_ManagerController extends Zend_Controller_Action
     function  preDispatch() 
     {
         $this->_conn = Zend_Db::factory('Pdo_Mysql', array(
-             'host'     => 'localhost'
-            ,'username' => 'bulukumba'
-            ,'password' => 'mydreams'
+             'host'     => '192.168.0.2'
+            ,'username' => 'root'
+            ,'password' => 'Z2D]=kUtLDKb'
             ,'dbname'   => 'hid'
         ));
         
