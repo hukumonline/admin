@@ -3,21 +3,21 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
 
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <h5>Hukumonline Polling</h5>
             
-            <? if (isset($this->message)): ?>
+            <?php if (isset($this->message)): ?>
             <div class="box box-info">
-                <?= $this->message; ?>
+                <?php echo  $this->message; ?>
             </div>
-            <? endif; ?>
+            <?php endif; ?>
 
             <form id="insert-polling" method="post" action="">
                 <fieldset>
@@ -50,12 +50,12 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div><br>
     <div id="showDiv1" style="width:100%;text-align:center;">
-    <?=$this->action('browse','manager','agenda');?>
+    <?php echo $this->action('browse','manager','agenda'); ?>
     </div>
-    <?=$this->action('view','manager','polling');?>
+    <?php echo $this->action('view','manager','polling'); ?>
 </aside>
 <!-- End of Right column/section -->
 

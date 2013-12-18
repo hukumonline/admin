@@ -3,27 +3,27 @@
 
     <div class="colgroup leading">
         <div class="column width6 first">
-            <?
+            <?php
             if ($this->getLanguage() == 'id')
                 $tag = "www.hukumonline.com";
             else
                 $tag = "en.hukumonline.com";
             ?>
 
-            <h3>Site: <a href="http://<?=$tag;?>" target="_blank" title="DMS <?=$tag;?>"><?=$tag;?></a></h3>
+            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
             <div class="align-left">
                 <h5>Hukumonline Polling:</h5>
             </div>
             <div class="align-right">
-                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/polling/election/new" class="btn"><span class="icon icon-add">&nbsp;</span>Add New</a>
-                <a href="<?=$this->baseUrl();?>/<?=$this->getLanguage();?>/polling/election/delete/id/<?=$this->pollId;?>" class="btn"><span class="icon icon-cancel">&nbsp;</span>Delete</a>
+                <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/polling/election/new" class="btn"><span class="icon icon-add">&nbsp;</span>Add New</a>
+                <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/polling/election/delete/id/<?php echo $this->pollId; ?>" class="btn"><span class="icon icon-cancel">&nbsp;</span>Delete</a>
             </div>
             <div style="clear:both;">&nbsp;</div>
             <div id="poll-container"></div>
             <script type="text/javascript">
             var total_votes = 0;
             var percent;
-            var votedID = '<?=$this->pollId;?>';
+            var votedID = '<?php echo $this->pollId; ?>';
 
             function animateResults(){
               $("#poll-results div").each(function(){
@@ -41,20 +41,20 @@
                     foreach ($rowset as $row) {
             ?>
 
-                            total_votes = total_votes+parseInt(<?=$row->hits ?>);
+                            total_votes = total_votes+parseInt(<?php echo $row->hits; ?>);
 
             <?php } ?>
 
-            var results_html = "<span class='barjudul'><?=$this->rowPoll->title; ?><br></span><div id='poll-results'><h4>Hasil :</h4><dl class='graph'>";
+            var results_html = "<span class='barjudul'><?php echo $this->rowPoll->title; ?><br></span><div id='poll-results'><h4>Hasil :</h4><dl class='graph'>";
 
             <?php foreach ($rowset as $row) { ?>
-                    percent = Math.round((parseInt(<?=$row->hits ?>)/parseInt(total_votes))*100);
-                    if ('<?=$row->guid ?>' !== votedID) {
-                            results_html = results_html+"<dt class='bar-title'><?=$row->text ?></dt><dd class='bar-container'><div id='bar<?=$row->guid ?>'style='width:0%;'>&nbsp;</div><strong>"+percent+"%</strong></dd>\n";
+                    percent = Math.round((parseInt(<?php echo $row->hits; ?>)/parseInt(total_votes))*100);
+                    if ('<?php echo $row->guid; ?>' !== votedID) {
+                            results_html = results_html+"<dt class='bar-title'><?php echo $row->text; ?></dt><dd class='bar-container'><div id='bar<?php echo $row->guid; ?>'style='width:0%;'>&nbsp;</div><strong>"+percent+"%</strong></dd>\n";
                     }
                     else
                     {
-                            results_html = results_html+"<dt class='bar-title'><?=$row->text ?></dt><dd class='bar-container'><div id='bar<?=$row->guid ?>'style='width:0%;background-color:#0066cc;'>&nbsp;</div><strong>"+percent+"%</strong></dd>\n";
+                            results_html = results_html+"<dt class='bar-title'><?php echo $row->text; ?></dt><dd class='bar-container'><div id='bar<?php echo $row->guid; ?>'style='width:0%;background-color:#0066cc;'>&nbsp;</div><strong>"+percent+"%</strong></dd>\n";
                     }
             <?php } ?>
 
@@ -76,12 +76,12 @@
 <!-- Right column/section -->
 <aside class="column width2">
     <div id="rightmenu">
-        <?=$this->action('sidebar','user','customer');?>
+        <?php echo $this->action('sidebar','user','customer'); ?>
     </div><br>
     <div id="showDiv1" style="width:100%;text-align:center;">
-    <?=$this->action('browse','manager','agenda');?>
+    <?php echo $this->action('browse','manager','agenda'); ?>
     </div>
-    <?=$this->action('view','manager','polling');?>
+    <?php echo $this->action('view','manager','polling'); ?>
 </aside>
 <!-- End of Right column/section -->
 
