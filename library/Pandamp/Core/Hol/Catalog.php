@@ -123,19 +123,35 @@ class Pandamp_Core_Hol_Catalog
 		$q = "url:\"".$url_content."\"";
 		
 		$db = Zend_Registry::get('db4');
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		
 		$data = array('url' => $url_content,
 		 			  'createdate' => date("Y-m-d h:i:s"),
-					  'remoteip' => Pandamp_Lib_Formater::getRealIpAddr(),
+					  'remoteip' => Pandamp_Lib_Formater::getHttpRealIp(),
 					  'kopel' => $kopel);
 					  
 		$hits = $hukumn->find($q,0,1);
 		if (isset($hits->response->docs[0])) 
 		{
 			$row = $hits->response->docs[0];
-			$hid = $row->id;
+			$hid = hexdec($row->id);
 			
-			$db->update('urls',$data,"id=$hid");
+			$url = $db->fetchRow("select * from urls where id = ?", $hid);
+			if ($url->id)
+			{
+				$db->update('urls',$data,"id=$hid");
+			}
+			else 
+			{
+				$data2 = array('url' => $url_content,
+				 			  'createdate' => date("Y-m-d h:i:s"),
+							  'remoteip' => Pandamp_Lib_Formater::getHttpRealIp(),
+							  'kopel' => $kopel,
+							  'id' => $hid);
+							  
+				$insert = $db->insert('urls', $data2);
+			}
+			
 		}
 		else 
 		{

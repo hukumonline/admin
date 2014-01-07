@@ -200,6 +200,20 @@ class Pandamp_Lib_Formater
         }
         return $ip;
     }
+    
+    public static function getHttpRealIp() {
+    	if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+    		$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+    		$_SERVER['REMOTE_ADDR'] = trim($ips[0]);
+    	} elseif ( isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ) {
+    		$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_REAL_IP'];
+    	} elseif ( isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']) ) {
+    		$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
+    	}
+    
+    	return $_SERVER['REMOTE_ADDR'];
+    }
+    
     static function get_date($tanggal) {
             $id = $tanggal;
             $id = substr($id,8,2).".".substr($id,5,2).".".substr($id,2,2)." ".substr($id,11,2).":".substr($id,14,2);
