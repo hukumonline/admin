@@ -118,6 +118,10 @@ class Customer_AccountController extends Zend_Controller_Action
     }
 	function transformRegister($value)
 	{
+		if (empty($value['username'])) {
+			throw new Zend_Exception("Username empty!");
+		}
+		
 		$obj = new Pandamp_Crypt_Password();
 		
 		$month 			= ($value['month'])? $value['month'] : '00';
