@@ -20,7 +20,14 @@ $this->headLink()
 				<a href="#invoice" class="nyroModal btn" title="Create New Invoice"><span class="icon icon-add">&nbsp;</span>Add New</a>            	
             </div>
             <div id='invoice' style='display: none;'>
-            <?php if (in_array($this->user['packageId'],array(14,15,16,17,18))) { ?>
+            <?php
+            	$modelPackage = new App_Model_Db_Table_Package();
+            	$rowPackage = $modelPackage->fetchRow("packageId=".$this->user['packageId']); 
+            ?>
+            <?php 
+            //if (in_array($this->user['packageId'],array(14,15,16,17,18))) {
+            if (!$rowPackage) { 
+			?>
             <form action="" method="POST" name="newinvoice">
             	<fieldset>
             		<legend>CREATE NEW INVOICE</legend>
