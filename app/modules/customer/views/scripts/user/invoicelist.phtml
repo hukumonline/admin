@@ -26,7 +26,7 @@ $this->headLink()
             ?>
             <?php 
             //if (in_array($this->user['packageId'],array(14,15,16,17,18))) {
-            if (!$rowPackage) { 
+            if ($rowPackage) { 
 			?>
             <form action="" method="POST" name="newinvoice">
             	<fieldset>
