@@ -148,7 +148,11 @@ class Customer_UserController extends Zend_Controller_Action
 					$rowset = $modelUser->find($id)->current();
 					if ($rowset != null) 
 					{
-				        if (in_array($rowset->packageId,array(14,15,16,17,18)))
+						$modelPackage = new App_Model_Db_Table_Package();
+						$rowPackage = $modelPackage->fetchRow("packageId=".$rowset->packageId);
+							
+				        //if (in_array($rowset->packageId,array(14,15,16,17,18)))
+				        if ($rowPackage)
 				        {
 				        	$periodeId = 2;
 							// Get disc promo
@@ -247,7 +251,11 @@ class Customer_UserController extends Zend_Controller_Action
 					{
 						if (($rowset->isActive == 0)) 
 						{
-					        if (in_array($rowset->packageId,array(14,15,16,17,18)))
+							$modelPackage = new App_Model_Db_Table_Package();
+							$rowPackage = $modelPackage->fetchRow("packageId=".$rowset->packageId);
+								
+					        //if (in_array($rowset->packageId,array(14,15,16,17,18)))
+					        if ($rowPackage)
 					        {
 					        	if (isset($rowset->paymentId) && ($rowset->paymentId <> 0))
 					        	{
@@ -326,10 +334,14 @@ class Customer_UserController extends Zend_Controller_Action
 			    	$sql = $modelUser->select()->setIntegrityCheck(false);
 					$sql->from(array('ku' => 'KutuUser'))->join(array('gag' => 'gacl_aro_groups'),'ku.packageId = gag.id')
 						->where('ku.kopel=?',$id);
-			
+					
 					$rowUser = $modelUser->fetchRow($sql);
-   		        	if (in_array($rowUser->packageId,array(14,15,16,17,18))) {
-   		        		
+					
+					$modelPackage = new App_Model_Db_Table_Package();
+					$rowPackage = $modelPackage->fetchRow("packageId=".$rowUser->packageId);
+					
+   		        	//if (in_array($rowUser->packageId,array(14,15,16,17,18))) {
+   		        	if ($rowPackage) {	
 						$tblInvoice = new App_Model_Db_Table_Invoice();
 						$where = $tblInvoice->getAdapter()->quoteInto("uid=?",$id);
 						$rowInvoice = $tblInvoice->fetchRow($where);
@@ -393,7 +405,12 @@ class Customer_UserController extends Zend_Controller_Action
         		
    		        $modelUser = new App_Model_Db_Table_User();
         		$rowset = $modelUser->fetchRow("kopel='".$id."'");
-				if ((in_array($rowset->packageId,array(14,15,16,17,18))) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
+        		
+        		$modelPackage = new App_Model_Db_Table_Package();
+        		$rowPackage = $modelPackage->fetchRow("packageId=".$rowset->packageId);
+        			
+				//if ((in_array($rowset->packageId,array(14,15,16,17,18))) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
+				if (($rowPackage) && ($rowset->paymentId <> 0) && ($rowset->isActive == 1))
 				{
 					$formater = new Pandamp_Core_Hol_User();
 					/**
@@ -1054,8 +1071,17 @@ class Customer_UserController extends Zend_Controller_Action
         }
 
         $this->_helper->layout->setLayout('layout-customer-credential');
+        
+        $modelPackage = new App_Model_Db_Table_Package();
+        $rowPackage = $modelPackage->fetchAll();
+         
+       foreach ($rowPackage as $rp) {
+       		$p[] = $rp->packageId;
+       }
+       
+       $pk = join(",", $p);
 
-		$rowset = App_Model_Show_User::show()->countUser("ku.packageId IN (14,15,16,17,18) AND ku.ses!='*'");    	
+		$rowset = App_Model_Show_User::show()->countUser("ku.packageId IN ($pk) AND ku.ses!='*'");    	
 		
 		$a['totalCount'] = $rowset;
 		$limit = 25;
