@@ -48,7 +48,11 @@ class Pandamp_Auth_Adapter_DbTable extends Zend_Auth_Adapter_DbTable
 
         // query for the identity
         try {
-            $resultIdentities = $this->_zendDb->fetchAll('SELECT * FROM '.$this->_tableName.' where '.$this->_identityColumn. "='" .$this->_identity."' AND isActive=1");
+            //$resultIdentities = $this->_zendDb->fetchAll('SELECT * FROM '.$this->_tableName.' where '.$this->_identityColumn. "='" .$this->_identity."' AND isActive=1");
+            $resultIdentities = $this->_zendDb->fetchAll('SELECT * FROM '.$this->_tableName.' ku
+             LEFT JOIN gacl_aro_groups gag ON ku.packageId=gag.id
+             where ku.'.$this->_identityColumn. "='" .$this->_identity."' AND ku.isActive IN (1,99)");
+            
         } catch (Exception $e) {
             /**
              * @see Zend_Auth_Adapter_Exception
