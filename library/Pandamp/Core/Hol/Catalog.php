@@ -500,7 +500,7 @@ class Pandamp_Core_Hol_Catalog
             $this->relateTo($catalogGuid, $relatedGuid, $relatedType);
 
             $indexingEngine = Pandamp_Search::manager();
-            //$indexingEngine->indexCatalog($relatedGuid);
+            $indexingEngine->indexCatalog($catalogGuid);
         }
     }
     public function relateTo($itemGuid, $relatedGuid, $as='RELATED_ITEM', $valRelation = 0)
