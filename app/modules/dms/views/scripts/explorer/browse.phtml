@@ -116,7 +116,7 @@
                                     $status = "publish_r";
                                     $ht = "Published, but has Expired";
 				}
-				else if ($hit['status'] == 0) {
+				else if ($hit['status'] == 0 || $hit['status'] == 1) {
                                     $status = "publish_x";
                                     $ht = "Not Published";
 				}
