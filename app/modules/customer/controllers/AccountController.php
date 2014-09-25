@@ -185,19 +185,32 @@ class Customer_AccountController extends Zend_Controller_Action
 	{
 		$rowset = App_Model_Show_Number::show()->getNumber();
 		$num = $rowset['user'];
-		$totdigit = 6;
+		//$totdigit = 6;
 		$num = strval($num);
 		$jumdigit = strlen($num);
-		$kopel = str_repeat("0",$totdigit-$jumdigit).$num;
+		//$kopel = str_repeat("0",$totdigit-$jumdigit).$num;
+		
+		$kopel = str_pad($num, $jumdigit, '0', STR_PAD_LEFT);
 		
 		return $kopel;
 	}
 	protected function updateKopel()
 	{
+		/*
 		$modelNumber = new App_Model_Db_Table_Number();
 		$rowset = $modelNumber->fetchRow();
 		$rowset->user = $rowset->user += 1;
 		$rowset->save();
+		*/
+		
+		try {
+			$modelNumber = new App_Model_Db_Table_Number();
+			$modelNumber->update(array('user'=>new Zend_Db_Expr('user + 1')), 'num=1');
+		}
+		catch (Exception $e)
+		{
+			throw new Zend_Exception($e->getMessage());
+		}
 	}
     
 
