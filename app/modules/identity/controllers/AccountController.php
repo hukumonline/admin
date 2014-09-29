@@ -63,6 +63,7 @@ class Identity_AccountController extends Zend_Controller_Action
 						Pandamp_Lib_Formater::writeLog();
 						
 						// to help thwart session fixation/hijacking
+						// @modifiedDate 2014-09-15 17:01
 						if (isset($remember) && $remember == 'yes') {
 							/*$hol = new Pandamp_Core_Hol_Auth();
 							$hol->user = $username;
@@ -76,7 +77,7 @@ class Identity_AccountController extends Zend_Controller_Action
 						else
 						{
 							// do not remember the session
-							Zend_Session::forgetMe();
+							// Zend_Session::forgetMe();
 						}
 						
 						$this->_helper->FlashMessenger('Successful authentication');
