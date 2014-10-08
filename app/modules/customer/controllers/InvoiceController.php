@@ -342,13 +342,13 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			// get expiration date
 			//$temptime = time();
 			//$temptime = strtotime($rowset->expirationDate);
-			$temptime = strtotime($todays_date);
+			$temptime = strtotime($todays_date); // Expire dihitung setelah pelanggan membayarar
 			$temptime = Pandamp_Lib_Formater::DateAdd('m',$rowUser['paymentId'],$temptime);
 			$expiredDate = strftime('%Y-%m-%d',$temptime);
 			$today = strtotime($todays_date); 
 			$expiration_date = strtotime($expiredDate);
 			if ($expiration_date < $today) {
-				$rowset->isPaid = 'E';
+				$rowset->isPaid = 'E'; // status expire
 				$rowset->save();
 				
 				$notes = date("Y-m-d h:i:s") . " - Invoice expired";
@@ -367,7 +367,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowInvoice->expirationDate = $expiredDate;
 			$rowInvoice->save();
 			
-			$rowset->isPaid = 'R';
+			$rowset->isPaid = 'R'; // status renew
 			$rowset->save();
 			
 			$notes = date("Y-m-d h:i:s") . " - Renew invoice";
@@ -395,5 +395,35 @@ class Customer_InvoiceController extends Zend_Controller_Action
 		}
 		
 		echo Zend_Json::encode($aResult);
+	}
+	
+	public function editAction()
+	{
+		if (!Pandamp_Controller_Action_Helper_IsAllowed::isAllowed('membership','all'))
+		{
+			$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/error/restricted');
+		}
+		
+		$this->_helper->layout->setLayout('layout-customer-credential');
+		 
+		$id = $this->_getParam("id");
+		
+		$tblInvoice = new App_Model_Db_Table_Invoice();
+		$rowset = $tblInvoice->find($id)->current();
+		$this->view->row = $rowset;
+		
+		if ($this->getRequest()->isPost()) {
+			$rowset->price				= $this->getRequest()->getPost('price');
+			$rowset->discount			= $this->getRequest()->getPost('disc');
+			$rowset->invoiceOutDate 	= $this->getRequest()->getPost('invoiceOutDate');
+			$rowset->invoiceConfirmDate	= $this->getRequest()->getPost('invoiceConfirmDate');
+			$rowset->clientBankAccount	= $this->getRequest()->getPost('clientBankAccount');
+			$rowset->isPaid				= $this->getRequest()->getPost('isPaid');
+			$rowset->expirationDate		= $this->getRequest()->getPost('expirationDate');
+				
+			$rowset->save();
+			
+			$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/invoicelist/id/'.$this->getRequest()->getPost('uid'));
+		}
 	}
 }

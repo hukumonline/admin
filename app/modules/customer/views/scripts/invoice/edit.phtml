@@ -1,0 +1,72 @@
+<?php 
+
+$this->headLink()
+	->appendStylesheet($this->cdn('scripts') . '/hol/datepicker/rfnet.css');
+
+?>
+
+<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/datepicker/datetimepicker.js"></script>
+
+<form action="" method="POST" name="editinvoice">
+<fieldset>
+	<legend>Edit Invoice:<?php echo $this->row->invoiceId; ?></legend>
+	<table class='display stylized'>
+	<tr>
+            			<td><label>Price:</label></td>
+            			<td><input type="text" value="<?php echo $this->row->price; ?>" name="price"/></td>
+            		</tr>
+            		<tr>
+            			<td><label>Discount:</label></td>
+            			<td><input type="text" value="<?php echo $this->row->discount; ?>" name="disc"/></td>
+            		</tr>
+	<tr>
+		<td><label>Invoice Out Date:</label></td>
+        <td nowrap>
+            <input type="text" value="<?php echo $this->row->invoiceOutDate; ?>" name="invoiceOutDate" id="invoiceOutDate"/>
+            <a href="javascript:NewCal('invoiceOutDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+		</td>
+	</tr>
+	<tr>
+            			<td nowrap><label>Invoice Confirm Date:</label></td>
+            			<td nowrap>
+            				<input type="text" value="<?php echo $this->row->invoiceConfirmDate; ?>" name="invoiceConfirmDate" id="invoiceConfirmDate"/>
+            				<a href="javascript:NewCal('invoiceConfirmDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td nowrap><label>Client Bank Account:</label></td>
+            			<td>
+            				<select name="clientBankAccount">
+            					<option value="BCA">BCA</option>
+            					<option value="BNI">BNI</option>
+            				</select>
+            			</td>
+            		</tr>
+	<tr>
+		<td><label>Is Paid:</label></td>
+		<td>
+			<select name="isPaid">
+            	<option value="N">No</option>
+            	<option value="Y">Yes</option>
+            </select>
+            <script>
+            $('[name=isPaid]').val("<?php echo $this->row->isPaid; ?>");
+            $('[name=clientBankAccount]').val("<?php echo $this->row->clientBankAccount; ?>");
+            </script>
+      	</td>
+	</tr>
+	<tr>
+		<td><label>expirationDate:</label></td>
+        <td nowrap>
+            <input type="text" value="<?php echo $this->row->expirationDate; ?>" name="expirationDate" id="expirationDate"/>
+            <a href="javascript:NewCal('expirationDate','yyyymmdd',false)"><img src="<?php echo $this->cdn('images'); ?>/img.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+		</td>
+	</tr>
+	<tr>
+            			<td colspan="2"><input type="submit" value="Save" class="btn btn-blue big" />
+            			<input type="hidden" name="uid" value="<?php echo $this->row->uid; ?>" />
+            			</td>
+            		</tr>
+	</table>
+</fieldset>
+</form>
