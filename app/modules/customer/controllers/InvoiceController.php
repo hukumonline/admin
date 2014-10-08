@@ -345,6 +345,19 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
 			$rowInvoice->save();
 			
+			$rowset->isPaid = 'R';
+			$rowset->save();
+			
+			$notes = date("Y-m-d h:i:s") . " - Renew invoice";
+			$data = array(
+					'notes'	 		=> $notes
+					,'modifiedDate'	=> date("Y-m-d h:i:s")
+					,'modifiedBy'	=> Zend_Auth::getInstance()->getIdentity()->username
+			);
+			
+			$modelUser = new App_Model_Db_Table_User();
+			$modelUser->update($data, "kopel='".$rowset->uid."'");
+			
             $aResult['isError'] = true;
             $aResult['msg'] = 'Invoice has been updated';
 			}
