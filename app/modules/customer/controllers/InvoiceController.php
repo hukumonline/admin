@@ -318,6 +318,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowUser = App_Model_Show_User::show()->getUserById($rowset->uid);
 			if (isset($rowUser['paymentId']) && ($rowUser['paymentId'] <> 0))
 			{
+				$todays_date = date("Y-m-d");
 			$tblPackage = new App_Model_Db_Table_Package();
 			$rowPackage = $tblPackage->fetchRow("packageId=".$rowUser['packageId']."");
 			if ($rowUser['paymentId'] == 12) {
@@ -334,15 +335,36 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowInvoice->price				= $price;
 			$rowInvoice->discount			= $rowset->discount;
 			$rowInvoice->invoiceOutDate 	= $rowset->expirationDate;
-			$rowInvoice->invoiceConfirmDate	= date("Y-m-d");
+			$rowInvoice->invoiceConfirmDate	= $todays_date;
 			$rowInvoice->clientBankAccount	= $rowset->clientBankAccount;
 			$rowInvoice->isPaid				= 'Y';
 			
 			// get expiration date
 			//$temptime = time();
-			$temptime = strtotime($rowset->expirationDate);
+			//$temptime = strtotime($rowset->expirationDate);
+			$temptime = strtotime($todays_date);
 			$temptime = Pandamp_Lib_Formater::DateAdd('m',$rowUser['paymentId'],$temptime);
-			$rowInvoice->expirationDate = strftime('%Y-%m-%d',$temptime);
+			$expiredDate = strftime('%Y-%m-%d',$temptime);
+			$today = strtotime($todays_date); 
+			$expiration_date = strtotime($expiredDate);
+			if ($expiration_date < $today) {
+				$rowset->isPaid = 'E';
+				$rowset->save();
+				
+				$notes = date("Y-m-d h:i:s") . " - Invoice expired";
+				$data = array(
+					'notes'	=> $notes
+				);
+				
+				$modelUser = new App_Model_Db_Table_User();
+				$modelUser->update($data, "kopel='".$rowset->uid."'");
+				
+				$aResult['isError'] = true;
+				$aResult['msg'] = 'Invoice sudah tidak bisa di renew karena tanggal expire < dari tanggal sekarang, <br>silahkan anda buat baru';
+			}
+			else
+			{
+			$rowInvoice->expirationDate = $expiredDate;
 			$rowInvoice->save();
 			
 			$rowset->isPaid = 'R';
@@ -350,9 +372,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
 			$notes = date("Y-m-d h:i:s") . " - Renew invoice";
 			$data = array(
-					'notes'	 		=> $notes
-					,'modifiedDate'	=> date("Y-m-d h:i:s")
-					,'modifiedBy'	=> Zend_Auth::getInstance()->getIdentity()->username
+				'notes'	=> $notes
 			);
 			
 			$modelUser = new App_Model_Db_Table_User();
@@ -360,6 +380,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
             $aResult['isError'] = true;
             $aResult['msg'] = 'Invoice has been updated';
+			}
 			}
 			else 
 			{
