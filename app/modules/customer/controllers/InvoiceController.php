@@ -423,6 +423,14 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				
 			$rowset->save();
 			
+			$notes = date("Y-m-d h:i:s") . ' ' . $this->_user->username . " - Modify invoice";
+			$data = array(
+					'notes'	=> $notes
+			);
+				
+			$modelUser = new App_Model_Db_Table_User();
+			$modelUser->update($data, "kopel='".$this->getRequest()->getPost('uid')."'");
+			
 			$this->_redirect(ROOT_URL.'/'.$this->_zl->getLanguage().'/customer/user/invoicelist/id/'.$this->getRequest()->getPost('uid'));
 		}
 	}
