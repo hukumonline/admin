@@ -353,7 +353,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				
 				$notes = date("Y-m-d h:i:s") . " - Invoice expired:".$id;
 				$data = array(
-					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' $notes')")
+					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' \n$notes')")
 				);
 				
 				$modelUser = new App_Model_Db_Table_User();
@@ -372,7 +372,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
 			$notes = date("Y-m-d h:i:s") . " - Renew invoice:".$id;
 			$data = array(
-				'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' $notes')")
+				'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' \n$notes')")
 			);
 			
 			$modelUser = new App_Model_Db_Table_User();
@@ -425,7 +425,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
 			$notes = date("Y-m-d h:i:s") . ' ' . $this->_user->username . " - Modify invoice:".$id;
 			$data = array(
-					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' $notes')") 
+					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' \n$notes')") 
 			);
 				
 			$modelUser = new App_Model_Db_Table_User();
