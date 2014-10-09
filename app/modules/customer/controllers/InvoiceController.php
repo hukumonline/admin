@@ -351,7 +351,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				$rowset->isPaid = 'E'; // status expire
 				$rowset->save();
 				
-				$notes = date("Y-m-d h:i:s") . " - Invoice expired";
+				$notes = date("Y-m-d h:i:s") . " - Invoice expired:".$id;
 				$data = array(
 					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' $notes')")
 				);
@@ -370,7 +370,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			$rowset->isPaid = 'R'; // status renew
 			$rowset->save();
 			
-			$notes = date("Y-m-d h:i:s") . " - Renew invoice";
+			$notes = date("Y-m-d h:i:s") . " - Renew invoice:".$id;
 			$data = array(
 				'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' $notes')")
 			);
@@ -423,7 +423,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 				
 			$rowset->save();
 			
-			$notes = date("Y-m-d h:i:s") . ' ' . $this->_user->username . " - Modify invoice";
+			$notes = date("Y-m-d h:i:s") . ' ' . $this->_user->username . " - Modify invoice:".$id;
 			$data = array(
 					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),' $notes')") 
 			);
