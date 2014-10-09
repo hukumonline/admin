@@ -48,6 +48,8 @@ $this->headLink()
 			<select name="isPaid">
             	<option value="N">No</option>
             	<option value="Y">Yes</option>
+            	<option value="R">Renewable</option>
+            	<option value="E">Expired</option>
             </select>
             <script>
             $('[name=isPaid]').val("<?php echo $this->row->isPaid; ?>");
