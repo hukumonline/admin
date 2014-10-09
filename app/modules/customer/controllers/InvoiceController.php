@@ -425,7 +425,7 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
 			$notes = date("Y-m-d h:i:s") . ' ' . $this->_user->username . " - Modify invoice";
 			$data = array(
-					'notes'	=> $notes
+					'notes'	=> new Zend_Db_Expr("CONCAT(ifnull(notes,''),$notes)") 
 			);
 				
 			$modelUser = new App_Model_Db_Table_User();
