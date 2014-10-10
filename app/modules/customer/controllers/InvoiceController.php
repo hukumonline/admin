@@ -341,8 +341,8 @@ class Customer_InvoiceController extends Zend_Controller_Action
 			
 			// get expiration date
 			//$temptime = time();
-			//$temptime = strtotime($rowset->expirationDate);
-			$temptime = strtotime($todays_date); // Expire dihitung setelah pelanggan membayarar
+			$temptime = strtotime($rowset->expirationDate);
+			//$temptime = strtotime($todays_date); // Expire dihitung setelah pelanggan membayarar
 			$temptime = Pandamp_Lib_Formater::DateAdd('m',$rowUser['paymentId'],$temptime);
 			$expiredDate = strftime('%Y-%m-%d',$temptime);
 			$today = strtotime($todays_date); 
