@@ -82,24 +82,34 @@ class Dev_CatalogController extends Zend_Controller_Action
     	
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	
+    	$where = "relatedGuid='$guid' AND relateAs='ISROOT'";
+    	$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
+    	if ($rowsetRelatedItem)
+    		echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem->itemGuid,'fixedTitle').'<br>';
+    	
+    	$where = "(relatedGuid='$guid' OR itemGuid='$guid') AND (relateAs IN ('REPEAL','AMEND'))";
+    	$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
+    	if ($rowsetRelatedItem->valueStringRelation)
+    		$guid = $rowsetRelatedItem->valueStringRelation;    		
+    	
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,"itemGuid DESC");
     	echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').'<br>';
     	foreach ($rowsetRelatedItem as $row) {
     		if ($row->relateAs === "REPEAL") {
-    			$status = "Mencabut";
+    			$status = "dicabut";
     		}
     		if ($row->relateAs === "AMEND") {
-    			$status = "Merubah";
+    			$status = "dirubah";
     		}
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     		if ($row->relateAs === "AMEND") {
-	    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$title [".$status."]<br>";
+	    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='$row->itemGuid'>$title</a> [".$status."]<br>";
 	    		$this->getchild($row->itemGuid);
     		} 
     		else
     		{
-    			echo $title . ' ['.$status.']'.'<br>';
+    			echo "<a href='$row->itemGuid'>$title</a> [".$status."]<br>";
     			$this->getchild($row->itemGuid);
     		}
     	} 
@@ -116,19 +126,19 @@ class Dev_CatalogController extends Zend_Controller_Action
     			$sTab.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     			
     		if ($row->relateAs === "REPEAL") {
-    			$status = "Mencabut";
+    			$status = "dicabut";
     		}
     		if ($row->relateAs === "AMEND") {
-    			$status = "Merubah";
+    			$status = "dirubah";
     		}
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     		if ($row->relateAs === "AMEND") {
-    			echo $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$title [".$status."]<br>";
+    			echo $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='$row->itemGuid'>$title</a> [".$status."]<br>";
     			$this->getchild($row->itemGuid,$level+1);
     		}
     		else
     		{
-	    		echo $sTab.$title . ' ['.$status.']'.'<br>';
+	    		echo $sTab."<a href='$row->itemGuid'>$title</a> [".$status."]<br>";
 	    		$this->getchild($row->itemGuid,$level+1);
     		}
     	}
