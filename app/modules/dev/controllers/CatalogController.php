@@ -71,4 +71,67 @@ class Dev_CatalogController extends Zend_Controller_Action
         //$sSolr .= ')';
         //echo $sSolr;
     }
+    
+    function historyAction()
+    {
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	
+    	$request = $this->getRequest();
+    	
+    	$guid = $request->getParam('guid');
+    	
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,"itemGuid DESC");
+    	echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').'<br>';
+    	foreach ($rowsetRelatedItem as $row) {
+    		if ($row->relateAs === "REPEAL") {
+    			$status = "Mencabut";
+    		}
+    		if ($row->relateAs === "AMEND") {
+    			$status = "Merubah";
+    		}
+    		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
+    		if ($row->relateAs === "AMEND") {
+	    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$title [".$status."]<br>";
+	    		$this->getchild($row->itemGuid);
+    		} 
+    		else
+    		{
+    			echo $title . ' ['.$status.']'.'<br>';
+    			$this->getchild($row->itemGuid);
+    		}
+    	} 
+    }
+    
+    function getchild($guid,$level=0)
+    {
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,"itemGuid DESC");
+    	foreach ($rowsetRelatedItem as $row) {
+    		$sTab="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    		for($i=0;$i<$level;$i++)
+    			$sTab.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    			
+    		if ($row->relateAs === "REPEAL") {
+    			$status = "Mencabut";
+    		}
+    		if ($row->relateAs === "AMEND") {
+    			$status = "Merubah";
+    		}
+    		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
+    		if ($row->relateAs === "AMEND") {
+    			echo $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$title [".$status."]<br>";
+    			$this->getchild($row->itemGuid,$level+1);
+    		}
+    		else
+    		{
+	    		echo $sTab.$title . ' ['.$status.']'.'<br>';
+	    		$this->getchild($row->itemGuid,$level+1);
+    		}
+    	}
+    		 
+    }
 }

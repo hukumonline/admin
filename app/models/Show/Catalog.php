@@ -35,7 +35,7 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
     /**
      * @return obj
      */
-    public function show()
+    public static function show()
     {
         if (!isset(self::$_instance)) {
                 $show = __CLASS__;
