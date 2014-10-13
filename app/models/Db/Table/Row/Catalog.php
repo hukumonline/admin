@@ -206,6 +206,13 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             $row->relatedGuid = $relatedGuid;
             $row->relateAs = $as;
             $row->valueIntRelation = $valRelation;
+            $row->itemType = "history";
+            
+            if (in_array($as, array('REPEAL','AMEND','ISROOT'))) {
+            	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+            	$rowVal = $tblRelatedItem->fetchRow("itemGuid='$relatedGuid'");
+            	$row->valueStringRelation = ($rowVal->valueStringRelation)? $rowVal->valueStringRelation : $relatedGuid;
+            }
         }
         $row->save();
     }
