@@ -89,11 +89,11 @@ class Dev_CatalogController extends Zend_Controller_Action
     	
     	$where = "(relatedGuid='$guid' OR itemGuid='$guid') AND (relateAs IN ('REPEAL','AMEND'))";
     	$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
-    	if ($rowsetRelatedItem->valueStringRelation)
+    	if (isset($rowsetRelatedItem->valueStringRelation))
     		$guid = $rowsetRelatedItem->valueStringRelation;    		
     	
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,"itemGuid DESC");
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
     	echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').'<br>';
     	foreach ($rowsetRelatedItem as $row) {
     		if ($row->relateAs === "REPEAL") {
@@ -119,7 +119,7 @@ class Dev_CatalogController extends Zend_Controller_Action
     {
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,"itemGuid DESC");
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
     	foreach ($rowsetRelatedItem as $row) {
     		$sTab="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     		for($i=0;$i<$level;$i++)

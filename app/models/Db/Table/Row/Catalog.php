@@ -188,9 +188,12 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
     {
         if(empty($this->guid))
             throw new Zend_Exception('Can not relate to empty GUID');
+        
         if(empty($relatedGuid))
             throw new Zend_Exception('Can not relate to empty related GUID');
-
+        
+        if ($this->guid==$relatedGuid && in_array($as, array('REPEAL','AMEND','ISROOT')))
+			return;
             
         $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
         $rowsetRelatedItem = $tblRelatedItem->find($this->guid, $relatedGuid, $as);
@@ -211,7 +214,10 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             if (in_array($as, array('REPEAL','AMEND','ISROOT'))) {
             	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
             	$rowVal = $tblRelatedItem->fetchRow("itemGuid='$relatedGuid'");
-            	$row->valueStringRelation = ($rowVal->valueStringRelation)? $rowVal->valueStringRelation : $relatedGuid;
+            	if (!empty($rowVal->valueStringRelation)) 
+            		$relatedGuid = $rowVal->valueStringRelation;
+            	
+            	$row->valueStringRelation = $relatedGuid;
             }
         }
         $row->save();
