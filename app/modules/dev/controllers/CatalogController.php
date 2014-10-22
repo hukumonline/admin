@@ -82,13 +82,18 @@ class Dev_CatalogController extends Zend_Controller_Action
     	
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	
-    	$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    	$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
-    	if (isset($rowsetRelatedItem->valueStringRelation))
-    		$guid = $rowsetRelatedItem->valueStringRelation;    		
     	
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'itemGuid desc');
+    	if (!$rowsetRelatedItem) {
+    		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    		$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
+    		if (isset($rowsetRelatedItem->valueStringRelation)) {
+    			$guid = $rowsetRelatedItem->valueStringRelation;
+		    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+		    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'itemGuid desc');
+    		}
+    	}
     	
     	echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').'<br>';
     	
