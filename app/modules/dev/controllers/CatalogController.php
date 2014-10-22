@@ -172,7 +172,7 @@ class Dev_CatalogController extends Zend_Controller_Action
     	$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
     	if ($rowsetRelatedItem) {
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem->relatedGuid,'fixedTitle');
-    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='$rowsetRelatedItem->itemGuid'>$title</a>[mencabut sebagian]<br>";
+    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='$rowsetRelatedItem->relatedGuid'>$title</a>[mencabut sebagian]<br>";
     	}
     }
 }
