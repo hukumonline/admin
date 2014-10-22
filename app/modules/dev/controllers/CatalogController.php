@@ -80,6 +80,8 @@ class Dev_CatalogController extends Zend_Controller_Action
     	
     	$guid = $request->getParam('guid');
     	
+    	$s = '';
+    	
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	
     	$where_r = "relatedGuid='$guid' AND relateAs='ISROOT'";
@@ -93,9 +95,14 @@ class Dev_CatalogController extends Zend_Controller_Action
     		if (isset($rowsetRelatedItem->valueStringRelation)) {
     			$where_ro = "valueStringRelation='$rowsetRelatedItem->valueStringRelation' AND relateAs='ISROOT'";
     			$rowsetRelatedItem_ro = $tblRelatedItem->fetchRow($where_ro);
-    			if ($rowsetRelatedItem_ro)
-    				echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_ro->itemGuid,'fixedTitle').'[mencabut sebagian]<br>';
-    			 
+    			if ($rowsetRelatedItem_ro) {
+	    			if ($rowsetRelatedItem_ro->relateAs == 'ISROOT') 
+	    				$s = '[mencabut sebagian]';
+	    			
+	    			
+    				echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_ro->itemGuid,'fixedTitle').'<br>';
+    			}
+    			
     			$guid = $rowsetRelatedItem->valueStringRelation;
 		    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
 		    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
@@ -103,11 +110,17 @@ class Dev_CatalogController extends Zend_Controller_Action
     	}
     	else
     	{
-    		if ($rowsetRelatedItem_r)
-    			echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle').'[mencabut sebagian]<br>';
+    		if ($rowsetRelatedItem_r) {
+    			if ($rowsetRelatedItem_r->relateAs == 'ISROOT') 
+    				$s = '[mencabut sebagian]';
+    			
+    			
+    			echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle').'<br>';
+    		}
+    		
     	}
     	
-    	echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').'<br>';
+    	echo App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').$s.'<br>';
     	
     	foreach ($rowsetRelatedItem as $row) {
     		if ($row->relateAs === "REPEAL") {
@@ -172,7 +185,7 @@ class Dev_CatalogController extends Zend_Controller_Action
     	$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
     	if ($rowsetRelatedItem) {
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem->relatedGuid,'fixedTitle');
-    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='$rowsetRelatedItem->relatedGuid'>$title</a>[mencabut sebagian]<br>";
+    		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='$rowsetRelatedItem->relatedGuid'>$title</a>[mencabut sebagian]<br>";
     	}
     }
 }
