@@ -35,7 +35,7 @@ class Pandamp_Core_Hol_Relation
     					$s = '[mencabut sebagian]';
     	
     	
-    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_ro->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_ro->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_ro->itemGuid,'fixedTitle').'</a><br>';
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_ro->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_ro->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_ro->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem_ro->relatedGuid' data-historyid='$rowsetRelatedItem_ro->itemGuid' data-status='$rowsetRelatedItem_ro->relateAs'>Delete</a><br>";
     			}
     			 
     			$guid = $rowsetRelatedItem->valueStringRelation;
@@ -50,7 +50,7 @@ class Pandamp_Core_Hol_Relation
     				$s = '[mencabut sebagian]';
     			 
     			 
-    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_r->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_r->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle').'</a><br>';
+    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_r->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_r->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem_r->relatedGuid' data-historyid='$rowsetRelatedItem_r->itemGuid' data-status='$rowsetRelatedItem_r->relateAs'>Delete</a><br>";
     		}
     	
     	}
@@ -62,17 +62,17 @@ class Pandamp_Core_Hol_Relation
     			$status = "dicabut";
     		}
     		if ($row->relateAs === "AMEND") {
-    			$status = "dirubah";
+    			$status = "merubah";
     		}
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     		if ($row->relateAs === "AMEND") {
-    			$newh .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    			$newh .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
     					$newh .= $this->isroot($row->itemGuid);
     					// 	    		$this->getchild($row->itemGuid);
     		}
     		else
     		{
-    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
     		//     			$this->isroot($row->itemGuid);
     		$newh .= $this->getchild($row->itemGuid);
     		}
@@ -96,7 +96,7 @@ class Pandamp_Core_Hol_Relation
     					$status = "dicabut";
     			}
     							if ($row->relateAs === "AMEND") {
-    									$status = "dirubah";
+    									$status = "merubah";
     									}
     									$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     									if ($row->relateAs === "AMEND") {
