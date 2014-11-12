@@ -56,7 +56,8 @@ class Pandamp_Core_Hol_Relation
     	}
     	 
     	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').$s.'<br>';
-    	 
+
+    	if ($rowsetRelatedItem) {
     	foreach ($rowsetRelatedItem as $row) {
     		if ($row->relateAs === "REPEAL") {
     			$status = "dicabut";
@@ -76,6 +77,7 @@ class Pandamp_Core_Hol_Relation
     		//     			$this->isroot($row->itemGuid);
     		$newh .= $this->getchild($row->itemGuid);
     		}
+    	}
     	}
     	 
     	return $newh;
