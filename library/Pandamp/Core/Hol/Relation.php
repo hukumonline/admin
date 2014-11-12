@@ -100,14 +100,14 @@ class Pandamp_Core_Hol_Relation
     									}
     									$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     									if ($row->relateAs === "AMEND") {
-    										$c .= $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    										$c .= $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
     										//     			echo $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     									//     			$this->isroot($row->itemGuid);
     									$c .= $this->getchild($row->itemGuid,$level+1);
     	}
     	else
     	{
-    		$c .= $sTab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    		$c .= $sTab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
 // 	    		echo $sTab;
     		// 	    		$this->isroot($row->itemGuid);
     		$c .= $this->getchild($row->itemGuid,$level+1);
@@ -124,7 +124,7 @@ class Pandamp_Core_Hol_Relation
     $rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
     if ($rowsetRelatedItem) {
     $title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem->relatedGuid,'fixedTitle');
-    return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem->relatedGuid)."'>$title</a>[mencabut sebagian]<br>";
+    return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem->relatedGuid)."'>$title</a>[mencabut sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem->relatedGuid' data-historyid='$rowsetRelatedItem->itemGuid' data-status='$rowsetRelatedItem->relateAs'>Delete</a><br>";
     }
     }
     public function getNode($catalogGuid)
