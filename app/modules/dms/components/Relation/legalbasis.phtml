@@ -4,7 +4,7 @@
     <ul id="dhline">
         <?php foreach ($this->rowsetLegalBasic as $data) { ?>
         <li>
-            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/search/catalog/detail/guid/<?php echo $data->itemGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></a>
+            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $data->itemGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></a>
         </li>
         <?php } ?>
     </ul>

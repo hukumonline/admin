@@ -4,7 +4,7 @@
     <ul id="ppline">
         <?php foreach ($this->rowsetRegulation as $data) { ?>
         <li>
-            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/search/catalog/detail/guid/<?php echo $data->relatedGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->relatedGuid,'fixedTitle'); ?></a><br>
+            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $data->relatedGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->relatedGuid,'fixedTitle'); ?></a><br>
             <?php echo $this->getCatalogTitle($data->relatedGuid,'fixedSubTitle'); ?>
         </li>
         <?php } ?>
