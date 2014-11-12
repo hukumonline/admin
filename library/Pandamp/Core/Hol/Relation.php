@@ -13,6 +13,132 @@ class Pandamp_Core_Hol_Relation
 {
     private $catalogGuid;
 
+    public function getHistorynew($guid,$node)
+    {
+    	$newh = $s = '';
+    	
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	 
+    	$where_r = "relatedGuid='$guid' AND relateAs='ISROOT'";
+    	$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
+    	
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    	if (count($rowsetRelatedItem) == 0) {
+    		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    		$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
+    		if (isset($rowsetRelatedItem->valueStringRelation)) {
+    			$where_ro = "valueStringRelation='$rowsetRelatedItem->valueStringRelation' AND relateAs='ISROOT'";
+    			$rowsetRelatedItem_ro = $tblRelatedItem->fetchRow($where_ro);
+    			if ($rowsetRelatedItem_ro) {
+    				if ($rowsetRelatedItem_ro->relateAs == 'ISROOT')
+    					$s = '[mencabut sebagian]';
+    	
+    	
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_ro->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_ro->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_ro->itemGuid,'fixedTitle').'</a><br>';
+    			}
+    			 
+    			$guid = $rowsetRelatedItem->valueStringRelation;
+    			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    		}
+    	}
+    	else
+    	{
+    		if ($rowsetRelatedItem_r) {
+    			if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
+    				$s = '[mencabut sebagian]';
+    			 
+    			 
+    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_r->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_r->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle').'</a><br>';
+    		}
+    	
+    	}
+    	 
+    	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').$s.'<br>';
+    	 
+    	foreach ($rowsetRelatedItem as $row) {
+    		if ($row->relateAs === "REPEAL") {
+    			$status = "dicabut";
+    		}
+    		if ($row->relateAs === "AMEND") {
+    			$status = "dirubah";
+    		}
+    		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
+    		if ($row->relateAs === "AMEND") {
+    			$newh .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    					$newh .= $this->isroot($row->itemGuid);
+    					// 	    		$this->getchild($row->itemGuid);
+    		}
+    		else
+    		{
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    		//     			$this->isroot($row->itemGuid);
+    		$newh .= $this->getchild($row->itemGuid);
+    		}
+    	}
+    	 
+    	return $newh;
+    }
+    
+    function getchild($guid,$level=0)
+    {
+    	$c='';
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    	foreach ($rowsetRelatedItem as $row) {
+    		$sTab="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    		for($i=0;$i<$level;$i++)
+    			$sTab.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    					 
+    			if ($row->relateAs === "REPEAL") {
+    					$status = "dicabut";
+    			}
+    							if ($row->relateAs === "AMEND") {
+    									$status = "dirubah";
+    									}
+    									$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
+    									if ($row->relateAs === "AMEND") {
+    										$c .= $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+    										//     			echo $sTab."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    									//     			$this->isroot($row->itemGuid);
+    									$c .= $this->getchild($row->itemGuid,$level+1);
+    	}
+    	else
+    	{
+    		$c .= $sTab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]<br>";
+// 	    		echo $sTab;
+    		// 	    		$this->isroot($row->itemGuid);
+    		$c .= $this->getchild($row->itemGuid,$level+1);
+    	}
+    	}
+    	
+    	return $c; 
+    }
+    
+    function isroot($guid)
+    {
+    $where = "itemGuid='$guid' AND relateAs='ISROOT'";
+    $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    $rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
+    if ($rowsetRelatedItem) {
+    $title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem->relatedGuid,'fixedTitle');
+    return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem->relatedGuid)."'>$title</a>[mencabut sebagian]<br>";
+    }
+    }
+    public function getNode($catalogGuid)
+    {
+    	$modelCatalogFolder = new App_Model_Db_Table_CatalogFolder();
+    	$rowset = $modelCatalogFolder->fetchRow("catalogGuid='".$catalogGuid."'");
+    
+    	if ($rowset)
+    		return $rowset->folderGuid;
+    	else
+    		return;
+    }
+    
+    
     public function getHistory($catalogGuid)
     {
         return $this->getRelatedItem($catalogGuid,'RELATED_HISTORY');

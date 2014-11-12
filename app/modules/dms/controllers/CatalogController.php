@@ -150,6 +150,10 @@ class Dms_CatalogController extends Zend_Controller_Action
         $w5 = new Dms_Relation_History($catalogGuid, $node);
         $this->view->widgetHistory = $w5;
 
+        require_once($modDir.'/components/Relation/Historynew.php');
+        $w9 = new Dms_Relation_Historynew($catalogGuid, $node);
+        $this->view->widgetHistorynew = $w9;
+        
         require_once($modDir.'/components/Relation/LegalBasis.php');
         $w6 = new Dms_Relation_LegalBasis($catalogGuid, $node);
         $this->view->widgetLegalBasis = $w6;
