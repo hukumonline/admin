@@ -7,7 +7,7 @@
             <?php if($data['node']==$this->catalogGuid) { ?>
             <img src="<?php echo $this->cdn('images'); ?>/page_right.gif">
             <?php } ?>
-            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/search/catalog/detail/guid/<?php echo $data['node']; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $data['title']; ?></a><br>
+            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $data['node']; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $data['title']; ?></a><br>
             <?php echo $data['subTitle']; ?>
             <?php if ($data['description']) { ?>
             <br><strong>Notes: </strong><?php echo $data['description']; ?>
