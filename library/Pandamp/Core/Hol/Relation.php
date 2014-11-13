@@ -43,8 +43,8 @@ class Pandamp_Core_Hol_Relation
     			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     		}
     	}
-    	else
-    	{
+//     	else
+//     	{
     		if ($rowsetRelatedItem_r) {
     			if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
     				$s = '[mencabut sebagian]';
@@ -53,7 +53,7 @@ class Pandamp_Core_Hol_Relation
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_r->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_r->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem_r->relatedGuid' data-historyid='$rowsetRelatedItem_r->itemGuid' data-status='$rowsetRelatedItem_r->relateAs'>Delete</a><br>";
     		}
     	
-    	}
+//     	}
     	 
     	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').$s.'<br>';
 
