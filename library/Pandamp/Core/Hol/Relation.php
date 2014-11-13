@@ -20,7 +20,8 @@ class Pandamp_Core_Hol_Relation
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	 
     	$where_r = "relatedGuid='$guid' AND relateAs='ISROOT'";
-    	$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
+    	//$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
+    	$rowsetRelatedItem_r = $tblRelatedItem->fetchAll($where_r);
     	
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
@@ -46,11 +47,14 @@ class Pandamp_Core_Hol_Relation
 //     	else
 //     	{
     		if ($rowsetRelatedItem_r) {
-    			if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
-    				$s = '[mencabut sebagian]';
+    			$s = '[mencabut sebagian]';
+    			/*if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
+    				$s = '[mencabut sebagian]';*/
     			 
-    			 
-    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_r->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_r->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_r->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem_r->relatedGuid' data-historyid='$rowsetRelatedItem_r->itemGuid' data-status='$rowsetRelatedItem_r->relateAs'>Delete</a><br>";
+    			foreach ($rowsetRelatedItem_r as $rr) { 
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rr->itemGuid.'/node/'.$this->getNode($rr->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rr->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rr->relatedGuid' data-historyid='$rr->itemGuid' data-status='$rr->relateAs'>Delete</a><br>";
+    			}
+    			
     		}
     	
 //     	}
