@@ -23,7 +23,7 @@ class Pandamp_Core_Hol_Relation
     	//$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
     	$rowsetRelatedItem_r = $tblRelatedItem->fetchAll($where_r);
     	
-    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ISROOT')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     	if (count($rowsetRelatedItem) == 0) {
     		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
@@ -55,7 +55,7 @@ class Pandamp_Core_Hol_Relation
     				if ($rr->relateAs == 'ISROOT' && $rr->relatedGuid == $guid)
     					$d = '[mencabut sebagian]';
     				
-    					$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rr->itemGuid.'/node/'.$this->getNode($rr->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rr->itemGuid,'fixedTitle')."</a>$d&nbsp<a href='javascript:;' class='historynew' data-guid='$rr->relatedGuid' data-historyid='$rr->itemGuid' data-status='$rr->relateAs'>Delete</a><br>";
+//     					$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rr->itemGuid.'/node/'.$this->getNode($rr->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rr->itemGuid,'fixedTitle')."</a>$d&nbsp<a href='javascript:;' class='historynew' data-guid='$rr->relatedGuid' data-historyid='$rr->itemGuid' data-status='$rr->relateAs'>Delete</a><br>";
     			}
     			
     		}
@@ -71,6 +71,9 @@ class Pandamp_Core_Hol_Relation
     		}
     		if ($row->relateAs === "AMEND") {
     			$status = "merubah";
+    		}
+    		if ($row->relateAs === "ISROOT") {
+    			$status = "mencabut sebagian";
     		}
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     		if ($row->relateAs === "AMEND") {
