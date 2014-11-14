@@ -211,7 +211,7 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             $row->valueIntRelation = $valRelation;
             
             
-            if (in_array($as, array('REPEAL','AMEND','ISROOT'))) {
+            if (in_array($as, array('REPEAL','AMEND','ESTABLISH','ISROOT'))) {
             	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
             	$rowVal = $tblRelatedItem->fetchRow("itemGuid='$relatedGuid'");
             	if (!empty($rowVal->valueStringRelation)) 

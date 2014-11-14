@@ -23,7 +23,7 @@ class Pandamp_Core_Hol_Relation
     	//$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
     	$rowsetRelatedItem_r = $tblRelatedItem->fetchAll($where_r);
     	
-    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ISROOT')";
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH','ISROOT')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     	if (count($rowsetRelatedItem) == 0) {
     		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
@@ -55,14 +55,21 @@ class Pandamp_Core_Hol_Relation
 	    		if ($rowsetRelatedItem1->relateAs === "AMEND") {
 	    			$s = "[merubah]";
 	    		}
+	    		if ($rowsetRelatedItem1->relateAs === "ESTABLISH") {
+	    			$s = "[menetapkan]";
+	    		}
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
     		
+    		}
+    		else
+    		{
+    			$s = "[menetapkan]";
     		}
     		
     	}
 //     	else
 //     	{
-    		if ($rowsetRelatedItem_r) {
+    		if (isset($rowsetRelatedItem_r)) {
     			//$s = '[mencabut sebagian]';
     			/*if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
     				$s = '[mencabut sebagian]';*/
@@ -83,23 +90,26 @@ class Pandamp_Core_Hol_Relation
     	if ($rowsetRelatedItem) {
     	foreach ($rowsetRelatedItem as $row) {
     		if ($row->relateAs === "REPEAL") {
-    			$status = "dicabut";
+    			$status = "[dicabut]";
     		}
     		if ($row->relateAs === "AMEND") {
-    			$status = "merubah";
+    			$status = "[merubah]";
     		}
     		if ($row->relateAs === "ISROOT") {
-    			$status = "mencabut sebagian";
+    			$status = "[mencabut sebagian]";
+    		}
+    		if ($row->relateAs === "ESTABLISH") {
+    			$status = "";
     		}
     		$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     		if ($row->relateAs === "AMEND") {
-    			$newh .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
+    			$newh .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
     					$newh .= $this->isroot($row->itemGuid);
     					// 	    		$this->getchild($row->itemGuid);
     		}
     		else
     		{
-    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
     		//     			$this->isroot($row->itemGuid);
     		$newh .= $this->getchild($row->itemGuid);
     		}
@@ -125,6 +135,9 @@ class Pandamp_Core_Hol_Relation
     			}
     							if ($row->relateAs === "AMEND") {
     									$status = "merubah";
+    									}
+    							if ($row->relateAs === "ESTABLISH") {
+    									$status = "menetapkan";
     									}
     									$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row->itemGuid,'fixedTitle');
     									if ($row->relateAs === "AMEND") {
