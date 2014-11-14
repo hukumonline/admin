@@ -44,6 +44,22 @@ class Pandamp_Core_Hol_Relation
     			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     		}
     	}
+    	else
+    	{
+    		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    		$rowsetRelatedItem1 = $tblRelatedItem->fetchRow($where);
+    		if (isset($rowsetRelatedItem1->valueStringRelation)) {
+    	   		if ($rowsetRelatedItem1->relateAs === "REPEAL") {
+    				$s = "[dicabut]";
+	    		}
+	    		if ($rowsetRelatedItem1->relateAs === "AMEND") {
+	    			$s = "[merubah]";
+	    		}
+    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')."</a> ".$s."&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
+    		
+    		}
+    		
+    	}
 //     	else
 //     	{
     		if ($rowsetRelatedItem_r) {
@@ -62,7 +78,7 @@ class Pandamp_Core_Hol_Relation
     	
 //     	}
     	 
-    	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle').$s.'<br>';
+    	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
 
     	if ($rowsetRelatedItem) {
     	foreach ($rowsetRelatedItem as $row) {
@@ -119,7 +135,7 @@ class Pandamp_Core_Hol_Relation
     	}
     	else
     	{
-    		$c .= $sTab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
+    		$c .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
 // 	    		echo $sTab;
     		// 	    		$this->isroot($row->itemGuid);
     		$c .= $this->getchild($row->itemGuid,$level+1);
