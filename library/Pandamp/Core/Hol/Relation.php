@@ -47,7 +47,7 @@ class Pandamp_Core_Hol_Relation
 //     	else
 //     	{
     		if ($rowsetRelatedItem_r) {
-    			$s = '[mencabut sebagian]';
+    			//$s = '[mencabut sebagian]';
     			/*if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
     				$s = '[mencabut sebagian]';*/
     			 

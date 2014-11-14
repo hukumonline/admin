@@ -88,7 +88,7 @@
                     if(confirm ('Are you sure ?')) {
                     	$.ajax({
                     		type:"post"
-                    		,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/delete"
+                    		,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/deletehistory"
                     		,data: "itemGuid="+ elem.attr('data-historyid') + "&relatedGuid="+ elem.attr('data-guid') +"&relateAs="+ elem.attr('data-status')
                     		,beforeSend: function() {
                     			displayLoad();
