@@ -55,7 +55,7 @@ class Pandamp_Core_Hol_Relation
 	    		if ($rowsetRelatedItem1->relateAs === "AMEND") {
 	    			$s = "[merubah]";
 	    		}
-    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')."</a> ".$s."&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
+    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
     		
     		}
     		
