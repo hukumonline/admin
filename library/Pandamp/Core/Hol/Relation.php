@@ -63,7 +63,7 @@ class Pandamp_Core_Hol_Relation
     		}
     		else
     		{
-    			$s = "[menetapkan]";
+//     			$s = "[menetapkan]";
     		}
     		
     	}
