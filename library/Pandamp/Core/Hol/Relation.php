@@ -38,13 +38,15 @@ class Pandamp_Core_Hol_Relation
     		$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
     		if (isset($rowsetRelatedItem->valueStringRelation)) {
     			$where_ro = "valueStringRelation='$rowsetRelatedItem->valueStringRelation' AND relateAs='ISROOT'";
-    			$rowsetRelatedItem_ro = $tblRelatedItem->fetchRow($where_ro);
+    			$rowsetRelatedItem_ro = $tblRelatedItem->fetchAll($where_ro);
     			if ($rowsetRelatedItem_ro) {
-    				if ($rowsetRelatedItem_ro->relateAs == 'ISROOT')
+    				foreach ($rowsetRelatedItem_ro as $ro) {
+    				if ($ro->relateAs == 'ISROOT')
     					$s = '[mencabut sebagian]';
     	
     	
-    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem_ro->itemGuid.'/node/'.$this->getNode($rowsetRelatedItem_ro->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem_ro->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem_ro->relatedGuid' data-historyid='$rowsetRelatedItem_ro->itemGuid' data-status='$rowsetRelatedItem_ro->relateAs'>Delete</a><br>";
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$ro->itemGuid.'/node/'.$this->getNode($ro->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($ro->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$ro->relatedGuid' data-historyid='$ro->itemGuid' data-status='$ro->relateAs'>Delete</a><br>";
+    				}
     			}
     			 
     			$guid = $rowsetRelatedItem->valueStringRelation;
