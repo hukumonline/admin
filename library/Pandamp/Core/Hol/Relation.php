@@ -23,7 +23,7 @@ class Pandamp_Core_Hol_Relation
     	//$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
     	$rowsetRelatedItem_r = $tblRelatedItem->fetchAll($where_r);
     	
-    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH','ISROOT')";
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     	if (count($rowsetRelatedItem) == 0) {
     		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
@@ -42,6 +42,7 @@ class Pandamp_Core_Hol_Relation
     			$guid = $rowsetRelatedItem->valueStringRelation;
     			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
     			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    			$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
     		}
     	}
     	else
@@ -59,17 +60,20 @@ class Pandamp_Core_Hol_Relation
 	    			$s = "[menetapkan]";
 	    		}
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
-    		
+    			$where = "relatedGuid='$rowsetRelatedItem1->relatedGuid' AND relateAs IN ('REPEAL','AMEND')";
+    			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    			 
     		}
     		else
     		{
 //     			$s = "[menetapkan]";
+    			$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
     		}
     		
     	}
 //     	else
 //     	{
-    		if (isset($rowsetRelatedItem_r)) {
+    		if (count($rowsetRelatedItem_r) > 0) {
     			//$s = '[mencabut sebagian]';
     			/*if ($rowsetRelatedItem_r->relateAs == 'ISROOT')
     				$s = '[mencabut sebagian]';*/
@@ -85,7 +89,7 @@ class Pandamp_Core_Hol_Relation
     	
 //     	}
     	 
-    	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
+//     	$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
 
     	if ($rowsetRelatedItem) {
     	foreach ($rowsetRelatedItem as $row) {
