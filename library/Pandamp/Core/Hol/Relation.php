@@ -48,7 +48,7 @@ class Pandamp_Core_Hol_Relation
     	}
     	else
     	{
-    		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ISROOT')";
     		$rowsetRelatedItem1 = $tblRelatedItem->fetchRow($where);
     		if (isset($rowsetRelatedItem1->valueStringRelation)) {
     	   		if ($rowsetRelatedItem1->relateAs === "REPEAL") {
@@ -64,7 +64,7 @@ class Pandamp_Core_Hol_Relation
 //     			$guid = $rowsetRelatedItem1->relatedGuid;
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->valueStringRelation.'/node/'.$this->getNode($rowsetRelatedItem1->valueStringRelation)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->valueStringRelation,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
     			$guid = $rowsetRelatedItem1->valueStringRelation;
-    			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ISROOT')";
     			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     			 
     		}
