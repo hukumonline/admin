@@ -23,7 +23,7 @@ class Pandamp_Core_Hol_Relation
     	//$rowsetRelatedItem_r = $tblRelatedItem->fetchRow($where_r);
     	$rowsetRelatedItem_r = $tblRelatedItem->fetchAll($where_r);
     	
-    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH')";
+    	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH','ISROOT')";
     	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
     	if (count($rowsetRelatedItem) == 0) {
     		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
