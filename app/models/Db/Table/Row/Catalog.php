@@ -213,11 +213,13 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
             
             if (in_array($as, array('REPEAL','AMEND','ESTABLISH','ISROOT'))) {
             	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
-            	$rowVal = $tblRelatedItem->fetchRow("itemGuid='$relatedGuid'");
-            	if (!empty($rowVal->valueStringRelation)) 
-            		$relatedGuid = $rowVal->valueStringRelation;
+            	$rowVal = $tblRelatedItem->fetchRow("itemGuid='$relatedGuid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH','ISROOT')");
+            	if ($rowVal && $rowVal->valueStringRelation) 
+            		$row->valueStringRelation = $rowVal->valueStringRelation;
+            	else
+            		$row->valueStringRelation = $relatedGuid;
             	
-            	$row->valueStringRelation = $relatedGuid;
+            	
             	$row->itemType = "history";
             }
         }
