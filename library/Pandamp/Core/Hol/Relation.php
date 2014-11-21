@@ -32,7 +32,7 @@ class Pandamp_Core_Hol_Relation
     	}
     		 
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ESTABLISH')";
-    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
     	if (count($rowsetRelatedItem) == 0) {
     		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ISROOT')";
     		$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
@@ -51,7 +51,7 @@ class Pandamp_Core_Hol_Relation
     			 
     			$guid = $rowsetRelatedItem->valueStringRelation;
     			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
     			$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
     		}
     		
@@ -152,7 +152,7 @@ class Pandamp_Core_Hol_Relation
     	$c='';
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
     	foreach ($rowsetRelatedItem as $row) {
     		$sTab="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     		for($i=0;$i<$level;$i++)
