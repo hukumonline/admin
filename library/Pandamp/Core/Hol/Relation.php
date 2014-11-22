@@ -51,7 +51,7 @@ class Pandamp_Core_Hol_Relation
     			 
     			$guid = $rowsetRelatedItem->valueStringRelation;
     			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'relatedGuid DESC');
+    			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'itemGuid DESC');
     			$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
     		}
     		
