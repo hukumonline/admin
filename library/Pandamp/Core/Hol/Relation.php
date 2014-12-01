@@ -152,7 +152,7 @@ class Pandamp_Core_Hol_Relation
     	$c='';
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
-    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'itemGuid DESC');
+    	$rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
     	foreach ($rowsetRelatedItem as $row) {
     		$sTab="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     		for($i=0;$i<$level;$i++)
