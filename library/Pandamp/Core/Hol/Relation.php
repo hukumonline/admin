@@ -40,19 +40,31 @@ class Pandamp_Core_Hol_Relation
     			$where_ro = "valueStringRelation='$rowsetRelatedItem->valueStringRelation' AND relateAs='ISROOT'";
     			$rowsetRelatedItem_ro = $tblRelatedItem->fetchAll($where_ro);
     			if ($rowsetRelatedItem_ro) {
+    				$xp=array();
     				foreach ($rowsetRelatedItem_ro as $ro) {
     				if ($ro->relateAs == 'ISROOT')
     					$s = '[mencabut sebagian]';
     	
-    	
+    	$xp[]=$ro->itemGuid;
     				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$ro->itemGuid.'/node/'.$this->getNode($ro->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($ro->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$ro->relatedGuid' data-historyid='$ro->itemGuid' data-status='$ro->relateAs'>Delete</a><br>";
     				}
     			}
     			 
+    			if (in_array($rowsetRelatedItem->relatedGuid, $xp)) {
+    				$guid = $rowsetRelatedItem->relatedGuid;
+    				$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem->valueStringRelation,'fixedTitle')." ".$s."<br>";
+    				$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
+    				$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'itemGuid DESC');
+    				
+    				
+    			}
+    			else 
+    			{
     			$guid = $rowsetRelatedItem->valueStringRelation;
     			$where = "relatedGuid='$guid' AND relateAs IN ('REPEAL','AMEND')";
     			$rowsetRelatedItem = $tblRelatedItem->fetchAll($where,'itemGuid DESC');
     			$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
+    			}
     		}
     		
     	}
