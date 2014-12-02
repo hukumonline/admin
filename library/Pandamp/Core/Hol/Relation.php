@@ -104,7 +104,8 @@ class Pandamp_Core_Hol_Relation
     				
     				$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')." ".$s."<br>";
     			} else {
-	    			$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
+    				if ($rowsetRelatedItem2->valueStringRelation !== $guid)
+	    				$newh .= App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle')." ".$s."<br>";
 	    			
 	    			if (isset($rowsetRelatedItem2->valueStringRelation)) {
 	    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem2->valueStringRelation.'/node/'.$this->getNode($rowsetRelatedItem2->valueStringRelation)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem2->valueStringRelation,'fixedTitle')."</a>&nbsp;[mencabut sebagian]&nbsp;<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem2->itemGuid' data-historyid='$rowsetRelatedItem2->relatedGuid' data-status='$rowsetRelatedItem2->relateAs'>Delete</a><br>";
