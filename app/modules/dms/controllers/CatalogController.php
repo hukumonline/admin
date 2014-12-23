@@ -162,6 +162,10 @@ class Dms_CatalogController extends Zend_Controller_Action
         $w7 = new Dms_Relation_Regulation($catalogGuid, $node);
         $this->view->widgetImplementingRegulation = $w7;
 
+        require_once($modDir.'/components/Relation/Iregulation.php');
+        $w10 = new Dms_Relation_Iregulation($catalogGuid, $node);
+        $this->view->widgetIregulation = $w10;
+
         require_once($modDir.'/components/Relation/Document.php');
         $w8 = new Dms_Relation_Document($catalogGuid, $node);
         $this->view->widgetFiles = $w8;

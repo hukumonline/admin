@@ -483,6 +483,15 @@ class Pandamp_Core_Hol_Relation
 
         return $rowsetRelatedItem;
     }
+    public function getIregulation($catalogGuid)
+    {
+        $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+
+        $where = "relatedGuid='$catalogGuid' AND relateAs='RELATED_PP'";
+        $rowsetRelatedItem = $tblRelatedItem->fetchAll($where);
+
+        return $rowsetRelatedItem;
+    }
     public function getFiles($catalogGuid)
     {
         $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
