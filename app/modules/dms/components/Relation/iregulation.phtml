@@ -1,0 +1,13 @@
+<?php if (count($this->rowsetRegulation) > 0) { ?>
+<fieldset>
+    <legend>PERATURAN PELAKSANA</legend>
+    <ul id="ppline">
+        <?php foreach ($this->rowsetRegulation as $data) { ?>
+        <li>
+            <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $data->itemGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></a><br>
+            <?php echo $this->getCatalogTitle($data->itemGuid,'fixedSubTitle'); ?>
+        </li>
+        <?php } ?>
+    </ul>
+</fieldset>
+<?php } ?>
