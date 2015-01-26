@@ -356,6 +356,7 @@ class Pandamp_Core_Hol_Catalog
             {
                     $file = $files['uploadedFile'.$x];
                     //$this->checkTitle($aDataCatalog['fixedTitle'.$x]);
+                    $this->checkSize($file['size'],$aDataCatalog['fixedTitle'.$x]);
             }
 
             $type = ($aDataCatalog['fixedType'.$x])? $aDataCatalog['fixedType'.$x] : '';
@@ -563,6 +564,14 @@ class Pandamp_Core_Hol_Catalog
 
         $rowCatalogAttribute->value = $value;
         $rowCatalogAttribute->save();
+    }
+    private function checkSize($size,$title)
+    {
+    	// If the file is larger than 300kb
+    	if ($size > 300000) {
+    		echo "[$title] Sorry, your file is too large.";
+    		exit();
+    	}
     }
     private function checkTitle($title)
     {
