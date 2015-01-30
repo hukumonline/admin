@@ -356,17 +356,19 @@ class Pandamp_Core_Hol_Catalog
             {
                     $file = $files['uploadedFile'.$x];
                     //$this->checkTitle($aDataCatalog['fixedTitle'.$x]);
-                    $this->checkSize($file['size'],$aDataCatalog['fixedTitle'.$x]);
+                    
             }
 
             $type = ($aDataCatalog['fixedType'.$x])? $aDataCatalog['fixedType'.$x] : '';
 
-            if ($type == 'file')
+            if ($type == 'file') {
                     $relatedType = 'RELATED_FILE';
-            elseif ($type == 'image')
+            } elseif ($type == 'image') {
                     $relatedType = 'RELATED_IMAGE';
-            elseif ($type == 'video')
+                    $this->checkSize($file['size'],$aDataCatalog['fixedTitle'.$x]);
+            } elseif ($type == 'video') {
                     $relatedType = 'RELATED_VIDEO';
+            }
 
             $tblCatalog = new App_Model_Db_Table_Catalog();
 
