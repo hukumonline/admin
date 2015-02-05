@@ -456,7 +456,7 @@ class Pandamp_Core_Hol_Catalog
                                     {
                                         move_uploaded_file($files['uploadedFile'.$x]['tmp_name'], $target_path. DIRECTORY_SEPARATOR . $catalogGuid . "." .$ext);
                                         //chmod($target_path,0644);
-                                        Pandamp_Lib_Formater::createthumb($thumb,$target_path.'/tn_'.$catalogGuid.".".$ext,130,130);
+                                        Pandamp_Lib_Formater::createthumb($thumb,$target_path.'/tn_'.$catalogGuid.".".$ext,275,160); // sebelumnya 130x130
                                     }
                                     else
                                     {
@@ -464,13 +464,13 @@ class Pandamp_Core_Hol_Catalog
                                         {
                                             move_uploaded_file($files['uploadedFile'.$x]['tmp_name'], $target_path. DIRECTORY_SEPARATOR . $catalogGuid . "." .$ext);
                                             //chmod($target_path,0644);
-                                            Pandamp_Lib_Formater::createthumb($thumb,$target_path.'/tn_'.$catalogGuid.".".$ext,130,130);
+                                            Pandamp_Lib_Formater::createthumb($thumb,$target_path.'/tn_'.$catalogGuid.".".$ext,275,160);
                                         }
                                         else
                                         {
                                             move_uploaded_file($files['uploadedFile'.$x]['tmp_name'], $sDir.DIRECTORY_SEPARATOR.$catalogGuid.".".$ext);
                                             //chmod($target_path,0644);
-                                            Pandamp_Lib_Formater::createthumb($thumb_mode,$sDir.'/tn_'.$catalogGuid.".".$ext,130,130);
+                                            Pandamp_Lib_Formater::createthumb($thumb_mode,$sDir.'/tn_'.$catalogGuid.".".$ext,275,160);
                                         }
                                     }
 
