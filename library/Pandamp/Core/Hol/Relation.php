@@ -37,7 +37,7 @@ class Pandamp_Core_Hol_Relation
     		$where = "itemGuid='$guid' AND relateAs IN ('REPEAL','AMEND','ISROOT')";
     		$rowsetRelatedItem = $tblRelatedItem->fetchRow($where);
     		if (isset($rowsetRelatedItem->valueStringRelation)) {
-    			$where_ro = "valueStringRelation='$rowsetRelatedItem->valueStringRelation' AND relateAs='ISROOT'";
+    			$where_ro = "valueStringRelation='$rowsetRelatedItem->valueStringRelation'";
     			$rowsetRelatedItem_ro = $tblRelatedItem->fetchAll($where_ro);
     			if ($rowsetRelatedItem_ro) {
     				$xp=array();
