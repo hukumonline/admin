@@ -87,7 +87,7 @@ class Pandamp_Core_Hol_Relation
 //     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->relatedGuid.'/node/'.$this->getNode($rowsetRelatedItem1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->relatedGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
 //     			$guid = $rowsetRelatedItem1->relatedGuid;
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rowsetRelatedItem1->valueStringRelation.'/node/'.$this->getNode($rowsetRelatedItem1->valueStringRelation)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowsetRelatedItem1->valueStringRelation,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rowsetRelatedItem1->itemGuid' data-historyid='$rowsetRelatedItem1->relatedGuid' data-status='$rowsetRelatedItem1->relateAs'>Delete</a><br>";
-    			
+    			echo '<pre>';print_r($rowsetRelatedItem);echo '</pre>';die;
     			foreach ($rowsetRelatedItem as $rr) {
     			
     				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$rr->itemGuid.'/node/'.$this->getNode($rr->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rr->itemGuid,'fixedTitle')."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$rr->relatedGuid' data-historyid='$rr->itemGuid' data-status='$rr->relateAs'>Delete</a><br>";
