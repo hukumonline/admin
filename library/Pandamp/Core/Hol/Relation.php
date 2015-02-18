@@ -48,7 +48,7 @@ class Pandamp_Core_Hol_Relation
     		{
     			foreach ($row2 as $row2_in1) 
     			{
-    				if ($row2_in1->relatedGuid == "$guid") { 
+    				if ($row2_in1->relatedGuid == $row1->relatedGuid) { 
     					continue;
     				} else { 
     					
