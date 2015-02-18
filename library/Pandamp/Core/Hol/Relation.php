@@ -21,7 +21,7 @@ class Pandamp_Core_Hol_Relation
     	
     	// mencari isroot dahulu
     	$row1 = $tblRelatedItem->fetchRow("relatedGuid='$guid' AND itemType='history'");
-    	if (isset($row1) && $row1->relateAs == 'ISROOT') {
+    	/*if (isset($row1) && $row1->relateAs == 'ISROOT') {
     		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->itemGuid.'/node/'.$this->getNode($row1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->relatedGuid,'fixedTitle')
     		."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
     	}
@@ -38,7 +38,7 @@ class Pandamp_Core_Hol_Relation
     		}
     		
     		
-    	}
+    	}*/
     	
     	
     	if (isset($row1) && isset($row1->valueStringRelation))
@@ -52,15 +52,15 @@ class Pandamp_Core_Hol_Relation
     					continue;
     				} else { 
     					
-    					$status = $this->getStatusHistory($row2_in1->itemGuid, $row2_in1->relatedGuid);
+    					//$status = $this->getStatusHistory($row2_in1->itemGuid, $row2_in1->relatedGuid);
     					
-	    				if ($status === "REPEAL") {
+	    				if ($row2_in1->relateAs === "REPEAL") {
 	    					$status = "[dicabut]";
 	    				}
-	    				if ($status === "AMEND") {
+	    				if ($row2_in1->relateAs === "AMEND") {
 	    					$status = "[merubah]";
 	    				}
-	    				if ($status === "ESTABLISH") {
+	    				if ($row2_in1->relateAs === "ESTABLISH") {
 	    					$status = "[menetapkan]";
 	    				}
 	    				
@@ -68,7 +68,7 @@ class Pandamp_Core_Hol_Relation
 	    				
     					$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->itemGuid.'/node/'.$this->getNode($row2_in1->itemGuid)."'>$title</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row2_in1->relatedGuid' data-historyid='$row2_in1->itemGuid' data-status='$row2_in1->relateAs'>Delete</a><br>";
 	    				
-	    				$newh .= $this->getchild($row2_in1->itemGuid);
+	    				//$newh .= $this->getchild($row2_in1->itemGuid);
     				}
     			}
     			
