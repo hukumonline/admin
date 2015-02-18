@@ -50,8 +50,8 @@ class Pandamp_Core_Hol_Relation
     		{
     			foreach ($row2 as $row2_in1) 
     			{
-    				if (isset($guidRoot))
-    					if ($row2_in1->itemGuid == "$guidRoot") continue;
+//     				if (isset($guidRoot))
+//     					if ($row2_in1->itemGuid == "$guidRoot") continue;
     					
    					//$status = $this->getStatusHistory($row2_in1->itemGuid, $row2_in1->relatedGuid);
     					
