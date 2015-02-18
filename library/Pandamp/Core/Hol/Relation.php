@@ -36,7 +36,7 @@ class Pandamp_Core_Hol_Relation
     				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1_in1->itemGuid.'/node/'.$this->getNode($row1_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
     				."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row1_in1->relatedGuid' data-historyid='$row1_in1->itemGuid' data-status='$row1_in1->relateAs'>Delete</a><br>";
     			}
-    			else if ($row1->valueStringRelation == $row1->relatedGuid)
+    			else
     			{
     				$guidRoot = $row1->valueStringRelation;
     				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->relatedGuid.'/node/'.$this->getNode($row1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
