@@ -95,6 +95,83 @@ class Pandamp_Core_Hol_Relation
     		
     	}
     	
+    	$row2 = $tblRelatedItem->fetchRow("itemGuid='$guid' AND itemType='history'");
+    	if (isset($row2) && $row2->relateAs == 'ISROOT') {
+    		$guidRoot = $row2->relatedGuid;
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2->itemGuid.'/node/'.$this->getNode($row2->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
+    		."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row2->relatedGuid' data-historyid='$row2->itemGuid' data-status='$row2->relateAs'>Delete</a><br>";
+    		
+    	}
+    	else
+    	{
+    		if (isset($row2) && isset($row2->valueStringRelation))
+    		{
+    			$row2_in1 = $tblRelatedItem->fetchRow("valueStringRelation='$row2->valueStringRelation'");
+    			if (isset($row2_in1) && $row2_in1->relateAs == 'ISROOT') {
+    				$guidRoot = $row2_in1->relatedGuid;
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->itemGuid.'/node/'.$this->getNode($row2_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
+    				."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row2_in1->relatedGuid' data-historyid='$row2_in1->itemGuid' data-status='$row2_in1->relateAs'>Delete</a><br>";
+    			}
+    			else if (isset($row2_in1) && $row2_in1->relateAs !== 'ISROOT')
+    			{
+	    			$guidRoot = $row2_in1->relatedGuid;
+	    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->itemGuid.'/node/'.$this->getNode($row2_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
+	    			."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row2_in1->relatedGuid' data-historyid='$row2_in1->itemGuid' data-status='$row2_in1->relateAs'>Delete</a><br>";
+    			}
+    			 
+    		}
+    	
+    	
+    	}
+    	
+    	if (isset($row2) && isset($row2->valueStringRelation))
+    	{
+    		$row3 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'",'itemGuid DESC');
+    		if ($row3)
+    		{
+    			foreach ($row3 as $row3_in2)
+    			{
+    				//$status = $this->getStatusHistory($row2_in1->itemGuid, $row2_in1->relatedGuid);
+    					
+    				if ($row3_in2->relateAs === "ISROOT") {
+    					$status = "[mencabut sebagian]";
+    				}
+    				if ($row3_in2->relateAs === "REPEAL") {
+    					$status = "[dicabut]";
+    				}
+    				if ($row3_in2->relateAs === "AMEND") {
+    					$status = "[merubah]";
+    				}
+    				if ($row3_in2->relateAs === "ESTABLISH") {
+    					$status = "[menetapkan]";
+    				}
+    	
+    				$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row3_in2->itemGuid,'fixedTitle');
+    				 
+    				if (isset($guidRoot)) {
+    					if ($row3_in2->itemGuid == "$guidRoot") {
+    						$intitle = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row3_in2->relatedGuid,'fixedTitle');
+    						$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row3_in2->relatedGuid.'/node/'.$this->getNode($row3_in2->relatedGuid)."'>$intitle</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row3_in2->relatedGuid' data-historyid='$row3_in2->itemGuid' data-status='$row3_in2->relateAs'>Delete</a><br>";
+    					}
+    					else
+    						$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row3_in2->itemGuid.'/node/'.$this->getNode($row3_in2->itemGuid)."'>$title</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row3_in2->relatedGuid' data-historyid='$row3_in2->itemGuid' data-status='$row3_in2->relateAs'>Delete</a><br>";
+    				}
+    				else
+    				{
+    	
+    					$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row3_in2->itemGuid.'/node/'.$this->getNode($row3_in2->itemGuid)."'>$title</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row3_in2->relatedGuid' data-historyid='$row3_in2->itemGuid' data-status='$row3_in2->relateAs'>Delete</a><br>";
+    	
+    					//$newh .= $this->getchild($row2_in1->itemGuid);
+    				}
+    	
+    			}
+    			 
+    		}
+    	
+    	}
+    			 
+    			 
+    	
     	return $newh;
     }
 
