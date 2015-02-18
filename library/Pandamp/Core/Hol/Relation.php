@@ -12,8 +12,65 @@
 class Pandamp_Core_Hol_Relation
 {
     private $catalogGuid;
-
+    
     public function getHistorynew($guid,$node)
+    {
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	
+    	$newh = '';
+    	
+    	// mencari isroot dahulu
+    	$row1 = $tblRelatedItem->fetchRow("relatedGuid='$guid'");
+    	if (isset($row1) && $row1->relateAs == 'ISROOT') {
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->itemGuid.'/node/'.$this->getNode($row1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->itemGuid,'fixedTitle')
+    		."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
+    	}
+    	else
+    	{
+    		if (isset($row1) && isset($row1->valueStringRelation))
+    		{
+    			$row1_in1 = $tblRelatedItem->fetchRow("valueStringRelation='$row1->valueStringRelation' AND relateAs='ISROOT'");
+    			if (isset($row1_in1) && $row1_in1->relateAs == 'ISROOT') {
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1_in1->itemGuid.'/node/'.$this->getNode($row1_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1_in1->itemGuid,'fixedTitle')
+    				."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row1_in1->relatedGuid' data-historyid='$row1_in1->itemGuid' data-status='$row1_in1->relateAs'>Delete</a><br>";
+    			}
+    			
+    		}
+    		
+    		
+    	}
+    	
+    	
+    	if (isset($row1) && isset($row1->valueStringRelation))
+    	{
+    		$row2 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'");
+    		if ($row2) 
+    		{
+    			foreach ($row2 as $row2_in1) 
+    			{
+    				if ($row2_in1->relateAs === "REPEAL") {
+    					$status = "[dicabut]";
+    				}
+    				if ($row2_in1->relateAs === "AMEND") {
+    					$status = "[merubah]";
+    				}
+    				if ($row2_in1->relateAs === "ESTABLISH") {
+    					$status = "[menetapkan]";
+    				}
+    				
+    				$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row2_in1->itemGuid,'fixedTitle');
+    				
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->itemGuid.'/node/'.$this->getNode($row2_in1->itemGuid)."'>$title</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row2_in1->relatedGuid' data-historyid='$row2_in1->itemGuid' data-status='$row2_in1->relateAs'>Delete</a><br>";
+    				$newh .= $this->getchild($row2_in1->itemGuid);
+    			}
+    			
+    		}
+    		
+    	}
+    	
+    }
+
+    public function getHistorynew_($guid,$node)
     {
     	$newh = $s = '';
     	
