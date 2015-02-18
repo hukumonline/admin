@@ -65,12 +65,10 @@ class Pandamp_Core_Hol_Relation
     					$status = "[menetapkan]";
     				}
 	    				
-    			    if (isset($guidRoot)) {
-    					if ($row2_in1->itemGuid == "$guidRoot") {
+    					if ($row2_in1->itemGuid == "$guid") {
     						$intitle = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row2_in1->relatedGuid,'fixedTitle');
     						$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->relatedGuid.'/node/'.$this->getNode($row2_in1->relatedGuid)."'>$intitle</a> $status&nbsp<a href='javascript:;' class='historynew' data-guid='$row2_in1->relatedGuid' data-historyid='$row2_in1->itemGuid' data-status='$row2_in1->relateAs'>Delete</a><br>";
     					}
-    				}
     				else 
     				{
 	    				$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row2_in1->itemGuid,'fixedTitle');
