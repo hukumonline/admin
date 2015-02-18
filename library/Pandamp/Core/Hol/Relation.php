@@ -277,7 +277,7 @@ class Pandamp_Core_Hol_Relation
     		$c .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row->itemGuid.'/node/'.$this->getNode($row->itemGuid)."'>$title</a> [".$status."]&nbsp<a href='javascript:;' class='historynew' data-guid='$row->relatedGuid' data-historyid='$row->itemGuid' data-status='$row->relateAs'>Delete</a><br>";
 // 	    		echo $sTab;
     		// 	    		$this->isroot($row->itemGuid);
-    		$c .= $this->getchild($row->itemGuid,$level+1);
+//     		$c .= $this->getchild($row->itemGuid,$level+1);
     	}
     	}
     	
