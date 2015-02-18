@@ -58,16 +58,16 @@ class Pandamp_Core_Hol_Relation
     			{
    					//$status = $this->getStatusHistory($row2_in1->itemGuid, $row2_in1->relatedGuid);
     					
-    				if ($row2_in1->relateAs === "ISROOT") {
+    				if ($row2_in1->relateAs == "ISROOT") {
     					$status = "[mencabut sebagian]";
     				}
-    				if ($row2_in1->relateAs === "REPEAL") {
+    				if ($row2_in1->relateAs == "REPEAL") {
     					$status = "[dicabut]";
     				}
-    				if ($row2_in1->relateAs === "AMEND") {
+    				if ($row2_in1->relateAs == "AMEND") {
     					$status = "[merubah]";
     				}
-    				if ($row2_in1->relateAs === "ESTABLISH") {
+    				if ($row2_in1->relateAs == "ESTABLISH") {
     					$status = "[menetapkan]";
     				}
     				
@@ -90,7 +90,7 @@ class Pandamp_Core_Hol_Relation
     				}
     				
     				
-    				if ($row2_in1->relateAs === "AMEND") {
+    				if ($row2_in1->relateAs == "AMEND") {
     					$newh .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$newh;
     				}
     				
