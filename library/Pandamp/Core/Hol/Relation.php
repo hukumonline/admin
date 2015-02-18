@@ -94,6 +94,8 @@ class Pandamp_Core_Hol_Relation
     		}
     		
     	}
+    	else
+    	{
     	
     	$row2 = $tblRelatedItem->fetchRow("itemGuid='$guid' AND itemType='history'");
     	if (isset($row2) && $row2->relateAs == 'ISROOT') {
@@ -171,6 +173,7 @@ class Pandamp_Core_Hol_Relation
     	}
     			 
     			 
+    	}
     	
     	return $newh;
     }
