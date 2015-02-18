@@ -30,7 +30,7 @@ class Pandamp_Core_Hol_Relation
     	{
     		if (isset($row1) && isset($row1->valueStringRelation))
     		{
-    			$row1_in1 = $tblRelatedItem->fetchRow("valueStringRelation='$row1->valueStringRelation' AND relateAs='ISROOT'");
+    			$row1_in1 = $tblRelatedItem->fetchRow("valueStringRelation='$row1->valueStringRelation'");
     			if (isset($row1_in1) && $row1_in1->relateAs == 'ISROOT') {
     				$guidRoot = $row1_in1->relatedGuid;
     				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1_in1->itemGuid.'/node/'.$this->getNode($row1_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
