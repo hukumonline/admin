@@ -22,7 +22,8 @@ class Pandamp_Core_Hol_Relation
     	// mencari isroot dahulu
     	$row1 = $tblRelatedItem->fetchRow("relatedGuid='$guid' AND itemType='history'");
     	if (isset($row1) && $row1->relateAs == 'ISROOT') {
-    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->itemGuid.'/node/'.$this->getNode($row1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->relatedGuid,'fixedTitle')
+    		$guidRoot = $row1->relatedGuid;
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->itemGuid.'/node/'.$this->getNode($row1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
     		."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
     	}
     	else
@@ -31,7 +32,8 @@ class Pandamp_Core_Hol_Relation
     		{
     			$row1_in1 = $tblRelatedItem->fetchRow("valueStringRelation='$row1->valueStringRelation' AND relateAs='ISROOT'");
     			if (isset($row1_in1) && $row1_in1->relateAs == 'ISROOT') {
-    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1_in1->itemGuid.'/node/'.$this->getNode($row1_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1_in1->relatedGuid,'fixedTitle')
+    				$guidRoot = $row1_in1->relatedGuid;
+    				$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1_in1->itemGuid.'/node/'.$this->getNode($row1_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
     				."</a>&nbsp[Mencabut Sebagian]&nbsp<a href='javascript:;' class='historynew' data-guid='$row1_in1->relatedGuid' data-historyid='$row1_in1->itemGuid' data-status='$row1_in1->relateAs'>Delete</a><br>";
     			}
     			
@@ -48,7 +50,7 @@ class Pandamp_Core_Hol_Relation
     		{
     			foreach ($row2 as $row2_in1) 
     			{
-    				if ($row2_in1->itemGuid == "$guid") { 
+    				if ($row2_in1->itemGuid == "$guidRoot") { 
     					continue;
     				} else { 
     					
