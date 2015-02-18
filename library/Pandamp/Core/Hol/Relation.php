@@ -116,8 +116,8 @@ class Pandamp_Core_Hol_Relation
     			}
     			else if (isset($row2_in1) && $row2_in1->relateAs !== 'ISROOT')
     			{
-	    			$guidRoot = $row2_in1->relatedGuid;
-	    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->itemGuid.'/node/'.$this->getNode($row2_in1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
+	    			$guidRoot = $row2_in1->valueStringRelation;
+	    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2_in1->relatedGuid.'/node/'.$this->getNode($row2_in1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
 	    			."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row2_in1->relatedGuid' data-historyid='$row2_in1->itemGuid' data-status='$row2_in1->relateAs'>Delete</a><br>";
     			}
     			 
