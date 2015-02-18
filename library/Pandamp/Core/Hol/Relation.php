@@ -20,7 +20,7 @@ class Pandamp_Core_Hol_Relation
     	$newh = '';
     	
     	// mencari isroot dahulu
-    	$row1 = $tblRelatedItem->fetchRow("relatedGuid='$guid' AND itemType='history'");
+    	$row1 = $tblRelatedItem->fetchRow("relatedGuid='$guid' AND itemType='history'",'itemGuid DESC');
     	if (isset($row1) && $row1->relateAs == 'ISROOT') {
     		$guidRoot = $row1->relatedGuid;
     		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->itemGuid.'/node/'.$this->getNode($row1->itemGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
