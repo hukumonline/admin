@@ -126,7 +126,7 @@ class Pandamp_Core_Hol_Relation
     	
     	if (isset($row2) && isset($row2->valueStringRelation))
     	{
-    		$row3 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'",'itemGuid DESC');
+    		$row3 = $tblRelatedItem->fetchAll("valueStringRelation='$row2->valueStringRelation'",'itemGuid DESC');
     		if ($row3)
     		{
     			foreach ($row3 as $row3_in2)
