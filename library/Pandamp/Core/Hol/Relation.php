@@ -68,6 +68,7 @@ class Pandamp_Core_Hol_Relation
     		
     	}
     	
+    	return $newh;
     }
 
     public function getHistorynew_($guid,$node)
