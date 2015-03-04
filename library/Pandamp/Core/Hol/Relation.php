@@ -54,7 +54,7 @@ class Pandamp_Core_Hol_Relation
     	
     	if (isset($row1) && isset($row1->valueStringRelation))
     	{
-    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->relatedGuid.'/node/'.$this->getNode($row1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
+    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->relatedGuid.'/node/'.$this->getNode($row1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->valueStringRelation,'fixedTitle')
     		."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
     		
     		$row2 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'");
