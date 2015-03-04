@@ -54,9 +54,6 @@ class Pandamp_Core_Hol_Relation
     	
     	if (isset($row1) && isset($row1->valueStringRelation))
     	{
-    		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->relatedGuid.'/node/'.$this->getNode($row1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->valueStringRelation,'fixedTitle')
-    		."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
-    		
     		$row2 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'");
     		if ($row2) 
     		{
@@ -122,9 +119,9 @@ class Pandamp_Core_Hol_Relation
     			else
     			{*/
     				//if ($row2->valueStringRelation !== $row2->relatedGuid) {
-	    			$guidRoot = $row2->valueStringRelation;
-	    			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2->relatedGuid.'/node/'.$this->getNode($row2->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
-	    			."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row2->relatedGuid' data-historyid='$row2->itemGuid' data-status='$row2->relateAs'>Delete</a><br>";
+	    			//$guidRoot = $row2->valueStringRelation;
+	    			//$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2->relatedGuid.'/node/'.$this->getNode($row2->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidRoot,'fixedTitle')
+	    			//."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row2->relatedGuid' data-historyid='$row2->itemGuid' data-status='$row2->relateAs'>Delete</a><br>";
     				//}
     			//}
     			 
