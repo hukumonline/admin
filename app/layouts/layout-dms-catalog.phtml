@@ -82,6 +82,27 @@
                      });
                 });
 
+                $('.deleterelation').click(function(e){
+                	e.preventDefault();
+                    var elem = $(this);
+                    if(confirm ('Are you sure ?')) {
+                    	$.ajax({
+                    		type:"post"
+                    		,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/delete"
+                    		,data: "itemGuid="+ elem.attr('data-itemguid') + "&relatedGuid="+ elem.attr('data-relatedguid') +"&relateAs="+ elem.attr('data-relateas')
+                    		,beforeSend: function() {
+                    			displayLoad();
+                    		}
+                			,success: function() {
+                				elem.html("Data has been deleted successfully");
+                				setTimeout(function() {
+               					 location.reload()
+               					  },1000);
+                			}		
+                    	});    
+                    }
+                });
+
                 $('.historynew').click(function(e){
                 	e.preventDefault();
                     var elem = $(this);

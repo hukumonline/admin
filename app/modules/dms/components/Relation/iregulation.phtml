@@ -6,6 +6,7 @@
         <li>
             <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $data->itemGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></a><br>
             <?php echo $this->getCatalogTitle($data->itemGuid,'fixedSubTitle'); ?>
+            - <a href="javascript:;" class="deleterelation" data-itemguid="<?php echo $data->itemGuid; ?>" data-relatedguid="<?php echo $data->relatedGuid; ?>" data-relateas="<?php echo $data->relateAs; ?>">Delete</a>
         </li>
         <?php } ?>
     </ul>
