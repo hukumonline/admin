@@ -24,6 +24,12 @@ class Pandamp_Core_Hol_Catalog
         else 
         	$title 	= $aData['fixedTitle'];
      
+
+        $setsticky = false;
+        $sticky = $aData['stickyCategory'];
+        if ($sticky == 1) {
+        	$setsticky = true;
+        }
         
         $slug = Pandamp_Utility_String::removeSign($title, '-', true);
         	
@@ -44,7 +50,7 @@ class Pandamp_Core_Hol_Catalog
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))?$aData['expiredDate']:$rowCatalog->expiredDate;
             $rowCatalog->status = (isset($aData['status']))?$aData['status']:$rowCatalog->status;
             $rowCatalog->price = (isset($aData['price']))?$aData['price']:$rowCatalog->price;
-
+            $rowCatalog->sticky = (int)$setsticky;
         }
         else
         {
@@ -62,6 +68,7 @@ class Pandamp_Core_Hol_Catalog
             $rowCatalog->deletedDate = '0000-00-00 00:00:00';
             $rowCatalog->status = (isset($aData['status']))?$aData['status']:0;
             $rowCatalog->price = (isset($aData['price']))?$aData['price']:0;
+            $rowCatalog->sticky = (int)$setsticky;
         }
         try
         {
