@@ -69,13 +69,13 @@ class Pandamp_Core_Hol_Relation
    					$status = $this->getStatusHistory($relatedrow[1], $row1->valueStringRelation);
    					
    					if ($status->relateAs == "AMEND") {
-   						$s = "Merubah";
+   						$s = "Dirubah";
    					}
    					if ($status->relateAs == "REPEAL") {
-   						$s = "Mencabut";
+   						$s = "Dicabut";
    					}	
    					if ($status->relateAs == "ISROOT") {
-   						$s = "Mencabut Sebagian";
+   						$s = "Dicabut Sebagian";
    					}	
 	    				
     			    /*if (isset($guidRoot)) {
@@ -150,13 +150,13 @@ class Pandamp_Core_Hol_Relation
    					$status = $this->getStatusHistory($relatedrow[1], $row2->valueStringRelation);
    					
    					if ($status->relateAs == "AMEND") {
-   						$s = "Merubah";
+   						$s = "Dirubah";
    					}
    					if ($status->relateAs == "REPEAL") {
-   						$s = "Mencabut";
+   						$s = "Dicabut";
    					}
    					if ($status->relateAs == "ISROOT") {
-   						$s = "Mencabut Sebagian";
+   						$s = "Dicabut Sebagian";
    					}	
 	    				
     			    /*if (isset($guidRoot)) {
