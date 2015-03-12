@@ -619,6 +619,10 @@ class Dms_CatalogController extends Zend_Controller_Action
 	        $id	 = $Bpm->save($aData);
 	        
             if ($id) {
+            	$gen = new Pandamp_Form_Helper_CatalogInputGenerator();
+            	$aRender = $gen->generateFormEdit($id);
+            	$this->view->aRenderedAttributes = $aRender;
+            	
             	$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($id);
 	            $message = "Data was successfully saved.";
 				$this->_helper->getHelper('FlashMessenger')

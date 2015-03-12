@@ -134,8 +134,8 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 		$aBaseAttributes['guid']['description'] = '';
 		$aBaseAttributes['guid']['form'] = "<input type='hidden' name='guid' id='guid' value='$rowCatalog->guid'>";
 		$checked = ($rowCatalog->sticky == 1) ? 'checked="checked"' : '';
-        $aBaseAttributes['stickyCategory']['form'] = '';
-        $aBaseAttributes['stickyCategory']['description'] = "<input type=\"checkbox\" name=\"stickyCategory\" value=\"1\" $checked />&nbsp;Set this article sticky";
+        $aBaseAttributes['stickyCategory']['form'] = "<input type=\"checkbox\" name=\"stickyCategory\" value=\"1\" $checked />&nbsp;<b>Set this article sticky</b>";
+        $aBaseAttributes['stickyCategory']['description'] = "";
 		$aBaseAttributes['shortTitle']['description'] = 'shortTitle';
 		$aBaseAttributes['shortTitle']['form'] = "<textarea name='shortTitle' id='shortTitle' rows='1'' cols='50'>$rowCatalog->shortTitle</textarea>";
 		$aBaseAttributes['profileGuid']['description'] = 'Profile';

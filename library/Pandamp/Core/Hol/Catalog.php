@@ -26,7 +26,7 @@ class Pandamp_Core_Hol_Catalog
      
 
         $setsticky = false;
-        $sticky = $aData['stickyCategory'];
+        $sticky = (isset($aData['stickyCategory']) && !empty($aData['stickyCategory']))? $aData['stickyCategory'] : 0;
         if ($sticky == 1) {
         	$setsticky = true;
         }
