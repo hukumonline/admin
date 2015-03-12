@@ -54,14 +54,25 @@ class Pandamp_Core_Hol_Relation
     	
     	if (isset($row1) && isset($row1->valueStringRelation))
     	{
+    		if ($row1->relateAs == "AMEND") {
+    			$row1Status = "Dirubah";
+    		}
+    		if ($row1->relateAs == "REPEAL") {
+    			$row1Status = "Dicabut";
+    		}
+    		if ($row1->relateAs == "ISROOT") {
+    			$row1Status = "Dicabut Sebagian";
+    		}
+    		
     		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->relatedGuid.'/node/'.$this->getNode($row1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->valueStringRelation,'fixedTitle')
-    		."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
+    		."</a>&nbsp;$row1Status&nbsp;<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
     		
     		$row2 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'");
     		if ($row2) 
     		{
     			$findRow = $this->findperaturanyear($row2->toArray());
-    			
+    			$numFrw = count($findRow) - 1;
+    			$tab = "";
     			for ($d=0; $d<count($findRow); $d++) 
     			{
     				$relatedrow = $findRow[$d];
@@ -69,13 +80,13 @@ class Pandamp_Core_Hol_Relation
    					$status = $this->getStatusHistory($relatedrow[1], $row1->valueStringRelation);
    					
    					if ($status->relateAs == "AMEND") {
-   						$s = "Dirubah";
+   						$s = "Merubah";
    					}
    					if ($status->relateAs == "REPEAL") {
-   						$s = "Dicabut";
+   						$s = "Mencabut";
    					}	
    					if ($status->relateAs == "ISROOT") {
-   						$s = "Dicabut Sebagian";
+   						$s = "Mencabut Sebagian";
    					}	
 	    				
     			    /*if (isset($guidRoot)) {
@@ -88,8 +99,20 @@ class Pandamp_Core_Hol_Relation
     				}
     				else 
     				{*/
-		    				
-	   					$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a> $s&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
+   					
+   						if ($status->relateAs == "AMEND") 
+   						{ 
+   							$tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; 
+   						}
+   						else
+   							$tab = "";
+   					
+   					
+   						if ($d < $numFrw)
+   							$newh .= $tab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a> $s&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
+   						else
+   							$newh .= $tab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
+	   						
 		    				
 	    				//$newh .= $this->getchild($row2_in1->itemGuid);
     				//}
@@ -135,14 +158,25 @@ class Pandamp_Core_Hol_Relation
     	
     	if (isset($row2) && isset($row2->valueStringRelation))
     	{
+    		if ($row2->relateAs == "AMEND") {
+    			$row2Status = "Dirubah";
+    		}
+    		if ($row2->relateAs == "REPEAL") {
+    			$row2Status = "Dicabut";
+    		}
+    		if ($row2->relateAs == "ISROOT") {
+    			$row2Status = "Dicabut Sebagian";
+    		}
+    		
     		$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2->valueStringRelation.'/node/'.$this->getNode($row2->valueStringRelation)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row2->valueStringRelation,'fixedTitle')
-    		."</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$row2->relatedGuid' data-historyid='$row2->itemGuid' data-status='$row2->relateAs'>Delete</a><br>";
+    		."</a>&nbsp;$row2Status&nbsp;<a href='javascript:;' class='historynew' data-guid='$row2->relatedGuid' data-historyid='$row2->itemGuid' data-status='$row2->relateAs'>Delete</a><br>";
     		
     		$row3 = $tblRelatedItem->fetchAll("valueStringRelation='$row2->valueStringRelation'");
     		if ($row3)
     		{
     			$findRowx = $this->findperaturanyear($row3->toArray());
-    			
+    			$numFrx = count($findRowx) - 1;
+    			$tabx = "";
     			for ($x=0; $x<count($findRowx); $x++) 
     			{
     				$relatedrow = $findRowx[$x];
@@ -150,13 +184,13 @@ class Pandamp_Core_Hol_Relation
    					$status = $this->getStatusHistory($relatedrow[1], $row2->valueStringRelation);
    					
    					if ($status->relateAs == "AMEND") {
-   						$s = "Dirubah";
+   						$s = "Merubah";
    					}
    					if ($status->relateAs == "REPEAL") {
-   						$s = "Dicabut";
+   						$s = "Mencabut";
    					}
    					if ($status->relateAs == "ISROOT") {
-   						$s = "Dicabut Sebagian";
+   						$s = "Mencabut Sebagian";
    					}	
 	    				
     			    /*if (isset($guidRoot)) {
@@ -169,8 +203,17 @@ class Pandamp_Core_Hol_Relation
     				}
     				else 
     				{*/
-		    				
-	   					$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a> $s&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
+	   					if ($status->relateAs == "AMEND")
+	   					{
+	   						$tabx = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	   					}
+	   					else 
+	   						$tabx = "";
+   					
+   						if ($x < $numFrx)
+   							$newh .= $tabx."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a> $s&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
+   						else
+   							$newh .= $tabx."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
 		    				
 	    				//$newh .= $this->getchild($row2_in1->itemGuid);
     				//}
