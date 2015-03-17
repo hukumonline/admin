@@ -358,7 +358,7 @@ class Pandamp_Core_Hol_Relation
     	}
     	$sSolr = substr_replace($sSolr,"",-4).")";
     	
-    	$solrResult = $solrAdapter->find($sSolr,0,$numi, 'year desc, number desc','POST');
+    	$solrResult = $solrAdapter->find($sSolr,0,$numi, 'fixedDate desc','POST');
     	$solrNumFound = $solrResult->response->numFound;
     	
     	$data = array();
