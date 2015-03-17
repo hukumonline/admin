@@ -19,6 +19,17 @@ class Api_RelationController extends Zend_Controller_Action
 
         exit();
     }
+    function deleteparenthistoryAction()
+    {
+    	$request = $this->getRequest();
+    	
+    	$catalogGuid = $request->getParam('guid');
+    	
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$tblRelatedItem->delete("valueStringRelation='$catalogGuid'");
+    	
+    	exit();
+    }
     function deletehistoryAction()
     {
     	$req = $this->getRequest();

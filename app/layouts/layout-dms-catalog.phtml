@@ -123,6 +123,27 @@
                     	});    
                     }
                 });
+                
+                $('.parenthistorynew').click(function(e){
+                	e.preventDefault();
+                    var elem = $(this);
+                    if(confirm ('This is the parent of the history tree, if you remove this then all history related will be removed, Are you sure ?')) {
+                    	$.ajax({
+                    		type:"post"
+                    		,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/deleteparenthistory"
+                    		,data: "guid="+ elem.attr('data-guid')
+                    		,beforeSend: function() {
+                    			displayLoad();
+                    		}
+                			,success: function() {
+                				elem.html("Data has been deleted successfully");
+                				setTimeout(function() {
+               					 location.reload()
+               					  },1000);
+                			}		
+                    	});    
+                    }
+                });
 
                 $('#ws').change(function(){
                      checkValues = new Array();

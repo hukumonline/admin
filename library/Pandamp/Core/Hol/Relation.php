@@ -15,9 +15,14 @@ class Pandamp_Core_Hol_Relation
     
     public function getHistorynew($guid,$node)
     {
+    	$current = Zend_Controller_Front::getInstance()->getRequest()->getParam('guid');
+    	
+    	$data = array();
+    	$content = 0;
+    	
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	
-    	$newh = '';
+    	//$newh = '';
     	
     	// mencari isroot dahulu
     	$row1 = $tblRelatedItem->fetchRow("relatedGuid='$guid' AND itemType='history'");
@@ -57,21 +62,31 @@ class Pandamp_Core_Hol_Relation
     		$row2 = $tblRelatedItem->fetchAll("valueStringRelation='$row1->valueStringRelation'");
     		if ($row2) 
     		{
-    			$findRow = $this->findperaturanyear($row2->toArray());
+    			//$findRow = $this->findperaturanyear($row2->toArray());
     			
-    			$row1Status = $this->compare($row1->valueStringRelation, $findRow[0][1], $row1->relateAs);
+    			//$row1Status = $this->compare($row1->valueStringRelation, $findRow[0][1], $row1->relateAs);
     			
+    			/*
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row1->relatedGuid.'/node/'.$this->getNode($row1->relatedGuid)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row1->valueStringRelation,'fixedTitle')
     			."</a>&nbsp;$row1Status&nbsp;<a href='javascript:;' class='historynew' data-guid='$row1->relatedGuid' data-historyid='$row1->itemGuid' data-status='$row1->relateAs'>Delete</a><br>";
-    			 
-    			$numFrw = count($findRow) - 1;
-    			$tab = "";
-    			for ($d=0; $d<count($findRow); $d++) 
+    			*/
+    			
+    			$f1 = array(
+    					array(
+    						'itemGuid'=>$row1->valueStringRelation,
+    						'relatedGuid'=>$row1->relatedGuid,	
+    						'relateAs'=>$row1->relateAs	
+    					));
+    			
+    			//$numFrw = count($findRow) - 1;
+    			//$tab = "";
+    			//for ($d=0; $d<count($findRow); $d++)
+    			for ($d=0; $d<count($row2->toArray()); $d++)
     			{
-    				$relatedrow = $findRow[$d];
+    				//$relatedrow = $findRow[$d];
     				
-   					$status = $this->getStatusHistory($relatedrow[1], $row1->valueStringRelation);
-   					
+   					//$status = $this->getStatusHistory($relatedrow[1], $row1->valueStringRelation);
+   					/*
    					if ($status->relateAs == "AMEND") {
    						$s = "Merubah";
    					}
@@ -81,6 +96,12 @@ class Pandamp_Core_Hol_Relation
    					if ($status->relateAs == "ISROOT") {
    						$s = "Mencabut Sebagian";
    					}	
+   					*/
+    				
+    				$relatedrow = $row2->toArray();
+    				$data[$d]['itemGuid'] = $relatedrow[$d]['itemGuid'];
+    				$data[$d]['relatedGuid'] = $relatedrow[$d]['relatedGuid'];
+    				$data[$d]['relateAs'] = $relatedrow[$d]['relateAs'];
 	    				
     			    /*if (isset($guidRoot)) {
     					if ($relatedrow[1] == "$guidRoot") {
@@ -93,6 +114,7 @@ class Pandamp_Core_Hol_Relation
     				else 
     				{*/
    					
+    					/*
    						if ($status->relateAs == "AMEND") 
    						{ 
    							$tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; 
@@ -105,12 +127,15 @@ class Pandamp_Core_Hol_Relation
    							$newh .= $tab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a> $s&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
    						else
    							$newh .= $tab."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
-	   						
+	   					*/
+    					
 		    				
 	    				//$newh .= $this->getchild($row2_in1->itemGuid);
     				//}
     				
     			}
+    			
+    			$newh = $this->findperaturanyear(array_merge($f1,$data), $row1->valueStringRelation);
     			
     		}
     		
@@ -155,23 +180,40 @@ class Pandamp_Core_Hol_Relation
     		$row3 = $tblRelatedItem->fetchAll("valueStringRelation='$row2->valueStringRelation'");
     		if ($row3)
     		{
-    			$findRowx = $this->findperaturanyear($row3->toArray());
+    			//$merge = array_merge(array($row2->toArray()),$row3->toArray());
+    			//$findRowx = $this->findperaturanyear($row3->toArray());
     			
-    			$row2Status = $this->compare($row2->valueStringRelation, $findRowx[0][1], $row2->relateAs);
-    			 
+    			//$row2Status = $this->compare($row2->valueStringRelation, $findRowx[0][1], $row2->relateAs);
+
+    			/*
     			$newh .= "<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$row2->valueStringRelation.'/node/'.$this->getNode($row2->valueStringRelation)."'>".App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($row2->valueStringRelation,'fixedTitle')
     			."</a>&nbsp;$row2Status&nbsp;<a href='javascript:;' class='historynew' data-guid='$row2->relatedGuid' data-historyid='$row2->itemGuid' data-status='$row2->relateAs'>Delete</a><br>";
-    			 
+				*/
+				//$m = $row3->toArray();
+				//Pandamp_Debug::manager(array_merge(array($row2->toArray()),$m));
+    			$f = array(
+    					array(
+    						'itemGuid'=>$row2->valueStringRelation,
+    						'relatedGuid'=>$row2->relatedGuid,	
+    						'relateAs'=>$row2->relateAs
+    					));
     			
-    			$numFrx = count($findRowx) - 1;
-    			$tabx = "";
-    			for ($x=0; $x<count($findRowx); $x++) 
+    			
+    			//$numFrx = count($findRowx) - 1;
+    			//$tabx = "";
+    			//for ($x=0; $x<count($findRowx); $x++)
+    			for ($x=0; $x<count($row3->toArray()); $x++)	 
     			{
-    				$relatedrow = $findRowx[$x];
+    				//$relatedrow = $findRowx[$x];
     				
-   					$status = $this->getStatusHistory($relatedrow[1], $row2->valueStringRelation);
+    				$relatedrow = $row3->toArray();
+    				$data[$x]['itemGuid'] = $relatedrow[$x]['itemGuid'];
+    				$data[$x]['relatedGuid'] = $relatedrow[$x]['relatedGuid'];
+    				$data[$x]['relateAs'] = $relatedrow[$x]['relateAs'];
+    				
+   					//$status = $this->getStatusHistory($relatedrow[1], $row2->valueStringRelation);
    					
-   					if ($status->relateAs == "AMEND") {
+   					/*if ($status->relateAs == "AMEND") {
    						$s = "Merubah";
    					}
    					if ($status->relateAs == "REPEAL") {
@@ -179,7 +221,7 @@ class Pandamp_Core_Hol_Relation
    					}
    					if ($status->relateAs == "ISROOT") {
    						$s = "Mencabut Sebagian";
-   					}	
+   					}*/	
 	    				
     			    /*if (isset($guidRoot)) {
     					if ($relatedrow[1] == "$guidRoot") {
@@ -191,7 +233,8 @@ class Pandamp_Core_Hol_Relation
     				}
     				else 
     				{*/
-	   					if ($status->relateAs == "AMEND")
+    				
+	   					/*if ($status->relateAs == "AMEND")
 	   					{
 	   						$tabx = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	   					}
@@ -202,12 +245,16 @@ class Pandamp_Core_Hol_Relation
    							$newh .= $tabx."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a> $s&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
    						else
    							$newh .= $tabx."<a href='".ROOT_URL.DS.'id'.DS.'dms/catalog/detail/guid/'.$relatedrow[1].'/node/'.$this->getNode($relatedrow[1])."'>$relatedrow[0]</a>&nbsp<a href='javascript:;' class='historynew' data-guid='$status->relatedGuid' data-historyid='$relatedrow[1]' data-status='$status->relateAs'>Delete</a><br>";
-		    				
+		    			*/
+    					
 	    				//$newh .= $this->getchild($row2_in1->itemGuid);
     				//}
     				
     			}
-    			 
+    			
+    			$newh = $this->findperaturanyear(array_merge($f,$data), $row2->valueStringRelation);
+    			
+    			
     		}
     	
     	}
@@ -224,6 +271,7 @@ class Pandamp_Core_Hol_Relation
     
     	$year1 = $this->queryyear($id1);
     	$year2 = $this->queryyear($id2);
+    	
     	if ($year1 < $year2) {
     		switch ($status)
     		{
@@ -236,6 +284,9 @@ class Pandamp_Core_Hol_Relation
     			case 'ISROOT';
     				$s = 'Dicabut sebagian';
     				break;
+    			default:
+    				$s = null;
+    				break;
     		}
     	}
     	else
@@ -246,15 +297,31 @@ class Pandamp_Core_Hol_Relation
     				$s = 'Mencabut';
     				break;
     			case 'AMEND':
-    				$s = 'Merubah';
+    				$s = 'Mengubah';
     				break;
     			case 'ISROOT';
 	    			$s = 'Mencabut sebagian';
 	    			break;
+    			default:
+    				$s = null;
+    				break;
     		}
     	}
     	
     	return $s;
+    }
+    
+    public function querysolr($id)
+    {
+    	$solrAdapter = Pandamp_Search::manager();
+    	$hits = $solrAdapter->find("id:$id",0,1);
+    	if (isset($hits->response->docs[0])) {
+    		$row = $hits->response->docs[0];
+    		
+    		return $row;
+    	}
+    	
+    	return;
     }
     
     public function queryyear($id)
@@ -270,7 +337,7 @@ class Pandamp_Core_Hol_Relation
     	return;
     }
     
-    public function findperaturanyear(array $id)
+    public function findperaturanyear(array $id, $parent)
     {
     	/*$solr = new Apache_Solr_Service( 'nihki:sirkulasi@202.153.129.35', '8983', '/solr/core-catalog' );
     	if ( ! $solr->ping() ) {
@@ -278,6 +345,7 @@ class Pandamp_Core_Hol_Relation
     		exit;
     	}*/
     	
+    	//Pandamp_Debug::manager($this->search($id, 'itemGuid', 'lt546455c9b16cb'));
     	
     	$solrAdapter = Pandamp_Search::manager();
     	
@@ -290,7 +358,7 @@ class Pandamp_Core_Hol_Relation
     	}
     	$sSolr = substr_replace($sSolr,"",-4).")";
     	
-    	$solrResult = $solrAdapter->find($sSolr,0,$numi, 'year desc','POST');
+    	$solrResult = $solrAdapter->find($sSolr,0,$numi, 'year desc, number asc','POST');
     	$solrNumFound = $solrResult->response->numFound;
     	
     	$data = array();
@@ -300,13 +368,35 @@ class Pandamp_Core_Hol_Relation
 	    	if(isset($solrResult->response->docs[$ii]))
 	    	{
 		    	$row = $solrResult->response->docs[$ii];
-	    		$data[$ii][0] = $row->title;
-	    		$data[$ii][1] = $row->id;
-	    		
+		    	$data[$ii]['id'] = $row->id;
+	    		$data[$ii]['title'] = $row->title;
+	    		$data[$ii]['year'] = $row->year;
+	    		$data[$ii]['fixedDate'] = $solrAdapter->translateSolrDate($row->fixedDate);
+	    		$relateAs = $this->search($id, 'itemGuid', $row->id);
+	    		$data[$ii]['relateAs'] = ($relateAs[0]) ? $relateAs[0]['relateAs'] : '' ;
+	    		$data[$ii]['relatedGuid'] = ($relateAs[0]) ? $relateAs[0]['relatedGuid'] : '' ;
+	    		$data[$ii]['parent'] = $parent;
 	    	}
     	}
     	
     	return $data;
+    }
+    
+    public function search($array, $key, $value)
+    {
+    	$results = array();
+    
+    	if (is_array($array)) {
+    		if (isset($array[$key]) && $array[$key] == $value) {
+    			$results[] = $array;
+    		}
+    
+    		foreach ($array as $subarray) {
+    			$results = array_merge($results, $this->search($subarray, $key, $value));
+    		}
+    	}
+    
+    	return $results;
     }
 
     public function getHistorynew_($guid,$node)

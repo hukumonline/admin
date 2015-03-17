@@ -1,6 +1,98 @@
 <?php if (isset($this->aData)) { ?>
 <fieldset>
 	<legend>HISTORY-new</legend>
-	<?php echo $this->aData; ?>
+	<table class="display stylized" id="thistorynew">
+	<thead>
+		<tr>
+			<th>Year</th>
+			<th colspan="2">Title</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php 
+	/*foreach ($this->aData as $key => $value) { 
+		$data[$value['year']][] = $value['title'];
+	}*/ 
+	$current = Zend_Controller_Front::getInstance()->getRequest()->getParam('guid');
+	$year = '';
+	foreach ($this->aData as $key => $value) :
+	?>
+	<tr>
+		<?php if ($value['year'] != $year) : ?>
+		<?php $year = $value['year']; ?>
+		<td><?php echo $year; ?></td>
+		<?php else : ?>
+		<td>&nbsp;</td>
+		<?php endif; ?>
+		<td>
+			<?php $helper = new Pandamp_Core_Hol_Relation(); ?>
+			<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $value['id']; ?>/node/<?php echo $helper->getNode($value['id']); ?>" target="_blank">
+				<?php echo $value['title']; ?>
+			</a>
+			<?php if ($ch = $this->getChildHistory($value['id'],$value['parent'])) : ?>
+			<div class="pad">
+				<ul>
+				<?php foreach ($ch as $c) : ?>
+					
+					<?php
+					//die('('.$value['year'] .'>='. $c['year'].') && ('.$value['fixedDate'].' >= '.$c['fixedDate'].')');
+					if (($value['year'] >= $c['year']) && ($value['fixedDate'] >= $c['fixedDate'])) : 
+					?>
+					<?php
+					if ($c['relateAs'] == "AMEND") {
+						$st = "Mengubah";
+					}
+					if ($c['relateAs'] == "REPEAL") {
+						$st = "Mencabut";
+					}
+					if ($c['relateAs'] == "ISROOT") {
+						$st = "Mencabut sebagian";
+					}
+					?>
+					<li>
+						<?php echo $st; ?>&nbsp;<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $c['id']; ?>/node/<?php echo $helper->getNode($c['id']); ?>" target="_blank"><?php echo $c['title']; ?></a>
+						<?php if ($c['id'] !== $c['parent']) : ?>
+						&nbsp;&raquo;&nbsp;
+						<a href="javascript:;" class="historynew" data-guid="<?php echo $c['relatedGuid']; ?>" data-historyid="<?php echo $c['id']; ?>" data-status="<?php echo $c['relateAs']; ?>">
+						[remove]
+						</a>
+						<?php endif; ?>
+						<!-- 
+						&raquo;
+						<small>
+						rg:<?php //echo $c['relatedGuid']; ?>&nbsp;
+						ig:<?php //echo $c['id']; ?>&nbsp;
+						s:<?php //echo $c['relateAs']; ?>
+						</small>
+						 -->
+					</li>
+					<?php endif; ?>
+				
+				<?php endforeach; ?>
+				</ul>
+			</div>
+			<?php endif; ?>
+		</td>
+		<td class="center">
+			<?php if ($value['id'] !== $value['parent']) : ?>
+			<a href="javascript:;" class="historynew" data-guid="<?php echo $value['relatedGuid']; ?>" data-historyid="<?php echo $value['id']; ?>" data-status="<?php echo $value['relateAs']; ?>">
+				<img alt="" src="<?php echo $this->cdn('images'); ?>/delete.png" height="16" width="16">
+			</a>
+			<!-- <br>
+			<small>
+			relatedGuid:<?php //echo $value['relatedGuid']; ?><br>
+			itemGuid:<?php //echo $value['id']; ?><br>
+			status:<?php //echo $value['relateAs']; ?>
+			</small> -->
+			<?php else : ?>
+			<a href="javascript:;" class="parenthistorynew" data-guid="<?php echo $value['id']; ?>">
+				<img alt="" src="<?php echo $this->cdn('images'); ?>/cancel.png" height="16" width="16">
+			</a>
+			<?php endif; ?>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+	</tbody>
+	</table>
 </fieldset>
 <?php } ?>

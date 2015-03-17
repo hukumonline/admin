@@ -1265,6 +1265,16 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
                 return date("Y-m-d\\TH:i:s\\Z",strtotime($date));
             }
         }
+        
+        public function translateSolrDate($date)
+        {
+        	if (empty($date)) return;
+        
+        	$aDateTime = str_replace(array('T','Z'),' ',$date);
+        	$mysqlDate = trim($aDateTime);
+        
+        	return $mysqlDate;
+        }    
 	
 	public function _translateMySqlDateToSolrDate($mysqlDate)
 	{
