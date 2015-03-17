@@ -262,7 +262,7 @@ class Pandamp_Core_Hol_Relation
     			 
     	}
     	
-    	return ($newh)? $newh : '';
+    	return (isset($newh))? $newh : '';
     }
     
     public function compare($id1,$id2,$status)
