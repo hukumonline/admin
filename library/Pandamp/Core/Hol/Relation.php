@@ -262,6 +262,8 @@ class Pandamp_Core_Hol_Relation
     			 
     	}
     	
+    	if (!$newh) return;
+    	
     	return $newh;
     }
     
