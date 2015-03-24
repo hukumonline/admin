@@ -14,8 +14,11 @@ class Api_RelationController extends Zend_Controller_Action
         $relatedGuid = ($req->getParam('relatedGuid')) ? $req->getParam('relatedGuid') : 'XXX';
         $relateAs = ($req->getParam('relateAs')) ? $req->getParam('relateAs') : 'XXX';
 
-        $hol = new Pandamp_Core_Hol_Relation();
-        $hol->delete($itemGuid,$relatedGuid,$relateAs);
+        //$hol = new Pandamp_Core_Hol_Relation();
+        //$hol->delete($itemGuid,$relatedGuid,$relateAs);
+        
+        $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+        $tblRelatedItem->delete("itemGuid='$itemGuid' AND relatedGuid='$relatedGuid' AND relateAs='$relateAs'");
 
         exit();
     }

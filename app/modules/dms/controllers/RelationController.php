@@ -97,6 +97,11 @@ class Dms_RelationController extends Zend_Controller_Action
         $this->view->relatedGuid = $sessHistory->relatedGuid;
 
         $r = $this->getRequest();
+        
+        if ($r->isXmlHttpRequest() ) {
+        	$this->_helper->layout->disableLayout();
+        	
+        }
 
         $sQuery = ($r->getParam('sQuery'))?$r->getParam('sQuery'):'';
         $this->view->sQuery = $sQuery;
@@ -163,6 +168,9 @@ class Dms_RelationController extends Zend_Controller_Action
 
                 $aResult['isError'] = false;
                 $aResult['msg'] = 'Adding Multi Relation Success';
+                $aResult['relateAs'] = $as;
+                $aResult['relatedGuid'] = $relatedItem;
+                $aResult['itemGuid'] = $guid;
             }
         }
         else
@@ -173,8 +181,51 @@ class Dms_RelationController extends Zend_Controller_Action
 
             $aResult['isError'] = false;
             $aResult['msg'] = 'Adding Relation Success';
+            $aResult['relateAs'] = $as;
+            $aResult['relatedGuid'] = $relatedItem;
+            $aResult['itemGuid'] = $item;
         }
 
         echo Zend_Json::encode($aResult);
+    }
+    
+    public function ppcommentAction()
+    {
+    	$this->_helper->layout->disableLayout();
+    	
+    	$request = $this->getRequest();
+    	$relatedGuid = $request->getParam('relatedGuid');
+    	$itemGuid = $request->getParam('itemGuid');
+    	$relateAs = $request->getParam('relateAs');
+    	
+    	if ($request->isPost()) {
+    		$komentar = $request->getPost('komentar');
+    		$itemGuid = $request->getPost('itemGuid');
+    		
+    		for ($i=0; $i<count($komentar); $i++) {
+    			//$where[] = "relatedGuid='$relatedGuid'";
+    			//$where[] = "itemGuid='$itemGuid[$i]'";
+    			//$where[] = "relateAs='$relateAs'";
+    			$ig = $itemGuid[$i];
+    			$desc = $komentar[$i];
+    			$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    			$tblRelatedItem->update([
+    						'description' => $desc
+    					]
+    					, [
+    						'relatedGuid = ?' => $relatedGuid,
+    						'itemGuid = ?' => $ig,
+    						'relateAs = ?' => $relateAs,
+    					]);
+    		}
+    		
+    		//echo "<script>parent.$.nyroModalRemove();</script>";
+    		exit('sukses');
+    	}
+    	
+    	$guidArray = explode(',', $itemGuid);
+    	$this->view->assign('relateAs',$relateAs);
+    	$this->view->assign('relatedGuid',$relatedGuid);
+    	$this->view->assign('itemGuid',$guidArray);
     }
 }

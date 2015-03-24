@@ -5,10 +5,24 @@
         <?php foreach ($this->rowsetRegulation as $data) { ?>
         <li>
             <a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $data->itemGuid; ?>/node/<?php echo $this->folderGuid; ?>"><?php echo $this->getCatalogTitle($data->itemGuid,'fixedTitle'); ?></a>
-            - <a href="javascript:;" class="deleterelation" data-itemguid="<?php echo $data->itemGuid; ?>" data-relatedguid="<?php echo $data->relatedGuid; ?>" data-relateas="<?php echo $data->relateAs; ?>">Delete</a><br>
+            - <a href="javascript:;" class="deleterelation" data-itemguid="<?php echo $data->itemGuid; ?>" data-relatedguid="<?php echo $data->relatedGuid; ?>" data-relateas="<?php echo $data->relateAs; ?>">Delete</a>
+            <?php if (empty($data->description)) : ?>&nbsp;&ndash;&nbsp;<a href="<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/relation/ppcomment/relatedGuid/<?php echo $data->relatedGuid; ?>/itemGuid/<?php echo $data->itemGuid; ?>/relateAs/<?php echo $data->relateAs; ?>" id="encom">Isi Komentar</a><?php endif; ?><br>
             <?php echo $this->getCatalogTitle($data->itemGuid,'fixedSubTitle'); ?>
+            <?php if (!empty($data->description)) { ?>
+            <br><small>Komentar:<?php echo $data->description; ?></small>
+            <?php } ?>
         </li>
         <?php } ?>
     </ul>
 </fieldset>
+<script>
+$('#encom').click(function(e){
+	e.preventDefault();
+	$.nyroModalManual({
+	      bgColor: '#3333cc',
+	      url: $(this).attr('href')
+	});
+	return false;
+});
+</script>
 <?php } ?>

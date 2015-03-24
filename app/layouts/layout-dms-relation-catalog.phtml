@@ -7,7 +7,7 @@
         <link href="<?=$this->cdn('styles')?>/adm/administry.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="<?=$this->cdn('styles')?>/adm/style.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="<?=$this->cdn('styles')?>/pagination.css" media="screen" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.4.2.min.js,hol/jquery/jquery.cookie.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/paging/jquery.pagination.js,hol/smooth.scroller.js" ></script>
+		<script type="text/javascript" src="<?=$this->cdn('scripts')?>/index.php?c=auto&amp;f=,hol/jquery/jquery-1.4.2.min.js,hol/jquery/jquery.cookie.js,hol/jquery/tooltip/jquery.tipTip.min.js,hol/jquery/form/jquery.validate.pack.js,hol/jquery/paging/jquery.pagination.js,hol/jquery/nyroModal/jquery.nyroModal.pack.js,hol/smooth.scroller.js" ></script>
         
         <!-- Internet Explorer Fixes -->
         <!--[if IE]>
@@ -117,8 +117,20 @@
                                     $('#message').fadeIn("slow", function(){
                                         $(this).html("Row " + checkValues + " " + response.msg).delay(2000).fadeOut(1000);
                                         $("#relate").val(withSelected);
+                                        //$("#entercomment").nyroModalManual();
+                                        //$('#ec').trigger('click');
+                                        if (response.relateAs=="RELATED_PP") {
+                                        	$.nyroModalManual({url:'<?=ROOT_URL;?>/<?=$this->getLanguage();?>/dms/relation/ppcomment/relatedGuid/'+response.relatedGuid+'/itemGuid/'+checkValues+'/relateAs/'+ response.relateAs});
+                                        }
+                                        
                                         return false;
                                     });
+
+                                    /*for (var i in checkValues) {
+                                        console.info(checkValues[i]);
+                                    	
+                                    }*/
+                                    
                                }
                              });
                         }

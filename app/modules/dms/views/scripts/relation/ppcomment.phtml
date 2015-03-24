@@ -1,0 +1,10 @@
+<form method="post" name="ppcomment">
+<?php for($i=0; $i<count($this->itemGuid); $i++) : ?>
+<fieldset>
+	<legend>Komentar untuk "<?php echo $this->getCatalogAttribute($this->itemGuid[$i],'fixedTitle'); ?>"</legend>
+	<textarea rows="7" cols="40" name="komentar[]"></textarea>
+	<input type="hidden" name="itemGuid[]" value="<?php echo $this->itemGuid[$i]; ?>">
+</fieldset>
+<?php endfor; ?>
+<br><input type="submit" style="display: inline-block;padding: 5px 10px;color: #777 !important;text-decoration: none;font-weight: bold;font-size: 11px;font-family: Tahoma, Arial, sans-serif;-moz-border-radius: 4px;-webkit-border-radius: 4px;border-radius: 4px;text-shadow: 0 1px 1px rgba(255,255,255,0.9);position: relative;cursor: pointer;border:1px solid #ccc !important;" value="Save">
+</form>
