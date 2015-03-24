@@ -16,13 +16,16 @@
     </ul>
 </fieldset>
 <script>
-$('#encom').click(function(e){
-	e.preventDefault();
-	$.nyroModalManual({
-	      bgColor: '#3333cc',
-	      url: $(this).attr('href')
+$(function(){
+	$('#encom').click(function(e){
+		e.preventDefault();
+		$.nyroModalManual({
+		      bgColor: '#3333cc',
+		      url: $(this).attr('href')
+		});
+		return false;
 	});
-	return false;
+
 });
 </script>
 <?php } ?>
