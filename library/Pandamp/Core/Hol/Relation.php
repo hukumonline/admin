@@ -135,7 +135,25 @@ class Pandamp_Core_Hol_Relation
     				
     			}
     			
-    			$newh = $this->findperaturanyear(array_merge($f1,$data), $row1->valueStringRelation);
+    			/**
+ 				 * @todo March 27, 2015
+ 				 * tambahkan query ke itemGuid
+    			 */
+    			$todoRG = $tblRelatedItem->fetchRow("itemGuid='$guid' AND itemType='history'");
+    			if ($todoRG) {
+    				$f2 = array(
+    						array(
+    								'itemGuid'=>$todoRG->valueStringRelation,
+    								'relatedGuid'=>$todoRG->relatedGuid,
+    								'relateAs'=>$todoRG->relateAs
+    						));
+    				
+    				$mergeThis = array_merge($f1,$data,$f2);
+    			}
+    			else
+    				$mergeThis = array_merge($f1,$data);
+    			
+    			$newh = $this->findperaturanyear($mergeThis, $row1->valueStringRelation);
     			
     		}
     		
