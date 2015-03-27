@@ -75,7 +75,8 @@ class Pandamp_Core_Hol_Relation
     					array(
     						'itemGuid'=>$row1->valueStringRelation,
     						'relatedGuid'=>$row1->relatedGuid,	
-    						'relateAs'=>$row1->relateAs	
+    						'relateAs'=>$row1->relateAs,
+    						'parent'=>$row1->valueStringRelation		
     					));
     			
     			//$numFrw = count($findRow) - 1;
@@ -102,6 +103,7 @@ class Pandamp_Core_Hol_Relation
     				$data[$d]['itemGuid'] = $relatedrow[$d]['itemGuid'];
     				$data[$d]['relatedGuid'] = $relatedrow[$d]['relatedGuid'];
     				$data[$d]['relateAs'] = $relatedrow[$d]['relateAs'];
+    				$data[$d]['parent'] = $relatedrow[$d]['valueStringRelation'];
 	    				
     			    /*if (isset($guidRoot)) {
     					if ($relatedrow[1] == "$guidRoot") {
@@ -145,7 +147,8 @@ class Pandamp_Core_Hol_Relation
     						array(
     								'itemGuid'=>$todoRG->valueStringRelation,
     								'relatedGuid'=>$todoRG->relatedGuid,
-    								'relateAs'=>$todoRG->relateAs
+    								'relateAs'=>$todoRG->relateAs,
+    								'parent'=>$todoRG->valueStringRelation
     						));
     				
     				$mergeThis = array_merge($f1,$data,$f2);
@@ -213,7 +216,8 @@ class Pandamp_Core_Hol_Relation
     					array(
     						'itemGuid'=>$row2->valueStringRelation,
     						'relatedGuid'=>$row2->relatedGuid,	
-    						'relateAs'=>$row2->relateAs
+    						'relateAs'=>$row2->relateAs,
+    						'parent'=>$row2->valueStringRelation
     					));
     			
     			
@@ -228,6 +232,7 @@ class Pandamp_Core_Hol_Relation
     				$data[$x]['itemGuid'] = $relatedrow[$x]['itemGuid'];
     				$data[$x]['relatedGuid'] = $relatedrow[$x]['relatedGuid'];
     				$data[$x]['relateAs'] = $relatedrow[$x]['relateAs'];
+    				$data[$x]['parent'] = $relatedrow[$x]['valueStringRelation'];
     				
    					//$status = $this->getStatusHistory($relatedrow[1], $row2->valueStringRelation);
    					
@@ -393,7 +398,7 @@ class Pandamp_Core_Hol_Relation
 	    		$relateAs = $this->search($id, 'itemGuid', $row->id);
 	    		$data[$ii]['relateAs'] = ($relateAs[0]) ? $relateAs[0]['relateAs'] : '' ;
 	    		$data[$ii]['relatedGuid'] = ($relateAs[0]) ? $relateAs[0]['relatedGuid'] : '' ;
-	    		$data[$ii]['parent'] = $parent;
+	    		$data[$ii]['parent'] = ($relateAs[0]) ? $relateAs[0]['parent'] : '' ;
 	    	}
     	}
     	

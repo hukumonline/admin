@@ -15,6 +15,7 @@ class Pandamp_Controller_Action_Helper_GetChildHistory
 				$data1[$content1]['itemGuid'] = $h1story->itemGuid;
 				$data1[$content1]['relatedGuid'] = $h1story->relatedGuid;
 				$data1[$content1]['relateAs'] = $h1story->relateAs;
+				$data1[$content1]['parent'] = $parent;
 				
 				$content1++;
 			}
@@ -29,6 +30,7 @@ class Pandamp_Controller_Action_Helper_GetChildHistory
 				$data2[$content2]['itemGuid'] = $h->relatedGuid;
 				$data2[$content2]['relatedGuid'] = $h->relatedGuid;
 				$data2[$content2]['relateAs'] = $h->relateAs;
+				$data2[$content2]['parent'] = $parent;
 				
 				$content2++;
 			}
