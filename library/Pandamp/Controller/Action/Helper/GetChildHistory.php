@@ -43,6 +43,7 @@ class Pandamp_Controller_Action_Helper_GetChildHistory
 			
 		}
 		
-		return $helper->findperaturanyear($data1, $parent);
+		if (isset($data1))
+			return $helper->findperaturanyear($data1, $parent);
 	}
 }
