@@ -141,15 +141,25 @@ class Pandamp_Core_Hol_Relation
  				 * @todo March 27, 2015
  				 * tambahkan query ke itemGuid
     			 */
-    			$todoRG = $tblRelatedItem->fetchRow("itemGuid='$guid' AND itemType='history'");
+    			$todoRG = $tblRelatedItem->fetchAll("itemGuid='$guid' AND itemType='history'");
     			if ($todoRG) {
-    				$f2 = array(
+    				$f2 = [];
+    				$c = 0;
+    				/*$f2 = array(
     						array(
     								'itemGuid'=>$todoRG->valueStringRelation,
     								'relatedGuid'=>$todoRG->relatedGuid,
     								'relateAs'=>$todoRG->relateAs,
     								'parent'=>$todoRG->valueStringRelation
-    						));
+    						));*/
+    				foreach ($todoRG as $rg)
+    				{
+    					$f2[$c]['itemGuid'] = $rg->valueStringRelation;
+    					$f2[$c]['relatedGuid'] = $rg->relatedGuid;
+    					$f2[$c]['relateAs'] = $rg->relateAs;
+    					$f2[$c]['parent'] = $rg->valueStringRelation;
+    					$c++;
+    				}
     				
     				$mergeThis = array_merge($f1,$data,$f2);
     			}
