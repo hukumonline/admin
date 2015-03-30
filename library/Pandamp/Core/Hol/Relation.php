@@ -165,7 +165,7 @@ class Pandamp_Core_Hol_Relation
     				$r = 0;
     				foreach ($todoRG as $rg1)
     				{
-    					$rgArr[$r]['itemGuid'] = $rg1->itemGuid;
+    					$rgArr[$r]['itemGuid'] = $rg1->relatedGuid;
     					$rgArr[$r]['relatedGuid'] = $rg1->relatedGuid;
     					$rgArr[$r]['relateAs'] = $rg1->relateAs;
     					$rgArr[$r]['parent'] = $rg1->valueStringRelation;
