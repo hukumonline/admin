@@ -6,7 +6,7 @@ class Pandamp_Controller_Action_Helper_GetChildHistory
 		$helper = new Pandamp_Core_Hol_Relation();
 		
 		$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
-		$h1 = $tblRelatedItem->fetchAll("relatedGuid='$guid' AND valueStringRelation='$parent' AND relateAs IN ('ISROOT','AMEND','REPEAL','ESTABLISH')");
+		$h1 = $tblRelatedItem->fetchAll("relatedGuid='$guid' AND relateAs IN ('ISROOT','AMEND','REPEAL','ESTABLISH')");
 		if (count($h1) > 0) {
 			$data1 = array();
 			$content1 = 0;
@@ -21,7 +21,7 @@ class Pandamp_Controller_Action_Helper_GetChildHistory
 			}
 		}
 		
-		$h2 = $tblRelatedItem->fetchAll("itemGuid='$guid' AND valueStringRelation='$parent' AND relateAs IN ('ISROOT','AMEND','REPEAL','ESTABLISH')");
+		$h2 = $tblRelatedItem->fetchAll("itemGuid='$guid' AND relateAs IN ('ISROOT','AMEND','REPEAL','ESTABLISH')");
 		if (count($h2) > 0) {
 			$data2 = array();
 			$content2 = 0;
