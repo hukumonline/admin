@@ -166,9 +166,32 @@ class Pandamp_Core_Hol_Relation
     			else
     				$mergeThis = array_merge($f1,$data);
     			
-    			$newh = $this->findperaturanyear($mergeThis, $row1->valueStringRelation);
+    			//$newh = $this->findperaturanyear($mergeThis, $row1->valueStringRelation);
     			
     		}
+    		
+    		/**
+    		 * @todo March 30, 2015
+    		 */
+    		$f3 = [];
+    		$b = 0;
+    		$todoBrg = $tblRelatedItem->fetchAll("relatedGuid='$guid' AND itemType='history' AND NOT valueStringRelation='$row1->valueStringRelation'");
+    		if ($todoBrg)
+    		{
+    			foreach ($todoBrg as $bg)
+    			{
+    				$f3[$b]['itemGuid'] = $bg->itemGuid;
+    				$f3[$b]['relatedGuid'] = $bg->relatedGuid;
+    				$f3[$b]['relateAs'] = $bg->relateAs;
+    				$f3[$b]['parent'] = $bg->valueStringRelation;
+    				$b++;
+    			}
+    			
+    			$mergeThis = array_merge($mergeThis,$f3);
+    		}
+    		
+    		
+    		$newh = $this->findperaturanyear($mergeThis, $row1->valueStringRelation);
     		
     	}
     	else
