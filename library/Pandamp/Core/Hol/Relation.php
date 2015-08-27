@@ -422,7 +422,9 @@ class Pandamp_Core_Hol_Relation
     	for($i=0;$i<$numi;$i++)
     	{
     		$row = $id[$i];
-    		$sSolr .= $row['itemGuid'] .' OR ';
+    		if ($row['itemGuid']){
+    			$sSolr .= $row['itemGuid'] .' OR ';
+    		}
     	}
     	$sSolr = substr_replace($sSolr,"",-4).")";
     	
