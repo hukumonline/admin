@@ -65,7 +65,7 @@ class Pandamp_Predictionio_EventClient
 		if ($client_response['eventId'])
 			Zend_Controller_Action_HelperBroker::getStaticHelper('GetNumber')->counter('pio');
 		
-		return $client_response;
+		//return $client_response;
 	}
 	
 	public function sendQuery($data = [])
