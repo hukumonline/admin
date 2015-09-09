@@ -17,4 +17,4 @@ library/Pandamp/Controller/Action/Helper/Cdn.php
 .project
 .htaccess
 
-/vendor/
+#/vendor/
