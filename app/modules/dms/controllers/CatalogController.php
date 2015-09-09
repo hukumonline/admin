@@ -552,9 +552,9 @@ class Dms_CatalogController extends Zend_Controller_Action
 	        $id	 = $Bpm->save($aData);
 	        
             if ($id) {
-	            $message = "Data was successfully saved.";
-				$this->_helper->getHelper('FlashMessenger')
-					->addMessage($message);
+// 	            $message = "Data was successfully saved.";
+// 				$this->_helper->getHelper('FlashMessenger')
+// 					->addMessage($message);
 					
 					
 				if (!empty($aData['fixedKeywords']))
@@ -624,9 +624,9 @@ class Dms_CatalogController extends Zend_Controller_Action
             	$this->view->aRenderedAttributes = $aRender;
             	
             	$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($id);
-	            $message = "Data was successfully saved.";
-				$this->_helper->getHelper('FlashMessenger')
-					->addMessage($message);
+// 	            $message = "Data was successfully saved.";
+// 				$this->_helper->getHelper('FlashMessenger')
+// 					->addMessage($message);
 					
 				if ($modelCatalog['profileGuid'] == "klinik") {
 					if ($modelCatalog['status'] == 99) {
