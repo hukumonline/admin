@@ -16,3 +16,5 @@ library/Pandamp/Controller/Action/Helper/Cdn.php
 .buildpath
 .project
 .htaccess
+
+/vendor/
