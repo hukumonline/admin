@@ -24,6 +24,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('db3', $multidb->getDb('db3'));
         Zend_Registry::set('db4', $multidb->getDb('db4'));
         //Zend_Registry::set('db5', $multidb->getDb('db5'));
+        
+        Zend_Registry::set('db6', $multidb->getDb('db6'));
     }
 
 	/**

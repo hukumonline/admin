@@ -178,6 +178,22 @@ class Pandamp_Core_Hol_Catalog
 		Pandamp_Core_FileCache::clear($dir . DS . 'url');
 		Pandamp_Core_FileCache::clear($dir . DS . 'action');
 		
+		if (Pandamp_Pio::manager()->ping()) {
+			Pandamp_Pio::manager()->addEvent([
+				'guid' => $catalogGuid,
+				'shortTitle' => $rowCatalog->shortTitle,
+				'profileGuid' => $profileGuid,
+				'publishedDate' => $rowCatalog->publishedDate,
+				'createdBy' => $rowCatalog->createdBy,
+				'createdDate' => $rowCatalog->createdDate,
+				'modifiedBy' => $rowCatalog->modifiedBy,
+				'modifiedDate' => $rowCatalog->modifiedDate,
+				'status' => $rowCatalog->status,
+				'title' => $title,
+				'subTitle' => $aData['fixedSubTitle'],
+				'desc' => $aData['fixedDescription']				
+			]);
+		}
 		
 		
         //after indexing, update isIndex and indexedDate in table KutuCatalog
