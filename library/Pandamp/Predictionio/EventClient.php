@@ -41,29 +41,17 @@ class Pandamp_Predictionio_EventClient
 	
 	public function addEvent($data = [])
 	{
-		if (self::checkExist($data['guid'])) return;
+		//if (self::checkExist($data['guid'])) return;
 		
-		Zend_Controller_Action_HelperBroker::addPrefix('Pandamp_Controller_Action_Helper');
-		$i = Zend_Controller_Action_HelperBroker::getStaticHelper('GetNumber')->generate('pio');
+		//Zend_Controller_Action_HelperBroker::addPrefix('Pandamp_Controller_Action_Helper');
+		//$i = Zend_Controller_Action_HelperBroker::getStaticHelper('GetNumber')->generate('pio');
 		
-		$client_response = $this->_client->setItem($i,[
-			'itypes' => 1,
-			'guid' => $data['guid'],
-			'shortTitle' => $data['shortTitle'],
-			'profile' => $data['profileGuid'],
-			'publishedDate' => $data['publishedDate'],
-			'createdBy' => $data['createdBy'],
-			'createdDate' => $data['createdDate'],
-			'modifiedBy' => $data['modifiedBy'],
-			'modifiedDate' => $data['modifiedDate'],
-			'status' => $data['status'],
-			'title' => $data['title'],
-			'subTitle' => $data['subTitle'],
-			'desc' => $data['desc']
+		$client_response = $this->_client->setItem($data['guid'],[
+			'category' => $data['category']
 		]);
 		
-		if ($client_response['eventId'])
-			Zend_Controller_Action_HelperBroker::getStaticHelper('GetNumber')->counter('pio');
+		/*if ($client_response['eventId'])
+			Zend_Controller_Action_HelperBroker::getStaticHelper('GetNumber')->counter('pio');*/
 		
 		//return $client_response;
 	}

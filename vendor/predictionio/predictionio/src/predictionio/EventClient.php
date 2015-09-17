@@ -135,14 +135,13 @@ class EventClient extends BaseClient {
    * @throws PredictionIOAPIError Request error
    */
    public function setItem($iid, array $properties=array(), $eventTime=null) {
-    $eventTime = $this->getEventTime($eventTime);
+    //$eventTime = $this->getEventTime($eventTime);
     if (empty($properties)) $properties = (object)$properties;
     $json = json_encode([
         'event' => '$set',
         'entityType' => 'item',
         'entityId' => $iid,
-        'properties' => $properties,
-        'eventTime' => $eventTime,
+        'properties' => $properties
     ]);
 
     return $this->sendRequest('POST', $this->eventUrl, $json);

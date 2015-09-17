@@ -181,17 +181,7 @@ class Pandamp_Core_Hol_Catalog
 		if (Pandamp_Pio::manager()->ping()) {
 			Pandamp_Pio::manager()->addEvent([
 				'guid' => $catalogGuid,
-				'shortTitle' => $rowCatalog->shortTitle,
-				'profileGuid' => $profileGuid,
-				'publishedDate' => $rowCatalog->publishedDate,
-				'createdBy' => $rowCatalog->createdBy,
-				'createdDate' => $rowCatalog->createdDate,
-				'modifiedBy' => $rowCatalog->modifiedBy,
-				'modifiedDate' => $rowCatalog->modifiedDate,
-				'status' => $rowCatalog->status,
-				'title' => $title,
-				'subTitle' => $aData['fixedSubTitle'],
-				'desc' => $aData['fixedDescription']				
+				'category' => $profileGuid				
 			]);
 		}
 		
