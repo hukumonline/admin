@@ -114,6 +114,14 @@ class Pandamp_Core_Hol_Catalog
         //do indexing
         $indexingEngine = Pandamp_Search::manager();
         $indexingEngine->indexCatalog($catalogGuid);
+        
+        $registry = Zend_Registry::getInstance();
+        $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+        
+        $res = $application->getOption('resources')['indexing']['solr']['write'];
+        
+        $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
+        $esolr->indexCatalog($catalogGuid); 
 
         // create shortener url
         $kopel 	= Zend_Auth::getInstance()->getIdentity()->kopel;
@@ -178,12 +186,14 @@ class Pandamp_Core_Hol_Catalog
 		Pandamp_Core_FileCache::clear($dir . DS . 'url');
 		Pandamp_Core_FileCache::clear($dir . DS . 'action');
 		
+		/*
 		if (Pandamp_Pio::manager()->ping()) {
 			Pandamp_Pio::manager()->addEvent([
 				'guid' => $catalogGuid,
 				'category' => $profileGuid				
 			]);
 		}
+		*/
 		
 		
         //after indexing, update isIndex and indexedDate in table KutuCatalog
