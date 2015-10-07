@@ -55,6 +55,13 @@ class Pandamp_Search_Adapter_Esolr extends Pandamp_Search_Adapter_Abstract
 		
 	}
 	
+	public function deleteCatalogFromIndex($catalogGuid)
+	{
+		$solr = &$this->_solr;
+		$solr->deleteById($catalogGuid);
+		$solr->commit();
+	}
+	
 	private function _createSolrDocument(&$row)
 	{
 		$part = new Apache_Solr_Document();
@@ -83,96 +90,94 @@ class Pandamp_Search_Adapter_Esolr extends Pandamp_Search_Adapter_Abstract
 		$rowCountCF = count($rowsetAttrCF);
 		for($x=0;$x<$rowCountCF;$x++)
 		{
-		$rowAttrCF = $rowsetAttrCF[$x];
-		$cf[] = $rowAttrCF->folderGuid;
+			$rowAttrCF = $rowsetAttrCF[$x];
+			$cf[] = $rowAttrCF->folderGuid;
 		}
 	
 		$part->kategoriId = $cf;
 	
 		if (in_array($row->profileGuid, array('article','klinik'))) {
 		
-		$part->fileImage = $this->fileImageUrl($row->guid);
+			$part->fileImage = $this->fileImageUrl($row->guid);
 		}
 	
-	
-	
 		$query="SELECT * FROM KutuCatalogAttribute where catalogGuid='".$row->guid."'";
-				$results = $this->db->query($query);
-				$rowsetAttr = $results->fetchAll(PDO::FETCH_OBJ);
-				if ($rowsetAttr) {
-				$rowCount = count($rowsetAttr);
-				for($i=0;$i<$rowCount;$i++)
-				{
+		$results = $this->db->query($query);
+		$rowsetAttr = $results->fetchAll(PDO::FETCH_OBJ);
+		if ($rowsetAttr) {
+			$rowCount = count($rowsetAttr);
+			for($i=0;$i<$rowCount;$i++)
+			{
 				$rowAttr = $rowsetAttr[$i];
 				switch ($rowAttr->attributeGuid)
 				{
-				case 'fixedCommentTitle':
-				case 'fixedTitle':
-					if(empty($rowAttr->value))
-		{
-		$part->title = $row->shortTitle;
-		}
-		else
-		{
-		$part->title = $rowAttr->value;
-		}
-			break;
-			case 'fixedSubTitle':
-			$part->subTitle = $rowAttr->value;
-					break;
-						case 'fixedContent':
+					case 'fixedCommentTitle':
+					case 'fixedTitle':
+						if(empty($rowAttr->value))
+						{
+							$part->title = $row->shortTitle;
+						}
+						else
+						{
+							$part->title = $rowAttr->value;
+						}
+						break;
+					case 'fixedSubTitle':
+						$part->subTitle = $rowAttr->value;
+						break;
+					case 'fixedContent':
 						$part->content = $this->clean_string_input($rowAttr->value);
 						break;
-						case 'fixedKeywords':
+					case 'fixedKeywords':
 						$part->keywords = array_map('trim', explode(',', $rowAttr->value));
 						break;
-								case 'fixedDescription':
-								$part->description = $rowAttr->value;
-								break;
-								case 'fixedAuthor':
-								$part->author = $rowAttr->value;
-								break;
-								case 'fixedComments':
-								$part->comments = $rowAttr->value;
-								break;
-								case 'fixedNumber':
-								case 'prtNomor':
-								case 'ptsNomor':
-								$part->number = $rowAttr->value;
-								break;
-								case 'fixedYear':
-				case 'ptsTahun':
-				case 'prtTahun':
-					$part->year = (int)$rowAttr->value;
+					case 'fixedDescription':
+						$part->description = $rowAttr->value;
 						break;
-						case 'fixedDate':
-				case 'prtDisahkan':
-				case 'ptsDibaca':
-					$part->fixedDate = $this->getDateInSolrFormat($rowAttr->value);
+					case 'fixedAuthor':
+						$part->author = $rowAttr->value;
 						break;
-						case 'fixedLanguage':
-					$part->language = $rowAttr->value;
+					case 'fixedComments':
+						$part->comments = $rowAttr->value;
 						break;
-						case 'fixedCommentQuestion':
-								$part->question = $this->clean_string_input($rowAttr->value);
-								break;
-								case 'fixedAnswer':
-										$part->answer = $this->clean_string_input($rowAttr->value);
-										break;
-								case 'fixedSelectNama':
-								$part->kontributor = $rowAttr->value;
-								if ($kt = $this->fileImageUrl($rowAttr->value)) {
-								$part->kontributorImage = $kt;
-				}
-				break;
-				case 'fixedSource' :
-				case 'fixedSelectMitra':
-				$part->sumber = $rowAttr->value;
-				if ($fiu = $this->fileImageUrl($rowAttr->value)) {
-					$part->sumberImage = $fiu;
-				}
-				break;
-				case 'fixedSelect':
+					case 'fixedNumber':
+					case 'prtNomor':
+					case 'ptsNomor':
+						$part->number = $rowAttr->value;
+						break;
+					case 'fixedYear':
+					case 'ptsTahun':
+					case 'prtTahun':
+						$part->year = (int)$rowAttr->value;
+						break;
+					case 'fixedDate':
+					case 'prtDisahkan':
+					case 'ptsDibaca':
+						$part->fixedDate = $this->getDateInSolrFormat($rowAttr->value);
+						break;
+					case 'fixedLanguage':
+						$part->language = $rowAttr->value;
+						break;
+					case 'fixedCommentQuestion':
+						$part->question = $this->clean_string_input($rowAttr->value);
+						break;
+					case 'fixedAnswer':
+						$part->answer = $this->clean_string_input($rowAttr->value);
+						break;
+					case 'fixedSelectNama':
+						$part->kontributor = $rowAttr->value;
+						if ($kt = $this->fileImageUrl($rowAttr->value)) {
+							$part->kontributorImage = $kt;
+						}
+						break;
+					case 'fixedSource' :
+					case 'fixedSelectMitra':
+						$part->sumber = $rowAttr->value;
+						if ($fiu = $this->fileImageUrl($rowAttr->value)) {
+							$part->sumberImage = $fiu;
+						}
+						break;
+					case 'fixedSelect':
 	
 						if (!empty($rowAttr->value))
 						{
@@ -566,31 +571,31 @@ class Pandamp_Search_Adapter_Esolr extends Pandamp_Search_Adapter_Abstract
 						{
 						$part->all = $rowAttr->value;
 						}
-						}
-						}
-						if($row->profileGuid=='kutu_doc')
-						{
-			//extract text from the file
+				}
+			}
+			if($row->profileGuid=='kutu_doc')
+			{
+				//extract text from the file
 				if (isset($docSystemName) || isset($docOriginalName) || isset($docMimeType)) {
-				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType);
-				//$sContent = $this->clean_string_input($sContent);
+					$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType);
+					//$sContent = $this->clean_string_input($sContent);
 				}
 				else
 					$sContent = '';
 						
 						
-					if(isset($part->content))
-					{
+				if(isset($part->content))
+				{
 					$part->content .= ' '.$sContent;
-					}
-					else
-					{
-						$part->content = $sContent;
-						}
-						}
-					}
-					return $part;
-						}
+				}
+				else
+				{
+					$part->content = $sContent;
+				}
+			}
+		}
+		return $part;
+	}
 	
 	private function fileImageUrl($guid)
 	{
