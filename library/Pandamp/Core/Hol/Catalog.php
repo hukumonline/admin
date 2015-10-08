@@ -261,6 +261,14 @@ class Pandamp_Core_Hol_Catalog
             
 	            $indexingEngine = Pandamp_Search::manager();
 	            $indexingEngine->indexCatalog($row->guid);
+	            
+	            $registry = Zend_Registry::getInstance();
+	            $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+	            
+	            $res = $application->getOption('resources')['indexing']['solr']['write'];
+	            
+	            $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
+	            $esolr->indexCatalog($row->guid);	            
 			}
             
         }
@@ -282,6 +290,14 @@ class Pandamp_Core_Hol_Catalog
             
 	            $indexingEngine = Pandamp_Search::manager();
 	            $indexingEngine->indexCatalog($row->guid);
+	            
+	            $registry = Zend_Registry::getInstance();
+	            $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+	             
+	            $res = $application->getOption('resources')['indexing']['solr']['write'];
+	             
+	            $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
+	            $esolr->indexCatalog($row->guid);
 			}
             
         }
@@ -535,6 +551,14 @@ class Pandamp_Core_Hol_Catalog
 
             $indexingEngine = Pandamp_Search::manager();
             $indexingEngine->indexCatalog($catalogGuid);
+            
+            $registry = Zend_Registry::getInstance();
+            $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+             
+            $res = $application->getOption('resources')['indexing']['solr']['write'];
+             
+            $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
+            $esolr->indexCatalog($catalogGuid);            
         }
     }
     public function relateTo($itemGuid, $relatedGuid, $as='RELATED_ITEM', $valRelation = 0)
