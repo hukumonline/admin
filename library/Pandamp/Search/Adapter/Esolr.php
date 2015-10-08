@@ -600,52 +600,55 @@ class Pandamp_Search_Adapter_Esolr extends Pandamp_Search_Adapter_Abstract
 	private function fileImageUrl($guid)
 	{
 		$fileImage=null;
-		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',true);
+		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC");
 		if ($rowImage) {
-			$rowDocSystemName = $this->getCatalogAttribute($rowImage->itemGuid, 'docSystemName');
-			if ($rowDocSystemName)
+			foreach ($rowImage as $row)
 			{
-				$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
-						
-				if (is_array(@getimagesize($this->_imageUrl.'/'.$guid.'/'.$rowImage->itemGuid.'.'.strtolower($ext)))) {
-					$fileImage[] = $this->_imageUrl.'/'.$guid.'/'.$rowImage->itemGuid.'.'.strtolower($ext);
-				}
-				else if (is_array($this->_imageUrl.'/'.$rowImage->itemGuid.'.'.strtolower($ext)))
+				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName');
+				if ($rowDocSystemName)
 				{
-					$fileImage[] = $this->_imageUrl.'/'.$rowImage->itemGuid.'.'.strtolower($ext);
+					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
+					
+					
+					if ($ori = $this->giu($guid, $row->itemGuid, strtolower($ext))) {
+						$fileImage['original'] = $ori;
+					}
+					if ($th = $this->giu($guid, $row->itemGuid, strtolower($ext), "tn_")) {
+						$fileImage['thumbnail'] = $th;
+					}
+					
+					return Zend_Json::encode($fileImage);
 				}
-
-				if (is_array(@getimagesize($this->_imageUrl.'/'.$guid.'/tn_'.$rowImage->itemGuid.'.'.strtolower($ext)))) {
-					$fileImage[] = $this->_imageUrl.'/'.$guid.'/tn_'.$rowImage->itemGuid.'.'.strtolower($ext);
-				}
-				else if (is_array(@getimagesize($this->_imageUrl.'/tn_'.$rowImage->itemGuid.'.'.strtolower($ext)))) {
-					$fileImage[] = $this->_imageUrl.'/tn_'.$rowImage->itemGuid.'.'.strtolower($ext);
-				}
-
 			}
+			
+			
 		}
-
+		
 		return $fileImage;
 	}
 	
-	protected function getRelated($relatedGuid,$relateAs,$asRow)
+	protected function getRelated($relatedGuid,$relateAs,$asRow,$order=null)
 	{
 		$db = $this->db;
-
+	
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-
+	
 		$sql = $db->select();
-
+	
 		$sql->from('KutuRelatedItem', '*');
 		$sql->where('relatedGuid=?',$relatedGuid);
 		$sql->where('relateAs=?',$relateAs);
-
+		
+		if ($order !== null) {
+			$sql->order($order);	
+		}
+		
 		if ($asRow) {
 			return $db->fetchRow($sql);
 		}
-
+		
 		return $db->fetchAll($sql);
-
+	
 	}
 	
 	protected function getCatalogAttribute($guid,$attributeGuid)
@@ -727,6 +730,32 @@ class Pandamp_Search_Adapter_Esolr extends Pandamp_Search_Adapter_Abstract
 		}
 
 		return 0;
+	}
+	
+	public function giu($guid, $itemguid, $ext, $prefix=null)
+	{
+		$registry = Zend_Registry::getInstance();
+		$config = $registry->get(Pandamp_Keys::REGISTRY_APP_OBJECT);
+		
+		$cdn = $config->getOption('cdn');
+	
+		$imageUrl = $cdn['static']['url']['images'];
+	
+		$url1 = @getimagesize($imageUrl.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext);
+		$url2 = @getimagesize($imageUrl.'/'.$prefix.$itemguid.'.'.$ext);
+		if (is_array($url1)) {
+			$image = $imageUrl.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext;
+		}
+		else if (is_array($url2))
+		{
+			$image = $imageUrl.'/'.$prefix.$itemguid.'.'.$ext;
+		}
+		else
+		{
+			$image = null;
+		}
+	
+		return $image;
 	}
 						
 	public function getDateInSolrFormat($date) {
