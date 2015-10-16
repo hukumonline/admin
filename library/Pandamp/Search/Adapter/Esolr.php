@@ -616,6 +616,10 @@ class Pandamp_Search_Adapter_Esolr extends Pandamp_Search_Adapter_Abstract
 					if ($th = $this->giu($guid, $row->itemGuid, strtolower($ext), "tn_")) {
 						$fileImage['thumbnail'] = $th;
 					}
+					if ($caption = $this->getCatalogAttribute($row->itemGuid, "fixedTitle"))
+					{
+						$fileImage['caption'] = $caption;
+					}
 					
 					return Zend_Json::encode($fileImage);
 				}
