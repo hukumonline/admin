@@ -123,6 +123,14 @@ class Pandamp_Core_Hol_Catalog
         $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
         $esolr->indexCatalog($catalogGuid); 
 
+        
+        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
+        if (null === $viewRenderer->view) {
+        	$viewRenderer->initView();
+        }
+        $view = $viewRenderer->view;
+        
+        
         // create shortener url
         $kopel 	= Zend_Auth::getInstance()->getIdentity()->kopel;
         
@@ -132,7 +140,25 @@ class Pandamp_Core_Hol_Catalog
 		$indexingConfig = $config['indexing']['solr']['write'];
 		$hukumn = new Pandamp_Search_Adapter_Solrh($indexingConfig['host'], $indexingConfig['port'], $indexingConfig['dir3']);
 		
-		$url_content = $cfg->web->url->base.'/berita/baca/'.$catalogGuid.'/'.$slug;
+		$catalogAttributeDb = new App_Model_Db_Table_CatalogAttribute();
+		
+		$zl = Zend_Registry::get('Zend_Locale');
+		
+		if ($zl->getLanguage() == 'id') {
+			
+			if ($profileGuid == 'klinik') 
+				$url_content = $cfg->web->url->base.'/klinik/detail/'.$catalogGuid.'/'.$slug;
+			else if (in_array($profileGuid, array('kutu_peraturan','kutu_putusan','kutu_peraturan_kolonial','kutu_rancangan_peraturan')))
+				$url_content = $cfg->web->url->base.'/pusatdata/detail/'.$catalogGuid.'/'.$view->getLabelNode($folderGuid).'/'.$folderGuid.'/'.$slug;
+			else
+				$url_content = $cfg->web->url->base.'/berita/baca/'.$catalogGuid.'/'.$slug;
+		
+			
+		}
+		else if ($zl->getLanguage() == 'en')
+		{
+			$url_content = $cfg->web->en->url->base.'/pages/'.$catalogGuid.'/'.$slug(strip_tags(title));
+		}
 		
 		//$q = "url:\"".$url_content."\" kopel:".$kopel;
 		$q = "url:\"".$url_content."\"";
