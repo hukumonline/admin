@@ -648,9 +648,9 @@ class Dms_CatalogController extends Zend_Controller_Action
 				}
 				else if (!empty($aData['fixedKeywords']))
 				{
-					if (in_array($modelCatalog['profileGuid'],array('article','clinic'))) {
+					if (in_array($modelCatalog->profileGuid,array('article','clinic'))) {
 					$keywords = base64_encode(trim($aData['fixedKeywords']));
-					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/relatedcatalog/guid/'.$id.'/profile/'.$modelCatalog['profileGuid'].'/keywords/'.$keywords.'/node/'.$sessHistory->currentNode);
+					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/catalog/relatedcatalog/guid/'.$id.'/profile/'.$modelCatalog->profileGuid.'/keywords/'.$keywords.'/node/'.$sessHistory->currentNode);
 					}
 				}
 				else 
