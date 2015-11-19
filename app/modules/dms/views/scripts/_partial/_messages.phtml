@@ -7,11 +7,10 @@
  */
 ?>
 <?php if ($this->messages) : ?>
-<div class="box box-info">
-	<ul style="list-style:none;">
+<div class="callout callout-success">
+	<h4>Warning!</h4>
 	<?php foreach ($this->messages as $msg) : ?>
-		<li><?php echo $msg; ?></li>
+		<p><?php echo $msg; ?></p>
 	<?php endforeach; ?>
-	</ul>
 </div>
 <?php endif; ?>

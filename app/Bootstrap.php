@@ -27,6 +27,68 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         //Zend_Registry::set('db6', $multidb->getDb('db6'));
     }
+    
+    /**
+     * Creates the job queue with a mysql message queue adapter, using
+     * using the default database driver from the application config
+     */
+    const NAME_ORDERQUEUE = 'job_queue';
+    protected function _initOrdersQueue()
+    {
+    	$config = $this->getOptions();
+    	$options = array(
+   			'name'          => self::NAME_ORDERQUEUE,
+   			'driverOptions' => array(
+				'host'      => $config['resources']['multidb']['db1']['host'],
+				'port'      => '3306',
+				'username'  => $config['resources']['multidb']['db1']['username'],
+				'password'  => $config['resources']['multidb']['db1']['password'],
+				'dbname'    => $config['resources']['multidb']['db1']['dbname'],
+				'type'      => 'pdo_mysql'
+   			)
+    	);
+    
+    	$queue = new Pandamp_Job_Queue('Db', $options);
+    	Zend_Registry::set(self::NAME_ORDERQUEUE,$queue);
+    }
+    
+    /**
+     * @var Zend_log
+     */
+    protected $_logger;
+    
+    /*
+     * The Zend_Log class defines the following priorities:
+    * 1. EMERG   = 0;  // Emergency: system is unusable
+    * 2. ALERT   = 1;  // Alert: action must be taken immediately
+    * 3. CRIT    = 2;  // Critical: critical conditions
+    * 4. ERR     = 3;  // Error: error conditions
+    * 5. WARN    = 4;  // Warning: warning conditions
+    * 6. NOTICE  = 5;  // Notice: normal but significant condition
+    * 7. INFO    = 6;  // Informational: informational messages
+    * 8. DEBUG   = 7;  // Debug: debug messages
+    *
+    * used $log->info, $log->err, etc.
+    *
+    * @sample:
+    * $log = Zend_Registry::get('Zend_Log');
+    * $log->err('test log');
+    *
+    */
+    
+    protected function _initRegisterLogger()
+    {
+    	$this->bootstrap('Log');
+    
+    	if (!$this->hasPluginResource('Log')) {
+    		throw new Zend_Exception('Log not enabled in zhol.ini');
+    	}
+    
+    	$logger = $this->getResource('Log');
+    	assert($logger != NULL);
+    	$this->_logger = $logger;
+    	Zend_Registry::set('Zend_Log',$logger);
+    }
 
 	/**
 	 * Init session

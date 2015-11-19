@@ -1,10 +1,10 @@
-<ul class="breadcrumbs">
+<ol class="breadcrumb">
 <?php for($i=0; $i<count($this->aPath);$i++) { ?>
-	<?php if($i != count($this->aPath)-1) {?>
-            <li><a href="<?php echo $this->aPath[$i]['url']; ?>"><span class="<?php echo ($i%2 ? 'label label-blue' : 'label label-red'); ?>"><?php echo $this->aPath[$i]['title']; ?></span></a></li>
+	<?php if($i != count($this->aPath)-1) { ?>
+            <li><a href="<?php echo $this->aPath[$i]['url']; ?>"><?php echo str_replace('Root','Home',$this->aPath[$i]['title']); ?></a></li>
 	<?php } else { ?>
-            <li><a href="<?php echo $this->aPath[$i]['url']; ?>"><?php echo $this->aPath[$i]['title']; ?></a></li>
+            <li class="active"><?php echo str_replace('Root','Home',$this->aPath[$i]['title']); ?></li>
 	<?php } ?>
 
 <?php } ?>
-</ul>
+</ol>

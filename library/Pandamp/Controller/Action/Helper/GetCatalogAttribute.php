@@ -16,7 +16,7 @@ class Pandamp_Controller_Action_Helper_GetCatalogAttribute
             if(isset($attr) && !empty($attr))
                     return $attr;
             else
-                    return 'No-Title';
+                    return;
 
 
         }

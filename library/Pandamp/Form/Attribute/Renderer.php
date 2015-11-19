@@ -17,13 +17,14 @@ class Pandamp_Form_Attribute_Renderer
 	var $attribs;
 	var $profileGuid;
 	
-	public function __construct($attributeGuid=null, $value=null, $type=null, $attribs=null, $profileGuid=null, $other=null)
+	public function __construct($attributeGuid=null, $value=null, $type=null, $attribs=null, $profileGuid=null, $desc=null, $other=null)
 	{
 		$this->name = $attributeGuid;
 		$this->value = $value;
 		$this->type = $type;
 		$this->attribs = $attribs;
 		$this->profileGuid = $profileGuid;
+		$this->label = $desc;
 		$this->other = $other;
 	}
 	
@@ -48,12 +49,13 @@ class Pandamp_Form_Attribute_Renderer
 	
 	        case 1:     // field type = textarea paragraph
 	        	$view = new Zend_View();
+	        	$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				if(isset($this->attribs))
 					$view->attribs = $this->attribs;
 				else
-					$view->attribs = array('rows' => 5, 'cols' =>50);
+					$view->attribs = array('rows' => 5, 'cols' =>50, 'class' => 'form-control');
 				$view->setScriptPath(dirname(__FILE__));
 				return $view->render('TextArea.phtml');
 	            
@@ -185,14 +187,16 @@ class Pandamp_Form_Attribute_Renderer
 				echo '<input type="reset" class="button" value="..." onClick="return showCalendar'."('$attributeId', 'dd/mm/Y')".';">';*/
 				break;
 			
+			// updated Nov 1, 2015	
 			case 6:
 				$view = new Zend_View();
+				$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				if (isset($this->attribs))
 					$view->attribs = $this->attribs;
 				else 
-					$view->attribs = array('size' => 25, 'maxlength' => '50');
+					$view->attribs = array('class' => 'form-control');
 				$view->setScriptPath(dirname(__FILE__));
 				return $view->render('Text.phtml');
 				break;
@@ -244,6 +248,7 @@ class Pandamp_Form_Attribute_Renderer
 	        	}
 	        	
 	        	$view = new Zend_View();
+	        	$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				$view->defaultValues = $defaultValues;
@@ -276,6 +281,7 @@ class Pandamp_Form_Attribute_Renderer
 				$data =  Zend_Json::decode(Zend_Json::encode($a));      	
 				
 	        	$view = new Zend_View();
+	        	$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				$view->defaultValues = $data;
@@ -325,6 +331,7 @@ class Pandamp_Form_Attribute_Renderer
 				$data =  Zend_Json::decode(Zend_Json::encode($a));      	
 				
 	        	$view = new Zend_View();
+	        	$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				$view->defaultValues = $data;
@@ -359,6 +366,7 @@ class Pandamp_Form_Attribute_Renderer
 				$data =  Zend_Json::decode(Zend_Json::encode($a));      	
 				
 	        	$view = new Zend_View();
+	        	$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				$view->defaultValues = $data;
@@ -366,6 +374,21 @@ class Pandamp_Form_Attribute_Renderer
 				return $view->render('select.phtml');
 	        
 	        break;
+	        
+	        case 14: // tags
+	        	$view = new Zend_View();
+	        	$view->label = $this->label;
+	        	$view->name = $this->name;
+	        	$view->value = $this->value;
+	        	if(isset($this->attribs))
+	        		$view->attribs = $this->attribs;
+	        	else
+	        		$view->attribs = array('rows' => 3, 'class' =>'form-control');
+	        	$view->setScriptPath(dirname(__FILE__));
+	        	return $view->render('tags.phtml');
+	        	 
+	        break;
+	        
 			case 101: //publishing status
 				require_once(CONFIG_PATH.'/master-status.php');
 				$aStatus = MasterStatus::getPublishingStatus();

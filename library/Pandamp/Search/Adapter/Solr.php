@@ -1539,6 +1539,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
                 'facet.limit'=>'-1',
                 'debugQuery'=>'true',
                 'sort'=>$sortField,
+            	'q.op'=>'AND',
                 'spellcheck'=>'true',            	            	
             	'qt'=>'spellCheckCompRH',			
             	'spellcheck.q'=>$querySolr,

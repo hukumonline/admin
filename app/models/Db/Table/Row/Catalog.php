@@ -144,14 +144,6 @@ class App_Model_Db_Table_Row_Catalog extends Zend_Db_Table_Row_Abstract
 
         try {
             $hits = $indexingEngine->deleteCatalogFromIndex($this->guid);
-            
-            $registry = Zend_Registry::getInstance();
-            $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
-            
-            $res = $application->getOption('resources')['indexing']['solr']['write'];
-            
-            $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
-            $esolr->deleteCatalogFromIndex($this->guid);
         }
         catch (Exception $e)
         {

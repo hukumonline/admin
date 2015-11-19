@@ -180,4 +180,103 @@ class Search_DmsController extends Zend_Controller_Action
         $this->view->numberOfRows = $num_rows;
         $this->view->data = $data;
     }
+    
+    /**
+     * Find images
+     */
+    public function findimageAction()
+    {
+    	$request   = $this->getRequest();
+    	$pageIndex = $request->getParam('pageIndex', 1);
+    	$perPage   = $request->getParam('perpage');
+    	$perPage   = ($perPage)? $perPage : 20;
+    	$offset    = ($pageIndex - 1) * $perPage;
+    
+    	$params = null;
+    	$exp 	= array();
+    
+    	$params = $request->getParam('q');
+    	if (null != $params) {
+    		$exp = rawurldecode(base64_decode($params));
+    		$exp = Zend_Json::decode($exp);
+    	}
+    	else
+    	{
+    		$params = rawurlencode(base64_encode(Zend_Json::encode($exp)));
+    	}
+    
+    	$indexingEngine = Pandamp_Search::manager();
+    
+    	if ($exp['keyword'] == '*' || $exp['keyword'] == '') {
+    		$exp['keyword'] = '*:*';
+    	}
+    
+    	$hits = $indexingEngine->find($exp['keyword'].' mimeType:image', $offset, $perPage,'createdDate desc');
+    	$solrNumFound = count($hits->response->docs);
+    
+    	$num_rows = $hits->response->numFound;
+    
+    	$paginator = Zend_Paginator::factory($num_rows);
+    	$cache = Pandamp_Cache::getInstance();
+    	if ($cache) {
+    		Zend_Paginator::setCache($cache);
+    	}
+    	$paginator->setCacheEnabled(true);
+    
+    	$paginator->setCurrentPageNumber($pageIndex);
+    	$paginator->setItemCountPerPage($perPage);
+    
+    	$paginator = get_object_vars($paginator->getPages('Sliding'));
+    
+    	$paginatorOptions = array(
+    			'path' 	   => $this->view->url(array('lang'=>$this->view->getLanguage()), 'search_catalog_findimage'),
+    			'itemLink' => (null == $params) ? 'page-%d' : 'page-%d?perpage='.$perPage.'&q=' . $params,
+    	);
+    
+    	/**
+    	 * Support searching from other page
+    	 * For example, search files at adding set page
+    	*/
+    	if (isset($exp['format']) && $exp['format'] == 'JSON') {
+    		$this->_helper->getHelper('viewRenderer')->setNoRender();
+    		$this->_helper->getHelper('layout')->disableLayout();
+    			
+    		$config = Pandamp_Application::getOption('cdn');
+    			
+    		if($solrNumFound>$perPage)
+    			$numRowset = $perPage ;
+    		else
+    			$numRowset = $solrNumFound;
+    			
+    		$res = array(
+    				'files' 	=> array(),
+    				'paginator' => $this->view->paginator()->slide($paginator, $paginatorOptions),
+    		);
+    		for ($i=0;$i<$numRowset;$i++) {
+    			$row = $hits->response->docs[$i];
+    			$relDb = new App_Model_Db_Table_RelatedItem();
+    			$rel = $relDb->fetchRow("itemGuid='".$row->id."' AND relateAs='RELATED_IMAGE'");
+    			if ($rel) {
+    				$ext = pathinfo($row->fileName,PATHINFO_EXTENSION);
+    				$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
+    				$res['files'][] = array(
+    						'id' 			=> $row->id,
+    						'relatedGuid' 	=> $rel->relatedGuid,
+    						'title' 		=> $row->title,
+    						'url'   		=> $url
+    				);
+    
+    			}
+    			else
+    			{
+    				//$url = 'http://images.hukumonline.com/frontend';
+    			}
+    				
+    
+    		}
+    			
+    		$this->getResponse()->setBody(Zend_Json::encode($res));
+    	}
+    
+    }
 }
