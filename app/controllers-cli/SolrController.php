@@ -612,7 +612,7 @@ class SolrController extends Application_Controller_Cli
 					}
 					else
 					{
-						$part->title = $rowAttr->value;
+						$part->title = (new Pandamp_Utility_Posts)->sanitize_post_title($rowAttr->value);
 					}
 					break;
 				case 'fixedSubTitle':
