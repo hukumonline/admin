@@ -9,7 +9,7 @@ class SolrController extends Application_Controller_Cli
 {
 	private $_pdfExtractor = 'pdftotext';
 	private $_wordExtractor = 'antiword';
-	private $_imageUrl = 'http://images.hukumonline.dev/frontend';
+	//private $_imageUrl = 'http://images.hukumonline.dev/frontend';
 	
 	public function emptyIndexAction()
 	{
@@ -73,7 +73,7 @@ class SolrController extends Application_Controller_Cli
 		echo "Indexing completed\n";
 	}
 	
-	public function deleteCatalogFromIndex($catalogGuid)
+	public function deleteCatalogFromIndexAction()
 	{
 		$request = $this->getRequest();
 		
@@ -516,6 +516,7 @@ class SolrController extends Application_Controller_Cli
 		$part->sticky = (!$row->sticky==null)? $row->sticky : 0;
 		$part->status = (!$row->status==null)? $row->status : 0;
 		
+		if ($row->profileGuid !== "kutu_doc") {
 		$part->desktop = $this->getCountCatalog($row->guid, $row->profileGuid, 'desktop');
 		$part->mobile = $this->getCountCatalog($row->guid, $row->profileGuid, 'mobile');
 		
@@ -533,12 +534,11 @@ class SolrController extends Application_Controller_Cli
 		
 		$part->kategoriId = $cf;
 		
-		$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini','cdn');
+		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
 		$part->shortenerUrl = $this->generateShortener($row->shortTitle);
 		
 		if (in_array($row->profileGuid, array('article','klinik','partner'))) {
-			
 			$part->fileImage = $this->fileImageUrl($row->guid);
 		}
 		
@@ -552,7 +552,7 @@ class SolrController extends Application_Controller_Cli
 					$rowRelatedClinic = $rk[$v];
 					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle']);
 					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle')));
-					$rowClinic[$v]['pageUrl'] = $cdn->hol->url->base."/klinik/detail/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
+					$rowClinic[$v]['pageUrl'] = $web->url->base."/klinik/detail/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
 				
 				$related = Zend_Json::encode($rowClinic);
@@ -568,7 +568,7 @@ class SolrController extends Application_Controller_Cli
 					$rowRelatedClinic = $rk[$v];
 					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle']);
 					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle')));
-					$rowClinic[$v]['pageUrl'] = $cdn->hol->url->base."/berita/baca/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
+					$rowClinic[$v]['pageUrl'] = $web->url->base."/berita/baca/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
 				
 				$related = Zend_Json::encode($rowClinic);
@@ -588,6 +588,7 @@ class SolrController extends Application_Controller_Cli
 		
 		
 		$part->relatedItem = $related;
+		}
 		
 		$docSystemName = null;
 		$docOriginalName = null;
@@ -1055,16 +1056,16 @@ class SolrController extends Application_Controller_Cli
 					$docSystemName = $rowAttr->value;
 					break;
 				case 'docSize':
-					// $part->fileSize = $rowAttr->value; //TODO conver to float first
+					$part->fileSize = $rowAttr->value;
 					break;
 				default:
-					if(isset($part->all))
+					if(isset($part->_text_))
 					{
-						$part->all .= ' '.$rowAttr->value;
+						$part->_text_ .= ' '.$rowAttr->value;
 					}
 					else
 					{
-						$part->all = $rowAttr->value;
+						$part->_text_ = $rowAttr->value;
 					}					
 			}
 		}
@@ -1097,6 +1098,7 @@ class SolrController extends Application_Controller_Cli
 		$fileImage=null;
 		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC");
 		if ($rowImage) {
+			$i=0;
 			foreach ($rowImage as $row)
 			{
 				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName');
@@ -1105,7 +1107,7 @@ class SolrController extends Application_Controller_Cli
 					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					
-					$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate']);
+					/*$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate']);
 					if ($catalog) {
 						// Pada file ImageController cli
 						// pd1 ini dilakukan juga strip_tags(trim($catalog->createdBy))
@@ -1135,7 +1137,7 @@ class SolrController extends Application_Controller_Cli
 							
 							}
 						}
-					}
+					}*/
 					
 					/*if (file_exists(ROOT_DIR.'/images/frontend/'.$guid.'/'.$row->itemGuid.'.'.strtolower($ext))) {
 						$fileImage['original'] = $this->_imageUrl.'/'.$guid.'/'.$row->itemGuid.'.'.strtolower($ext);
@@ -1152,29 +1154,42 @@ class SolrController extends Application_Controller_Cli
 						$fileImage['thumbnail'] = $this->_imageUrl.'/tn_'.$row->itemGuid.'.'.strtolower($ext);
 					}*/
 					
-					/*if ($ori = $this->giu($guid, $row->itemGuid, strtolower($ext), null, "local")) {
-						$fileImage['original'] = $ori;
-					}*/
+					if ($catalogGuid !== $row->itemGuid)
+					{
+						$ig = $this->getItemRelated($catalogGuid,'RELATED_IMAGE');
+						$guid = $ig['relatedGuid']; 
+					}
 					
-					if (!isset($fileImage['thumbnail'])) {
-						if ($th = $this->giu($guid, $row->itemGuid, strtolower($ext), "tn_", "local")) {
-							$fileImage['thumbnail'] = $th;
+					if ($ori = $this->giu($guid, $catalogGuid, strtolower($ext), null, "local")) {
+						$fileImage[$i]['original'] = $ori;
+					}
+					
+					$file = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
+					$keys = array_keys($file->toArray());
+					foreach ($keys as $key)
+					{
+						if ($img = $this->giu($guid, $catalogGuid, strtolower($ext), $key.'_', "local")) {
+							$fileImage[$i][$key] = $img;
 						}
 					}
 					
-					if ($caption = $this->getCatalogAttribute($row->itemGuid, "fixedTitle"))
-					{
-						$fileImage['caption'] = strip_tags(trim($caption));
+					if ($th = $this->giu($guid, $catalogGuid, strtolower($ext), "tn_", "local")) {
+						$fileImage[$i]['thumbnail'] = $th;
 					}
 					
-					return Zend_Json::encode($fileImage);
+					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle"))
+					{
+						$fileImage[$i]['caption'] = strip_tags(trim($caption));
+					}
+					
 				}
+				$i++;
 			}
 			
-			
+			return Zend_Json::encode($fileImage);
 		}
 		
-		return $fileImage;
+		return;
 	}
 	
 	protected function generateShortener($shortTitle)
@@ -1196,13 +1211,23 @@ class SolrController extends Application_Controller_Cli
 		{
 			$hex = dechex($row->id);
 			
-			$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini','web');
+			$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 			$shortUrl = $web->url->short.'/'.$hex;
 		}
 		
 		return $shortUrl;
 	}
 	
+	protected function getItemRelated($itemGuid,$relateAs)
+	{
+		$db = $this->db;
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		$sql = $db->select();
+		$sql->from('KutuRelatedItem', '*');
+		$sql->where('itemGuid=?',$itemGuid);
+		$sql->where('relateAs=?',$relateAs);
+		return $db->fetchRow($sql);
+	}
 	protected function getRelated($relatedGuid,$relateAs,$asRow,$order=null,$multi=false)
 	{
 		$db = $this->db;
@@ -1331,7 +1356,7 @@ class SolrController extends Application_Controller_Cli
 	
 	public function giu($guid, $itemguid, $ext, $prefix=null,$default="remote")
 	{
-		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini','cdn');
+		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
 		
 		$imageDir = $config->static->dir->images;
 		$imageUrl = $config->static->url->images;
@@ -1366,8 +1391,8 @@ class SolrController extends Application_Controller_Cli
 	
 	public function getDateInSolrFormat($date) {
 		if($date=='0000-00-00 00:00:00' OR $date=='0000-00-00' OR $date=='' OR $date==NULL) {
-			//return '0000-00-00T00:00:00Z';
-			return '1999-12-31T23:59:59Z';
+			return '0000-00-00T00:00:00Z';
+			//return '1999-12-31T23:59:59Z';
 		}
 		else
 		{
