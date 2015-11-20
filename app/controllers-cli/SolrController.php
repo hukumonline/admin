@@ -536,7 +536,7 @@ class SolrController extends Application_Controller_Cli
 		
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
-		$part->shortenerUrl = $this->generateShortener($row->shortTitle);
+		//$part->shortenerUrl = $this->generateShortener($row->shortTitle);
 		
 		if (in_array($row->profileGuid, array('article','klinik','partner'))) {
 			$part->fileImage = $this->fileImageUrl($row->guid);
