@@ -502,7 +502,7 @@ class SolrController extends Application_Controller_Cli
 	{
 		$part = new Apache_Solr_Document();
 		$part->id = $row->guid;
-		$part->shortTitle = $row->shortTitle;
+		$part->shortTitle = trim(strip_tags($row->shortTitle));
 		$part->profile = $row->profileGuid;
 		$part->publishedDate = $this->getDateInSolrFormat($row->publishedDate);
 		$part->expiredDate = $this->getDateInSolrFormat($row->expiredDate);
@@ -608,7 +608,7 @@ class SolrController extends Application_Controller_Cli
 				case 'fixedTitle':
 					if(empty($rowAttr->value))
 					{
-						$part->title = $row->shortTitle;
+						$part->title = trim(strip_tags($row->shortTitle));
 					}
 					else
 					{
@@ -653,7 +653,7 @@ class SolrController extends Application_Controller_Cli
 					$part->language = $rowAttr->value;
 					break;
 				case 'fixedCommentQuestion':
-					$part->question = $this->clean_string_input($rowAttr->value);
+					$part->question = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
 					break;
 				case 'fixedAnswer':
 					//$part->answer = $this->clean_string_input($rowAttr->value);
@@ -1444,7 +1444,7 @@ class SolrController extends Application_Controller_Cli
 							unlink($outpath);
 							echo 'content PDF: '. $sDir.' ' . strlen($value)."\n";
 							if(strlen($value) > 20)
-								return $this->clean_string_input($value);
+								return (new Pandamp_Utility_Posts)->sanitize_post_content($value);
 							else
 							{
 								echo "content file kosong\n";
