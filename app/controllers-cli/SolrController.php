@@ -1154,11 +1154,11 @@ class SolrController extends Application_Controller_Cli
 						$fileImage['thumbnail'] = $this->_imageUrl.'/tn_'.$row->itemGuid.'.'.strtolower($ext);
 					}*/
 					
-					if ($catalogGuid !== $row->itemGuid)
+					/*if ($catalogGuid !== $row->itemGuid)
 					{
 						$ig = $this->getItemRelated($catalogGuid,'RELATED_IMAGE');
-						$guid = $ig['relatedGuid']; 
-					}
+						$guid = $ig->relatedGuid; 
+					}*/
 					
 					if ($ori = $this->giu($guid, $catalogGuid, strtolower($ext), null, "local")) {
 						$fileImage[$i]['original'] = $ori;
