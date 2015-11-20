@@ -34,7 +34,15 @@ class Search_DmsController extends Zend_Controller_Action
 
         if (!$auth->hasIdentity()) {
             //$this->_forward('login','account','admin');
-			
+        	if ($this->getRequest()->isXmlHttpRequest()) {
+        		//$this->getResponse()->setHttpResponseCode(401);
+        		$this->getResponse()->setRawHeader('HTTP/1.1 401 Not Found');
+        		$return = array('message' => 'You are not allowed to access this page because you do not have permission to view it.<br />Please contact the administrator.');
+        		$this->getResponse()->setBody(Zend_Json::encode($return));
+        		$this->getResponse()->setBody(
+       				"<script>alert('f');</script>"        				
+        		);die;
+        	}
 			$this->_redirect($loginUrl.'?returnUrl='.$sReturn);     
         }
         else
@@ -211,7 +219,7 @@ class Search_DmsController extends Zend_Controller_Action
     		$exp['keyword'] = '*:*';
     	}
     
-    	$hits = $indexingEngine->find($exp['keyword'].' mimeType:image', $offset, $perPage,'createdDate desc');
+    	$hits = $indexingEngine->find($exp['keyword'].' mimeType:image* profile:kutu_doc', $offset, $perPage,'createdDate desc');
     	$solrNumFound = count($hits->response->docs);
     
     	$num_rows = $hits->response->numFound;
@@ -229,8 +237,8 @@ class Search_DmsController extends Zend_Controller_Action
     	$paginator = get_object_vars($paginator->getPages('Sliding'));
     
     	$paginatorOptions = array(
-    			'path' 	   => $this->view->url(array('lang'=>$this->view->getLanguage()), 'search_catalog_findimage'),
-    			'itemLink' => (null == $params) ? 'page-%d' : 'page-%d?perpage='.$perPage.'&q=' . $params,
+   			'path' 	   => $this->view->url(array('lang'=>$this->view->getLanguage()), 'search_catalog_findimage'),
+   			'itemLink' => (null == $params) ? 'page-%d' : 'page-%d?perpage='.$perPage.'&q=' . $params,
     	);
     
     	/**
@@ -249,28 +257,30 @@ class Search_DmsController extends Zend_Controller_Action
     			$numRowset = $solrNumFound;
     			
     		$res = array(
-    				'files' 	=> array(),
-    				'paginator' => $this->view->paginator()->slide($paginator, $paginatorOptions),
+   				'files' 	=> array(),
+   				'paginator' => $this->view->paginator()->slide($paginator, $paginatorOptions),
     		);
     		for ($i=0;$i<$numRowset;$i++) {
     			$row = $hits->response->docs[$i];
-    			$relDb = new App_Model_Db_Table_RelatedItem();
-    			$rel = $relDb->fetchRow("itemGuid='".$row->id."' AND relateAs='RELATED_IMAGE'");
-    			if ($rel) {
-    				$ext = pathinfo($row->fileName,PATHINFO_EXTENSION);
-    				$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
-    				$res['files'][] = array(
-    						'id' 			=> $row->id,
-    						'relatedGuid' 	=> $rel->relatedGuid,
-    						'title' 		=> $row->title,
-    						'url'   		=> $url
-    				);
+				$fn = pathinfo($row->systemName,PATHINFO_FILENAME);
+   				$ext = pathinfo($row->systemName,PATHINFO_EXTENSION);
+   				$relDb = new App_Model_Db_Table_RelatedItem();
+   				$rel = $relDb->fetchRow("itemGuid='".$fn."' AND relateAs='RELATED_IMAGE'");
+   				
+   				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/thumbnail_'.$row->systemName)))
+   					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/thumbnail_'.$row->systemName;
+   				elseif (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/tn_'.$fn.'.'.$ext)))
+   					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/tn_'.$fn.'.'.$ext;
+   				   				
+   				//$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
+   				//$url = $config['static']['url']['images'].'/upload/'.$pd1.'/'.$pd2.'/'.$pd3.'/'.$pd4.'/'.$fn.'_square'.'.'.$ext;
+   				$res['files'][] = array(
+					'id' 			=> $row->id,
+					'relatedGuid' 	=> $rel->relatedGuid,
+					'title' 		=> $row->title,
+					'url'   		=> $url
+ 				);
     
-    			}
-    			else
-    			{
-    				//$url = 'http://images.hukumonline.com/frontend';
-    			}
     				
     
     		}

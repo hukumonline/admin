@@ -40,8 +40,11 @@ class Api_CatalogController extends Zend_Controller_Action
 		try {
 			$this->view->addHitsBySolr(json_encode([[
 					"id" => $catalogGuid,
-					"title" => ["set" => $title]
-					]]));
+					"title" => ["set" => $title],
+					"shortTitle" => ["set" => Pandamp_Utility_String::removeSign($title, '-', true)],
+					"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")],
+					"modifiedBy" => ["set" => Zend_Auth::getInstance()->getIdentity()->username]
+				]]));
 		}
 		catch (Zend_Exception $e)
 		{}

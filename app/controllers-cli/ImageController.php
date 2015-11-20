@@ -7,7 +7,7 @@ class ImageController extends Application_Controller_Cli
 		$request = $this->getRequest();
 		$query = $request->getParam('q');
 		
-		$size = [
+		/*$size = [
 			'square' => 'crop_99_103', //legalpanelsidecontent
 			'thumbnail' => 'resize_100_53', //terbaru
 			'multimedia' => 'resize_245_169', //multimediabxslider
@@ -17,12 +17,14 @@ class ImageController extends Application_Controller_Cli
 			'cropnext' => 'crop_325_183', //nextevent
 			'mainhead' => 'resize_462_309', //utama
 			'medium' => 'resize_646_431' //detailberita
-		];
+		];*/
 		
 		$tool = 'gd';
 		
+		$size = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
+		
 		$sizes 	= array();
-		foreach ($size as $key => $value) {
+		foreach ($size->toArray() as $key => $value) {
 			list($method, $width, $height) = explode('_', $value);
 			$sizes[$key] = array('method' => $method, 'width' => $width, 'height' => $height);
 		}
@@ -55,16 +57,18 @@ class ImageController extends Application_Controller_Cli
 				{
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
-
-					$image = $this->giu($row->guid, $rowsetRelatedItem->itemGuid, $ext, null, "remote");
 					
-					$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini','cdn');
+					$image = $this->giu($row->guid, $rowsetRelatedItem->itemGuid, $ext, null, "local");
 					
-					$dir = $cdn->static->dir->images . DIRECTORY_SEPARATOR . 'upload';
+					$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
+					
+					//$dir = $cdn->static->dir->images . DIRECTORY_SEPARATOR . 'upload';
+					$dir = $cdn->static->dir->images;
 					
 					$catalogDb = $this->getCatalog($rowsetRelatedItem->itemGuid, ['createdBy','createdDate']);
 					
-					$path = implode(DS, array(strip_tags(trim($catalogDb->createdBy)), date('Y',strtotime($catalogDb->createdDate)), date('m',strtotime($catalogDb->createdDate)), date('d',strtotime($catalogDb->createdDate))));
+					//$path = implode(DS, array(strip_tags(trim($catalogDb->createdBy)), date('Y',strtotime($catalogDb->createdDate)), date('m',strtotime($catalogDb->createdDate)), date('d',strtotime($catalogDb->createdDate))));
+					$path = implode(DS, [$row->guid]);
 					Pandamp_Utility_File::createDirs($dir, $path);
 					
 					//$fileName  = uniqid('lt');
@@ -90,7 +94,7 @@ class ImageController extends Application_Controller_Cli
 						$width 	= $sizes[$s]['width'];
 						$height = $sizes[$s]['height'];
 							
-						$f 		 = $fileName . '_' . $s . '.' . $ext;
+						$f 		 = $s . '_' . $fileName . '.' . $ext;
 						$newFile = $dir . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $f;
 						
 						/**
@@ -106,7 +110,7 @@ class ImageController extends Application_Controller_Cli
 						}
 						
 						//beritahu nama file baru catalogAttribute
-						$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
+						//$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
 						
 						
 						/*try {
@@ -185,6 +189,21 @@ class ImageController extends Application_Controller_Cli
 		return ($row) ? $row : '';
 	}
 	
+	protected function getItemRelated($itemGuid, $relateAs)
+	{
+		$db = $this->db;
+	
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+	
+		$sql = $db->select();
+		$sql->from('KutuRelatedItem', '*');
+		$sql->where('itemGuid=?',$itemGuid);
+		$sql->where('relateAs=?',$relateAs);
+		$row = $db->fetchRow($sql);
+	
+		return ($row) ? $row : '';
+	}
+	
 	protected function getCatalogAttribute($guid,$attributeGuid)
 	{
 		$db = $this->db;
@@ -204,7 +223,7 @@ class ImageController extends Application_Controller_Cli
 	
 	public function giu($guid, $itemguid, $ext, $prefix=null,$default="remote")
 	{
-		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini','cdn');
+		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
 	
 		$imageDir = $config->static->dir->images;
 		$imageUrl = $config->static->url->images;
