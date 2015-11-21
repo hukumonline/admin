@@ -204,12 +204,13 @@ class ImageController extends Application_Controller_Cli
 				try {
 					$this->addHitsBySolr(json_encode([[
 							"id" => $row->guid,
-							"fileImage" => ["set" => Zend_Json::encode($fileImage)]
+							"fileImage" => ["set" => Zend_Json::encode($fileImage)],
+							"expiredDate" => ["set" => $this->getDateInSolrFormat($row->expiredDate)]
 						]]));
 				}
 				catch (Zend_Exception $e)
 				{
-						
+					$this->log()->err($e->getMessage());
 				}
 				
 			}
@@ -349,5 +350,31 @@ class ImageController extends Application_Controller_Cli
 		}
 	
 		return $image;
+	}
+	
+	protected function log()
+	{
+		$logger = new Zend_Log();
+	
+		$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH . "/../temp/log/application.log");
+	
+		// @TODO Filter only Log::CRIT
+		//$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
+		//$writer->addFilter($filter);
+	
+		$logger->addWriter($writer);
+	
+		return $logger;
+	}
+	
+	public function getDateInSolrFormat($date) {
+		if($date=='0000-00-00 00:00:00' OR $date=='0000-00-00' OR $date=='' OR $date==NULL) {
+			//return '0000-00-00T00:00:00Z';
+			return '1999-12-31T23:59:59Z';
+		}
+		else
+		{
+			return date("Y-m-d\\TH:i:s\\Z",strtotime($date));
+		}
 	}
 }
