@@ -1291,6 +1291,8 @@ class SolrController extends Application_Controller_Cli
 	
 	protected function getCatalogAttribute($guid,$attributeGuid,$lang='id')
 	{
+		if ($guid=='' OR $guid==NULL) return; 
+			
 		$db = $this->getDbHandler($lang);
 	
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
