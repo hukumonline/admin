@@ -518,7 +518,7 @@ class SolrController extends Application_Controller_Cli
 		$part->sticky = (!$row->sticky==null)? $row->sticky : 0;
 		$part->status = (!$row->status==null)? $row->status : 0;
 		
-		if ($row->profileGuid !== "kutu_doc") {
+		if ($row->profileGuid !== "kutu_doc" && $lang !== "en") {
 		$part->desktop = $this->getCountCatalog($row->guid, $row->profileGuid, 'desktop', $lang);
 		$part->mobile = $this->getCountCatalog($row->guid, $row->profileGuid, 'mobile', $lang);
 		
