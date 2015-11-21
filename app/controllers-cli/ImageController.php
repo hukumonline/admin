@@ -139,6 +139,76 @@ class ImageController extends Application_Controller_Cli
 		echo "Images optimizing completed\n";
 	}
 	
+	public function fileimageAction()
+	{
+		$request = $this->getRequest();
+		$query = $request->getParam('q');
+		
+		$db = $this->db;
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		$select = $db->select();
+		$select->from('KutuCatalog', '*');
+		
+		if (isset($query) && !empty($query))
+		{
+			$select->where($query);
+		}
+		
+		$select->order('createdDate ASC');
+		
+		$rowsFound = $db->fetchAll($select);
+		
+		echo 'There are '.count($rowsFound)." catalog(s)\n";
+		
+		$rowCount = count($rowsFound);
+		for($iCount=0;$iCount<$rowCount;$iCount++) {
+			$row = $rowsFound[$iCount];
+			
+			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
+			if ($rowsetRelatedItem) {
+				$fileImage='';
+				$i=0;
+				foreach ($rowsetRelatedItem as $image)
+				{
+					$rowDocSystemName = $this->getCatalogAttribute($image->itemGuid, 'docSystemName');
+					if ($rowDocSystemName)
+					{
+						$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
+						$ext = strtolower($ext);
+						if ($ori = $this->giu($row->guid, $image->itemGuid, $ext, null, "local")) {
+							$fileImage[$i]['original'] = $ori;
+						}
+						if ($th = $this->giu($row->guid, $image->itemGuid, $ext, "tn_", "local")) {
+							$fileImage[$i]['thumbnail'] = $th;
+						}
+							
+						if ($caption = $this->getCatalogAttribute($image->itemGuid, "fixedTitle"))
+						{
+							$fileImage[$i]['caption'] = strip_tags(trim($caption));
+						}
+					}
+					
+					$i++;
+				}
+				
+				
+				try {
+					$this->addHitsBySolr(json_encode([[
+							"id" => $row->guid,
+							"fileImage" => ["set" => Zend_Json::encode($fileImage)]
+						]]));
+				}
+				catch (Zend_Exception $e)
+				{
+						
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 	protected function addHitsBySolr($jsonData)
 	{
 		//$registry = Zend_Registry::getInstance();
@@ -174,7 +244,7 @@ class ImageController extends Application_Controller_Cli
 		return ($row) ? $row : '';
 	}
 	
-	protected function getDocumentById($catalogGuid, $relateAs)
+	protected function getDocumentById($catalogGuid, $relateAs, $multi=false, $order=null)
 	{
 		$db = $this->db;
 	
@@ -184,7 +254,16 @@ class ImageController extends Application_Controller_Cli
 		$sql->from('KutuRelatedItem', '*');
 		$sql->where('relatedGuid=?',$catalogGuid);
 		$sql->where('relateAs=?',$relateAs);
-		$row = $db->fetchRow($sql);
+		
+		if ($order !== null) {
+			$sql->order($order);
+		}
+		
+		if ($multi)
+			$row = $db->fetchAll($sql);
+		else
+			$row = $db->fetchRow($sql);
+		
 	
 		return ($row) ? $row : '';
 	}
