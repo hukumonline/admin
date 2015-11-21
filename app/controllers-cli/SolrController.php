@@ -1097,6 +1097,8 @@ class SolrController extends Application_Controller_Cli
 	
 	private function fileImageUrl($guid,$lang='id')
 	{
+		if ($guid=='' OR $guid==NULL) return;
+		
 		$fileImage=null;
 		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC",false,$lang);
 		if ($rowImage) {
