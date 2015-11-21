@@ -164,6 +164,15 @@ class ImageController extends Application_Controller_Cli
 		for($iCount=0;$iCount<$rowCount;$iCount++) {
 			$row = $rowsFound[$iCount];
 			
+			if (isset($rowsFound[$iCount+1])) {
+				$nextRow = $rowsFound[$iCount+1];
+				$n = "-next:[".$nextRow->guid."]";
+			}
+			else
+				$n = '';
+			
+			echo 'urutan: '.$iCount ." - ";
+			
 			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
 			if ($rowsetRelatedItem) {
 				$fileImage='';
@@ -205,8 +214,15 @@ class ImageController extends Application_Controller_Cli
 				
 			}
 			
+			echo "guid:[".$row->guid."][".$row->createdDate."]".$n."\n";
+				
+			flush();
 		}
 		
+		
+		sleep(1);
+		
+		echo "Update fileImage completed\n";
 	}
 	
 	protected function addHitsBySolr($jsonData)
