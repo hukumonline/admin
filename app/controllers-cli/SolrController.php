@@ -123,7 +123,7 @@ class SolrController extends Application_Controller_Cli
 		$db = $this->db;
 		
 		if ($lang == 'en') {
-			$db = Zend_Registry::get('db4');
+			$db = $this->db4;
 		}
 		
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
