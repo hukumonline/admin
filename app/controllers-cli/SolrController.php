@@ -541,7 +541,7 @@ class SolrController extends Application_Controller_Cli
 		//$part->shortenerUrl = $this->generateShortener($row->shortTitle);
 		
 		if (in_array($row->profileGuid, array('article','klinik','partner'))) {
-			$part->fileImage = $this->fileImageUrl($row->guid);
+			$part->fileImage = $this->fileImageUrl($row->guid,$lang);
 		}
 		
 		if ($row->profileGuid == "klinik") {
@@ -1095,15 +1095,15 @@ class SolrController extends Application_Controller_Cli
 		return $part;
 	}
 	
-	private function fileImageUrl($guid)
+	private function fileImageUrl($guid,$lang='id')
 	{
 		$fileImage=null;
-		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC");
+		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC",false,$lang);
 		if ($rowImage) {
 			$i=0;
 			foreach ($rowImage as $row)
 			{
-				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName');
+				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName', $lang);
 				if ($rowDocSystemName)
 				{
 					//$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
