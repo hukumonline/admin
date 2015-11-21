@@ -92,6 +92,7 @@ class SolrController extends Application_Controller_Cli
 	{
 		$request = $this->getRequest();
 		
+		$lang = $request->getParam('lang');
 		$path = $request->getParam('path');
 		$query = $request->getParam('q');
 		
@@ -120,6 +121,11 @@ class SolrController extends Application_Controller_Cli
 		echo "Start indexing\n";
 		
 		$db = $this->db;
+		
+		if ($lang == 'en') {
+			$db = Zend_Registry::get('db4');
+		}
+		
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$select = $db->select();
 		$select->from('KutuCatalog', '*');
