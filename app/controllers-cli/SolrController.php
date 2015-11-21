@@ -92,7 +92,7 @@ class SolrController extends Application_Controller_Cli
 	{
 		$request = $this->getRequest();
 		
-		$lang = $request->getParam('lang');
+		$lang = $request->getParam('lang','id');
 		$path = $request->getParam('path');
 		$query = $request->getParam('q');
 		
