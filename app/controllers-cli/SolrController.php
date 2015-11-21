@@ -1391,8 +1391,8 @@ class SolrController extends Application_Controller_Cli
 	
 	public function getDateInSolrFormat($date) {
 		if($date=='0000-00-00 00:00:00' OR $date=='0000-00-00' OR $date=='' OR $date==NULL) {
-			return '0000-00-00T00:00:00Z';
-			//return '1999-12-31T23:59:59Z';
+			//return '0000-00-00T00:00:00Z';
+			return '1999-12-31T23:59:59Z';
 		}
 		else
 		{

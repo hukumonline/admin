@@ -173,7 +173,7 @@ class ImageController extends Application_Controller_Cli
 			
 			echo 'urutan: '.$iCount ." - ";
 			
-			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
+			/*$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
 			if ($rowsetRelatedItem) {
 				$fileImage='';
 				$i=0;
@@ -213,7 +213,22 @@ class ImageController extends Application_Controller_Cli
 					$this->log()->err($e->getMessage());
 				}
 				
+			}*/
+			
+			try {
+				$this->addHitsBySolr(json_encode([[
+						"id" => $row->guid,
+						"createdDate" => ["set" => $this->getDateInSolrFormat($row->createdDate)],
+						"deletedDate" => ["set" => $this->getDateInSolrFormat($row->deletedDate)],
+						"modifiedDate" => ["set" => $this->getDateInSolrFormat($row->modifiedDate)],
+						"publishedDate" => ["set" => $this->getDateInSolrFormat($row->publishedDate)]
+						]]));
 			}
+			catch (Zend_Exception $e)
+			{
+				$this->log()->err($e->getMessage());
+			}
+				
 			
 			echo "guid:[".$row->guid."][".$row->createdDate."]".$n."\n";
 				

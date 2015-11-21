@@ -869,8 +869,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 	
 	private function getDateInSolrFormat($date) {
 		if($date=='0000-00-00 00:00:00' OR $date=='0000-00-00' OR $date=='' OR $date==NULL) {
-			return '0000-00-00T00:00:00Z';
-			//return '1999-12-31T23:59:59Z';
+			//return '0000-00-00T00:00:00Z';
+			return '1999-12-31T23:59:59Z';
 		}
 		else
 		{
