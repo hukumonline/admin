@@ -1104,8 +1104,9 @@ class SolrController extends Application_Controller_Cli
 				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName');
 				if ($rowDocSystemName)
 				{
-					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
+					//$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
+					$ext = strtolower($ext);
 					
 					/*$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate']);
 					if ($catalog) {
@@ -1160,7 +1161,7 @@ class SolrController extends Application_Controller_Cli
 						$guid = $ig->relatedGuid; 
 					}*/
 					
-					if ($ori = $this->giu($guid, $catalogGuid, strtolower($ext), null, "local")) {
+					/*if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
 						$fileImage[$i]['original'] = $ori;
 					}
 					
@@ -1168,16 +1169,29 @@ class SolrController extends Application_Controller_Cli
 					$keys = array_keys($file->toArray());
 					foreach ($keys as $key)
 					{
-						if ($img = $this->giu($guid, $catalogGuid, strtolower($ext), $key.'_', "local")) {
+						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "local")) {
 							$fileImage[$i][$key] = $img;
 						}
 					}
 					
-					if ($th = $this->giu($guid, $catalogGuid, strtolower($ext), "tn_", "local")) {
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
 						$fileImage[$i]['thumbnail'] = $th;
 					}
 					
 					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle"))
+					{
+						$fileImage[$i]['caption'] = strip_tags(trim($caption));
+					}*/
+					
+					
+					if ($ori = $this->giu($guid, $row->itemGuid, $ext, null, "local")) {
+						$fileImage[$i]['original'] = $ori;
+					}
+					if ($th = $this->giu($guid, $row->itemGuid, $ext, "tn_", "local")) {
+						$fileImage[$i]['thumbnail'] = $th;
+					}
+						
+					if ($caption = $this->getCatalogAttribute($row->itemGuid, "fixedTitle"))
 					{
 						$fileImage[$i]['caption'] = strip_tags(trim($caption));
 					}
