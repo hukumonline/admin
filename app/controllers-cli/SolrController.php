@@ -29,6 +29,7 @@ class SolrController extends Application_Controller_Cli
 	{
 		$request = $this->getRequest();
 		
+		$lang = $request->getParam('lang','id');
 		$catalogGuid = $request->getParam('guid');
 		$path = $request->getParam('path');
 		
@@ -46,7 +47,7 @@ class SolrController extends Application_Controller_Cli
 		
 		echo "Start indexing guid:$catalogGuid\n";
 		
-		$db = $this->db;
+		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$select = $db->select();
 		$select->from('KutuCatalog', '*');
@@ -120,12 +121,7 @@ class SolrController extends Application_Controller_Cli
 	
 		echo "Start indexing\n";
 		
-		$db = $this->db;
-		
-		if ($lang == 'en') {
-			$db = $this->db4;
-		}
-		
+		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$select = $db->select();
 		$select->from('KutuCatalog', '*');
@@ -159,7 +155,7 @@ class SolrController extends Application_Controller_Cli
 			
 			echo 'urutan: '.$iCount ." - ";
 			
-			$documents[$iCount] = $this->_createSolrDocument($row);
+			$documents[$iCount] = $this->_createSolrDocument($row, $lang);
 			
 			if($iCount%1000 == 0)
 			{
@@ -504,7 +500,7 @@ class SolrController extends Application_Controller_Cli
 		return $part;
 	}
 	
-	private function _createSolrDocument(&$row)
+	private function _createSolrDocument(&$row, $lang='id')
 	{
 		$part = new Apache_Solr_Document();
 		$part->id = $row->guid;
@@ -523,13 +519,13 @@ class SolrController extends Application_Controller_Cli
 		$part->status = (!$row->status==null)? $row->status : 0;
 		
 		if ($row->profileGuid !== "kutu_doc") {
-		$part->desktop = $this->getCountCatalog($row->guid, $row->profileGuid, 'desktop');
-		$part->mobile = $this->getCountCatalog($row->guid, $row->profileGuid, 'mobile');
+		$part->desktop = $this->getCountCatalog($row->guid, $row->profileGuid, 'desktop', $lang);
+		$part->mobile = $this->getCountCatalog($row->guid, $row->profileGuid, 'mobile', $lang);
 		
 		$related = null;
 		$cf = array();
 		$queryCF="SELECT * FROM KutuCatalogFolder where catalogGuid='".$row->guid."'";
-		$resultsCF = $this->db->query($queryCF);
+		$resultsCF = $this->getDbHandler($lang)->query($queryCF);
 		$rowsetAttrCF = $resultsCF->fetchAll(PDO::FETCH_OBJ);
 		$rowCountCF = count($rowsetAttrCF);
 		for($x=0;$x<$rowCountCF;$x++)
@@ -549,15 +545,15 @@ class SolrController extends Application_Controller_Cli
 		}
 		
 		if ($row->profileGuid == "klinik") {
-			$rk = $this->getRelated($row->guid,"RELATED_Clinic",false,"relatedGuid desc");
+			$rk = $this->getRelated($row->guid,"RELATED_Clinic",false,"relatedGuid desc",false,$lang);
 			if ($rk)
 			{
 				$rowClinic = array();
 				for($v=0;$v<count($rk);$v++)
 				{
 					$rowRelatedClinic = $rk[$v];
-					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle']);
-					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle')));
+					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle'], $lang);
+					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle', $lang)));
 					$rowClinic[$v]['pageUrl'] = $web->url->base."/klinik/detail/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
 				
@@ -565,15 +561,15 @@ class SolrController extends Application_Controller_Cli
 			}
 		}
 		if ($row->profileGuid == "article") {
-			$rk = $this->getRelated($row->guid,"RELATED_OTHER",false,"relatedGuid desc");
+			$rk = $this->getRelated($row->guid,"RELATED_OTHER",false,"relatedGuid desc",false,$lang);
 			if ($rk)
 			{
 				$rowClinic = array();
 				for($v=0;$v<count($rk);$v++)
 				{
 					$rowRelatedClinic = $rk[$v];
-					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle']);
-					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle')));
+					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle'], $lang);
+					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle', $lang)));
 					$rowClinic[$v]['pageUrl'] = $web->url->base."/berita/baca/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
 				
@@ -583,7 +579,7 @@ class SolrController extends Application_Controller_Cli
 		if (in_array($row->profileGuid, array('kutu_peraturan','kutu_rancangan_peraturan','kutu_peraturan_kolonial','kutu_putusan')))
 		{
 			$relateAs = array('RELATED_PP','RELATED_BASE','RELATED_HISTORY');
-			$rk = $this->getRelated($row->guid,$relateAs,false,"relatedGuid desc",true);
+			$rk = $this->getRelated($row->guid,$relateAs,false,"relatedGuid desc",true,$lang);
 			if ($rk)
 			{
 				$grouped = $this->array_group_by($rk, 'relateAs');
@@ -601,7 +597,7 @@ class SolrController extends Application_Controller_Cli
 		$docMimeType = null;
 		
 		$query="SELECT * FROM KutuCatalogAttribute where catalogGuid='".$row->guid."'";
-		$results = $this->db->query($query);
+		$results = $this->getDbHandler($lang)->query($query);
 		$rowsetAttr = $results->fetchAll(PDO::FETCH_OBJ);
 		if ($rowsetAttr) {
 		$rowCount = count($rowsetAttr);
@@ -741,12 +737,12 @@ class SolrController extends Application_Controller_Cli
 					$part->kategoriklinik = $rowAttr->value;
 					 
 					//$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
-					//$resultsKK = $this->db->query($queryKK);
+					//$resultsKK = $this->getDbHandler($lang)->query($queryKK);
 						
 					//$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
 						
 					//$part->kategori = $rowsetAttrKK[0]->value;
-					$part->kategori = $this->getCatalogAttribute($rowAttr->value, 'fixedTitle');
+					$part->kategori = $this->getCatalogAttribute($rowAttr->value, 'fixedTitle', $lang);
 						
 					break;	
 				case 'prtJenis':
@@ -1079,7 +1075,7 @@ class SolrController extends Application_Controller_Cli
 		{
 			//extract text from the file
 			if (isset($docSystemName) || isset($docOriginalName) || isset($docMimeType)) {
-				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType);
+				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType, $lang);
 				//$sContent = $this->clean_string_input($sContent);
 			}
 			else
@@ -1238,9 +1234,9 @@ class SolrController extends Application_Controller_Cli
 		return $shortUrl;
 	}
 	
-	protected function getItemRelated($itemGuid,$relateAs)
+	protected function getItemRelated($itemGuid,$relateAs,$lang='id')
 	{
-		$db = $this->db;
+		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$sql = $db->select();
 		$sql->from('KutuRelatedItem', '*');
@@ -1248,9 +1244,9 @@ class SolrController extends Application_Controller_Cli
 		$sql->where('relateAs=?',$relateAs);
 		return $db->fetchRow($sql);
 	}
-	protected function getRelated($relatedGuid,$relateAs,$asRow,$order=null,$multi=false)
+	protected function getRelated($relatedGuid,$relateAs,$asRow,$order=null,$multi=false,$lang='id')
 	{
-		$db = $this->db;
+		$db = $this->getDbHandler($lang);
 	
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 	
@@ -1279,9 +1275,9 @@ class SolrController extends Application_Controller_Cli
 	
 	}
 	
-	protected function getCatalog($catalogGuid, $field)
+	protected function getCatalog($catalogGuid, $field, $lang='id')
 	{
-		$db = $this->db;
+		$db = $this->getDbHandler($lang);
 		
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		
@@ -1293,9 +1289,9 @@ class SolrController extends Application_Controller_Cli
 		return ($row) ? $row : '';
 	}
 	
-	protected function getCatalogAttribute($guid,$attributeGuid)
+	protected function getCatalogAttribute($guid,$attributeGuid,$lang='id')
 	{
-		$db = $this->db;
+		$db = $this->getDbHandler($lang);
 	
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 	
@@ -1310,10 +1306,10 @@ class SolrController extends Application_Controller_Cli
 		return ($row) ? $row->value : '';
 	}
 	
-	public function getCountCatalog($guid, $profileGuid, $type)
+	public function getCountCatalog($guid, $profileGuid, $type, $lang='id')
 	{
 		$valueText=null;
-		if (isset($profileGuid) && !in_array($profileGuid, array('partner','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup','kutu_emailconfirm','kutu_contentjp'))) {
+		if (isset($profileGuid) && !in_array($profileGuid, array('partner','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
 			switch ($type) {
 				case 'desktop':
 					if (in_array($profileGuid, array('article','isuhangat'))) {
@@ -1344,7 +1340,7 @@ class SolrController extends Application_Controller_Cli
 					break;
 			}
 			
-			$db = $this->db;
+			$db = $this->getDbHandler($lang);
 			$db->setFetchMode(Zend_Db::FETCH_OBJ);
 			$sql = $db->select();
 			$sql->from('KutuAssetSetting', ['valueInt']);
@@ -1373,6 +1369,17 @@ class SolrController extends Application_Controller_Cli
 	
 		return 0;
 	}	
+	
+	private function getDbHandler($lang)
+	{
+		if ($lang == "id")
+			return $this->db;
+		elseif ($lang == "en")
+			return $this->db4;
+		else
+			return $this->db3;
+		
+	}
 	
 	public function giu($guid, $itemguid, $ext, $prefix=null,$default="remote")
 	{
@@ -1420,10 +1427,10 @@ class SolrController extends Application_Controller_Cli
 		}
 	}
 	
-	private function _extractText($guid, $systemName, $fileName, $mimeType)
+	private function _extractText($guid, $systemName, $fileName, $mimeType, $lang='id')
 	{
 		$query="SELECT * FROM KutuRelatedItem where itemGuid='$guid' AND relateAs='RELATED_FILE'";
-		$results = $this->db->query($query);
+		$results = $this->getDbHandler($lang)->query($query);
 		
 		$rowset = $results->fetchAll(PDO::FETCH_OBJ);
 		
