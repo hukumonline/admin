@@ -17,10 +17,11 @@ class Application_Controller_Cli extends Zend_Controller_Action
 		$this->db = $multidb->getDb('db1');
 		$this->db2 = $multidb->getDb('db2');
 		$this->db3 = $multidb->getDb('db3');
+		$this->db4 = $multidb->getDb('db4');
 		
 		// @todo 
 		// untuk shortener
-		Zend_Registry::set('db4', $multidb->getDb('db3'));
+		//Zend_Registry::set('db4', $multidb->getDb('db3'));
 		
 		$this->flush ();
 	}
