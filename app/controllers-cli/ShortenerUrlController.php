@@ -38,7 +38,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 				'kopel' => $row->kopel
 			];
 			
-			$this->db3->insert($data);
+			$this->db3->insert('shorturls',$data);
 
 			if (isset($rowsetAttr[$i+1])) {
 				$nextRow = $rowsetAttr[$i+1];
