@@ -68,7 +68,6 @@ class ShortenerUrlController extends Application_Controller_Cli
 			
 			$a[$i] = $row->id;
 			
-			file_put_contents(ROOT_DIR.DS.'temp'.DS.'datashorturl.2211151032', serialize($a));
 				
 			echo "id:[".$row->id."][".$row->createdate."]".$n."\n";
 				
@@ -83,6 +82,8 @@ class ShortenerUrlController extends Application_Controller_Cli
 		catch ( Exception $e ) {
 			echo $e->getMessage();
 		}*/
+		
+		file_put_contents(ROOT_DIR.DS.'temp'.DS.'datashorturl.2211151032', serialize($a));
 		
 		
 		sleep(1);
