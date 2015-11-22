@@ -110,10 +110,10 @@ class ImageController extends Application_Controller_Cli
 						}
 						
 						//beritahu nama file baru catalogAttribute
-						//$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
+						$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
 						
 						
-						/*try {
+						try {
 							$this->addHitsBySolr(json_encode([[
 									"id" => $rowsetRelatedItem->itemGuid,
 									"fileName" => ["set" => $fileName . '.' . $ext],
@@ -123,7 +123,7 @@ class ImageController extends Application_Controller_Cli
 						catch (Zend_Exception $e)
 						{
 							
-						}*/
+						}
 						
 					}
 					
@@ -139,6 +139,7 @@ class ImageController extends Application_Controller_Cli
 		echo "Images optimizing completed\n";
 	}
 	
+	// fileImage old format
 	public function fileimageAction()
 	{
 		$request = $this->getRequest();

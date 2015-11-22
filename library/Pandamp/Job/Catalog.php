@@ -11,7 +11,9 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$kopel = ($this->params['kopel'])? $this->params['kopel'] : '';
 		$lang = ($this->params['lang'])? $this->params['lang'] : 'id';
 		
-		$this->toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang);
+		if ($lang !== 'en')
+			$this->toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang);
+		
 		$this->toSolr($catalogGuid, $lang);
 		$this->toDoc($catalogGuid, $lang);
 		
@@ -57,6 +59,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		
 		
 		$db = $this->getDbHandler('sh');
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		
 		$solr = $this->getSolrService('sh');
 		
@@ -74,19 +77,46 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		if (isset($hits->response->docs[0])) {
 			$row = $hits->response->docs[0];
 			$hid = $row->id;
-			$db->update('urls',$data,"id=$hid");
+			$db->update('shorturls',$data,"id=$hid");
 		}
 		else
 		{
-			$insert = $db->insert('urls', $data);
+			$recoveredData = file_get_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.2211151032');
+			$recoveredArray = unserialize($recoveredData);
+			$start = array_shift($recoveredArray);
+			foreach($recoveredArray as $v){
+				if ($start + 1 != $v) {
+					$missing = $start + 1;
+					break;
+				}
+				$start = $v;
+			}
+			
+			if (isset($missing)) {
+				$numId = $missing;
 				
-			$hid = $db->lastInsertId('urls', 'id');
+				$recoveredArray[] = $missing;
+				sort($recoveredArray);
+				file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.2211151032', serialize($recoveredArray));
+			}
+			else 
+			{
+				$sm = $db->select();
+				$sm->from('shorturls',array(new Zend_Db_Expr('MAX(id)+1 as maxid')));
+				$rowMax = $db->fetchRow($sm);
+				$numId = $rowMax->maxid;
+			}
+			
+			$data['id'] = $numId;
+			
+			$insert = $db->insert('shorturls', $data);
+				
+			$hid = $db->lastInsertId('shorturls', 'id');
 		}
 		
-		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		
 		$select = $db->select();
-		$select->from('urls', '*');
+		$select->from('shorturls', '*');
 		$select->where("id='$hid'");
 		
 		$row = $db->fetchRow($select);
@@ -1137,7 +1167,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 	
 		$sql = $db->select();
 	
-		$sql->from('urls', ['id']);
+		$sql->from('shorturls', ['id']);
 		$sql->where("url LIKE '%$shortTitle%'");
 	
 		$row = $db->fetchRow($sql);
