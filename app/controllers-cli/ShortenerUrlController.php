@@ -15,12 +15,18 @@ class ShortenerUrlController extends Application_Controller_Cli
 		{
 			echo "is ON\n";
 		}
-			
+
+		echo "Start indexing\n";
 		
 		$query = "select b.id, b.url as link, b.createdate, b.remoteip, b.kopel from clicks as a,urls as b where a.urlid = b.id and b.url like '%www.hukumonline.com%' group by a.urlid, b.url order by b.createdate asc";
 		$results = $this->db3->query($query);
 		$rowsetAttr = $results->fetchAll(PDO::FETCH_OBJ);
 		$rowCount = count($rowsetAttr);
+		
+		echo 'There are '.$rowCount." url(s)\n";
+		
+		$documents = array();
+		
 		for($i=0;$i<$rowCount;$i++)
 		{
 			$row = $rowsetAttr[$i];
@@ -32,11 +38,8 @@ class ShortenerUrlController extends Application_Controller_Cli
 				'kopel' => $row->kopel
 			];
 			
-			$shortUrlDb = new App_Model_Db_Table_ShortUrl();
-			$shortUrlDb->insert($data);
+			$this->db3->insert($data);
 
-			echo "Start indexing id:$row->id\n";
-			
 			if (isset($rowsetAttr[$i+1])) {
 				$nextRow = $rowsetAttr[$i+1];
 				$n = "-next:[".$nextRow->id."]";
