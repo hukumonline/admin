@@ -3,6 +3,8 @@ require_once( 'Apache/Solr/Service.php' );
 
 class Pandamp_Job_Catalog extends Pandamp_Job_Base
 {
+	private $_pdfExtractor = 'pdftotext';
+	private $_wordExtractor = 'antiword';
 	public function runJob()
 	{
 		$folderGuid = ($this->params['folderGuid'])? $this->params['folderGuid'] : '';
