@@ -267,6 +267,7 @@ class Search_DmsController extends Zend_Controller_Action
 					$fn = $row->id;
 				}
    				$ext = pathinfo($row->systemName,PATHINFO_EXTENSION);
+   				$ext = strtolower($ext);
    				$relDb = new App_Model_Db_Table_RelatedItem();
    				$rel = $relDb->fetchRow("itemGuid='".$fn."' AND relateAs='RELATED_IMAGE'");
    				
