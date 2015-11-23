@@ -624,12 +624,9 @@ $(function () {
 	    		});
 	  	} else {
 	    	e.preventDefault();
-	    	var inst = FCKeditorAPI.GetInstance("fixedContent");
-			var sValue = inst.GetHTML();
-			
-			if(sValue) {
-			    $("#showfckcontent").val(sValue);   
-			}
+	    	for ( instance in CKEDITOR.instances ) {
+        CKEDITOR.instances[instance].updateElement();
+    }
     		var vardata = $('#editPost').serialize();
     		$('.box-footer > button').attr({'disabled':'disabled'});
     		$('#wait').html('Simpan database...tunggu...').addClass('label label-warning').fadeIn();
