@@ -549,8 +549,11 @@ $(function () {
 	    		});
 	  	} else {
 	    	e.preventDefault();
+	    	for ( instance in CKEDITOR.instances ) {
+        CKEDITOR.instances[instance].updateElement();
+    }
     		var vardata = $('#newPost').serialize();
-    		<!-- $('.box-footer > button').attr({'disabled':'disabled'}); -->
+    		$('.box-footer > button').attr({'disabled':'disabled'});
     		$('#wait').html('Simpan database...tunggu...').addClass('label label-warning').fadeIn();
     		$.post('', vardata, function(data){
     			if (data.response == true) {
