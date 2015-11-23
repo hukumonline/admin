@@ -153,7 +153,7 @@ div.tagsinput div { display:block; float: left; }
 									$relatedItemDb = new App_Model_Db_Table_RelatedItem();
 									$relItems = $relatedItemDb->fetchAll("relatedGuid='".$this->catalogGuid."' AND relateAs='RELATED_IMAGE'");
 									?>
-									<?php if ($this->catalogGuid !== 'lt547f25753dc49') : // guid beritafoto => solusi sementara karena jika tidak begini maka tidak bisa di sembunyikan ?>
+									<?php if ($this->currentNode !== 'lt4de5c32a53bd4') : // guid beritafoto => solusi sementara karena jika tidak begini maka tidak bisa di sembunyikan ?>
 									<div style="margin-bottom: 2px">Search for existing images.</div>
 									<div class="box-body">
 										<div class="form-group">
@@ -196,10 +196,10 @@ div.tagsinput div { display:block; float: left; }
 									?>
 									
 									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
-										<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/square_<?php echo $filename; ?>" height="70" width="80">
+										<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/thumbnail_<?php echo $filename; ?>" height="70" width="80">
 										<a href="javascript:;" id="<?php echo $fn; ?>" class="irAction" style="text-decoration: none">[-]</a>
 										<input value="<?php echo $title; ?>" style="width: 340px;" id="<?php echo $fn; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
-										<input value="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/square_<?php echo $filename; ?>" name="fixedFileImage" type="hidden">
+										<input value="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/thumbnail_<?php echo $filename; ?>" name="fixedFileImage" type="hidden">
 									</div>						
 									<?php //endif; ?>
 									<?php endforeach; ?>
@@ -225,10 +225,10 @@ div.tagsinput div { display:block; float: left; }
 											?>
 											<li>
 												<div style="padding: 5px 0px 5px;" id="row_<?php echo $fn2; ?>">
-													<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/square_<?php echo $filename2; ?>" height="70" width="80">
+													<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/thumbnail_<?php echo $filename2; ?>" height="70" width="80">
 													<a href="javascript:;" id="<?php echo $fn2; ?>" class="irAction" style="text-decoration: none">[-]</a>
 													<input value="<?php echo $title2; ?>" style="width: 310px;" id="<?php echo $fn2; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
-													<input value='{"id":"<?php echo $fn2; ?>","title":"<?php echo $title2; ?>", "url":"<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/square_<?php echo $filename2; ?>"}' name="photos[]" type="hidden">
+													<input value='{"id":"<?php echo $fn2; ?>","title":"<?php echo $title2; ?>", "url":"<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/thumbnail_<?php echo $filename2; ?>"}' name="photos[]" type="hidden">
 												</div>
 											</li>
 											<?php endforeach; ?>
