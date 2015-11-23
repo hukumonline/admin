@@ -263,7 +263,7 @@ class Search_DmsController extends Zend_Controller_Action
     		for ($i=0;$i<$numRowset;$i++) {
     			$row = $hits->response->docs[$i];
 				$fn = pathinfo($row->systemName,PATHINFO_FILENAME);
-				if (substr($fn,0,5) !== 'lt') {
+				if (substr($fn,0,2) !== 'lt') {
 					$fn = $row->id;
 				}
    				$ext = pathinfo($row->systemName,PATHINFO_EXTENSION);
