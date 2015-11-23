@@ -27,7 +27,6 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			$viewRenderer->initView();
 		}
 		$view = $viewRenderer->view;
-		$view->addHelperPath(APPLICATION_PATH . '/../library/Pandamp/Controller/Action/Helper', 'Pandamp_Controller_Action_Helper');
 		
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
@@ -42,7 +41,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			if ($catalog->profileGuid == 'klinik')
 				$url_content = $web->url->base.'/klinik/detail/'.$catalogGuid.'/'.$catalog->shortTitle;
 			elseif (in_array($catalog->profileGuid, array('kutu_peraturan','kutu_putusan','kutu_peraturan_kolonial','kutu_rancangan_peraturan')))
-				$url_content = $web->url->base.'/pusatdata/detail/'.$catalogGuid.'/'.$view->getLabelNode($folderGuid).'/'.$folderGuid.'/'.$catalog->shortTitle;
+				$url_content = $web->url->base.'/pusatdata/detail/'.$catalogGuid.'/'.$this->getLabelNode($folderGuid,$lang).'/'.$folderGuid.'/'.$catalog->shortTitle;
 			else
 				$url_content = $web->url->base.'/berita/baca/'.$catalogGuid.'/'.$catalog->shortTitle;
 		}
@@ -1286,5 +1285,49 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		}
 	
 		return $grouped;
+	}
+	
+	private function getLabelNode($folderGuid, $lang)
+	{
+		$db = $this->getDbHandler($lang);
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$sql = $db->select();
+		$sql->from('KutuFolder', '*');
+		
+		$rowFolder = $db->fetchRow("guid='$folderGuid'");
+		if ($rowFolder) {
+			$path = explode("/",$rowFolder->path);
+			$rpath = $path[0];
+			$rowFolder1 = $db->fetchRow("guid='$rpath'");
+			if ($rowFolder1) {
+				$rowFolder2 = $db->fetchRow("guid='$rowFolder1->parentGuid'");
+				if ($rowFolder2) {
+					if ($rowFolder2->title == "Peraturan") {
+						return "nprt";
+					}
+					elseif ($rowFolder2->title == "Putusan") {
+						return "npts";
+					}
+					else
+					{
+						return "node";
+					}
+				}
+				else
+				{
+					return "node";
+				}
+			}
+			else
+			{
+				return "node";
+			}
+		}
+		else
+		{
+			return "node";
+		}
+	
 	}
 }
