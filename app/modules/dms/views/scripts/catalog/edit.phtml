@@ -154,7 +154,7 @@ div.tagsinput div { display:block; float: left; }
 									$relatedItemDb = new App_Model_Db_Table_RelatedItem();
 									$relItems = $relatedItemDb->fetchAll("relatedGuid='".$this->catalogGuid."' AND relateAs='RELATED_IMAGE'");
 									?>
-									<?php if ($this->catalogGuid !== 'lt547f25753dc49') : // guid beritafoto => solusi sementara karena jika tidak begini maka tidak bisa di sembunyikan ?>
+									<?php if ($this->currentNode !== 'lt4de5c32a53bd4') : // guid beritafoto => solusi sementara karena jika tidak begini maka tidak bisa di sembunyikan ?>
 									<div style="margin-bottom: 2px">Search for existing images.</div>
 									<div class="box-body">
 										<div class="form-group">

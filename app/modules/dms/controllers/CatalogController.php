@@ -12,7 +12,8 @@ class Dms_CatalogController extends Zend_Controller_Action
 
     function  preDispatch()
     {
-        $this->_helper->layout->setLayout('layout-dms-catalog');
+        //$this->_helper->layout->setLayout('layout-dms-catalog');
+        $this->_helper->layout->setLayout('layout-dms-newcatalog');
 
         $auth = Zend_Auth::getInstance();
 
@@ -520,6 +521,7 @@ class Dms_CatalogController extends Zend_Controller_Action
         $this->view->urlReferer = $sessHistory->urlReferer;
 
     }
+    
     function newAction()
     {
         $r = $this->getRequest();
@@ -532,6 +534,8 @@ class Dms_CatalogController extends Zend_Controller_Action
         $this->view->widget2 = $w;
         
         $this->view->profile = $profileGuid;
+        
+        $this->view->guid = (new Pandamp_Core_Guid())->generateGuid();
 
         $generatorForm = new Pandamp_Form_Helper_CatalogInputGenerator();
         $aRender = $generatorForm->generateFormAdd(strtolower($profileGuid), $folderGuid);
@@ -545,19 +549,28 @@ class Dms_CatalogController extends Zend_Controller_Action
         if($r->isPost())
         {
 	        $aData = $r->getPost();
-	
+			
 	        $aData['username'] = $this->_user->username;
 	
 	        $Bpm = new Pandamp_Core_Hol_Catalog();
-	        $id	 = $Bpm->save($aData);
+	        $id = $Bpm->save($aData);
 	        
             if ($id) {
-// 	            $message = "Data was successfully saved.";
-// 				$this->_helper->getHelper('FlashMessenger')
-// 					->addMessage($message);
+            	$this->_helper->getHelper('FlashMessenger')
+            		->addMessage('The article has been added successfully.');
+            	
+            	$queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
+            	$queue->addJob('Pandamp_Job_Catalog',
+            			['guid' => $id,'folderGuid' => $folderGuid, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+            			false);
+
+            	$this->_helper->json([
+            			'response' => true,
+            			'message' => 'Artikel berhasil disimpan. <a href="'.ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$folderGuid.'">Lihat artikel</a>.'
+            		]);
 					
 					
-				if (!empty($aData['fixedKeywords']))
+				/*if (!empty($aData['fixedKeywords']))
 				{
 					if (in_array($profileGuid,array('article','clinic'))) {
 					$keywords = base64_encode(trim($aData['fixedKeywords']));
@@ -567,10 +580,12 @@ class Dms_CatalogController extends Zend_Controller_Action
 				else 
 				{
 					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$folderGuid);
-				}
+				}*/
             }
+            
         }
     }
+    
     function editAction()
     {
         $r = $this->getRequest();
@@ -594,10 +609,13 @@ class Dms_CatalogController extends Zend_Controller_Action
 
         $modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
         
+        $this->view->assign('catalog', $modelCatalog);
+        $this->view->assign('catalogGuid', $catalogGuid);
+        
         $this->view->profile = $modelCatalog['profileGuid'];
         
         if ($modelCatalog['profileGuid'] == "klinik") {
-            $this->_forward('answer.clinic','clinic','dms',array('guid'=>$catalogGuid));
+            $this->_forward('answer.clinic','clinic','dms',array('guid'=>$catalogGuid,'node'=>$sessHistory->currentNode));
         }
         else
         {
@@ -623,12 +641,22 @@ class Dms_CatalogController extends Zend_Controller_Action
             	$aRender = $gen->generateFormEdit($id);
             	$this->view->aRenderedAttributes = $aRender;
             	
-            	$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($id);
+            	//$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($id);
 // 	            $message = "Data was successfully saved.";
 // 				$this->_helper->getHelper('FlashMessenger')
 // 					->addMessage($message);
+
+            	$queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
+            	$queue->addJob('Pandamp_Job_Catalog',
+            			['guid' => $id,'folderGuid' => $sessHistory->currentNode, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+            			false);
+            	
+            	$this->_helper->json([
+            			'response' => true,
+            			'message' => 'Artikel berhasil disimpan. <a href="'.ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$sessHistory->currentNode.'">Lihat artikel</a>.'
+            		]);
 					
-				if ($modelCatalog->profileGuid == "klinik") {
+				/*if ($modelCatalog->profileGuid == "klinik") {
 					if ($modelCatalog->status == 99) {
 						$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/99/node/lt4b11e8c86c8a4');
 					}
@@ -656,7 +684,8 @@ class Dms_CatalogController extends Zend_Controller_Action
 				else 
 				{
 					$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/explorer/browse/node/'.$sessHistory->currentNode);
-				}
+				}*/
+            	
             }
         }
 
@@ -711,5 +740,60 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$this->view->assign('node',$node);
     	
     	$this->_helper->layout()->headerTitle = "Related Article";
+    }
+    
+    /**
+     * Suggest tags based on user's input
+     *
+     * @return void
+     */
+    public function suggestAction()
+    {
+    	$this->_helper->getHelper('viewRenderer')->setNoRender();
+    	$this->_helper->getHelper('layout')->disableLayout();
+    
+    	$request = $this->getRequest();
+    	$q 		 = $request->getParam('term');
+    	$limit 	 = $request->getParam('limit', 10);
+    
+    	$indexing = Pandamp_Search::manager();
+    
+    	$hits = $indexing->find($q, 0, $limit,"publishedDate desc");
+    	$solrNumFound = count($hits->response->docs);
+    
+    	if($solrNumFound>$limit)
+    		$numRowset = $limit ;
+    	else
+    		$numRowset = $solrNumFound;
+    
+    	//$return = '';
+    	$a = array();
+    	for ($i=0;$i<$numRowset;$i++) {
+    		$row = $hits->response->docs[$i];
+    		//$return .= $row->title . '|' . $row->id . "\n";
+    			
+    		$profileSolr = str_replace("kutu_", "", $row->profile);
+    		$profileSolr = str_replace("kategoriklinik","Kategori Klinik",$profileSolr);
+    		$profileSolr = str_replace("peraturan_kolonial","Peraturan Kolonial",$profileSolr);
+    		$profileSolr = str_replace("rancangan_peraturan","Rancangan Peraturan",$profileSolr);
+    		$profileSolr = str_replace("financial_services","Financial Services",$profileSolr);
+    		$profileSolr = str_replace("general_corporate","General Corporate",$profileSolr);
+    		$profileSolr = str_replace("oil_and_gas","Oil and Gas",$profileSolr);
+    		$profileSolr = str_replace("executive_alert","Executive Alert",$profileSolr);
+    		$profileSolr = str_replace("manufacturing_&_industry","Manufacturing & Industry",$profileSolr);
+    		$profileSolr = str_replace("consumer_goods","Consumer Goods",$profileSolr);
+    		$profileSolr = str_replace("telecommunications_and_media","Telecommunications and Media",$profileSolr);
+    		$profileSolr = str_replace("executive_summary","Executive Summary",$profileSolr);
+    		$profileSolr = str_replace("hot_news","Hot News",$profileSolr);
+    		$profileSolr = str_replace("hot_issue_ile","Hot Issue ILE",$profileSolr);
+    		$profileSolr = str_replace("hot_issue_ild","Hot Issue ILD",$profileSolr);
+    		$profileSolr = str_replace("hot_issue_ilb","Hot Issue ILB",$profileSolr);
+    			
+    		//$a[$i]['label']= strip_tags($row->title) . '|' . $profileSolr;
+    		$a[$i]['label']= strip_tags($row->title);
+    		$a[$i]['value']= $row->id;
+    	}
+    	//$this->getResponse()->setBody($return);
+    	$this->getResponse()->setBody(Zend_Json::encode($a));
     }
 }

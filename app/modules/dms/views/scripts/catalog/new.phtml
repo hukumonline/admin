@@ -1,93 +1,517 @@
 <?php 
-/**
- * Pandamp
- * 
- * @author		2011-2012 Nihki Prihadi <nihki@madaniyah.com>
- * @version		$Id: new.phtml 1 2012-03-05 11:28Z $modified
- */
-?>
-<?php 
-$this->headTitle('Add new article');
-
 $this->headLink()
-	->appendStylesheet($this->cdn('scripts') . '/hol/datepicker/rfnet.css');
+	->appendStylesheet($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css')
+	->appendStylesheet($this->cdn('scripts') . '/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css');
 
 $this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js')
+	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/scripts/moment.js')
+	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/scripts/bootstrap-datetimepicker.js')
+	->appendFile($this->cdn('scripts') . '/plugins/phpjs/php.full.min.js')
 	->appendFile($this->cdn('scripts') . '/hol/pandamp/util.js');
+
+$this->headStyle()->captureStart();
 ?>
-
-<script type="text/javascript" src="<?php echo ROOT_URL; ?>/library/tinymce/tiny_mce.js"></script>
-<script type="text/javascript" src="<?php echo $this->cdn('scripts'); ?>/hol/datepicker/datetimepicker.js"></script>
-
-<!-- Left column/section -->
-<section class="column width6 first">
-    <div class="colgroup leading">
-        <div class="column width6 first">
-            <?php
-            if ($this->getLanguage() == 'id')
-                $tag = "www.hukumonline.com";
-            else
-                $tag = "en.hukumonline.com";
-            ?>
-            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
-            <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->currentNode; ?>">Back to Folder</a>
-            <fieldset>
-                <legend>LOCATION:</legend>
-                <?php echo $this->widget2->render(); ?>
-            </fieldset>
-            <form id="catalogInputForm" name="catalogInputForm" method="POST">
-                <fieldset>
-                    <legend>ADDING NEW CATALOG</legend>
-                    <?php //if ($this->profile == 'article') : ?>
-                    <!--<div class="box box-info">
-                    <abbr>Perhatian:</abbr> Untuk mengaktifkan fitur berita terkait
-                    isikan kolom <abbr>keywords</abbr>.<br>Pisahkan setiap keywords dengan
-                    koma, contoh: dpr, pemilu, partai politik
-                    </div>-->
-                    <?php //endif; ?>
-					<?php foreach ($this->aRenderedAttributes['baseForm'] as $a) : ?>
-					<p>
-						<label><?php echo $a['description']; ?></label><br>
-						<?php echo $a['form']; ?>
-					</p>
-					<?php endforeach; ?>
-					<?php foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
-					<?php if (isset($a['description']) && isset($a['form'])) : ?>
-					<p>
-						<label><?php echo $a['description']; ?></label><br>
-						<?php echo $a['form']; ?>
-					</p>
-					<?php endif; ?>
-					<?php endforeach; ?>
-                    
-					<p>
-						<input type="submit" name="save" id="save" value="Save" class="btn btn-blue big" />
-					</p>
-                </fieldset>
-            </form>
-        </div>
-    </div>
-
-
-    <div class="clear">&nbsp;</div>
-
-</section>
-<!-- End of Left column/section -->
-
-<!-- Right column/section -->
-<aside class="column width2">
-    <div id="rightmenu">
-        <?php echo $this->action('sidebar','user','customer'); ?>
-    </div>
-</aside>
-<!-- End of Right column/section -->
-<script type="text/javascript">
-setTimeout(function()
+.mloading{margin:0 auto; background:url(<?php echo $this->cdn('styles'); ?>/images/loading.gif) center no-repeat; height:20px; line-height:20px}
+.ui-autocomplete-loading { background:url('<?php echo $this->cdn('styles'); ?>/images/loading.gif') no-repeat right center }
+.bootstrap-tagsinput { width: 100%;min-height: 100px; }
+.ui-dialog{font-size: 83.5%;}
+.ui-widget-overlay
 {
+  opacity: .50 !important; /* Make sure to change both of these, as IE only sees the second one */
+  filter: Alpha(Opacity=50) !important;
+
+  background:"rgb(0, 0, 0)";
+}
+.photos { overflow: auto; }
+.photos li { float: left; margin-right: 5px; position: relative; height: 50px; margin-bottom: 5px; list-style-type: none; }
+.photos li img { width: 48px; height: 45px; border: 1px solid #999; cursor: pointer; }
+.photos li a { position: absolute; left: 0; top: 35px; }
+.t_a_ui_paginator { margin: 0 auto; text-align: center; font-size:10px }
+.t_a_ui_paginator span { margin: 0px 10px 0px 0px; }
+.t_a_ui_paginator a { text-decoration: underline; text-align: center; margin: 0px 5px 0px 0px; line-height: 20px; }
+.t_a_ui_paginator span.t_a_ui_active { background-color: #555; padding: 6px 8px; line-height: 9px; height: 9px; width: 7px; }
+.ephotos { overflow: auto; border: 1px solid #444; padding: 5px; }
+.ephotos li { float: left; margin-right: 10px; margin-bottom: 15px; }
+
+<?php $this->headStyle()->captureEnd(); ?>
+<?php $this->headTitle('Add new article'); ?>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<?php
+	if ($this->getLanguage() == 'id')
+		$tag = "www.hukumonline.com";
+	else
+		$tag = "en.hukumonline.com";
+	?>
+	<h1>
+		Site
+		<small><?php echo $tag; ?></small>
+	</h1>
+	<?php echo $this->widget2->render(); ?>
+</section>
+<!-- Main content -->
+<section class="content">
+	<?php echo $this->flashMessenger(); ?>
+	<!-- form start -->
+	<form id="newPost" method="post">
+	<div class="box box-info">
+		<div class="box-header with-border">
+			<h3 class="box-title">New Catalog</h3>
+		</div><!-- /.box-header -->
+		<div class="box-body">
+			<div class="checkbox">
+				<label><input type="checkbox" name="stickyCategory" value="1"> Set this article sticky</label>
+			</div>
+			<div class="row">
+				<div class="form-group col-xs-8">
+					<label for="shortTitle">Slug</label>
+					<input type="text" class="form-control" name="shortTitle" id="shortTitle">
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-xs-3">
+					<label>Published Date</label>
+					<div class="input-group" id="datetimepicker1" data-date-format="YYYY-MM-DD HH:mm:ss">
+						<div class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</div>
+						<input type="text" class="form-control" name="publishedDate" id="publishedDate" value="<?php echo date('Y-m-d H:i:s'); ?>">
+					</div>
+				</div>
+				<div class="form-group col-xs-3">
+					<label>Expired Date</label>
+					<div class="input-group" id="datetimepicker2" data-date-format="YYYY-MM-DD HH:mm:ss">
+						<input type="text" class="form-control" name="expiredDate" id="expiredDate" value="0000-00-00 00:00:00">
+						<div class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-xs-3">
+					<label>Status</label>
+					<?php
+						require_once(CONFIG_PATH.'/master-status.php');
+						$aStatus = MasterStatus::getPublishingStatus();
+					?>
+					<select name="status" class="form-control">
+					<?php foreach($aStatus as $val => $label) : ?>
+					<option value="<?php echo $val; ?>"<?php if($val == 99) echo ' selected'; ?>><?php echo $label;?></option>
+					<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>Price</label>
+				<div class="input-group col-xs-4">
+					<span class="input-group-addon">Rp</span>
+					<input type="text" class="form-control" name="price">
+					<span class="input-group-addon">.00</span>
+				</div>
+			</div>
+			
+			<?php foreach ($this->aRenderedAttributes['attributeForm'] as $a) : ?>
+				<?php if (isset($a['form'])) : ?>
+					<?php echo $a['form']; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+			
+		</div>
+		
+		<input type="hidden" name="guid" value="<?php echo $this->guid; ?>">
+		<input type="hidden" name="profileGuid" value="<?php echo $this->profile; ?>">
+		<input type="hidden" name="folderGuid" value="<?php echo $this->currentNode; ?>">
+		<input type="hidden" name="createdDate" value="<?php echo date('Y-m-d H:i:s'); ?>">
+			<div class="box-footer">
+            	<button type="submit" class="btn btn-primary">Submit</button>
+            	<p class="help-block" id="wait"></p>
+        	</div>
+	</div>
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-6">
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h3 class="box-title">Unggahan</h3>
+                  	<div class="box-tools pull-right">
+                		<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                		<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+          			</div>
+                </div>
+                <div class="box-body">
+                	<div class="nav-tabs-custom">
+	                	<ul class="nav nav-tabs">
+	                  		<li class="active"><a href="#images" data-toggle="tab">Images</a></li>
+	                  		<li><a href="#files" data-toggle="tab">Files</a></li>
+	                	</ul>
+	                	<div class="tab-content">
+	                		<div class="active tab-pane" id="images">
+	                			<div style="margin-bottom: 2px">Search for existing images.</div>
+                				<div class="box-body">
+									<div class="form-group">
+										<label>Title</label>
+										<div class="input-group">
+											<input type="text" class="form-control" name="keyword" id="keyword" />
+											<div class="input-group-addon">
+												<a href="javascript: void(0);" id="searchButton">
+													<i class="fa fa-search"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="photos" style="margin-top:-15px;margin-bottom: 10px;margin-left:-15px">
+									<ul id="uploadedPhotos"></ul>
+									<ul id="searchPhotos"></ul>
+								</div>
+								<div class="clearfix"></div>
+								<div class="clearfix t_a_ui_paginator" id="searchPager" style="margin-bottom: 10px"></div>
+								
+								<div id="articleImageContainer"></div>
+								
+								<div class="photos" style="margin-top: 10px">
+									<ul id="filesSet"></ul>
+								</div>
+	                		</div>
+	                		<div class="tab-pane" id="files">
+	                			<div id="progress" class="progress" style="display: none;">
+	                				<div class="progress-bar progress-bar-success"></div>
+	                			</div>
+	                			<p>
+								    <label>Or Upload File</label>
+								    <input type='file' name='uploadedFiles[]' id='fileupload' multiple />
+								</p>
+								<p class="help-block">
+									You can select files/images to upload at the same time. 
+								</p>
+								<p>
+								    <label for='fixedType'>Type</label>
+								    <select name='fixedType' id='fixedType' class="form-control">
+								    	<option value="">---</option>
+								        <option value='file'<?php if (Zend_Auth::getInstance()->getIdentity()->name == "Dc Admin") : ?> selected<?php endif; ?>>File</option>
+								        <option value='image'<?php if (Zend_Auth::getInstance()->getIdentity()->name == "News Admin") : ?> selected<?php endif; ?>>Image</option>
+								    </select>
+								</p>
+								<input type='hidden' name='profile' id='profile' value='kutu_doc'>
+								
+	                			<ul class="list-inline" id="ephotos"></ul>
+	                			
+	                			<div class='box-body'><div id="extraattribute"></div></div>
+	                			
+	                		</div>
+	                	</div>
+                	</div>
+                </div>
+			</div>
+		</div><!--/.col (left) -->
+		<!-- right column -->
+        <div class="col-md-6">
+        	<div class="box box-warning">
+        		<div class="box-header with-border">
+        			<h3 class="box-title">Relasi Katalog</h3>
+        			<div class="box-tools pull-right">
+                		<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                		<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+              		</div>
+        		</div>
+        		<div class="box-body">
+        			<p class="margin">Enter relation (you don't have to remember title exactly, there are suggestions based on your input):</p>
+        			<div class="form-group">
+	        			<select id="relate" name="relate" class="form-control">
+					    	<option value="">Relate As:</option>
+					    	<?php if ($this->getLanguage() == "id") { ?>
+					        <option value="RELATED_OTHER">Berita</option>
+					        <option value="RELATED_Clinic">Klinik</option>
+					        <option value="RELATED_ISSUE">Isu Hangat</option>
+					        <option value="RELATED_HISTORY">Sejarah</option>
+					        <option value="RELATED_BASE">Dasar Hukum</option>
+					        <?php } else { ?>
+					        <option value="RELATED_TRANSLATION_ID">Indonesian Translation</option>
+					        <option value="RELATED_TRANSLATION_EN">English Translation</option>
+					        <?php } ?>
+						</select>
+					</div>	
+					<div class="form-group">
+						<input type="text" id="relInput" class="form-control" placeholder="keywords" />
+					</div>
+					<p class="margin">List of selected relations (Click on title to remove it):</p>
+					<div id="relsList" class="well" style="height: 200px; overflow: auto">
+					</div>
+        		</div>
+        	</div>
+        </div>
+	</div>
+	</form>
+	<div id="confirmDialog"></div>
+</section>
+<?php $this->headScript()->captureStart(); ?>
+$(function () {
+	
 	/**
-	 * Validate form
+	 * Search handler
 	 */
-	$.validator.addMethod('shortTitle', function(value) {
+	 $('#searchButton').click(function(){
+	 	var exp = {
+	 		keyword: $('#keyword').val(),
+	 		format: 'JSON'
+	 	};
+	 	var q = rawurlencode(base64_encode($.toJSON(exp)));
+	 	searchFiles('<?php echo $this->url(array('lang'=>$this->getLanguage()),'search_catalog_findimage'); ?>?q=' + q);
+	 });
+	 
+	 /**
+	 * Search for photos
+	 * @param string url The url which returns the result in JSON format
+	 */
+	function searchFiles(url) {
+		$('#searchPhotos').html('').addClass('mloading');
+		$.ajax({
+			url: url,
+			type: 'GET',
+			success: function(response) {
+				var res = $.evalJSON(response);
+				var files = res.files;
+				$('#searchPhotos').removeClass('mloading');
+				$('#searchPhotos').html('');
+				$(files).each(function(i) {
+					var li = $('<li/>');
+					var coverImages = files[i];
+					
+					$('<img/>').attr('src', files[i].url).click(function() {
+						setCoverForSet(coverImages);
+					}).appendTo(li);
+					
+					$('<a/>').attr('href', 'javascript: void(0);').html('[+]')
+					.css('text-decoration', 'none')
+					.click(function() {
+						addImageToSet($(this));
+					}).appendTo(li);
+					
+					/**
+					 * Add input element to indicate which files will be added to set later
+					 */
+					var urls = {};
+					for (var thumb in files[i]) {
+						urls[thumb] = files[i][thumb]; 
+					}
+					$(li).append($('<input/>').attr('type', 'hidden').val($.toJSON(urls)))
+						.prependTo($('#searchPhotos'));
+					
+					
+				});
+				
+				$('#searchPager').html(res.paginator).find('a').each(function() {
+					var link = $(this).attr('href');
+					$(this).attr('href', 'javascript: void(0);').click(function() {
+						searchFiles(link);
+					});
+				});
+				
+				
+			},
+			error: function(xhr, status, error) {
+				alert( "Request failed: " + status );
+			}
+		});
+		
+	}
+	
+	function setCoverForSet(images) {
+		$('#articleImageContainer').html('<img src="' + images.url + '" width="80" height="70" />');
+		var div = $('<div/>').css('padding', '5px 0 0 0');
+	    $(div).append($('<input/>').val(images.title)
+	    .attr('type', 'text').attr('name', 'fileImage').attr('id', 'fileImage')
+	    .addClass('form-control'))
+	    .append($('<input/>').attr('type', 'hidden').attr('name','fixedFileImage').val(images.url))
+	    .appendTo('#articleImageContainer');
+	    
+	}	 
+	
+	/**
+	 * Add image to set when user click on + link
+	 * @param link The HTML link
+	 */
+	function addImageToSet(link) {
+		var li = $(link).parent().clone(true);
+		$(li).find('a:first').remove();
+		var cloneLink = $(link).clone();
+		$(cloneLink).html('[-]').unbind('click').bind('click', function() {
+			removeImageFromSet($(this));
+		});
+		$(li).find('input').attr('name', 'photos[]');
+		$(li).append(cloneLink).appendTo($('#filesSet'));
+		$(link).parent().remove();	
+		
+	}	
+	
+	/**
+	 * Remove image from set when user click on - link
+	 * @param link The HTML link
+	 */
+	function removeImageFromSet(link) {
+		var li = $(link).parent().clone(true);
+		$(li).find('a:first').remove();
+		var cloneLink = $(link).clone();
+		$(cloneLink).html('[+]').unbind('click').bind('click', function() {
+			addImageToSet($(this));
+		});
+		$(li).find('input').attr('name', '');
+		$(li).append(cloneLink).appendTo($('#uploadedPhotos'));	
+		$(link).parent().remove();
+	};
+	
+	$('#relsList').find('span').click(function(){
+		$(this).remove();
+	});
+	
+	$('#relInput').autocomplete({
+		source: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/suggest?limit=10",
+		select: function( event, ui ) {
+			if ($("#relate").val() === "") {
+				alert("Select Relation Type!");
+			}
+			else
+			{
+				if ($('#relsList').find('input[type="hidden"][value="' + ui.item.value + '"]').length == 0) {
+					$('<p/>')
+						.html(ui.item.label)
+						.addClass("text-green")
+						.append($('<input/>').attr('type', 'hidden').attr('name', 'relIds[]').val(ui.item.value))
+						.append($('<input/>').attr('type', 'hidden').attr('name', 'relGuids[]').val($("#relate").val()))
+						.click(function() {
+							$(this).remove();
+						}).appendTo($('#relsList'));
+				}
+
+			}
+			
+			<!-- $("#relate").val(''); -->
+			$(this).val('');
+			
+			return false;
+			
+		}, 
+		open: function() {
+			$(".ui-autocomplete").css({
+				"z-index":1000,
+				"font-size": "12px"
+			});
+		}
+	
+	});	
+	
+	$('#datetimepicker1').datetimepicker({
+		pick12HourFormat: false,
+		sideBySide: true
+	});
+	$('#datetimepicker2').datetimepicker({
+		pick12HourFormat: false,
+		sideBySide: true
+	});
+	$('#fixedKeywords').tagsinput({
+        confirmKeys: [13, 44, 188]
+    });
+    $("[rel=tooltip]").tooltip({ placement: 'right'});
+    
+    $('#fileupload').fileupload({
+    	url: '<?php echo $this->url(['lang'=>$this->getLanguage()],'upload_file_upload'); ?>',
+    	dataType: 'json',
+    	maxFileSize: 500000, 
+    	done: function (e, data) {
+    		if(data.result) {
+    			if (data.result.original.type == "file") {
+    				var presentImage = "<div style='padding:5px'>"+data.result.original.title+"</div>";
+    			}
+    			else
+    			{
+    			var presentImage = $('<img/>');
+    			$(presentImage).attr('src', data.result.original.url)
+	    			.attr('width', '100').attr('height', '100')
+					.attr('style', 'cursor: pointer')
+					.click(function() {
+						console.log($.toJSON(data.result));
+					});
+				}
+				var select = $('<select/>');
+				$(select).attr('width', '100');
+				$('<option/>').attr('value', '').html('---').appendTo(select);
+				$('<option/>').attr('value', 'caption').attr('data-options',data.result.original.id)
+					.attr('data-name',data.files[0].name)
+					.html('Insert Caption')
+					.appendTo(select);
+				$(select).change(function() {
+					if ($(this).val() != '') {
+						if ($(this).val() == 'caption') {
+							addFormAttribute($(this).val(), $(this).find('option:selected').data('options'), $(this).find('option:selected').data('name'));
+						}
+					}
+				});	
+				$('<li/>').append(presentImage)
+				.append($('<input/>').attr('type', 'hidden').attr('name','filename[]').val(data.files[0].name))
+				.append($('<input/>').attr('type', 'hidden').attr('name','fileUrl[]').val($.toJSON(data.result)))
+				.append($('<br/>')).append(select).appendTo($('#ephotos'));
+    			
+    			$('#progress').hide();
+    		}
+    		
+    		
+    	},
+    	fail: function (e, data) {
+    		$.each(data.messages, function (index, error) {
+    			alert('Upload file error: ' + error);
+    		});
+    	},
+    	processfail: function (e, data) {
+    		alert(data.files[data.index].name + "\n" + data.files[data.index].error);
+    	},
+    	progressall: function (e, data) {
+    		var progress = parseInt(data.loaded / data.total * 100, 10);
+    		$('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+    	},
+    	add: function (e, data) {
+    		var uploadErrors = [],
+    			type = $('select[name=fixedType]').val();
+    		
+    			
+    		if(type == 'image' && data.originalFiles[0]['size'] > 500000) {
+    			uploadErrors.push('Filesize is too big');
+    		}
+    		if(uploadErrors.length > 0) {
+    			alert(uploadErrors.join("\n"));
+    			return false;
+    		}
+    		else
+    		{
+				data.submit();
+			}
+    	},
+    	start: function(e) {
+    		$('#progress').css({display:'block'});
+    	}
+    }).bind('fileuploadsubmit',function (e, data) {
+    	var type = $('select[name=fixedType]').val(),
+    		guid = '<?php echo $this->guid; ?>';
+    	data.formData = {type:type,guid:guid};
+    	console.log(type + ' ' + data.originalFiles[0]['size']);
+    	if(type == 'image' && data.originalFiles[0]['size'] > 500000) {
+    		alert('Filesize is too big');
+    		data.context.find('button').prop('disabled', false);
+			return false;
+    	}
+    	if (!data.formData.type) {
+    		alert('Pilih Jenis Upload');
+			data.context.find('button').prop('disabled', false);
+			return false;
+    	}
+    });
+    
+    $.validator.addMethod('shortTitle', function(value) {
 		value = value.replace(/^\s+|\s+$/g, '');
 		var regex = new RegExp(/^[a-z0-9\-]+$/);
 		if (value == '' || value.match(regex)) {
@@ -96,22 +520,57 @@ setTimeout(function()
 			return false;
 		}
 	});
-	
-    $("#catalogInputForm").validate({
-        rules: {
-            fixedTitle: "required"
-        },
-        messages: {
-            fixedTitle: "Enter Title"
-        }
-    });
     
-	/**
+    /**
 	 * Automatically create shortTitle once user enter the title
 	 */
 	$('#fixedTitle').bind('change', function() {
 		$('#shortTitle').val(Pandamp.Util.generateShortTitle($(this).val()));
 	});
 	
+    $("input[name=fixedTitle]").prop('required',true);
+	$('#newPost').validator().on('submit', function (e) {
+	  	if (e.isDefaultPrevented()) {
+	    	$('#confirmDialog').html('form is not valid!Please check again')
+	    		.dialog({
+	    			title:'Error',
+	    			modal: true,
+	    			closeOnEscape: false,
+	    			resizable: false,
+	    			open: function(event, ui) {
+						$('.ui-dialog-titlebar-close').hide();
+						$(this).parent().find('.ui-dialog-buttonpane button').wrapInner('<span/>');
+					},
+	    			buttons: {
+	    				'OK': function() {
+							$(this).dialog('destroy').empty();
+						}
+	    			}
+	    		});
+	  	} else {
+	    	e.preventDefault();
+    		var vardata = $('#newPost').serialize();
+    		<!-- $('.box-footer > button').attr({'disabled':'disabled'}); -->
+    		$('#wait').html('Simpan database...tunggu...').addClass('label label-warning').fadeIn();
+    		$.post('', vardata, function(data){
+    			if (data.response == true) {
+    				$('#wait').html(data.message).addClass('label label-info').fadeIn('slow');
+    				$('.box-footer > button').removeAttr('disabled');
+    					
+    			}
+    			else
+    				$('#wait').html('Ada masalah...Kontak IT').addClass('label label-warning').fadeIn();
+    			
+    		}, "json");
+		}
+	});    
+	
+	$('#searchButton').click();
 });
-</script>
+function addFormAttribute(v,fileId,name)
+{
+	$('#extraattribute').append("<div class='form-group col-xs-9'>"+
+	"<input type='text' name='attr_" + v + "_" + fileId + "[]' class='form-control' placeholder='"+ucfirst(v)+": "+name+"'></div>"+
+	"</div>");
+}
+<?php $this->headScript()->captureEnd(); ?>
