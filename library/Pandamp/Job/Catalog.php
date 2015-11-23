@@ -1035,6 +1035,19 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		return ($row) ? $row : '';
 	}
 	
+	private function getFolderByGuid($folderGuid, $lang)
+	{
+		$db = $this->getDbHandler($lang);
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+	
+		$sql = $db->select();
+		$sql->from('KutuFolder', '*');
+		$sql->where('guid=?',$folderGuid);
+		$row = $db->fetchRow($sql);
+	
+		return ($row) ? $row : '';
+	}
+	
 	private function getCatalogAttribute($guid,$attributeGuid,$lang)
 	{
 		$db = $this->getDbHandler($lang);
@@ -1289,19 +1302,13 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 	
 	private function getLabelNode($folderGuid, $lang)
 	{
-		$db = $this->getDbHandler($lang);
-		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-		
-		$sql = $db->select();
-		$sql->from('KutuFolder', '*');
-		
-		$rowFolder = $db->fetchRow("guid='$folderGuid'");
+		$rowFolder = $this->getFolderByGuid($folderGuid,$lang);
 		if ($rowFolder) {
 			$path = explode("/",$rowFolder->path);
 			$rpath = $path[0];
-			$rowFolder1 = $db->fetchRow("guid='$rpath'");
+			$rowFolder1 = $this->getFolderByGuid($rpath,$lang);
 			if ($rowFolder1) {
-				$rowFolder2 = $db->fetchRow("guid='$rowFolder1->parentGuid'");
+				$rowFolder2 = $this->getFolderByGuid($rowFolder1->parentGuid,$lang);
 				if ($rowFolder2) {
 					if ($rowFolder2->title == "Peraturan") {
 						return "nprt";
