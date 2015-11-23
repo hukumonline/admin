@@ -16,9 +16,8 @@ class Pandamp_Core_Hol_Catalog
         if(empty($aData['profileGuid']))
             throw new Zend_Exception('Catalog Profile can not be EMPTY!');
 
-            
         $profileGuid = $aData['profileGuid'];
-            
+        
         if ($profileGuid == 'klinik')
         	$title 	= $aData['fixedCommentTitle'];
         else 
@@ -63,7 +62,7 @@ class Pandamp_Core_Hol_Catalog
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))? $aData['expiredDate'] : '0000-00-00 00:00:00';
             $rowCatalog->createdBy = (isset($aData['username']))?$aData['username']:'';
             $rowCatalog->modifiedBy = $rowCatalog->createdBy;
-            $rowCatalog->createdDate = date("Y-m-d h:i:s");
+            $rowCatalog->createdDate = date("Y-m-d H:i:s");
             $rowCatalog->modifiedDate = $rowCatalog->createdDate;
             $rowCatalog->deletedDate = '0000-00-00 00:00:00';
             $rowCatalog->status = (isset($aData['status']))?$aData['status']:0;
@@ -110,20 +109,174 @@ class Pandamp_Core_Hol_Catalog
         {
             $rowCatalog->copyToFolder($folderGuid);
         }
-
-        //do indexing
-        $indexingEngine = Pandamp_Search::manager();
-        $indexingEngine->indexCatalog($catalogGuid);
         
+        /**
+         * @todo Relasi Katalog
+         */
+        if (isset($aData['relIds'])) {
+        	$relatedItemDb = new App_Model_Db_Table_RelatedItem();
+        	$relatedItemDb->delete(array(
+       			'relatedGuid=?'	=> $catalogGuid,
+       			'relateAs IN (?)' => array('RELATED_OTHER','RELATED_Clinic','RELATED_ISSUE','RELATED_HISTORY','RELATED_BASE','RELATED_TRANSLATION_ID','RELATED_TRANSLATION_EN')
+        	));
+        	for ($i=0;$i<count($aData['relIds']);$i++) {
+        		if (($aData['relIds'][$i]) AND ($aData['relGuids'][$i])) {
+        			$relatedItemDb->insert(array(
+       					'itemGuid' => $aData['relIds'][$i],
+       					'relatedGuid' => $catalogGuid,
+       					'relateAs' => $aData['relGuids'][$i]
+        			));
+        		}
+        	}
+        }
+        
+        /**
+         * @todo Upload File
+         */
+		if (isset($aData['filename']) && !empty($aData['filename'])) {
+			
+			$catalogDb = new App_Model_Db_Table_Catalog();
+			
+			for ($i = 0; $i < count($aData['filename']); $i++) {
+				$fileName = $aData['filename'][$i];
+				$fileUrls = json_decode(stripslashes($aData['fileUrl'][$i]));
+				foreach ($fileUrls as $index => $value) {
+					if ($index == "original") {  
+						$title = '';
+						$slug = '';
+						if (isset($aData['attr_caption_'.$value->id]) && !empty($aData['attr_caption_'.$value->id]))
+						{
+							$title = $aData['attr_caption_'.$value->id][0];
+							$slug = Pandamp_Utility_String::removeSign($title, '-', true);
+						}	
+						
+						if ($value->type == 'file') {
+							$relatedType = 'RELATED_FILE';
+							
+						}
+						elseif ($value->type == 'image')
+						{
+							$relatedType = 'RELATED_IMAGE';
+						}
+						
+						$rowDocCatalog = $catalogDb->fetchNew();
+						$rowDocCatalog->guid = $value->id;
+						$rowDocCatalog->shortTitle = $slug;
+						$rowDocCatalog->profileGuid = $aData['profile'];
+						
+						$docCatalogGuid = $rowDocCatalog->save();
+						
+						$rowsetDocCatalogAttribute = $rowDocCatalog->findDependentRowsetCatalogAttribute();
+						
+						$this->_updateCatalogAttribute($rowsetDocCatalogAttribute, $docCatalogGuid, 'docSystemName', $value->title);
+						$this->_updateCatalogAttribute($rowsetDocCatalogAttribute, $docCatalogGuid, 'docOriginalName', $fileName);
+						$this->_updateCatalogAttribute($rowsetDocCatalogAttribute, $docCatalogGuid, 'docSize', $value->size);
+						$this->_updateCatalogAttribute($rowsetDocCatalogAttribute, $docCatalogGuid, 'docMimeType', $value->filetype);
+						$this->_updateCatalogAttribute($rowsetDocCatalogAttribute, $docCatalogGuid, 'fixedTitle', $title);
+						$this->_updateCatalogAttribute($rowsetDocCatalogAttribute, $docCatalogGuid, 'docViewOrder', 0);
+						
+						$this->relateTo($docCatalogGuid, $catalogGuid, $relatedType);
+					}	
+				}
+			}
+		} 
+		
+		/**
+		 * Copy|Use image
+		 * Untuk satu article satu image
+		 */
+		if (isset($aData['fixedFileImage'])) {
+			$fixedFileImage = $aData['fixedFileImage'];
+			$fixedFileImage = basename($fixedFileImage);
+			if (strpos($fixedFileImage,'tn_') !== false) {
+				$basename = str_replace('tn_','',$fixedFileImage);
+			}
+			else
+				$basename = str_replace('thumbnail_','',$fixedFileImage);
+			
+			$guidBasename = pathinfo($basename,PATHINFO_FILENAME);
+			
+			$eiTitle = ($aData['fileImage'])? $aData['fileImage'] : '';
+			
+			$eslug = Pandamp_Utility_String::removeSign($eiTitle, '-', true);
+			
+			$rel = array();
+			
+			$relatedItemDb = new App_Model_Db_Table_RelatedItem();
+			$relItems = $relatedItemDb->fetchAll("relatedGuid='".$catalogGuid."' AND relateAs='RELATED_IMAGE'");
+			if ($relItems) 
+			{
+				foreach ($relItems as $relItem)
+				{
+					$catalogDb = new App_Model_Db_Table_Catalog();
+					$catalog = $catalogDb->fetchRow("guid='".$relItem['itemGuid']."' AND status!=-1");
+					if ($catalog) {
+						$rel[] = $relItem['itemGuid'];
+					}
+				}
+			}
+			
+			if (isset($rel[0]) && count($rel)==1 && $rel[0] == $guidBasename)
+			{
+				$rowEImageCatalog = $tblCatalog->find($guidBasename)->current();
+				$rowEImageCatalog->shortTitle = $eslug;
+			}
+			else
+			{
+				if (isset($rel[0]))
+					$this->delete($rel[0]);
+				
+				// jika ingin mengganti gambar dari yang sudah ada
+				$of = $tblCatalog->find($guidBasename)->current();
+		
+				$rowEImageCatalog = $tblCatalog->fetchNew();
+				$rowEImageCatalog->shortTitle = $eslug;
+				$rowEImageCatalog->profileGuid = $aData['profile'];
+				$rowEImageCatalog->createdDate = $of->createdDate;
+				$rowEImageCatalog->createdBy = $of->createdBy;
+					
+			}
+			
+			
+			$catalogEGuid = $rowEImageCatalog->save();
+			
+			$rowsetEImageCatalogAttribute = $rowEImageCatalog->findDependentRowsetCatalogAttribute();
+			
+			/**
+			 * @TODO docSystemName
+			 * digunakan sebagai inti|pemisah dari image
+			 * jika dia hasil copy dari catalog lain atau file original nya sendiri 
+			 * maka yg diambil adalah attribute ini
+			 */			
+			$this->_updateCatalogAttribute($rowsetEImageCatalogAttribute, $catalogEGuid, 'docSystemName', $basename);
+			$this->_updateCatalogAttribute($rowsetEImageCatalogAttribute, $catalogEGuid, 'docOriginalName', App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidBasename,'docOriginalName'));
+			$this->_updateCatalogAttribute($rowsetEImageCatalogAttribute, $catalogEGuid, 'docSize', App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidBasename,'docSize'));
+			$this->_updateCatalogAttribute($rowsetEImageCatalogAttribute, $catalogEGuid, 'docMimeType', App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidBasename,'docMimeType'));
+			$this->_updateCatalogAttribute($rowsetEImageCatalogAttribute, $catalogEGuid, 'docViewOrder', App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guidBasename,'docViewOrder'));
+			$this->_updateCatalogAttribute($rowsetEImageCatalogAttribute, $catalogEGuid, 'fixedTitle', $eiTitle);
+			
+			$this->relateTo($catalogEGuid, $catalogGuid, 'RELATED_IMAGE');
+			
+		}
+        
+
+        /**
+         * @todo BLOCK solr core-catalog	
+        $indexingEngine = Pandamp_Search::manager();
+        $indexingEngine->indexCatalog($catalogGuid); */
+        
+        /**
+		 * @todo BLOCK New solr corehol	
         $registry = Zend_Registry::getInstance();
         $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
         
         $res = $application->getOption('resources')['indexing']['solr']['write'];
         
         $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
-        $esolr->indexCatalog($catalogGuid); 
+        $esolr->indexCatalog($catalogGuid); */
 
-        
+        /**
+		 * @todo BLOCK solr shortenerUrl core3
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         if (null === $viewRenderer->view) {
         	$viewRenderer->initView();
@@ -186,9 +339,9 @@ class Pandamp_Core_Hol_Catalog
 		}
 		
 		// indexing shortener url
-		$hukumn->indexCatalog($hid);
+		$hukumn->indexCatalog($hid); */
 		        
-        
+        /*
 		try {
 			
 		    $url = 'http://developers.facebook.com/tools/lint/?url={'.$url_content.'}&format=json';
@@ -204,13 +357,14 @@ class Pandamp_Core_Hol_Catalog
 		{
 			//die($e->getMessage());
 		}
+		*/
 		
 		/**
 		 * Updated Dec 10, 2013 06:01
 		 */
-		$dir = $cfg->cdn->hol->static->url . DS . 'temp' . DS . 'cache';
-		Pandamp_Core_FileCache::clear($dir . DS . 'url');
-		Pandamp_Core_FileCache::clear($dir . DS . 'action');
+		//$dir = $cfg->cdn->hol->static->url . DS . 'temp' . DS . 'cache';
+		//Pandamp_Core_FileCache::clear($dir . DS . 'url');
+		//Pandamp_Core_FileCache::clear($dir . DS . 'action');
 		
 		/*
 		if (Pandamp_Pio::manager()->ping()) {
@@ -257,14 +411,10 @@ class Pandamp_Core_Hol_Catalog
             {
                 $indexingEngine = Pandamp_Search::manager();
                 $indexingEngine->indexCatalog($rowRelatedItem->relatedGuid);
-                
-                $registry = Zend_Registry::getInstance();
-                $application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
-                
-                $res = $application->getOption('resources')['indexing']['solr']['write'];
-                
-                $esolr = new Pandamp_Search_Adapter_Esolr($res['host'], $res['port'], $res['dir4']);
-                $esolr->indexCatalog($rowRelatedItem->relatedGuid);
+                $queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
+                $queue->addJob('Pandamp_Job_Catalog',
+                		['guid' => $rowRelatedItem->relatedGuid, 'lang' => Zend_Registry::get("Zend_Locale")->getLanguage()],
+                		false);
             }
         }
 
