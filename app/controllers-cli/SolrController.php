@@ -59,7 +59,7 @@ class SolrController extends Application_Controller_Cli
 		{
 			$documents = array();
 			
-			$documents[] = $this->_createSolrDocument($row);
+			$documents[] = $this->_createSolrDocument($row,$lang);
 			
 			try {
 				$solr->addDocuments( $documents );
