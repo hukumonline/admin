@@ -27,6 +27,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			$viewRenderer->initView();
 		}
 		$view = $viewRenderer->view;
+		$view->addHelperPath(APPLICATION_PATH . '/../library/Pandamp/Controller/Action/Helper', 'Pandamp_Controller_Action_Helper');
 		
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
