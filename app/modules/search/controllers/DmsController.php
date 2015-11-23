@@ -266,7 +266,8 @@ class Search_DmsController extends Zend_Controller_Action
 				if (substr($fn,0,2) !== 'lt') {
 					$fn = $row->id;
 				}
-   				$ext = pathinfo($row->systemName,PATHINFO_EXTENSION);
+				$rowDocSystemName = $this->view->getCatalogAttribute($fn, 'docSystemName');
+   				$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
    				$ext = strtolower($ext);
    				$relDb = new App_Model_Db_Table_RelatedItem();
    				$rel = $relDb->fetchRow("itemGuid='".$fn."' AND relateAs='RELATED_IMAGE'");
