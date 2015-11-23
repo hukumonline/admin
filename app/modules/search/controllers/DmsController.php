@@ -273,7 +273,7 @@ class Search_DmsController extends Zend_Controller_Action
    				
    				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/thumbnail_'.$row->systemName)))
    					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/thumbnail_'.$row->systemName;
-   				elseif (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/tn_'.$fn.'.'.$ext)))
+   				else
    					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/tn_'.$fn.'.'.$ext;
    				   				
    				//$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
