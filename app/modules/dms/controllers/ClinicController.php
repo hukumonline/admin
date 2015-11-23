@@ -184,10 +184,18 @@ class Dms_ClinicController extends Zend_Controller_Action
 	        $id	 = $Bpm->save($aData);
 	        
             if ($id) {
-	            $message = "Data was successfully saved.";
-				$this->_helper->getHelper('FlashMessenger')
-					->addMessage($message);
-				$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$aData['status'].'/node/'.$node);
+	            //$message = "Data was successfully saved.";
+				//$this->_helper->getHelper('FlashMessenger')->addMessage($message);
+				//$this->_redirect(ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$aData['status'].'/node/'.$node);
+            	$queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
+            	$queue->addJob('Pandamp_Job_Catalog',
+            			['guid' => $id,'folderGuid' => $node, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+            			false);
+            	 
+            	$this->_helper->json([
+            			'response' => true,
+            			'message' => 'Artikel berhasil disimpan. <a href="'.ROOT_URL.'/'.$this->_lang->getLanguage().'/dms/clinic/browse/status/'.$aData['status'].'/node/'.$node.'">Lihat artikel</a>.'
+            		]);
             }
         }
 
