@@ -1108,7 +1108,7 @@ class SolrController extends Application_Controller_Cli
 				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName', $lang);
 				if ($rowDocSystemName)
 				{
-					//$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
+					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
 					
@@ -1159,13 +1159,13 @@ class SolrController extends Application_Controller_Cli
 						$fileImage['thumbnail'] = $this->_imageUrl.'/tn_'.$row->itemGuid.'.'.strtolower($ext);
 					}*/
 					
-					/*if ($catalogGuid !== $row->itemGuid)
+					if ($catalogGuid !== $row->itemGuid)
 					{
 						$ig = $this->getItemRelated($catalogGuid,'RELATED_IMAGE');
 						$guid = $ig->relatedGuid; 
-					}*/
+					}
 					
-					/*if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
+					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
 						$fileImage[$i]['original'] = $ori;
 					}
 					
@@ -1185,9 +1185,11 @@ class SolrController extends Application_Controller_Cli
 					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle"))
 					{
 						$fileImage[$i]['caption'] = strip_tags(trim($caption));
-					}*/
+					}
 					
 					
+					/**
+					 * Image format lama
 					if ($ori = $this->giu($guid, $row->itemGuid, $ext, null, "local")) {
 						$fileImage[$i]['original'] = $ori;
 					}
@@ -1198,7 +1200,7 @@ class SolrController extends Application_Controller_Cli
 					if ($caption = $this->getCatalogAttribute($row->itemGuid, "fixedTitle"))
 					{
 						$fileImage[$i]['caption'] = strip_tags(trim($caption));
-					}
+					}*/
 					
 				}
 				$i++;

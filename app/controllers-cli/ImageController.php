@@ -48,7 +48,7 @@ class ImageController extends Application_Controller_Cli
 		$rowCount = count($rowsFound);
 		for($iCount=0;$iCount<$rowCount;$iCount++) {
 			$row = $rowsFound[$iCount];
-			
+			$fileImage=null;
 			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE');
 			if ($rowsetRelatedItem) {
 				//get image url
@@ -109,24 +109,47 @@ class ImageController extends Application_Controller_Cli
 								break;
 						}
 						
-						//beritahu nama file baru catalogAttribute
-						$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
-						
-						
-						try {
-							$this->addHitsBySolr(json_encode([[
-									"id" => $rowsetRelatedItem->itemGuid,
-									"fileName" => ["set" => $fileName . '.' . $ext],
-									"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
-								]]));
-						}
-						catch (Zend_Exception $e)
-						{
-							
+						if ($img = $this->giu($row->guid, $fileName, $ext, $s.'_', "local")) {
+							$fileImage[$iCount][$s] = $img;
 						}
 						
+						
+					} // end foreach
+					
+					if ($th = $this->giu($row->guid, $fileName, $ext, "tn_", "local")) {
+						$fileImage[$iCount]['thumbnail'] = $th;
+					}
+						
+					if ($caption = $this->getCatalogAttribute($fileName, "fixedTitle"))
+					{
+						$fileImage[$iCount]['caption'] = strip_tags(trim($caption));
 					}
 					
+					//beritahu nama file baru catalogAttribute
+					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
+					
+					
+					try {
+						//update document
+						$this->addHitsBySolr(json_encode([[
+								"id" => $rowsetRelatedItem->itemGuid,
+								"fileName" => ["set" => $fileName . '.' . $ext],
+								"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
+							]]));
+						
+						$this->log()->info(Zend_Json::encode($fileImage));
+
+						//update catalog
+						/*$this->addHitsBySolr(json_encode([[
+								"id" => $row->guid,
+								"fileImage" => ["set" => Zend_Json::encode($fileImage)],
+								"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
+							]]));*/
+							
+					}
+					catch (Zend_Exception $e)
+					{}
+										
 					
 				}
 				
