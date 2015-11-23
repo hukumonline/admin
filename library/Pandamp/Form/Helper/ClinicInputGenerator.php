@@ -68,11 +68,14 @@ class Pandamp_Form_Helper_ClinicInputGenerator
 				$guidMan = new Pandamp_Core_Guid();
 				$catalogAttributeGuid = $guidMan->generateGuid();
 			}
+			if(isset($rowAttribute)){
+			$desc = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
 				
-			$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid, $attributeValue, $rowAttribute->type,null,'author','partner');
+			$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid, $attributeValue, $rowAttribute->type,null,'author',$desc,'partner');
 			
-			$aRenderedAttributes[$rowAttribute->guid]['description'] = $rowAttribute->description;
+			//$aRenderedAttributes[$rowAttribute->guid]['description'] = $rowAttribute->description;
 			$aRenderedAttributes[$rowAttribute->guid]['form'] = $attributeRenderer->render();
+			}
 			$i++;
 			
 		}

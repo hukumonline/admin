@@ -17,10 +17,13 @@ class Pandamp_Form_Helper_CatalogInputGenerator
             foreach ($rows as $row)
             {
                 $row3 = $row->findParentRow('App_Model_Db_Table_Attribute');
-                $attributeRenderer = new Pandamp_Form_Attribute_Renderer($row3->guid,null,$row3->type,null, $profileGuid,'partner');
+                
+                $desc = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;
+                
+                $attributeRenderer = new Pandamp_Form_Attribute_Renderer($row3->guid,null,$row3->type,null, $profileGuid, $desc, 'partner');
 
                 // $aRenderedAttributes[$row3->guid]['description'] = $row3->description;
-                $aRenderedAttributes[$row3->guid]['description'] = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;
+                //$aRenderedAttributes[$row3->guid]['description'] = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;
                 $aRenderedAttributes[$row3->guid]['form'] = $attributeRenderer->render();
                 $i++;
             }
@@ -119,12 +122,14 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 			}
 			if(isset($rowAttribute))
 			{
+				$desc = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
+				
 				if ($zl->getLanguage() == 'en')
 					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid,'clinic_partner');
 				else
-					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid,'partner');
+					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid, $desc, 'partner');
 				
-				$aRenderedAttributes[$rowAttribute->guid]['description'] = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
+				//$aRenderedAttributes[$rowAttribute->guid]['description'] = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
 				
 				$aRenderedAttributes[$rowAttribute->guid]['form'] = $attributeRenderer->render();
 			}
