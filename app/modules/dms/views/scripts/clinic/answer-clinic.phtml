@@ -182,7 +182,10 @@ div.tagsinput div { display:block; float: left; }
 									$filename = $this->getCatalogAttribute($relItem['itemGuid'],'docSystemName');
 									$ext = pathinfo($filename, PATHINFO_EXTENSION);
 									$fn = pathinfo($filename, PATHINFO_FILENAME);
-									$title = $this->getCatalogAttribute($relItem['itemGuid'],'fixedTitle');
+									if (substr($fn,0,2) !== 'lt') {
+										$fn = $relItem['itemGuid'];
+									}
+									$title = $this->getCatalogAttribute($fn,'fixedTitle');
 									$rg = $this->getItemRelated($fn,'RELATED_IMAGE');
 									/*
 									$catalogDb = new App_Model_Db_Table_Catalog();
