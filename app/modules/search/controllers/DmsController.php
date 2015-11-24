@@ -263,7 +263,8 @@ class Search_DmsController extends Zend_Controller_Action
     		for ($i=0;$i<$numRowset;$i++) {
     			$row = $hits->response->docs[$i];
     			$fs = 'thumbnail_';
-    			$filename = $row->systemName;
+    			//$filename = $row->systemName; <-- metode ini kadang suka kosong
+    			$filename = $this->view->getCatalogAttribute($row->id,'docSystemName');
 				$fn = pathinfo($filename,PATHINFO_FILENAME);
    				$ext = pathinfo($filename,PATHINFO_EXTENSION);
    				$ext = strtolower($ext);
