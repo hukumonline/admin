@@ -130,25 +130,29 @@ class ImageController extends Application_Controller_Cli
 					
 					
 					try {
-						//update document
-						$this->addHitsBySolr(json_encode([[
-								"id" => $rowsetRelatedItem->itemGuid,
-								"fileName" => ["set" => $fileName . '.' . $ext],
-								"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
-							]]));
 						
 						//$this->log()->info(Zend_Json::encode($fileImage));
 
 						//update catalog
-						$this->addHitsBySolr(json_encode([[
+						$up = $this->addHitsBySolr(json_encode([[
 								"id" => $row->guid,
 								"fileImage" => ["set" => Zend_Json::encode($fileImage)],
 								"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
 							]]));
-							
+
+						if ($up) {
+							//update document
+							$this->addHitsBySolr(json_encode([[
+									"id" => $rowsetRelatedItem->itemGuid,
+									"fileName" => ["set" => $fileName . '.' . $ext],
+									"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
+								]]));
+						}
 					}
 					catch (Zend_Exception $e)
-					{}
+					{
+						$this->log()->err($e->getMessage());
+					}
 										
 					
 				}
