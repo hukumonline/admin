@@ -228,12 +228,21 @@ class Pandamp_Core_Hol_Catalog
 				
 				// jika ingin mengganti gambar dari yang sudah ada
 				$of = $tblCatalog->find($guidBasename)->current();
+				if ($of) {
+					$cd = $of->createdDate;
+					$cb = $of->createdBy;
+				}
+				else
+				{
+					$cb = $aData['username'];
+					$cd = date("Y-m-d H:i:s");
+				}
 		
 				$rowEImageCatalog = $tblCatalog->fetchNew();
 				$rowEImageCatalog->shortTitle = $eslug;
 				$rowEImageCatalog->profileGuid = $aData['profile'];
-				$rowEImageCatalog->createdDate = $of->createdDate;
-				$rowEImageCatalog->createdBy = $of->createdBy;
+				$rowEImageCatalog->createdDate = $cd;
+				$rowEImageCatalog->createdBy = $cb;
 					
 			}
 			
