@@ -1162,13 +1162,18 @@ class SolrController extends Application_Controller_Cli
 					if ($catalogGuid !== $row->itemGuid)
 					{
 						$ig = $this->getItemRelated($catalogGuid,'RELATED_IMAGE');
-						$guid = $ig->relatedGuid; 
+						if ($ig)
+							$guid = $ig->relatedGuid; 
 					}
 					
 					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
 						$fileImage[$i]['original'] = $ori;
 					}
 					
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
+						$fileImage[$i]['thumbnail'] = $th;
+					}
+						
 					$file = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
 					$keys = array_keys($file->toArray());
 					foreach ($keys as $key)
@@ -1176,10 +1181,6 @@ class SolrController extends Application_Controller_Cli
 						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "local")) {
 							$fileImage[$i][$key] = $img;
 						}
-					}
-					
-					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
-						$fileImage[$i]['thumbnail'] = $th;
 					}
 					
 					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle"))
