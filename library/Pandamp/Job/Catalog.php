@@ -77,7 +77,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		}
 		else
 		{
-			$recoveredData = file_get_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.2211151032');
+			$recoveredData = file_get_contents(ROOT_DIR.DS.'data'.DS.'datashorturl');
 			$recoveredArray = unserialize($recoveredData);
 			$start = array_shift($recoveredArray);
 			foreach($recoveredArray as $v){
@@ -93,7 +93,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				
 				$recoveredArray[] = $missing;
 				sort($recoveredArray);
-				file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.2211151032', serialize($recoveredArray));
+				file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl', serialize($recoveredArray));
 			}
 			else 
 			{

@@ -8,7 +8,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 		$solr->setPath('/solr/coreshorturl');
 			
 		if ( ! $solr->ping() ) {
-			echo "Solr service not responding.\n";
+			echo "Solr coreshorturl service not responding.\n";
 			exit;
 		}
 		else
@@ -30,7 +30,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 		for($i=0;$i<$rowCount;$i++)
 		{
 			$row = $rowsetAttr[$i];
-			/*$data = [
+			$data = [
 				'id' => $row->id,
 				'url' => $row->link,
 				'createdate' => $row->createdate,
@@ -38,7 +38,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 				'kopel' => $row->kopel
 			];
 			
-			$this->db3->insert('shorturls',$data);*/
+			$this->db3->insert('shorturls',$data);
 
 			if (isset($rowsetAttr[$i+1])) {
 				$nextRow = $rowsetAttr[$i+1];
@@ -50,7 +50,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 				
 			echo 'urutan: '.$i ." - ";
 			
-			/*$documents[$i] = $this->_createSolrDocument($row);
+			$documents[$i] = $this->_createSolrDocument($row);
 				
 			if($i%1000 == 0)
 			{
@@ -64,7 +64,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 					echo "Error occured when processing record starting from number: ". ($i - 1000) . ' to '.$i."\n";
 					throw new Zend_Exception($e->getMessage());
 				}
-			}*/
+			}
 			
 			$a[$i] = $row->id;
 			
@@ -74,16 +74,16 @@ class ShortenerUrlController extends Application_Controller_Cli
 			flush();
 		}
 		
-		/*try {
+		try {
 			$solr->addDocuments( $documents );
 			$solr->commit();
 			$solr->optimize();
 		}
 		catch ( Exception $e ) {
 			echo $e->getMessage();
-		}*/
+		}
 		
-		file_put_contents(ROOT_DIR.DS.'temp'.DS.'datashorturl.2211151032', serialize($a));
+		file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl', serialize($a));
 		
 		
 		sleep(1);
