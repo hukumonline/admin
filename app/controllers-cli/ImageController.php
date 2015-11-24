@@ -144,7 +144,7 @@ class ImageController extends Application_Controller_Cli
 							//update document
 							$this->addHitsBySolr(json_encode([[
 									"id" => $rowsetRelatedItem->itemGuid,
-									"fileName" => ["set" => $fileName . '.' . $ext],
+									"systemName" => ["set" => $fileName . '.' . $ext],
 									"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
 								]]));
 						}
