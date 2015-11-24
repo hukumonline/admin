@@ -83,7 +83,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 			echo $e->getMessage();
 		}
 		
-		file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl', serialize($a));
+		file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.txt', serialize($a));
 		
 		
 		sleep(1);
