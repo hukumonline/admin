@@ -67,7 +67,7 @@ class ImageController extends Application_Controller_Cli
 					//$dir = $cdn->static->dir->images . DIRECTORY_SEPARATOR . 'upload';
 					$dir = $cdn->static->dir->images;
 					
-					$catalogDb = $this->getCatalog($image->itemGuid, ['createdBy','createdDate']);
+					//$catalogDb = $this->getCatalog($image->itemGuid, ['createdBy','createdDate']);
 					
 					//$path = implode(DS, array(strip_tags(trim($catalogDb->createdBy)), date('Y',strtotime($catalogDb->createdDate)), date('m',strtotime($catalogDb->createdDate)), date('d',strtotime($catalogDb->createdDate))));
 					$path = implode(DS, [$row->guid]);
