@@ -265,8 +265,8 @@ class ImageController extends Application_Controller_Cli
 		//$link= $res["host"].":".$res["port"].$res["dir1"].'/update?commit=true';
 		//$link= $res["host"].":".$res["port"].$res["dir1"].'/update?commitWithin=10000';
 	
-		$ch = curl_init('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.'/solr/'.$indexing->solr->write->dir1.'/update?commitWithin=10000');
-		$this->log()->info('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.'/solr/'.$indexing->solr->write->dir1.'/update?commitWithin=10000');
+		$ch = curl_init('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=10000');
+		$this->log()->info('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=10000');
 		//$ch = curl_init($link);
 		//curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
