@@ -262,27 +262,31 @@ class Search_DmsController extends Zend_Controller_Action
     		);
     		for ($i=0;$i<$numRowset;$i++) {
     			$row = $hits->response->docs[$i];
-				$fn = pathinfo($row->systemName,PATHINFO_FILENAME);
-				if (substr($fn,0,2) !== 'lt') {
-					$fn = $row->id;
-				}
-				$rowDocSystemName = $this->view->getCatalogAttribute($fn, 'docSystemName');
-   				$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
+    			$fs = 'thumbnail_';
+    			$filename = $row->systemName;
+				$fn = pathinfo($filename,PATHINFO_FILENAME);
+   				$ext = pathinfo($filename,PATHINFO_EXTENSION);
    				$ext = strtolower($ext);
+   				if (substr($fn,0,2) !== 'lt') {
+   					$fn = $row->id;
+   					$fs = 'tn_';
+   					$filename = $fn.'.'.$ext;
+   				}
+   				$title = $this->view->getCatalogAttribute($fn,'fixedTitle');
    				$relDb = new App_Model_Db_Table_RelatedItem();
    				$rel = $relDb->fetchRow("itemGuid='".$fn."' AND relateAs='RELATED_IMAGE'");
    				
-   				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/thumbnail_'.$row->systemName)))
-   					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/thumbnail_'.$row->systemName;
-   				else
-   					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/tn_'.$fn.'.'.$ext;
+   				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$fs.$filename)))
+   					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$fs.$filename;
+   				elseif (is_array(@getimagesize($config['static']['url']['images'].'/'.$fs.$filename)))
+   					$url = $config['static']['url']['images'].'/'.$fs.$filename;
    				   				
    				//$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
    				//$url = $config['static']['url']['images'].'/upload/'.$pd1.'/'.$pd2.'/'.$pd3.'/'.$pd4.'/'.$fn.'_square'.'.'.$ext;
    				$res['files'][] = array(
-					'id' 			=> $row->id,
+					'id' 			=> $fn,
 					'relatedGuid' 	=> $rel->relatedGuid,
-					'title' 		=> $row->title,
+					'title' 		=> $title,
 					'url'   		=> $url
  				);
     
