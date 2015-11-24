@@ -49,32 +49,32 @@ class ImageController extends Application_Controller_Cli
 		for($iCount=0;$iCount<$rowCount;$iCount++) {
 			$row = $rowsFound[$iCount];
 			$fileImage=null;
-			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true);
+			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
 			if ($rowsetRelatedItem) {
 				$g=0;
-				foreach ($rowsetRelatedItem as $image) {
+				foreach ($rowsetRelatedItem as $related) {
 				//get image url
-				$rowDocSystemName = $this->getCatalogAttribute($image->itemGuid, 'docSystemName');
+				$rowDocSystemName = $this->getCatalogAttribute($related->itemGuid, 'docSystemName');
 				if ($rowDocSystemName)
 				{
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
 					
-					$image = $this->giu($row->guid, $image->itemGuid, $ext, null, "local");
+					$image = $this->giu($row->guid, $related->itemGuid, $ext, null, "local");
 					
 					$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
 					
 					//$dir = $cdn->static->dir->images . DIRECTORY_SEPARATOR . 'upload';
 					$dir = $cdn->static->dir->images;
 					
-					//$catalogDb = $this->getCatalog($image->itemGuid, ['createdBy','createdDate']);
+					//$catalogDb = $this->getCatalog($related->itemGuid, ['createdBy','createdDate']);
 					
 					//$path = implode(DS, array(strip_tags(trim($catalogDb->createdBy)), date('Y',strtotime($catalogDb->createdDate)), date('m',strtotime($catalogDb->createdDate)), date('d',strtotime($catalogDb->createdDate))));
 					$path = implode(DS, [$row->guid]);
 					Pandamp_Utility_File::createDirs($dir, $path);
 					
 					//$fileName  = uniqid('lt');
-					$fileName  = $image->itemGuid;
+					$fileName  = $related->itemGuid;
 					$fileku	   = $dir . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $fileName . '.' . $ext;
 					
 					file_put_contents($fileku, file_get_contents($image));
@@ -128,14 +128,14 @@ class ImageController extends Application_Controller_Cli
 					}
 					
 					//beritahu nama file baru catalogAttribute
-					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$image->itemGuid' AND attributeGuid='docSystemName'");
+					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$related->itemGuid' AND attributeGuid='docSystemName'");
 					
 					
 					try {
 						
 						//update document
 						$this->addHitsBySolr(json_encode([[
-								"id" => $image->itemGuid,
+								"id" => $related->itemGuid,
 								"systemName" => ["set" => $fileName . '.' . $ext],
 								"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
 							]]));
