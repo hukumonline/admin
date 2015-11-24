@@ -8,8 +8,13 @@ class Application_Controller_Cli extends Zend_Controller_Action
 	
 	function preDispatch ()
 	{
+		$indexing = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','indexing');
+
+		$host = $indexing->solr->write->host;
+		$port = $indexing->solr->write->port;
+		
 		//$this->_solr = new Apache_Solr_Service( 'nihki:sirkulasi@localhost', '8983' );
-		$this->_solr = new Apache_Solr_Service( 'localhost', '8983' );
+		$this->_solr = new Apache_Solr_Service( $host, $port );
 		
 		$multidb = Pandamp_Application::getResource('multidb');
 		$multidb->init();
