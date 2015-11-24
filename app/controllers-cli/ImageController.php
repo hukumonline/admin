@@ -255,6 +255,8 @@ class ImageController extends Application_Controller_Cli
 	
 	protected function addHitsBySolr($jsonData)
 	{
+		$indexing = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','indexing');
+		
 		//$registry = Zend_Registry::getInstance();
 		//$application=Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
 	
@@ -263,7 +265,7 @@ class ImageController extends Application_Controller_Cli
 		//$link= $res["host"].":".$res["port"].$res["dir1"].'/update?commit=true';
 		//$link= $res["host"].":".$res["port"].$res["dir1"].'/update?commitWithin=10000';
 	
-		$ch = curl_init('http://localhost:8983/solr/corehol/update?commit=true');
+		$ch = curl_init('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.'/solr/'.$indexing->solr->write->dir1.'/update?commit=true');
 		//$ch = curl_init($link);
 		//curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
