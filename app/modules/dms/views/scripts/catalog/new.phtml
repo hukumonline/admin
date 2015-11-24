@@ -190,7 +190,7 @@ $this->headStyle()->captureStart();
 								<p>
 								    <label for='fixedType'>Type</label>
 								    <select name='fixedType' id='fixedType' class="form-control">
-								    	<option value="">---</option>
+								    	<option value="">--- Pilih ---</option>
 								        <option value='file'<?php if (Zend_Auth::getInstance()->getIdentity()->name == "Dc Admin") : ?> selected<?php endif; ?>>File</option>
 								        <option value='image'<?php if (Zend_Auth::getInstance()->getIdentity()->name == "News Admin") : ?> selected<?php endif; ?>>Image</option>
 								    </select>
@@ -228,6 +228,11 @@ $this->headStyle()->captureStart();
 					        <option value="RELATED_ISSUE">Isu Hangat</option>
 					        <option value="RELATED_HISTORY">Sejarah</option>
 					        <option value="RELATED_BASE">Dasar Hukum</option>
+					        <option value="RELATED_PP">Peraturan Pelaksana</option>
+					        <option value="REPEAL">Mencabut Peraturan</option>
+                    		<option value="AMEND">Merubah Peraturan</option>
+                    		<option value="ESTABLISH">Menetapkan Peraturan</option>
+                    		<option value="ISROOT">Mencabut sebagian</option>
 					        <?php } else { ?>
 					        <option value="RELATED_TRANSLATION_ID">Indonesian Translation</option>
 					        <option value="RELATED_TRANSLATION_EN">English Translation</option>
@@ -437,7 +442,7 @@ $(function () {
 				}
 				var select = $('<select/>');
 				$(select).attr('width', '100');
-				$('<option/>').attr('value', '').html('---').appendTo(select);
+				$('<option/>').attr('value', '').html('--- Pilih ---').appendTo(select);
 				$('<option/>').attr('value', 'caption').attr('data-options',data.result.original.id)
 					.attr('data-name',data.files[0].name)
 					.html('Insert Caption')
@@ -557,7 +562,11 @@ $(function () {
     		$('#wait').html('Simpan database...tunggu...').addClass('label label-warning').fadeIn();
     		$.post('', vardata, function(data){
     			if (data.response == true) {
-    				$('#wait').html(data.message).addClass('label label-info').fadeIn('slow');
+    				$('#wait').html(data.message).addClass('label label-info').slideDown('slow',function(){
+    					setTimeout(function() {
+               					 window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->currentNode; ?>";
+               					  },2000);
+    				});
     				$('.box-footer > button').removeAttr('disabled');
     					
     			}

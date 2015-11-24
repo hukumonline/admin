@@ -298,10 +298,10 @@ class SolrController extends Application_Controller_Cli
 		$query = $request->getParam('q');
 		
 		$solr = &$this->_solr;
-		$solr->setPath('/solr/assetsetting');
+		$solr->setPath('/solr/coreasset');
 		
 		if ( ! $solr->ping() ) {
-			echo "Solr service not responding.\n";
+			echo "Solr coreasset service not responding.\n";
 			exit;
 		}
 		else
@@ -309,7 +309,7 @@ class SolrController extends Application_Controller_Cli
 			echo "is ON\n";
 		}
 		
-		echo "Start indexing\n";
+		echo "Start indexing AssetSetting\n";
 		
 		$db = $this->db;
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
@@ -388,7 +388,7 @@ class SolrController extends Application_Controller_Cli
 		
 		sleep(1);
 		
-		echo "Indexing completed\n";
+		echo "Indexing AssetSetting completed\n";
 	}
 	
 	public function folderAction()
@@ -398,10 +398,10 @@ class SolrController extends Application_Controller_Cli
 		$query = $request->getParam('q');
 		
 		$solr = &$this->_solr;
-		$solr->setPath('/solr/folder');
+		$solr->setPath('/solr/corefolder');
 		
 		if ( ! $solr->ping() ) {
-			echo "Solr service not responding.\n";
+			echo "Solr corefolder service not responding.\n";
 			exit;
 		}
 		else
@@ -409,7 +409,7 @@ class SolrController extends Application_Controller_Cli
 			echo "is ON\n";
 		}
 		
-		echo "Start indexing\n";
+		echo "Start indexing Folders\n";
 		
 		$db = $this->db;
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
@@ -485,7 +485,7 @@ class SolrController extends Application_Controller_Cli
 		
 		sleep(1);
 		
-		echo "Indexing completed\n";
+		echo "Indexing Folders completed\n";
 	}
 	
 	private function _createShortenerDocument(&$row)

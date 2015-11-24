@@ -24,12 +24,6 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 	
 	public function toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang)
 	{
-		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-		if (null === $viewRenderer->view) {
-			$viewRenderer->initView();
-		}
-		$view = $viewRenderer->view;
-		
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
 		$catalog = $this->getCatalog($catalogGuid, ['profileGuid','shortTitle'], $lang);

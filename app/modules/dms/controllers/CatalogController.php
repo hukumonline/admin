@@ -12,8 +12,7 @@ class Dms_CatalogController extends Zend_Controller_Action
 
     function  preDispatch()
     {
-        //$this->_helper->layout->setLayout('layout-dms-catalog');
-        $this->_helper->layout->setLayout('layout-dms-newcatalog');
+        $this->_helper->layout->setLayout('layout-dms-catalog');
 
         $auth = Zend_Auth::getInstance();
 
@@ -524,6 +523,8 @@ class Dms_CatalogController extends Zend_Controller_Action
     
     function newAction()
     {
+    	$this->_helper->layout->setLayout('layout-dms-newcatalog');
+    	
         $r = $this->getRequest();
         $folderGuid = $r->getParam('node');
         $profileGuid = $r->getParam('profile');
@@ -588,6 +589,8 @@ class Dms_CatalogController extends Zend_Controller_Action
     
     function editAction()
     {
+    	$this->_helper->layout->setLayout('layout-dms-newcatalog');
+    	
         $r = $this->getRequest();
         $catalogGuid = ($this->_getParam('guid'))? $this->_getParam('guid') : '';
 
