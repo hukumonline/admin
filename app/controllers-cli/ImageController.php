@@ -49,30 +49,32 @@ class ImageController extends Application_Controller_Cli
 		for($iCount=0;$iCount<$rowCount;$iCount++) {
 			$row = $rowsFound[$iCount];
 			$fileImage=null;
-			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE');
+			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true);
 			if ($rowsetRelatedItem) {
+				$g=0;
+				foreach ($rowsetRelatedItem as $image) {
 				//get image url
-				$rowDocSystemName = $this->getCatalogAttribute($rowsetRelatedItem->itemGuid, 'docSystemName');
+				$rowDocSystemName = $this->getCatalogAttribute($image->itemGuid, 'docSystemName');
 				if ($rowDocSystemName)
 				{
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
 					
-					$image = $this->giu($row->guid, $rowsetRelatedItem->itemGuid, $ext, null, "local");
+					$image = $this->giu($row->guid, $image->itemGuid, $ext, null, "local");
 					
 					$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
 					
 					//$dir = $cdn->static->dir->images . DIRECTORY_SEPARATOR . 'upload';
 					$dir = $cdn->static->dir->images;
 					
-					$catalogDb = $this->getCatalog($rowsetRelatedItem->itemGuid, ['createdBy','createdDate']);
+					$catalogDb = $this->getCatalog($image->itemGuid, ['createdBy','createdDate']);
 					
 					//$path = implode(DS, array(strip_tags(trim($catalogDb->createdBy)), date('Y',strtotime($catalogDb->createdDate)), date('m',strtotime($catalogDb->createdDate)), date('d',strtotime($catalogDb->createdDate))));
 					$path = implode(DS, [$row->guid]);
 					Pandamp_Utility_File::createDirs($dir, $path);
 					
 					//$fileName  = uniqid('lt');
-					$fileName  = $rowsetRelatedItem->itemGuid;
+					$fileName  = $image->itemGuid;
 					$fileku	   = $dir . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $fileName . '.' . $ext;
 					
 					file_put_contents($fileku, file_get_contents($image));
@@ -87,6 +89,10 @@ class ImageController extends Application_Controller_Cli
 					
 					$baseUrl = $cdn->static->url->images;
 					
+					if ($th = $this->giu($row->guid, $fileName, $ext, "tn_", "local")) {
+						$fileImage[$g]['thumbnail'] = $th;
+					}
+						
 					//mulai optimasi
 					foreach ($thumbnailSizes as $s) {
 						$service->setFile($image);
@@ -110,44 +116,29 @@ class ImageController extends Application_Controller_Cli
 						}
 						
 						if ($img = $this->giu($row->guid, $fileName, $ext, $s.'_', "local")) {
-							$fileImage[$iCount][$s] = $img;
+							$fileImage[$g][$s] = $img;
 						}
 						
 						
-					} // end foreach
+					} // end foreach optimasi
 					
-					if ($th = $this->giu($row->guid, $fileName, $ext, "tn_", "local")) {
-						$fileImage[$iCount]['thumbnail'] = $th;
-					}
-						
 					if ($caption = $this->getCatalogAttribute($fileName, "fixedTitle"))
 					{
-						$fileImage[$iCount]['caption'] = strip_tags(trim($caption));
+						$fileImage[$g]['caption'] = strip_tags(trim($caption));
 					}
 					
 					//beritahu nama file baru catalogAttribute
-					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$rowsetRelatedItem->itemGuid' AND attributeGuid='docSystemName'");
+					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$image->itemGuid' AND attributeGuid='docSystemName'");
 					
 					
 					try {
 						
-						//$this->log()->info(Zend_Json::encode($fileImage));
-
-						//update catalog
-						$up = $this->addHitsBySolr(json_encode([[
-								"id" => $row->guid,
-								"fileImage" => ["set" => Zend_Json::encode($fileImage)],
+						//update document
+						$this->addHitsBySolr(json_encode([[
+								"id" => $image->itemGuid,
+								"systemName" => ["set" => $fileName . '.' . $ext],
 								"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
 							]]));
-
-						if ($up) {
-							//update document
-							$this->addHitsBySolr(json_encode([[
-									"id" => $rowsetRelatedItem->itemGuid,
-									"systemName" => ["set" => $fileName . '.' . $ext],
-									"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
-								]]));
-						}
 					}
 					catch (Zend_Exception $e)
 					{
@@ -157,6 +148,17 @@ class ImageController extends Application_Controller_Cli
 					
 				}
 				
+				$g++;
+				} //end foreach
+				
+				//update catalog
+				$this->addHitsBySolr(json_encode([[
+						"id" => $row->guid,
+						"fileImage" => ["set" => Zend_Json::encode($fileImage)],
+						"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
+					]]));
+				
+				$this->log()->info(Zend_Json::encode($fileImage));
 			}
 			
 		}
@@ -266,7 +268,7 @@ class ImageController extends Application_Controller_Cli
 		//$link= $res["host"].":".$res["port"].$res["dir1"].'/update?commitWithin=10000';
 	
 		$ch = curl_init('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=10000');
-		$this->log()->info('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=10000');
+		//$this->log()->info('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=10000');
 		//$ch = curl_init($link);
 		//curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
