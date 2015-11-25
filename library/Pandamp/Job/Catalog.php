@@ -7,11 +7,11 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 	private $_wordExtractor = 'antiword';
 	public function runJob()
 	{
-		$folderGuid = ($this->params['folderGuid'])? $this->params['folderGuid'] : '';
-		$catalogGuid = ($this->params['guid'])? $this->params['guid'] : '';
-		$ip = ($this->params['ip'])? $this->params['ip'] : '';
-		$kopel = ($this->params['kopel'])? $this->params['kopel'] : '';
-		$lang = ($this->params['lang'])? $this->params['lang'] : 'id';
+		$folderGuid = (isset($this->params['folderGuid']))? $this->params['folderGuid'] : '';
+		$catalogGuid = (isset($this->params['guid']))? $this->params['guid'] : '';
+		$ip = (isset($this->params['ip']))? $this->params['ip'] : '';
+		$kopel = (isset($this->params['kopel']))? $this->params['kopel'] : '';
+		$lang = (isset($this->params['lang']))? $this->params['lang'] : 'id';
 		
 		if ($lang !== 'en')
 			$this->toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang);
