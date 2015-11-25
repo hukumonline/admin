@@ -276,19 +276,19 @@ class Search_DmsController extends Zend_Controller_Action
    				$title = $this->view->getCatalogAttribute($fn,'fixedTitle');
    				$relDb = new App_Model_Db_Table_RelatedItem();
    				$rel = $relDb->fetchRow("itemGuid='".$fn."' AND relateAs='RELATED_IMAGE'");
-   				
-   				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$fs.$filename)))
-   					$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$fs.$filename;
+   				$relGuid = $rel->relatedGuid;
+   				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$relGuid.'/'.$fs.$filename)))
+   					$url = $config['static']['url']['images'].'/'.$relGuid.'/'.$fs.$filename;
    				elseif (is_array(@getimagesize($config['static']['url']['images'].'/'.$fs.$filename)))
    					$url = $config['static']['url']['images'].'/'.$fs.$filename;
    				   				
    				//$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
    				//$url = $config['static']['url']['images'].'/upload/'.$pd1.'/'.$pd2.'/'.$pd3.'/'.$pd4.'/'.$fn.'_square'.'.'.$ext;
    				$res['files'][] = array(
-					'id' 			=> $fn,
-					'relatedGuid' 	=> $rel->relatedGuid,
-					'title' 		=> $title,
-					'url'   		=> $url
+					'id' 			=> ($fn)?$fn:'',
+					'relatedGuid' 	=> ($relGuid)?$relGuid:'',
+					'title' 		=> ($title)?$title:'',
+					'url'   		=> ($url)?$url:''
  				);
     
     				
