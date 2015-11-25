@@ -125,7 +125,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 				$desc = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
 				
 				if ($zl->getLanguage() == 'en')
-					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid,'clinic_partner');
+					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid, $desc, 'clinic_partner');
 				else
 					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid, $desc, 'partner');
 				
