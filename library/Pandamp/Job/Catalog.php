@@ -353,7 +353,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 						$part->language = $rowAttr->value;
 						break;
 					case 'fixedCommentQuestion':
-						$part->question = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
+						$part->question = (new Pandamp_Utility_Posts)->sanitize_post_title($rowAttr->value);
 						break;
 					case 'fixedAnswer':
 						//$part->answer = $this->clean_string_input($rowAttr->value);
