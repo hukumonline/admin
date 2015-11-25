@@ -276,7 +276,7 @@ class Search_DmsController extends Zend_Controller_Action
    				$title = $this->view->getCatalogAttribute($fn,'fixedTitle');
    				$relDb = new App_Model_Db_Table_RelatedItem();
    				$rel = $relDb->fetchRow("itemGuid='".$fn."' AND relateAs='RELATED_IMAGE'");
-   				$relGuid = $rel->relatedGuid;
+   				$relGuid = (isset($rel->relatedGuid))?$rel->relatedGuid:'';
    				if (is_array(@getimagesize($config['static']['url']['images'].'/'.$relGuid.'/'.$fs.$filename)))
    					$url = $config['static']['url']['images'].'/'.$relGuid.'/'.$fs.$filename;
    				elseif (is_array(@getimagesize($config['static']['url']['images'].'/'.$fs.$filename)))
