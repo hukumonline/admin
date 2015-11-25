@@ -219,8 +219,10 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$db = $this->getDbHandler($lang);
 		
 		if ($row->profileGuid !== "kutu_doc") {
+		if ($lang !== 'en') {	
 		$part->desktop = $this->getCountCatalog($row->guid, $row->profileGuid, $lang, 'desktop');
 		$part->mobile = $this->getCountCatalog($row->guid, $row->profileGuid, $lang, 'mobile');
+		}
 		
 		$related = null;
 		$cf = array();
@@ -287,7 +289,10 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			}
 		}
 		
+		if (null != $related) {
 		$part->relatedItem = $related;
+		}
+		
 		}
 		
 		$docSystemName = null;
