@@ -29,6 +29,11 @@ class ImageController extends Application_Controller_Cli
 			$sizes[$key] = array('method' => $method, 'width' => $width, 'height' => $height);
 		}
 		
+		/**
+		 * Generate thumbnails
+		 */
+		$thumbnailSizes = array_keys($sizes);
+		
 		$db = $this->db;
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$select = $db->select();
@@ -60,7 +65,9 @@ class ImageController extends Application_Controller_Cli
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
 					
-					$image = $this->giu($row->guid, $related->itemGuid, $ext, null, "local");
+					if ($image = $this->giu($row->guid, $related->itemGuid, $ext, null, "local")) {
+						$fileImage[$g]['original'] = $image;
+					}
 					
 					$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
 					
@@ -74,16 +81,12 @@ class ImageController extends Application_Controller_Cli
 					Pandamp_Utility_File::createDirs($dir, $path);
 					
 					//$fileName  = uniqid('lt');
-					$fileName  = $related->itemGuid;
-					$fileku	   = $dir . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $fileName . '.' . $ext;
+					$fileName = $related->itemGuid;
 					
-					file_put_contents($fileku, file_get_contents($image));
+					// taruh file original nya di folder tujuan baru
+					$fileku	= $dir . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $fileName . '.' . $ext;
+					//file_put_contents($fileku, file_get_contents($image));
 					
-					/**
-					 * Generate thumbnails
-					 */
-					$thumbnailSizes = array_keys($sizes);
-						
 					$service = null;
 					$service = new Pandamp_Image_GD();
 					
