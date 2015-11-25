@@ -1097,7 +1097,10 @@ class SolrController extends Application_Controller_Cli
 	
 	private function fileImageUrl($guid,$lang='id')
 	{
-		if ($guid=='' OR $guid==NULL) return;
+		if ($guid=='' OR $guid==NULL) {
+			$this->log()->err('guid:'.$guid.' NULL');
+			return;
+		}
 		
 		$fileImage=null;
 		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC",false,$lang);
@@ -1206,6 +1209,8 @@ class SolrController extends Application_Controller_Cli
 				}
 				$i++;
 			}
+			
+			$this->log()->info(Zend_Json::encode($fileImage));
 			
 			return Zend_Json::encode($fileImage);
 		}
@@ -1421,6 +1426,21 @@ class SolrController extends Application_Controller_Cli
 		}
 		
 		return $image;
+	}
+	
+	protected function log()
+	{
+		$logger = new Zend_Log();
+	
+		$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH . "/../temp/log/application.log");
+	
+		// @TODO Filter only Log::CRIT
+		//$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
+		//$writer->addFilter($filter);
+	
+		$logger->addWriter($writer);
+	
+		return $logger;
 	}
 	
 	public function getDateInSolrFormat($date) {
