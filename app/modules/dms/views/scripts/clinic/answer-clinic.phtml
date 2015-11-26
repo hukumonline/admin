@@ -222,13 +222,14 @@ div.tagsinput div { display:block; float: left; }
 											<?php if (count($relItems) != 1) : ?>
 											<?php foreach ($relItems as $item) : ?>
 											<?php
-											$fs = 'thumbnail_';
+											$fs2 = 'thumbnail_';
 											$filename2 = $this->getCatalogAttribute($item['itemGuid'],'docSystemName');
 											$ext2 = pathinfo($filename2, PATHINFO_EXTENSION);
 											$fn2 = pathinfo($filename2, PATHINFO_FILENAME);
 											if (substr($fn2,0,2) !== 'lt') {
 												$fn2 = $item['itemGuid'];
-												$fs = 'tn_';
+												$fs2 = 'tn_';
+												$filename2 = $fn2.'.'.$ext2;
 											}
 											$title2 = $this->getCatalogAttribute($fn2,'fixedTitle');
 											$rg2 = $this->getItemRelated($fn2,'RELATED_IMAGE');
@@ -236,10 +237,10 @@ div.tagsinput div { display:block; float: left; }
 											?>
 											<li>
 												<div style="padding: 5px 0px 5px;" id="row_<?php echo $fn2; ?>">
-													<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/<?php echo $fs.$filename2; ?>" height="70" width="80">
+													<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/<?php echo $fs2.$filename2; ?>" height="70" width="80">
 													<a href="javascript:;" id="<?php echo $fn2; ?>" class="irAction" style="text-decoration: none">[-]</a>
 													<input value="<?php echo $title2; ?>" style="width: 310px;" id="<?php echo $fn2; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
-													<input value='{"id":"<?php echo $fn2; ?>","title":"<?php echo $title2; ?>", "url":"<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/<?php echo $fs.$filename2; ?>"}' name="photos[]" type="hidden">
+													<input value='{"id":"<?php echo $fn2; ?>","title":"<?php echo $title2; ?>", "url":"<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg2['relatedGuid']; ?>/<?php echo $fs2.$filename2; ?>"}' name="photos[]" type="hidden">
 												</div>
 											</li>
 											<?php endforeach; ?>
