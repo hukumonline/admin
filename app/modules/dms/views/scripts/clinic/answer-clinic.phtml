@@ -186,7 +186,7 @@ div.tagsinput div { display:block; float: left; }
 									if (substr($fn,0,2) !== 'lt') {
 										$fn = $relItem['itemGuid'];
 										$fs = 'tn_';
-										$filename = $fn.'.'.strtolower($ext);
+										$filename = $fn.'.'.$ext;
 									}
 									$title = $this->getCatalogAttribute($fn,'fixedTitle');
 									$rg = $this->getItemRelated($fn,'RELATED_IMAGE');
