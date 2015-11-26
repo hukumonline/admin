@@ -58,8 +58,8 @@ class ShortenerUrlController extends Application_Controller_Cli
 		if (isset($hits->response->docs[0])) {
 			$row = $hits->response->docs[0];
 			$hid = $row->id;
-			$this->debug(data);
-			$db->update('shorturls',$data,"id=$hid");
+			$this->debug($data);
+			//$db->update('shorturls',$data,"id=$hid");
 		}
 		else
 		{
@@ -91,9 +91,9 @@ class ShortenerUrlController extends Application_Controller_Cli
 			
 			$data['id'] = $numId;
 			$this->debug($data);
-			$insert = $db->insert('shorturls', $data);
+			//$insert = $db->insert('shorturls', $data);
 				
-			$hid = $db->lastInsertId('shorturls', 'id');
+			//$hid = $db->lastInsertId('shorturls', 'id');
 		}
 		
 		
