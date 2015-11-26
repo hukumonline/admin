@@ -1108,6 +1108,8 @@ class SolrController extends Application_Controller_Cli
 			$i=0;
 			foreach ($rowImage as $row)
 			{
+				$this->log()->info('RELATED_IMAGE:'.$row->itemGuid);
+				
 				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName', $lang);
 				if ($rowDocSystemName)
 				{
@@ -1215,6 +1217,10 @@ class SolrController extends Application_Controller_Cli
 			$this->log()->info(Zend_Json::encode($fileImage));
 			
 			return Zend_Json::encode($fileImage);
+		}
+		else
+		{
+			$this->log()->warn('RELATED_IMAGE:'.$guid.' kosong');
 		}
 		
 		return;
