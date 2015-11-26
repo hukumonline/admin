@@ -19,6 +19,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 			exit;
 		}
 		
+		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		if ($lang == 'id') {
 			if ($catalog->profileGuid == 'klinik')
 				$url_content = $web->url->base.'/klinik/detail/'.$catalogGuid.'/'.$catalog->shortTitle;
