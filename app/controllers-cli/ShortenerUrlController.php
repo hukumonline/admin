@@ -46,13 +46,12 @@ class ShortenerUrlController extends Application_Controller_Cli
 		$solr = $this->getSolrService('sh');
 		
 		if ( ! $solr->ping() ) {
-			$this->log()->err('Solr shortUrl service not responding');
-		
-			return;
+			echo "Solr coreshorturl service not responding.\n";
+			exit;
 		}
 		else
 		{
-			$this->log()->info('shortUrl id: ' . $catalogGuid);
+			echo "is ON\n";
 		}
 		
 		$hits = $solr->search($q,0,1,['fl'=>'id']);
