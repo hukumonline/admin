@@ -8,11 +8,11 @@ class ShortenerUrlController extends Application_Controller_Cli
 		
 		$catalogGuid = $request->getParam('guid');
 		$folderGuid = $request->getParam('folderGuid');
-		$lang = $request->getParam('lang');
+		$lang = $request->getParam('lang','id');
 		$ip = '175.103.48.153';
 		$kopel = '00001';
 		
-		$catalog = $this->getCatalog($catalogGuid, ['profileGuid','shortTitle']);
+		$catalog = $this->getCatalog($catalogGuid, ['profileGuid','shortTitle'],$lang);
 		
 		if ($catalog->profileGuid == 'kutu_doc') {
 			echo "dokumen no need shorturl.\n";
