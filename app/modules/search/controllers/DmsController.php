@@ -267,7 +267,7 @@ class Search_DmsController extends Zend_Controller_Action
     			$filename = $this->view->getCatalogAttribute($row->id,'docSystemName');
 				$fn = pathinfo($filename,PATHINFO_FILENAME);
    				$ext = pathinfo($filename,PATHINFO_EXTENSION);
-   				$ext = strtolower($ext);
+   				//$ext = strtolower($ext);
    				if (substr($fn,0,2) !== 'lt') {
    					$fn = $row->id;
    					$fs = 'tn_';
