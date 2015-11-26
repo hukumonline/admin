@@ -127,6 +127,7 @@ class Upload_FileController extends Zend_Controller_Action
 			
 			$ext 	   = explode('.', $name);
 			$extension = $ext[count($ext) - 1];
+			$extension = strtolower($extension);
 			//$fileName  = uniqid();
 			$fileName  = (new Pandamp_Core_Guid())->generateGuid();
 			$fileku	   = $dir . DS . $path . DS . $fileName . '.' . $extension;
