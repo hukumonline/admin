@@ -56,11 +56,44 @@ class ShortenerUrlController extends Application_Controller_Cli
 		
 		$hits = $solr->search($q,0,1,['fl'=>'id']);
 		if (isset($hits->response->docs[0])) {
-			$this->debug($q);
+			$row = $hits->response->docs[0];
+			$hid = $row->id;
+			$this->debug(data);
+			$db->update('shorturls',$data,"id=$hid");
 		}
 		else
 		{
-			$this->debug('empty');
+			$recoveredData = file_get_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.txt');
+			$recoveredArray = unserialize($recoveredData);
+			$start = array_shift($recoveredArray);
+			foreach($recoveredArray as $v){
+				if ($start + 1 != $v) {
+					$missing = $start + 1;
+					break;
+				}
+				$start = $v;
+			}
+			
+			if (isset($missing)) {
+				$numId = $missing;
+				
+				//$recoveredArray[] = $missing;
+				//sort($recoveredArray);
+				//file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.txt', serialize($recoveredArray));
+			}
+			else 
+			{
+				$sm = $db->select();
+				$sm->from('shorturls',array(new Zend_Db_Expr('MAX(id)+1 as maxid')));
+				$rowMax = $db->fetchRow($sm);
+				$numId = $rowMax->maxid;
+			}
+			
+			$data['id'] = $numId;
+			$this->debug($data);
+			$insert = $db->insert('shorturls', $data);
+				
+			$hid = $db->lastInsertId('shorturls', 'id');
 		}
 		
 		
