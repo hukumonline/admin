@@ -41,7 +41,7 @@ class FixController extends Application_Controller_Cli
 			if ($title) {
 				$slug = Pandamp_Utility_String::removeSign($title, '-', true);
 				
-				$db->update('KutuCatalog',['shortTitle'=>$slug],"guid=$row->guid");
+				$db->update('KutuCatalog',['shortTitle'=>$slug],"guid='$row->guid'");
 				
 				try {
 				
