@@ -1115,7 +1115,7 @@ class SolrController extends Application_Controller_Cli
 				{
 					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
-					//$ext = strtolower($ext);
+					$ext = strtolower($ext);
 					
 					/*$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate']);
 					if ($catalog) {

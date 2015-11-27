@@ -271,7 +271,7 @@ class Search_DmsController extends Zend_Controller_Action
    				if (substr($fn,0,2) !== 'lt') {
    					$fn = $row->id;
    					$fs = 'tn_';
-   					$filename = $fn.'.'.$ext;
+   					$filename = $fn.'.'.strtolower($ext);
    				}
    				$title = $this->view->getCatalogAttribute($fn,'fixedTitle');
    				$relDb = new App_Model_Db_Table_RelatedItem();
@@ -281,14 +281,16 @@ class Search_DmsController extends Zend_Controller_Action
    					$url = $config['static']['url']['images'].'/'.$relGuid.'/'.$fs.$filename;
    				elseif (is_array(@getimagesize($config['static']['url']['images'].'/'.$fs.$filename)))
    					$url = $config['static']['url']['images'].'/'.$fs.$filename;
+   				else 
+   					$url = 'http://static.hukumonline.com/frontend/default/images/kaze/karticle-img.jpg';
    				   				
    				//$url = $config['static']['url']['images'].'/'.$rel->relatedGuid.'/'.$rel->itemGuid.'.'.strtolower($ext);
    				//$url = $config['static']['url']['images'].'/upload/'.$pd1.'/'.$pd2.'/'.$pd3.'/'.$pd4.'/'.$fn.'_square'.'.'.$ext;
    				$res['files'][] = array(
-					'id' 			=> ($fn)?$fn:'',
-					'relatedGuid' 	=> ($relGuid)?$relGuid:'',
-					'title' 		=> ($title)?$title:'',
-					'url'   		=> ($url)?$url:''
+					'id' 			=> (isset($fn))?$fn:'',
+					'relatedGuid' 	=> (isset($relGuid))?$relGuid:'',
+					'title' 		=> (isset($title))?$title:'',
+					'url'   		=> (isset($url))?$url:''
  				);
     
     				

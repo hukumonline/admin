@@ -923,7 +923,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				{
 					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
-					
+					$ext = strtolower($ext);
 					// @TODO query ke catalog
 					/*$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate'], $lang);
 					if ($catalog) {
