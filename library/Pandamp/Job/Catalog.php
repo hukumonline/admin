@@ -22,7 +22,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		return true;
 	}
 	
-	public function toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang)
+	public function toShortUrl($catalogGuid, $folderGuid = null, $ip = null, $kopel = null, $lang)
 	{
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
@@ -64,10 +64,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				
 			return;
 		}
-		else
-		{
-			$this->log()->info('shortUrl id: ' . $catalogGuid);
-		}
+
+		$this->log()->info('start shortUrl id: ' . $catalogGuid);
 		
 		$hits = $solr->search($q,0,1,['fl'=>'id']);
 		if (isset($hits->response->docs[0])) {
@@ -155,10 +153,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			
 			return;
 		}
-		else
-		{
-			$this->log()->info('index guid: ' . $catalogGuid);
-		}
+
+		$this->log()->info('index guid: ' . $catalogGuid);
 		
 		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
@@ -918,12 +914,15 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			$i=0;
 			foreach ($rowImage as $row)
 			{
+				$this->log()->info('RELATED_IMAGE itemGuid:'.$row->itemGuid);
+				
 				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName', $lang);
 				if ($rowDocSystemName)
 				{
 					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
+					
 					// @TODO query ke catalog
 					/*$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate'], $lang);
 					if ($catalog) {
@@ -981,7 +980,12 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				$i++;
 			}
 				
+			$this->log()->info('Guid:'.$guid.' imagenya adalah: ' . Zend_Json::encode($fileImage));
 			return Zend_Json::encode($fileImage);
+		}
+		else
+		{
+			$this->log()->warn('RELATED_IMAGE untuk guid:'.$guid.' kosong');
 		}
 	
 		return;
