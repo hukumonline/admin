@@ -105,7 +105,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			
 			$insert = $db->insert('shorturls', $data);
 				
-			$hid = $db->lastInsertId('shorturls', 'id');
+			//$hid = $db->lastInsertId('shorturls', 'id');
+			$hid = $numId;
 		}
 		
 		
