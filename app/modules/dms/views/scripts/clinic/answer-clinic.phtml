@@ -179,18 +179,14 @@ div.tagsinput div { display:block; float: left; }
 									<?php
 									if ($relItems) :
 									foreach ($relItems as $relItem) :
-									$fs = 'thumbnail_';
+									//$fs = 'thumbnail_';
 									$filename = $this->getCatalogAttribute($relItem['itemGuid'],'docSystemName');
 									$ext = pathinfo($filename, PATHINFO_EXTENSION);
 									$fn = pathinfo($filename, PATHINFO_FILENAME);
 									if (substr($fn,0,2) !== 'lt') {
 										$fn = $relItem['itemGuid'];
-										$fs = 'tn_';
+										//$fs = 'tn_';
 										$filename = $fn.'.'.$ext;
-									}
-									elseif ($fn !== $relItem['itemGuid'])
-									{
-										$fs = 'tn_';
 									}
 									$title = $this->getCatalogAttribute($fn,'fixedTitle');
 									$rg = $this->getItemRelated($fn,'RELATED_IMAGE');
@@ -205,10 +201,12 @@ div.tagsinput div { display:block; float: left; }
 									*/
 									?>
 									<?php 
-									if (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/'.$fs.$filename)))
-										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/'.$fs.$filename; 
-									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$fs.$filename)))
-										$url = $this->cdn('rim').'/frontend/'.$fs.$filename; // format lama pasti tn_
+									if (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/thumbnail_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/thumbnail_'.$filename; 
+									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/tn_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/tn_'.$filename; 
+									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/tn_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/tn_'.$filename; // format lama pasti tn_
 									?>
 									
 									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
