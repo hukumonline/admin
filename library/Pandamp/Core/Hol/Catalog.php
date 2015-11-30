@@ -44,7 +44,7 @@ class Pandamp_Core_Hol_Catalog
         {
             $rowCatalog = $tblCatalog->find($catalogGuid)->current();
 
-            $rowCatalog->shortTitle = ($aData['shortTitle'])?$aData['shortTitle']:$slug;
+            $rowCatalog->shortTitle = (isset($aData['shortTitle']))?$aData['shortTitle']:$slug;
             $rowCatalog->publishedDate = (isset($aData['publishedDate']))?$aData['publishedDate']:$rowCatalog->publishedDate;
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))?$aData['expiredDate']:$rowCatalog->expiredDate;
             $rowCatalog->status = (isset($aData['status']))?$aData['status']:$rowCatalog->status;
