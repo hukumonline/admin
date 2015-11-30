@@ -961,7 +961,11 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
 						$fileImage[$i]['original'] = $ori;
 					}
-					
+
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
+						$fileImage[$i]['thumbnail'] = $th;
+					}
+						
 					$file = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
 					$keys = array_keys($file->toArray());
 					foreach ($keys as $key)
@@ -971,9 +975,6 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 						}
 					}
 					
-					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
-						$fileImage[$i]['thumbnail'] = $th;
-					}
 
 					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle", $lang))
 					{

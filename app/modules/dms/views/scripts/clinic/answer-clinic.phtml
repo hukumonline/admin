@@ -200,12 +200,18 @@ div.tagsinput div { display:block; float: left; }
 									$pd4 = date('d',strtotime($catalog['createdDate']));
 									*/
 									?>
+									<?php 
+									if (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/'.$fs.$filename)))
+										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/'.$fs.$filename; 
+									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$fs.$filename)))
+										$url = $this->cdn('rim').'/frontend/'.$fs.$filename;
+									?>
 									
 									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
-										<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/<?php echo $fs.$filename; ?>" height="70" width="80">
+										<img src="<?php echo $url; ?>" height="70" width="80">
 										<a href="javascript:;" id="<?php echo $fn; ?>" class="irAction" style="text-decoration: none">[-]</a>
 										<input value="<?php echo $title; ?>" style="width: 340px;" id="<?php echo $fn; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
-										<input value="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/<?php echo $fs.$filename; ?>" name="fixedFileImage" type="hidden">
+										<input value="<?php echo $url; ?>" name="fixedFileImage" type="hidden">
 									</div>						
 									<?php //endif; ?>
 									<?php endforeach; ?>
