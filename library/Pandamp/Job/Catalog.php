@@ -251,7 +251,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				{
 					$rowRelatedClinic = $rk[$v];
 					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle'],$lang);
-					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle',$lang)));
+					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedCommentTitle',$lang)));
 					$rowClinic[$v]['pageUrl'] = $web->url->base."/klinik/detail/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
 		
