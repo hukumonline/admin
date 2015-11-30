@@ -203,8 +203,8 @@ div.tagsinput div { display:block; float: left; }
 									<?php 
 									if (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/'.$fs.$filename)))
 										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/'.$fs.$filename; 
-									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$fs.$filename)))
-										$url = $this->cdn('rim').'/frontend/'.$fs.$filename;
+									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/tn_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/tn_'.$filename; // format lama pasti tn_
 									?>
 									
 									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
