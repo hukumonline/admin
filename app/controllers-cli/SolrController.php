@@ -553,7 +553,7 @@ class SolrController extends Application_Controller_Cli
 				{
 					$rowRelatedClinic = $rk[$v];
 					$catalogClinic = $this->getCatalog($rowRelatedClinic->itemGuid, ['shortTitle'], $lang);
-					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle', $lang)));
+					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedCommentTitle', $lang)));
 					$rowClinic[$v]['pageUrl'] = $web->url->base."/klinik/detail/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
 				
