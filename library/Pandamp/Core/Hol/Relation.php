@@ -794,6 +794,10 @@ class Pandamp_Core_Hol_Relation
             foreach ($rowsetRelatedDocs as $rowRelatedDoc)
             {
                 $systemname = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($rowRelatedDoc->itemGuid,'docSystemName');
+                
+                $ext = pathinfo($systemname,PATHINFO_EXTENSION);
+                $ext = strtolower($ext);
+                
                 $parentGuid = $rowRelatedDoc->relatedGuid;
 
                 //$sDir1 = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.$systemname;
@@ -820,25 +824,21 @@ class Pandamp_Core_Hol_Relation
                 //$sDir = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'images';
                 //$sDir2 = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$parentGuid;
 
-                if (file_exists($sDir."/".$systemname.".gif"))      { unlink($sDir."/".$systemname.".gif"); 	}
-                if (file_exists($sDir."/tn_".$systemname.".gif"))   { unlink($sDir."/tn_".$systemname.".gif"); 	}
-                if (file_exists($sDir."/".$systemname.".jpg"))      { unlink($sDir."/".$systemname.".jpg"); 	}
-                if (file_exists($sDir."/tn_".$systemname.".jpg"))   { unlink($sDir."/tn_".$systemname.".jpg"); 	}
-                if (file_exists($sDir."/".$systemname.".jpeg"))     { unlink($sDir."/".$systemname.".jpeg"); 	}
-                if (file_exists($sDir."/tn_".$systemname.".jpeg"))  { unlink($sDir."/tn_".$systemname.".jpeg"); }
-                if (file_exists($sDir."/".$systemname.".png"))      { unlink($sDir."/".$systemname.".png"); 	}
-                if (file_exists($sDir."/tn_".$systemname.".png"))   { unlink($sDir."/tn_".$systemname.".png"); 	}
+                if (file_exists($sDir."/".$systemname.'.'.$ext))      { unlink($sDir."/".$systemname.'.'.$ext); 	}
+                if (file_exists($sDir."/tn_".$systemname.'.'.$ext))   { unlink($sDir."/tn_".$systemname.'.'.$ext); 	}
 
-                if (file_exists($sDir2."/".$systemname.".gif"))      { unlink($sDir2."/".$systemname.".gif"); 	}
-                if (file_exists($sDir2."/tn_".$systemname.".gif"))   { unlink($sDir2."/tn_".$systemname.".gif"); 	}
-                if (file_exists($sDir2."/".$systemname.".jpg"))      { unlink($sDir2."/".$systemname.".jpg"); 	}
-                if (file_exists($sDir2."/tn_".$systemname.".jpg"))   { unlink($sDir2."/tn_".$systemname.".jpg"); 	}
-                if (file_exists($sDir2."/".$systemname.".jpeg"))     { unlink($sDir2."/".$systemname.".jpeg"); 	}
-                if (file_exists($sDir2."/tn_".$systemname.".jpeg"))  { unlink($sDir2."/tn_".$systemname.".jpeg"); }
-                if (file_exists($sDir2."/".$systemname.".png"))      { unlink($sDir2."/".$systemname.".png"); 	}
-                if (file_exists($sDir2."/tn_".$systemname.".png"))   { unlink($sDir2."/tn_".$systemname.".png"); 	}
+                if (file_exists($sDir2."/".$systemname.'.'.$ext))      { unlink($sDir2."/".$systemname.'.'.$ext); 	}
+                if (file_exists($sDir2."/tn_".$systemname.'.'.$ext))   { unlink($sDir2."/tn_".$systemname.'.'.$ext); 	}
 
-
+                $file = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
+                $keys = array_keys($file->toArray());
+                foreach ($keys as $key)
+                {
+                	if (file_exists($sDir2.'/'.$key.'_'.$systemname.'.'.$ext)) {
+                		unlink($sDir2.'/'.$key.'_'.$systemname.'.'.$ext);
+                	}
+                	
+                }
 
 
                 $tblCatalog = new App_Model_Db_Table_Catalog();

@@ -73,8 +73,8 @@ class Api_CatalogController extends Zend_Controller_Action
 					'status' => -1
 				], "guid='".$itemGuid."'");*/
 
-			$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
-			$tblRelatedItem->delete("itemGuid='$itemGuid' AND relatedGuid='$relatedGuid' AND relateAs='$relateAs'");
+			$tblRelatedItem = new Pandamp_Core_Hol_Relation();
+			$tblRelatedItem->delete($itemGuid,$relatedGuid,$relateAs);
 			
 			$result = 'RESULT_OK';
 		}
