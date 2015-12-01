@@ -53,8 +53,9 @@ class ImageController extends Application_Controller_Cli
 		$rowCount = count($rowsFound);
 		for($iCount=0;$iCount<$rowCount;$iCount++) {
 			$row = $rowsFound[$iCount];
+			$guid = $row->guid;
 			$fileImage=null;
-			$rowsetRelatedItem = $this->getDocumentById($row->guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
+			$rowsetRelatedItem = $this->getDocumentById($guid, 'RELATED_IMAGE', true, "relatedGuid DESC");
 			if ($rowsetRelatedItem) {
 				$g=0;
 				foreach ($rowsetRelatedItem as $related) {
@@ -62,12 +63,17 @@ class ImageController extends Application_Controller_Cli
 				$rowDocSystemName = $this->getCatalogAttribute($related->itemGuid, 'docSystemName');
 				if ($rowDocSystemName)
 				{
+					$fileName = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
 					
-					if ($image = $this->giu($row->guid, $related->itemGuid, $ext, null, "local")) {
-						$fileImage[$g]['original'] = $image;
+					if (substr($fileName,0,2) !== 'lt') {
+						$fileName = $related->itemGuid;
 					}
+					
+					$ig = $this->getItemRelated($fileName,'RELATED_IMAGE');
+					if ($ig)
+						$guid = $ig->relatedGuid;
 					
 					$cdn = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
 					
@@ -77,22 +83,27 @@ class ImageController extends Application_Controller_Cli
 					//$catalogDb = $this->getCatalog($related->itemGuid, ['createdBy','createdDate']);
 					
 					//$path = implode(DS, array(strip_tags(trim($catalogDb->createdBy)), date('Y',strtotime($catalogDb->createdDate)), date('m',strtotime($catalogDb->createdDate)), date('d',strtotime($catalogDb->createdDate))));
-					$path = implode(DS, [$row->guid]);
+					$path = implode(DS, [$guid]);
 					Pandamp_Utility_File::createDirs($dir, $path);
 					
 					//$fileName  = uniqid('lt');
-					$fileName = $related->itemGuid;
+					//$fileName = $related->itemGuid;
 					
 					// taruh file original nya di folder tujuan baru
 					$fileku	= $dir . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $fileName . '.' . $ext;
 					//file_put_contents($fileku, file_get_contents($image));
+					$this->log()->info('Path image:'.$fileku);
 					
 					$service = null;
 					$service = new Pandamp_Image_GD();
 					
 					$baseUrl = $cdn->static->url->images;
 					
-					if ($th = $this->giu($row->guid, $fileName, $ext, "tn_", "local")) {
+					if ($image = $this->giu($guid, $fileName, $ext, null, "local")) {
+						$fileImage[$g]['original'] = $image;
+					}
+					
+					if ($th = $this->giu($guid, $fileName, $ext, "tn_", "local")) {
 						$fileImage[$g]['thumbnail'] = $th;
 					}
 						
@@ -111,14 +122,14 @@ class ImageController extends Application_Controller_Cli
 						 */
 						switch ($method) {
 							case 'resize':
-								$service->resizeLimit($newFile, $width, $height);
+								//$service->resizeLimit($newFile, $width, $height);
 								break;
 							case 'crop':
-								$service->crop($newFile, $width, $height);
+								//$service->crop($newFile, $width, $height);
 								break;
 						}
 						
-						if ($img = $this->giu($row->guid, $fileName, $ext, $s.'_', "local")) {
+						if ($img = $this->giu($guid, $fileName, $ext, $s.'_', "local")) {
 							$fileImage[$g][$s] = $img;
 						}
 						
@@ -131,10 +142,11 @@ class ImageController extends Application_Controller_Cli
 					}
 					
 					//beritahu nama file baru catalogAttribute
-					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$related->itemGuid' AND attributeGuid='docSystemName'");
+					//$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$related->itemGuid' AND attributeGuid='docSystemName'");
+					$this->log()->info('update KutuCatalogAttribute dengan value:'.$fileName . '.' . $ext . ' dimana catalogGuid='.$related->itemGuid.' dan attributeGuid='.docSystemName);
+					$this->log()->info('upindex id='.$related->itemGuid.' ubah systemName:'.$fileName . '.' . $ext);
 					
-					
-					try {
+					/*try {
 						
 						//update document
 						$this->addHitsBySolr(json_encode([[
@@ -146,7 +158,7 @@ class ImageController extends Application_Controller_Cli
 					catch (Zend_Exception $e)
 					{
 						$this->log()->err($e->getMessage());
-					}
+					}*/
 										
 					
 				}
@@ -155,13 +167,14 @@ class ImageController extends Application_Controller_Cli
 				} //end foreach
 				
 				//update catalog
-				$this->addHitsBySolr(json_encode([[
-						"id" => $row->guid,
+				/*$this->addHitsBySolr(json_encode([[
+						"id" => $guid,
 						"fileImage" => ["set" => Zend_Json::encode($fileImage)],
 						"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
-					]]));
+					]]));*/
 				
-				$this->log()->info(Zend_Json::encode($fileImage));
+				$this->log()->info('upindex id='.$guid.' ubah fileImage:'.Zend_Json::encode($fileImage));
+				//$this->log()->info(Zend_Json::encode($fileImage));
 			}
 			
 		}
