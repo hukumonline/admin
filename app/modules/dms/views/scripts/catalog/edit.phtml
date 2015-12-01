@@ -180,13 +180,13 @@ div.tagsinput div { display:block; float: left; }
 									<?php
 									if ($relItems) :
 									foreach ($relItems as $relItem) :
-									$fs = 'thumbnail_';
+									//$fs = 'thumbnail_';
 									$filename = $this->getCatalogAttribute($relItem['itemGuid'],'docSystemName');
 									$ext = pathinfo($filename, PATHINFO_EXTENSION);
 									$fn = pathinfo($filename, PATHINFO_FILENAME);
 									if (substr($fn,0,2) !== 'lt') {
 										$fn = $relItem['itemGuid'];
-										$fs = 'tn_';
+										//$fs = 'tn_';
 										$filename = $fn.'.'.$ext;
 									}
 									$title = $this->getCatalogAttribute($fn,'fixedTitle');
@@ -201,12 +201,20 @@ div.tagsinput div { display:block; float: left; }
 									$pd4 = date('d',strtotime($catalog['createdDate']));
 									*/
 									?>
+									<?php 
+									if (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/thumbnail_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/thumbnail_'.$filename; 
+									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/tn_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/'.$rg['relatedGuid'].'/tn_'.$filename; 
+									elseif (is_array(@getimagesize($this->cdn('rim').'/frontend/tn_'.$filename)))
+										$url = $this->cdn('rim').'/frontend/tn_'.$filename; // format lama pasti tn_
+									?>
 									
 									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
-										<img src="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/<?php echo $fs.$filename; ?>" height="70" width="80">
+										<img src="<?php echo $url; ?>" height="70" width="80">
 										<a href="javascript:;" id="<?php echo $fn; ?>" class="irAction" style="text-decoration: none">[-]</a>
 										<input value="<?php echo $title; ?>" style="width: 340px;" id="<?php echo $fn; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
-										<input value="<?php echo $this->cdn('rim'); ?>/frontend/<?php echo $rg['relatedGuid']; ?>/<?php echo $fs.$filename; ?>" name="fixedFileImage" type="hidden">
+										<input value="<?php echo $url; ?>" name="fixedFileImage" type="hidden">
 									</div>						
 									<?php //endif; ?>
 									<?php endforeach; ?>
