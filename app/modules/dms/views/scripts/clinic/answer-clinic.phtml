@@ -211,7 +211,7 @@ div.tagsinput div { display:block; float: left; }
 									
 									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
 										<img src="<?php echo $url; ?>" height="70" width="80">
-										<a href="javascript:;" id="<?php echo $fn; ?>" class="irAction" style="text-decoration: none">[-]</a>
+										<a href="javascript:;" id="<?php echo $relItem['itemGuid']; ?>" class="irAction" style="text-decoration: none">[-]</a>
 										<input value="<?php echo $title; ?>" style="width: 340px;" id="<?php echo $fn; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
 										<input value="<?php echo $url; ?>" name="fixedFileImage" type="hidden">
 									</div>						
