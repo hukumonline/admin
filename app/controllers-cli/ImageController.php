@@ -143,7 +143,7 @@ class ImageController extends Application_Controller_Cli
 					
 					//beritahu nama file baru catalogAttribute
 					//$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$related->itemGuid' AND attributeGuid='docSystemName'");
-					$this->log()->info('update KutuCatalogAttribute dengan value:'.$fileName . '.' . $ext . ' dimana catalogGuid='.$related->itemGuid.' dan attributeGuid='.docSystemName);
+					$this->log()->info('update KutuCatalogAttribute dengan value:'.$fileName . '.' . $ext . ' dimana catalogGuid='.$related->itemGuid.' dan attributeGuid=docSystemName');
 					$this->log()->info('upindex id='.$related->itemGuid.' ubah systemName:'.$fileName . '.' . $ext);
 					
 					/*try {
