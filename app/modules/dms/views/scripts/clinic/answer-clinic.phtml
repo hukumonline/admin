@@ -209,7 +209,7 @@ div.tagsinput div { display:block; float: left; }
 										$url = $this->cdn('rim').'/frontend/tn_'.$filename; // format lama pasti tn_
 									?>
 									
-									<div style="padding: 5px 0px 0px;" id="row_<?php echo $fn; ?>">
+									<div style="padding: 5px 0px 0px;" id="row_<?php echo $relItem['itemGuid']; ?>">
 										<img src="<?php echo $url; ?>" height="70" width="80">
 										<a href="javascript:;" id="<?php echo $relItem['itemGuid']; ?>" class="irAction" style="text-decoration: none">[-]</a>
 										<input value="<?php echo $title; ?>" style="width: 340px;" id="<?php echo $fn; ?>" name="fileImage" type="text" onchange="javascript:updateImageSet(this);">
