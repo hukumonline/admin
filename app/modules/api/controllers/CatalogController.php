@@ -80,13 +80,21 @@ class Api_CatalogController extends Zend_Controller_Action
 		}
 		
 		try {
-			$this->view->addHitsBySolr(json_encode([[
+			$indexingEngine = Pandamp_Search::manager();
+			$indexingEngine->deleteCatalogFromIndex($itemGuid);
+			
+			$queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
+			$queue->addJob('Pandamp_Job_Catalog',
+					['guid' => $itemGuid],
+				false);
+			
+			/*$this->view->addHitsBySolr(json_encode([[
 					"delete" => $itemGuid
-				]]));
+				]]));*/
 		}
 		catch (Zend_Exception $e)
 		{
-			
+			Zend_Registry::get('Zend_Log')->err($e->__toString());
 		}
 		
 		$this->getResponse()->setBody($result);
