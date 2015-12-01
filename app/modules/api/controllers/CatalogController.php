@@ -66,17 +66,17 @@ class Api_CatalogController extends Zend_Controller_Action
 		
 		$result  = 'RESULT_ERROR';
 		if ($request->isPost()) {
-			$catalogDb = new App_Model_Db_Table_Catalog();
+			/*$catalogDb = new App_Model_Db_Table_Catalog();
 			$catalogDb->update([
 					'deletedDate' => new Zend_Db_Expr('NOW()'),
 					'deletedBy' => Zend_Auth::getInstance()->getIdentity()->username,
 					'status' => -1
-				], "guid='".$itemGuid."'");
+				], "guid='".$itemGuid."'");*/
 				
 			$result = 'RESULT_OK';
 		}
 		
-		try {
+		/*try {
 			$this->view->addHitsBySolr(json_encode([[
 					"id" => $itemGuid,
 					"deletedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")],
@@ -87,7 +87,7 @@ class Api_CatalogController extends Zend_Controller_Action
 		catch (Zend_Exception $e)
 		{
 			
-		}
+		}*/
 		
 		$this->getResponse()->setBody($result);
 	}
