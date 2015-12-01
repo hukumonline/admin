@@ -72,22 +72,22 @@ class Api_CatalogController extends Zend_Controller_Action
 					'deletedBy' => Zend_Auth::getInstance()->getIdentity()->username,
 					'status' => -1
 				], "guid='".$itemGuid."'");*/
-				
+
+			$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+			$tblRelatedItem->delete("itemGuid='$itemGuid' AND relatedGuid='$relatedGuid' AND relateAs='$relateAs'");
+			
 			$result = 'RESULT_OK';
 		}
 		
-		/*try {
+		try {
 			$this->view->addHitsBySolr(json_encode([[
-					"id" => $itemGuid,
-					"deletedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")],
-					"deletedBy" => ["set" => Zend_Auth::getInstance()->getIdentity()->username],
-					"status" => ["set" => -1]
+					"delete" => $itemGuid
 				]]));
 		}
 		catch (Zend_Exception $e)
 		{
 			
-		}*/
+		}
 		
 		$this->getResponse()->setBody($result);
 	}
