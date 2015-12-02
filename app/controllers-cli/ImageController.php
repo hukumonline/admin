@@ -122,10 +122,10 @@ class ImageController extends Application_Controller_Cli
 						 */
 						switch ($method) {
 							case 'resize':
-								//$service->resizeLimit($newFile, $width, $height);
+								$service->resizeLimit($newFile, $width, $height);
 								break;
 							case 'crop':
-								//$service->crop($newFile, $width, $height);
+								$service->crop($newFile, $width, $height);
 								break;
 						}
 						
@@ -142,11 +142,11 @@ class ImageController extends Application_Controller_Cli
 					}
 					
 					//beritahu nama file baru catalogAttribute
-					//$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$related->itemGuid' AND attributeGuid='docSystemName'");
+					$db->update('KutuCatalogAttribute',['value' => $fileName . '.' . $ext],"catalogGuid='$related->itemGuid' AND attributeGuid='docSystemName'");
 					$this->log()->info('update KutuCatalogAttribute dengan value:'.$fileName . '.' . $ext . ' dimana catalogGuid='.$related->itemGuid.' dan attributeGuid=docSystemName');
 					$this->log()->info('upindex id='.$related->itemGuid.' ubah systemName:'.$fileName . '.' . $ext);
 					
-					/*try {
+					try {
 						
 						//update document
 						$this->addHitsBySolr(json_encode([[
@@ -158,7 +158,7 @@ class ImageController extends Application_Controller_Cli
 					catch (Zend_Exception $e)
 					{
 						$this->log()->err($e->getMessage());
-					}*/
+					}
 										
 					
 				}
@@ -167,11 +167,11 @@ class ImageController extends Application_Controller_Cli
 				} //end foreach
 				
 				//update catalog
-				/*$this->addHitsBySolr(json_encode([[
+				$this->addHitsBySolr(json_encode([[
 						"id" => $guid,
 						"fileImage" => ["set" => Zend_Json::encode($fileImage)],
 						"modifiedDate" => ["set" => date("Y-m-d\\TH:i:s\\Z")]
-					]]));*/
+					]]));
 				
 				$this->log()->info('upindex id='.$guid.' ubah fileImage:'.Zend_Json::encode($fileImage));
 				//$this->log()->info(Zend_Json::encode($fileImage));
