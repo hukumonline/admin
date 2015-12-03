@@ -648,8 +648,10 @@ $(function () {
 	    		});
 	  	} else {
 	    	e.preventDefault();
+	    	if( $('#fixedContent').length ) {
 	    	for ( instance in CKEDITOR.instances ) {
         CKEDITOR.instances[instance].updateElement();
+    }
     }
     		var vardata = $('#editPost').serialize();
     		$('.box-footer > button').attr({'disabled':'disabled'});

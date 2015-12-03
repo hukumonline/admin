@@ -554,8 +554,10 @@ $(function () {
 	    		});
 	  	} else {
 	    	e.preventDefault();
+	    	if( $('#fixedContent').length ) {
 	    	for ( instance in CKEDITOR.instances ) {
         CKEDITOR.instances[instance].updateElement();
+    }
     }
     		var vardata = $('#newPost').serialize();
     		$('.box-footer > button').attr({'disabled':'disabled'});
