@@ -156,6 +156,7 @@ class Pandamp_Form_Attribute_Renderer
 			
 	        case 4:	
 				$view = new Zend_View();
+				$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				
