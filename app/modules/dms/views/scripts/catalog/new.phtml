@@ -1,9 +1,11 @@
 <?php 
 $this->headLink()
 	->appendStylesheet($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css')
+	->appendStylesheet($this->cdn('scripts') . '/plugins/select2/select2.min.css')
 	->appendStylesheet($this->cdn('scripts') . '/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css');
 
 $this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/select2/select2.min.js')
 	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js')
 	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/scripts/moment.js')
 	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/scripts/bootstrap-datetimepicker.js')
@@ -206,6 +208,20 @@ $this->headStyle()->captureStart();
                 	</div>
                 </div>
 			</div>
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">Category</h3>
+					
+				</div>
+				<div class="box-body">
+					<p>You can select other categories for article:</p>
+					<!-- <select id="categories" name="categories" multiple="multiple"></select> -->
+					<div class="well" style="height: 200px; overflow: auto;">
+						<?php echo $this->categoryCheckbox(array('id' => 'categoriesCheckbox', 'name' => 'categories[]', 'selected' => [$this->currentNode])); ?>
+					</div>
+				</div>
+			</div>
+			
 		</div><!--/.col (left) -->
 		<!-- right column -->
         <div class="col-md-6">
@@ -515,6 +531,30 @@ $(function () {
 			return false;
     	}
     });
+    
+    <!-- $('#categories').select2({
+    	width: '300px',
+    	ajax:{
+    		type:'post',
+    		url:'<?php //echo ROOT_URL; ?>/<?php //echo $this->getLanguage(); ?>/api/category/getchildreninjson',
+    		dataType: 'json',
+    		data: function (json) {
+    			return {
+    				json: JSON.stringify(json),
+    				delay: 0.3
+    			};
+    		},
+    		processResults: function (data) {
+    			return {
+    				results: $.map(data, function(obj)
+    				{
+    					return { id: obj.id, text: obj.text };
+    				})
+    			};
+    		}
+    	}
+    	
+    }); -->
     
     $.validator.addMethod('shortTitle', function(value) {
 		value = value.replace(/^\s+|\s+$/g, '');

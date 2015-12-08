@@ -110,6 +110,41 @@ class Pandamp_Core_Hol_Catalog
             $rowCatalog->copyToFolder($folderGuid);
         }
         
+        // copy to other categories
+        if (!empty($aData['categories'])) {
+        	$tblCatalogFolder = new App_Model_Db_Table_CatalogFolder();
+        	$cf = $tblCatalogFolder->fetchAll("catalogGuid='$catalogGuid'");
+        	if (count($cf)) {
+        		$sa="";
+        		foreach ($cf as $cfol) {
+        			$cts[] = $cfol->folderGuid;
+        			if (!in_array($cfol->folderGuid, $aData['categories']))
+        			{
+        				$tblCatalogFolder->delete("catalogGuid='$cfol->catalogGuid' AND folderGuid='$cfol->folderGuid'");
+        				$sa="del";
+        			}
+        		}
+        		
+        		if ($sa=="del") {
+        			$auth = Zend_Auth::getInstance();
+        			$group = $auth->getIdentity()->name;
+        			$group = strtolower(str_replace(" ", "", $group));
+        			 
+        			$zl = Zend_Registry::get("Zend_Locale");
+        			$lang = $zl->getLanguage();
+        		
+        			$cache = Pandamp_Cache::getInstance();
+        			$sel = join("_", $cts);
+        			$cache->remove('categoryCheckbox_'.$sel.'_'.$lang.'_'.$group);
+        		}
+        	}
+        	
+        	foreach ($aData['categories'] as $category)
+        	{
+        		$rowCatalog->copyToFolder($category);
+        	}
+        }
+        
         /**
          * @todo Relasi Katalog
          */

@@ -625,6 +625,18 @@ class Dms_CatalogController extends Zend_Controller_Action
             $gen = new Pandamp_Form_Helper_CatalogInputGenerator();
             $aRender = $gen->generateFormEdit($catalogGuid);
             $this->view->aRenderedAttributes = $aRender;
+            
+            $catalogFolderDb = new App_Model_Db_Table_CatalogFolder();
+            $rowCategory = $catalogFolderDb->fetchAll("catalogGuid='$catalogGuid'");
+            $categories = array();
+            if ($rowCategory) {
+            	foreach ($rowCategory as $rc)
+            	{
+            		$categories[] = $rc->folderGuid;
+            	}
+            }
+            
+            $this->view->assign('categories',$categories);
         }
 
         if($r->isPost())
@@ -757,10 +769,14 @@ class Dms_CatalogController extends Zend_Controller_Action
     
     	$request = $this->getRequest();
     	$q 		 = $request->getParam('term');
+    	$profile = $request->getParam('profile');
     	$limit 	 = $request->getParam('limit', 10);
+    	
+    	if ($profile)
+    		$q .= ' profile:' . $profile;
     
     	$indexing = Pandamp_Search::manager();
-    
+    	
     	$hits = $indexing->find($q, 0, $limit,"publishedDate desc");
     	$solrNumFound = count($hits->response->docs);
     
