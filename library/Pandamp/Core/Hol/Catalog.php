@@ -111,7 +111,7 @@ class Pandamp_Core_Hol_Catalog
         }
         
         // copy to other categories
-        if (!empty($aData['categories'])) {
+        /*if (!empty($aData['categories'])) {
         	$tblCatalogFolder = new App_Model_Db_Table_CatalogFolder();
         	$cf = $tblCatalogFolder->fetchAll("catalogGuid='$catalogGuid'");
         	if (count($cf)) {
@@ -143,7 +143,7 @@ class Pandamp_Core_Hol_Catalog
         	{
         		$rowCatalog->copyToFolder($category);
         	}
-        }
+        }*/
         
         /**
          * @todo Relasi Katalog

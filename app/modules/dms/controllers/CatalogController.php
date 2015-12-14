@@ -626,7 +626,7 @@ class Dms_CatalogController extends Zend_Controller_Action
             $aRender = $gen->generateFormEdit($catalogGuid);
             $this->view->aRenderedAttributes = $aRender;
             
-            $catalogFolderDb = new App_Model_Db_Table_CatalogFolder();
+            /*$catalogFolderDb = new App_Model_Db_Table_CatalogFolder();
             $rowCategory = $catalogFolderDb->fetchAll("catalogGuid='$catalogGuid'");
             $categories = array();
             if ($rowCategory) {
@@ -636,7 +636,7 @@ class Dms_CatalogController extends Zend_Controller_Action
             	}
             }
             
-            $this->view->assign('categories',$categories);
+            $this->view->assign('categories',$categories);*/
         }
 
         if($r->isPost())

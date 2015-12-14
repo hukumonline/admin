@@ -36,7 +36,7 @@
 <body class="hold-transition skin-yellow-light sidebar-mini">
 	<div class="wrapper">
 		<?php echo $this->render("header-dms-newcatalog.phtml"); ?>
-		
+		<?php echo $this->render("aside.phtml"); ?>
 		<!-- Content Wrapper. Contains page content -->
       	<div class="content-wrapper">
       		<?php echo $this->layout()->content; ?>
@@ -61,7 +61,7 @@
 	<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jquery.iframe-transport.js"></script>
 	<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jquery.fileupload.js"></script>
 	<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jquery.validate.min.js"></script>
-	<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jquery.json.min.js"></script>
+	<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jquery.validate.min.js"></script>
 	<!-- Bootstrap 3.3.5 -->
     <script src="<?php echo $this->cdn('styles'); ?>/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?php echo $this->cdn('scripts'); ?>/plugins/validator.min.js"></script>
@@ -71,6 +71,7 @@
     <script src="<?php echo $this->cdn('styles'); ?>/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo $this->cdn('styles'); ?>/dist/js/demo.js"></script>
+    <script src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/jstree.js"></script>
 	<?php
 	/**
 	 * Put all widget's javascript to the bottom of page 
