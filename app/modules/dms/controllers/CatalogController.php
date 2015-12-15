@@ -412,6 +412,8 @@ class Dms_CatalogController extends Zend_Controller_Action
             $req = $this->getRequest();
             $targetNode = $req->getParam('targetNode');
             $tblCatalog = new App_Model_Db_Table_Catalog();
+            
+            $queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
 
             if(is_array($guid))
             {
@@ -422,16 +424,27 @@ class Dms_CatalogController extends Zend_Controller_Action
                     {
                         $row = $rowset->current();
                         $row->moveToFolder($sourceNode, $targetNode);
+                        
+                        Zend_Registry::get('Zend_Log')->info('move multiple article:'.$tmpGuid.' to folderGuid:'.$targetNode.' dari ip:'.Pandamp_Lib_Formater::getHttpRealIp().' oleh:'.$this->_user->kopel);
+                        $queue->addJob('Pandamp_Job_Catalog',
+                        		['guid' => $tmpGuid,'folderGuid' => $targetNode, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+                        	false);
                     }
                 }
             }
             else
             {
-                $rowset = $tblCatalog->find($r->getParam('guid'));
+            	$g = $r->getParam('guid');
+                $rowset = $tblCatalog->find($g);
                 if(count($rowset))
                 {
                     $row = $rowset->current();
                     $row->moveToFolder($sourceNode, $targetNode);
+                    
+                    Zend_Registry::get('Zend_Log')->info('move article:'.$g.' to folderGuid:'.$targetNode.' dari ip:'.Pandamp_Lib_Formater::getHttpRealIp().' oleh:'.$this->_user->kopel);
+                    $queue->addJob('Pandamp_Job_Catalog',
+                    		['guid' => $g,'folderGuid' => $targetNode, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+                    	false);
                 }
             }
 
@@ -488,6 +501,8 @@ class Dms_CatalogController extends Zend_Controller_Action
 
             $req = $this->getRequest();
             $targetNode = $req->getParam('targetNode');
+            
+            $queue = Zend_Registry::get(Bootstrap::NAME_ORDERQUEUE);
 
             $tblCatalog = new App_Model_Db_Table_Catalog();
 
@@ -500,16 +515,27 @@ class Dms_CatalogController extends Zend_Controller_Action
                     {
                         $row = $rowset->current();
                         $row->copyToFolder($targetNode);
+                        
+                        Zend_Registry::get('Zend_Log')->info('copy multiple article:'.$tmpGuid.' to folderGuid:'.$targetNode.' dari ip:'.Pandamp_Lib_Formater::getHttpRealIp().' oleh:'.$this->_user->kopel);
+                        $queue->addJob('Pandamp_Job_Catalog',
+                        		['guid' => $tmpGuid,'folderGuid' => $targetNode, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+                        	false);
                     }
                 }
             }
             else
             {
-                $rowset = $tblCatalog->find($r->getParam('guid'));
+            	$g = $r->getParam('guid');
+                $rowset = $tblCatalog->find($g);
                 if(count($rowset))
                 {
                     $row = $rowset->current();
                     $row->copyToFolder($targetNode);
+                    
+                    Zend_Registry::get('Zend_Log')->info('copy article:'.$g.' to folderGuid:'.$targetNode.' dari ip:'.Pandamp_Lib_Formater::getHttpRealIp().' oleh:'.$this->_user->kopel);
+                    $queue->addJob('Pandamp_Job_Catalog',
+                    		['guid' => $g,'folderGuid' => $targetNode, 'ip' => Pandamp_Lib_Formater::getHttpRealIp(), 'kopel' => $this->_user->kopel, 'lang' => $this->view->getLanguage()],
+                    	false);
                 }
             }
             $this->view->message = "Data was successfully saved.";
