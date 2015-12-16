@@ -65,7 +65,7 @@ div.tagsinput div { display:block; float: left; }
 			</div><!-- /.box-header -->
 			<div class="box-body">
 				<div class="checkbox">
-					<label><input type="checkbox" name="stickyCategory" value="1"> Set this article sticky</label>
+					<label><input type="checkbox" name="stickyCategory" value="1"<?php if ($this->catalog['sticky'] == 1) : ?> checked="checked"<?php endif; ?> /> Set this article sticky</label>
 				</div>
 				<div class="row">
 					<div class="form-group col-xs-8">
