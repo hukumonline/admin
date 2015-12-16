@@ -540,7 +540,7 @@ class SolrController extends Application_Controller_Cli
 		
 		//$part->shortenerUrl = $this->generateShortener($row->shortTitle);
 		
-		if (in_array($row->profileGuid, array('article','klinik','partner'))) {
+		if (in_array($row->profileGuid, array('article','kutu_agenda','klinik','partner'))) {
 			$part->fileImage = $this->fileImageUrl($row->guid,$lang);
 		}
 		
@@ -1332,7 +1332,7 @@ class SolrController extends Application_Controller_Cli
 		if (isset($profileGuid) && !in_array($profileGuid, array('partner','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
 			switch ($type) {
 				case 'desktop':
-					if (in_array($profileGuid, array('article','isuhangat'))) {
+					if (in_array($profileGuid, array('article','isuhangat','kutu_agenda'))) {
 						$valueText = 'TICKER';
 					}
 					else if ($profileGuid=='klinik') {
@@ -1346,7 +1346,7 @@ class SolrController extends Application_Controller_Cli
 					break;
 						
 				case 'mobile':
-					if (in_array($profileGuid, array('article','isuhangat'))) {
+					if (in_array($profileGuid, array('article','isuhangat','kutu_agenda'))) {
 						$valueText = 'TICKER-MOBILE';
 					}
 					else if ($profileGuid=='klinik') {
