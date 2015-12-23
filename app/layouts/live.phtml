@@ -80,6 +80,7 @@
 	?>
 	<script type="text/javascript">
 	$(document).ready(function() {
+		$.ajaxSetup({ cache: false });
 		setInterval(function() {
 			$('#logreq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest');
 		},3000);
