@@ -26,8 +26,9 @@ class Admin_LiveController extends Zend_Controller_Action
 	public function timelineAction()
 	{
 		$this->_helper->layout()->disableLayout();
-		$query = array();
-		$requestLog = App_Model_Mongodb_RequestLog::fetchOne(['access_time' => ['$lte' => new \MongoDate(strtotime('+1 minute'))]]);
+		
+		$nextOneMinute = strtotime('+1 minute');
+		$requestLog = App_Model_Mongodb_RequestLog::fetchOne(['access_time' => ['$lte' => new \MongoDate()]]);
 		
 		/*$content = 0;
 		$data = array();
