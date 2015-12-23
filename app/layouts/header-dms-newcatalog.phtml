@@ -16,9 +16,10 @@
 		</a>
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
+				<?php $auth = Zend_Auth::getInstance(); ?>
+				<?php if ($auth->hasIdentity()) : ?>
 				<!-- User Account: style can be found in dropdown.less -->
 				<li class="dropdown user user-menu">
-					<?php $auth = Zend_Auth::getInstance(); ?>
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   		<img src="<?php echo $this->userAvatar(); ?>" class="user-image" alt="User Image">
                   		<span class="hidden-xs"><?php echo $auth->getIdentity()->fullName; ?></span>
@@ -40,6 +41,7 @@
                   		</li>	
                 	</ul>
 				</li>
+				<?php endif; ?>
 				
 			</ul>
 		</div>
