@@ -79,12 +79,25 @@
 	echo $this->compressor('js', 'bottomBody'); 
 	?>
 	<script type="text/javascript">
+	function fetchTimeline(){
+        $.ajax({
+            url: '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/timeline',
+            success: function(data) {
+                $("#timeline").prepend(data);
+                if($("#timeline li").length > 10){
+                    $('#timeline li:gt(9)').remove();
+                }
+                $("#timeline li").fadeIn();
+                setTimeout("fetchTimeline()", 3000);
+            }
+        });
+    }
 	$(document).ready(function() {
 		$.ajaxSetup({ cache: false });
 		setInterval(function() {
 			$('#logreq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest');
-			$('#timeline').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/timeline');
 		},3000);
+		fetchTimeline();
 	});
 	</script>
 </body>

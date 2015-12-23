@@ -27,19 +27,19 @@ class Admin_LiveController extends Zend_Controller_Action
 	{
 		$this->_helper->layout()->disableLayout();
 		
-		$requestLog = App_Model_Mongodb_RequestLog::all()->sort(['_id' => -1])->limit(10);
+		$requestLog = App_Model_Mongodb_RequestLog::fetchOne();
 		
-		$content = 0;
+		/*$content = 0;
 		$data = array();
 		foreach ($requestLog as $reqlog) {
 			$data[$content]['ip'] = $reqlog->ip;
 			$data[$content]['access_time'] = $reqlog->access_time;
 			
 			$content++;
-		}
+		}*/
 		
 		
-		$this->view->assign('data',$data);
+		$this->view->assign('reqlog',$requestLog);
 		$this->view->assign('dateFormat', array(
 				'DAY' 			=> '%s days ago',
 				'DAY_HOUR'		=> '%s days %s hours ago',
