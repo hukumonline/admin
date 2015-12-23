@@ -27,8 +27,7 @@ class Admin_LiveController extends Zend_Controller_Action
 	{
 		$this->_helper->layout()->disableLayout();
 		
-		$nextOneMinute = strtotime('+1 minute');
-		$requestLog = App_Model_Mongodb_RequestLog::fetchOne(['access_time' => ['$lte' => new \MongoDate()]]);
+		$requestLog = App_Model_Mongodb_RequestLog::all(['access_time' => ['$lte' => new \MongoDate()]])->skip(0)->limit(1)->sort(['access_time'=>-1]);
 		
 		/*$content = 0;
 		$data = array();
@@ -40,7 +39,7 @@ class Admin_LiveController extends Zend_Controller_Action
 		}*/
 		
 		
-		$this->view->assign('reqlog',$requestLog);
+		$this->view->assign('reqlog',$requestLog->export());
 		$this->view->assign('dateFormat', array(
 				'DAY' 			=> '%s days ago',
 				'DAY_HOUR'		=> '%s days %s hours ago',
