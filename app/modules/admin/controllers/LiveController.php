@@ -27,9 +27,7 @@ class Admin_LiveController extends Zend_Controller_Action
 	{
 		$this->_helper->layout()->disableLayout();
 		$query = array();
-		$requestLog = App_Model_Mongodb_RequestLog::fetchOne(
-				['access_time' => ['$lte' => new \MongoDate(strtotime('+1 minute'))]]
-				,['_id' => -1]);
+		$requestLog = App_Model_Mongodb_RequestLog::fetchOne(['access_time' => ['$lte' => new \MongoDate(strtotime('+1 minute'))]]);
 		
 		/*$content = 0;
 		$data = array();
