@@ -2,7 +2,7 @@
 <li>
 	<i class="fa fa-road bg-blue"></i>
 	<div class="timeline-item">
-		<span class="time"><i class="fa fa-clock-o"></i> <?php echo $this->dateFormatter()->diff(strtotime($this->reqlog->access_time), $this->dateFormat); ?></span>
+		<span class="time"><i class="fa fa-clock-o"></i> <?php echo $this->reqlog->access_time; ?></span>
 		<h3 class="timeline-header"><a href="#"><?php echo $this->reqlog->ip; ?></a> sent you an email</h3>
 		<div class="timeline-body">
 		test
