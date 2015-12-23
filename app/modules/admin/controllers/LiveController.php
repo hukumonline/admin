@@ -20,6 +20,6 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
 		
-		echo number_format(App_Model_Mongodb_RequestLog::all()->count());
+		echo number_format(App_Model_Mongodb_RequestLog::all()->count(true));
 	}
 }
