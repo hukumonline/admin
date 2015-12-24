@@ -29,25 +29,6 @@ class Admin_LiveController extends Zend_Controller_Action
 		
 		$requestLog = App_Model_Mongodb_RequestLog::all()->skip(0)->limit(1)->sort(['access_time'=>-1]);
 		
-		/*$content = 0;
-		$data = array();
-		foreach ($requestLog as $reqlog) {
-			$data[$content]['ip'] = $reqlog->ip;
-			$data[$content]['access_time'] = $reqlog->access_time;
-			
-			$content++;
-		}*/
-		
-		
 		$this->view->assign('reqlog',$requestLog->getNext());
-		$this->view->assign('dateFormat', array(
-				'DAY' 			=> '%s days ago',
-				'DAY_HOUR'		=> '%s days %s hours ago',
-				'HOUR' 			=> '%s hours ago',
-				'HOUR_MINUTE' 	=> '%s hours %s minutes ago',
-				'MINUTE' 		=> '%s minutes ago',
-				'MINUTE_SECOND'	=> '%s minutes %s seconds ago',
-				'SECOND'		=> '%s seconds ago',
-		));
 	}
 }

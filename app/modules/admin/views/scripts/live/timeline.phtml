@@ -20,7 +20,23 @@
 		<span class="time"><i class="fa fa-clock-o"></i> <?php echo date("H:i:s",strtotime($this->reqlog->access_time)); ?></span>
 		<h3 class="timeline-header"><a href="#"><?php echo $topInfo; ?></a></h3>
 		<div class="timeline-body">
-		<?php echo $this->reqlog->full_url; ?>
+		<?php
+		$furl = $this->reqlog->full_url;
+		$url = pathinfo($furl);
+		$guid = basename($url['dirname']);
+		$catalogDb = App_Model_Show_Catalog::show()->getCatalogByGuid($guid);
+		?>
+		<?php if ($catalogDb) : ?>
+		<?php
+		if ($catalogDb['profileGuid'] == 'klinik')
+			$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedCommentTitle'); 
+		else
+			$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle'); 
+		?>
+		<a href="<?php echo $furl; ?>"><?php echo $title; ?></a>
+		<?php else : ?>
+		<?php echo $furl; ?>
+		<?php endif; ?>
 		</div>
 		<div class="timeline-footer">
 			<span class="label label-primary"><?php echo $this->reqlog->browser; ?></span>
