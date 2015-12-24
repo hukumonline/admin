@@ -14,7 +14,11 @@
 	<?php
 	$topInfo = '<a href="#">'.$this->reqlog->ip.'</a>';
 	?>
+	<?php if ( $this->isMobile($this->reqlog->agent) ) : ?>
+	<i class="fa fa-car bg-purple"></i>
+	<?php else : ?>
 	<i class="fa fa-road bg-blue"></i>
+	<?php endif; ?>
 	<?php endif; ?>
 	<div class="timeline-item">
 		<span class="time"><i class="fa fa-clock-o"></i> <?php echo date("H:i:s",strtotime($this->reqlog->access_time)); ?></span>
