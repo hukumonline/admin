@@ -1,9 +1,19 @@
-<?php //foreach ($this->data as $reqlog) : ?>
 <li>
+	<?php if (isset($this->reqlog->kopel)) : ?>
+	<?php
+	$rowUser = App_Model_Show_User::show()->getUserById($this->reqlog->kopel);
+	$topInfo = '<a href="#">'.$rowUser['fullName'].'</a>'.' '.$this->reqlog->ip;
+	?>
+	<i class="fa fa-user bg-aqua"></i>
+	<?php else : ?>
+	<?php
+	$topInfo = '<a href="#">'.$this->reqlog->ip.'</a>';
+	?>
 	<i class="fa fa-road bg-blue"></i>
+	<?php endif; ?>
 	<div class="timeline-item">
-		<span class="time"><i class="fa fa-clock-o"></i> <?php echo $this->reqlog->access_time; ?></span>
-		<h3 class="timeline-header"><a href="#"><?php echo $this->reqlog->ip; ?></a> sent you an email</h3>
+		<span class="time"><i class="fa fa-clock-o"></i> <?php echo date("H:i:s",strtotime($this->reqlog->access_time)); ?></span>
+		<h3 class="timeline-header"><a href="#"><?php echo $topInfo; ?></a></h3>
 		<div class="timeline-body">
 		test
 		</div>
@@ -12,4 +22,3 @@
 		</div>
 	</div>
 </li>
-<?php //endforeach; ?>
