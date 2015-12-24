@@ -42,7 +42,7 @@
 		<?php echo $furl; ?>
 		<?php endif; ?>
 		<div class="box-body">
-			<p class="text-light-blue">referer: <?php echo $this->reqlog->refer_url; ?></p>
+			<?php if (isset($this->reqlog->refer_url)) : ?><p class="text-light-blue">referer: <?php echo $this->reqlog->refer_url; ?></p><?php endif; ?>
 			<p class="text-muted">agent: <?php echo $this->reqlog->agent; ?></p>
 		</div>
 		</div>
