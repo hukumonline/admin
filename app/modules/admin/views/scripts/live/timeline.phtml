@@ -17,7 +17,7 @@
 	<?php if ( $this->isMobile($this->reqlog->agent) ) : ?>
 	<i class="fa fa-car bg-purple"></i>
 	<?php else : ?>
-	<i class="fa fa-desktop bg-blue"></i>
+	<i class="fa fa-desktop bg-teal"></i>
 	<?php endif; ?>
 	<?php endif; ?>
 	<div class="timeline-item">
@@ -41,6 +41,8 @@
 		<?php else : ?>
 		<?php echo $furl; ?>
 		<?php endif; ?>
+		<small>referer: <?php echo $this->reqlog->refer_url; ?></small>
+		<small>agent: <?php echo $this->reqlog->agent; ?></small>
 		</div>
 		<div class="timeline-footer">
 			<span class="label label-primary"><?php echo $this->reqlog->browser; ?></span>
