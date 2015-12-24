@@ -2,7 +2,7 @@
 	<?php if (isset($this->reqlog->kopel)) : ?>
 	<?php
 	$rowUser = App_Model_Show_User::show()->getUserById($this->reqlog->kopel);
-	$topInfo = '<a href="#">'.$rowUser['fullName'].'</a>'.' '.$this->reqlog->ip;
+	$topInfo = '<a href="#">'.$rowUser['fullName'].'</a>'.' <small>'.$this->reqlog->ip.'</small>';
 	?>
 	<i class="fa fa-user bg-aqua"></i>
 	<?php elseif (isset($this->reqlog->bot)) : ?>
@@ -20,10 +20,12 @@
 		<span class="time"><i class="fa fa-clock-o"></i> <?php echo date("H:i:s",strtotime($this->reqlog->access_time)); ?></span>
 		<h3 class="timeline-header"><a href="#"><?php echo $topInfo; ?></a></h3>
 		<div class="timeline-body">
-		test
+		<?php echo $this->reqlog->full_url; ?>
 		</div>
 		<div class="timeline-footer">
-		foot
+			<span class="label label-primary"><?php echo $this->reqlog->browser; ?></span>
+			<span class="label label-primary"><?php echo $this->reqlog->version; ?></span>
+			<span class="label label-primary"><?php echo $this->reqlog->platform; ?></span>
 		</div>
 	</div>
 </li>
