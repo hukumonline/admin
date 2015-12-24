@@ -5,6 +5,11 @@
 	$topInfo = '<a href="#">'.$rowUser['fullName'].'</a>'.' '.$this->reqlog->ip;
 	?>
 	<i class="fa fa-user bg-aqua"></i>
+	<?php elseif (isset($this->reqlog->bot)) : ?>
+	<?php
+	$topInfo = '<a href="#">'.$this->reqlog->ip.'</a>'.' <small>'.$this->reqlog->bot.'</small>';
+	?>
+	<i class="fa fa-exchange bg-yellow"></i>
 	<?php else : ?>
 	<?php
 	$topInfo = '<a href="#">'.$this->reqlog->ip.'</a>';
