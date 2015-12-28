@@ -168,6 +168,156 @@ function datediff($tgl1, $tgl2){
 		$diff = abs((mktime ( 0, 0, 0, $end_month, $end_day, $end_year) - mktime ( 0, 0, 0, $start_month, $start_day, $start_year))/(60*60*24));		
 		print_r($diff);
 	}
+	
+	const NAME_ORDERQUEUE = 'job_queue';
+	function addjobsAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+		
+		$options = array(
+			'name'          => self::NAME_ORDERQUEUE,
+			'driverOptions' => array(
+				'host'      => 'localhost',
+				'port'      => '3306',
+				'username'  => 'root',
+				'password'  => '',
+				'dbname'    => 'sjalocal',
+				'type'      => 'pdo_mysql'
+			)
+		);
+		
+		$queue = new Pandamp_Job_Queue('Db', $options);
+		
+		$params = array('example'=>'param');
+		for($i=0;$i<10;$i++)
+		{
+			$params['requence to show differences']=$i;
+			$params['time to show differences']=time();
+			$queue->addJob('Pandamp_Job_Example',
+				$params,
+					false);
+		}
+		
+	}
+	
+	function runjobsAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+		
+		$options = array(
+				'name'          => self::NAME_ORDERQUEUE,
+				'driverOptions' => array(
+						'host'      => 'localhost',
+						'port'      => '3306',
+						'username'  => 'root',
+						'password'  => '',
+						'dbname'    => 'sjalocal',
+						'type'      => 'pdo_mysql'
+				)
+		);
+		
+		$queue = new Pandamp_Job_Queue('Db', $options);
+		$queue->runJobs();
+	}
+	
+	public function testAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+		
+		//$slug = "http://www.hukumonline.com/berita/baca/lt564de15027f4d/jalan-keluar-bagi-advokat-dalam-implementasikan-pp-no-43-tahun-2015";
+		
+		// hasilnya: -berita-baca-lt564de15027f4d-jalan-keluar-bagi-advokat-dalam-implementasikan-pp-no-43-tahun-2015
+		//echo $this->getSlug($slug,['http://www.hukumonline.com']);
+		
+		// hasilnya: berita/baca/lt564de15027f4d/jalan-keluar-bagi-advokat-dalam-implementasikan-pp-no-43-tahun-2015
+		//echo trim(parse_url($slug, PHP_URL_PATH), '/');
+		
+		// hasilnya: jalan-keluar-bagi-advokat-dalam-implementasikan-pp-no-43-tahun-2015
+		//echo basename($slug);
+		
+		// Find first gap in array
+		$a = array('1','3','5','7');
+		//$a[] = '2';
+		//sort($a);
+		$start = array_shift($a);
+		
+		foreach($a as $v){
+			if ($start + 1 != $v) {
+				$missing = $start + 1;
+				break;
+			}
+		
+			$start = $v;
+		}
+		
+		// hasil:4
+		if (isset($missing))
+			echo $missing;
+		else
+			echo $start + 1; // yang terakhir +1
+	}
+	
+	public function parseAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+		
+		$url = "http://m.hukumonline.com/pusatdata/detail/lt4f796689194c0/node/537/pp-no-11-tahun-2008-perubahan-kelima-atas-peraturan-pemerintah-nomor-8-tahun-2000-tentang-peraturangaji-hakim-peradilan-umum,-peradilan-tata-usaha-negara,-dan-peradilan-agama";
+		$url = pathinfo($url);
+		$url = $url['dirname'];
+		//$url = basename($url);
+		
+		print_r($url);
+	}
+	
+	public function referralAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+		
+		$ref = App_Model_Mongodb_RequestLog::referral();
+		
+		print_r($ref['result']);
+	}
+	
+	public function testfileAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+		
+		$recoveredData = file_get_contents(ROOT_DIR.DS.'temp'.DS.'datashorturl.2211151032.test1');
+		$recoveredArray = unserialize($recoveredData);
+		$start = array_shift($recoveredArray);
+		
+		foreach($recoveredArray as $v){
+			if ($start + 1 != $v) {
+				$missing = $start + 1;
+				break;
+			}
+		
+			$start = $v;
+		}
+		
+		echo $missing;
+	}
+	
+	function getSlug($str, $replace=array(), $delimiter='-') {
+		setlocale(LC_ALL, 'en_US.UTF8');
+		//
+		if( !empty($replace) ) {
+			$str = str_replace((array)$replace, ' ', $str);
+		}
+		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+		$clean=strip_tags($clean);
+		$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		$clean = strtolower(trim($clean, '-'));
+		$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+		return $clean;
+	}
+	
     function ftpAction()
     {
         $this->_helper->layout->disableLayout();
@@ -198,9 +348,22 @@ print_r($body.' code: '.$ret);
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
-        $obj = new Pandamp_Crypt_Password();
-        echo $obj->decryptPassword('BTwENAA5A2QDOws+');
+        echo md5('SolrRocks');
+        //$obj = new Pandamp_Crypt_Password();
+        //echo $obj->decryptPassword('VTIDb1o8Bz0LaApsUndSJgtoB3QDJ1x2');
+        /*for($i = 1; $i <=10; $i++) {
+        
+        	$plainPassword = $this->generateRandomString();
+        	$cryptedPassword = $obj->encryptPassword($plainPassword);
+        	$deCryptedPassword = $obj->decryptPassword($cryptedPassword);
+        	echo $cryptedPassword.' '.$deCryptedPassword.' plainnya: '.$plainPassword."<br>";
+        }*/
+        
     }
+    function generateRandomString($length = 10) {
+    	return substr(str_shuffle("_!'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+    }
+    
     function generatePasswordAction()
     {
         $this->_helper->layout->disableLayout();
