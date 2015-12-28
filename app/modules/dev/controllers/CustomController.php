@@ -283,7 +283,7 @@ function datediff($tgl1, $tgl2){
 		
 		$ref = App_Model_Mongodb_RequestLog::referral();
 		
-		print_r($ref['result']);
+		print_r($ref);
 	}
 	
 	public function testfileAction()
