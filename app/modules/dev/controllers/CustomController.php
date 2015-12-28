@@ -278,6 +278,9 @@ function datediff($tgl1, $tgl2){
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(TRUE);
 		
+		$db = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','mongodb');
+		Shanty_Mongo::addConnections($db);
+		
 		$ref = App_Model_Mongodb_RequestLog::referral();
 		
 		print_r($ref['result']);
