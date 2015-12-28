@@ -7,8 +7,8 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	public static function referral()
 	{
 		$date = [
-			'$gte' => strtotime(date('Y-m-d 23:59:59', strtotime('-2 days'))),
-			'$lte' => new Zend_Db_Expr('NOW()'),
+			'$gte' => date('Y-m-d 23:59:59'),
+			'$lte' => date('Y-m-d H:i:s'),
 		];
 	
 		$match = [
