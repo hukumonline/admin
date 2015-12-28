@@ -7,7 +7,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	public static function referral()
 	{
 		$date = [
-			'$gte' => new \MongoDate( strtotime(date('Y-m-d 23:59:59', strtotime('-2 days'))) ),
+			'$gte' => new \MongoDate( strtotime(date('Y-m-d 23:59:59', strtotime('-320 days'))) ),
 			'$lte' => new \MongoDate(),
 		];
 	
@@ -22,7 +22,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			['$match' => $match],
 				[
 				'$group' => [
-					'_id' => 'kopel',
+					'_id' => '$kopel',
 					'total' => ['$sum' => 1]
 				]
 			],
