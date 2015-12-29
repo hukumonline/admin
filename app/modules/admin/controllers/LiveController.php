@@ -38,6 +38,6 @@ class Admin_LiveController extends Zend_Controller_Action
 		
 		$referral = App_Model_Mongodb_RequestLog::referral();
 		
-		echo $referral['result'];
+		$this->getResponse()->setBody(Zend_Json::encode($referral));
 	}
 }
