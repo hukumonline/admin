@@ -12,10 +12,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		];
 	
 		$match = [
-			'access_time' => $date,
-			'kopel' => [
-				'$exists' => true
-			]
+			'access_time' => $date
 		];
 	
 		return self::getMongoCollection()->aggregate(
