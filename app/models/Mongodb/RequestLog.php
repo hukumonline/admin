@@ -13,7 +13,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	
 		$match = [
 			'access_time' => $date,
-			'kopel' => [
+			'refer_url' => [
 				'$exists' => true
 			]
 		];
