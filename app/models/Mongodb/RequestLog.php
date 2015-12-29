@@ -27,7 +27,9 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				]
 			],
 			[
-				'$limit' => 10,
+				'$limit' => 10
+			],
+			[
 				'$sort' => ['total' => -1]
 			]
 		);
