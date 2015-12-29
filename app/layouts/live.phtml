@@ -98,6 +98,17 @@
 			$('#logreq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest');
 		},3000);
 		fetchTimeline();
+
+		// top referal
+	    $.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/referral', function(r){
+	        
+	        if(r.result)
+	            $.each(r.result, function(i, v){
+	                $('#searchToday > table').append('<tr><td><a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a></td><td>'+v.total+'</td></tr>');
+	            });
+	    });
+
+	    
 	});
 	</script>
 </body>

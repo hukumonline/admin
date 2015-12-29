@@ -28,7 +28,16 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		
 		$requestLog = App_Model_Mongodb_RequestLog::all()->skip(0)->limit(1)->sort(['access_time'=>-1]);
-		
 		$this->view->assign('reqlog',$requestLog->getNext());
+	}
+	
+	public function referralAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+		
+		$referral = App_Model_Mongodb_RequestLog::referral();
+		
+		echo $referral['result'];
 	}
 }
