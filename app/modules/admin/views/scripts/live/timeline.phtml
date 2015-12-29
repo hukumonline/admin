@@ -21,7 +21,7 @@
 	<?php endif; ?>
 	<?php endif; ?>
 	<div class="timeline-item">
-		<span class="time"><i class="fa fa-clock-o"></i> <?php echo date("H:i:s",strtotime($this->reqlog->access_time)); ?></span>
+		<span class="time"><i class="fa fa-clock-o"></i> <?php echo date("H:i:s",$this->reqlog['access_time']->sec); ?></span>
 		<h3 class="timeline-header"><a href="#"><?php echo $topInfo; ?></a></h3>
 		<div class="timeline-body">
 		<?php
@@ -37,7 +37,7 @@
 		else
 			$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle'); 
 		?>
-		<a href="<?php echo $furl; ?>"><?php echo $title; ?></a>
+		<a href="<?php echo $furl; ?>" target="_blank"><?php echo $title; ?></a>
 		<?php else : ?>
 		<?php echo $furl; ?>
 		<?php endif; ?>
