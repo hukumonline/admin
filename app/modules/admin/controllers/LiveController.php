@@ -36,7 +36,9 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
 		
-		$referral = App_Model_Mongodb_RequestLog::referral();
+		$request = $this->getRequest();
+		
+		$referral = App_Model_Mongodb_RequestLog::referral($request->getParam('periode'));
 		
 		$this->getResponse()->setBody(Zend_Json::encode($referral));
 	}

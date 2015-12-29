@@ -115,7 +115,14 @@
 		fetchTimeline();
 		loadReferral();
 		
-
+		// top referal kemarin
+	    $.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/referral', {periode:'yesterday'}, function(r){
+	        
+	        if(r.result)
+	            $.each(r.result, function(i, v){
+	            	$('#searchYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+	            });
+	    });
 	    
 	});
 	</script>
