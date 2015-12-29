@@ -22,7 +22,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			['$match' => $match],
 				[
 				'$group' => [
-					'_id' => '$kopel',
+					'_id' => '$refer_url',
 					'total' => ['$sum' => 1]
 				]
 			],
