@@ -118,7 +118,7 @@
                     	$('#clickToday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
                     });
             });
-            
+            setTimeout("loadClick()", 20000);
         
         });
     }
