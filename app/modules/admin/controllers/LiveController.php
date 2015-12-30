@@ -34,7 +34,7 @@ class Admin_LiveController extends Zend_Controller_Action
 		elseif ($request->getParam('log') == 'minute')
 			$query = [
 				'access_time' => [
-					'$gte' => new \MongoDate( strtotime('+1 minute') ),
+					'$gte' => new \MongoDate( strtotime('-1 minute') ),
 					'$lte' => new \MongoDate(),
 				]
 			];
