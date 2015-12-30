@@ -26,7 +26,8 @@ class Admin_LiveController extends Zend_Controller_Action
 		if ($request->getParam('log') == 'today')
 			$query = [
 				'access_time' => [
-					'$lte' => new \MongoDate(strtotime('+1 minute'))
+					'$gte' => new \MongoDate( strtotime(date('Y-m-d 23:59:59', strtotime('-2 days'))) ),
+					'$lte' => new \MongoDate(),
 				]
 			];
 		
