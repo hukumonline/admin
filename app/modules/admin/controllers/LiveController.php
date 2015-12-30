@@ -52,6 +52,12 @@ class Admin_LiveController extends Zend_Controller_Action
 	
 		$click = App_Model_Mongodb_RequestLog::click($request->getParam('periode'));
 	
+		foreach ($click['result'] as $key => $val) {
+			$click['result'][$key]['_id'] = basename($val['_id']);
+		}
+		
 		$this->getResponse()->setBody(Zend_Json::encode($click));
 	}
+	
+	
 }
