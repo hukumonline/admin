@@ -129,6 +129,7 @@
 		},3000);
 		fetchTimeline();
 		loadReferral();
+		loadClick();
 		
 		// top referal kemarin
 	    $.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/referral', {periode:'yesterday'}, function(r){
