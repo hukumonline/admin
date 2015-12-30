@@ -53,7 +53,19 @@ class Admin_LiveController extends Zend_Controller_Action
 		$click = App_Model_Mongodb_RequestLog::click($request->getParam('periode'));
 	
 		foreach ($click['result'] as $key => $val) {
-			$click['result'][$key]['basename'] = basename($val['_id']);
+			$furl = $val['_id'];
+			$url = pathinfo($furl);
+			$guid = basename($url['dirname']);
+			$title = basename($val['_id']);
+			$catalogDb = App_Model_Show_Catalog::show()->getCatalogByGuid($guid);
+			if ($catalogDb) {
+				if ($catalogDb['profileGuid'] == 'klinik')
+					$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedCommentTitle');
+				else
+					$title = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue($guid,'fixedTitle');
+			}
+			
+			$click['result'][$key]['title'] = $title;
 		}
 		
 		$this->getResponse()->setBody(Zend_Json::encode($click));
