@@ -25,7 +25,10 @@ class Admin_LiveController extends Zend_Controller_Action
 		$query = array();
 		if ($request->getParam('log') == 'today')
 			$query = [
-				'access_time' => ['$lte' => new \MongoDate(strtotime('+1 minute'))]
+				'access_time' => [
+					'$gte' => new \MongoDate( strtotime(date('Y-m-d 23:59:59', strtotime('-2 days'))) ),
+					'$lte' => new \MongoDate(),
+				]
 			];
 		
 		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count(true));
