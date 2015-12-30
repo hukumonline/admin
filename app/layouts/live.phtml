@@ -115,7 +115,7 @@
                 if(r.result)
                 	$('#clickToday > table').empty();
                     $.each(r.result, function(i, v){
-                    	$('#clickToday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v.title.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+                    	$('#clickToday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'" target="_blank">'+v.title.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
                     });
             });
             setTimeout("loadClick()", 20000);
@@ -144,7 +144,7 @@
 	        
 	        if(r.result)
 	            $.each(r.result, function(i, v){
-	            	$('#clickYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v.title.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+	            	$('#clickYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'" target="_blank">'+v.title.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
 	            });
 	    });	    
 	    
