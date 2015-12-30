@@ -20,7 +20,13 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
 		
-		echo number_format(App_Model_Mongodb_RequestLog::all()->count(true));
+		$request = $this->getRequest();
+		
+		$query = array();
+		if ($request->getParam('log') == 'today')
+			$query = ['$lte' => new \MongoDate(strtotime('+1 minute'))];
+		
+		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count(true));
 	}
 	
 	public function timelineAction()

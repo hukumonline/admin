@@ -126,6 +126,7 @@
 		$.ajaxSetup({ cache: false });
 		setInterval(function() {
 			$('#logreq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest');
+			$('#livereq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest/log/today');
 		},3000);
 		fetchTimeline();
 		loadReferral();
