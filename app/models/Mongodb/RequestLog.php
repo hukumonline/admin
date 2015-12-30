@@ -59,7 +59,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			['$match' => $match],
 				[
 				'$group' => [
-					'_id' => '$uri',
+					'_id' => '$full_url',
 					'total' => ['$sum' => 1]
 				]
 			],
