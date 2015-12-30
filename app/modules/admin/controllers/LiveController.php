@@ -26,11 +26,11 @@ class Admin_LiveController extends Zend_Controller_Action
 		if ($request->getParam('log') == 'today')
 			$query = [
 				'access_time' => [
-					'$lte' => new \MongoDate()
+					'$lte' => new \MongoDate(strtotime('+1 minute'))
 				]
 			];
 		
-		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count(true));
+		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count());
 	}
 	
 	public function timelineAction()
