@@ -101,7 +101,7 @@
     	        if(r.result)
     	        	$('#searchToday > table').empty();
     	            $.each(r.result, function(i, v){
-    	                $('#searchToday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+    	                $('#searchToday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'" target="_blank">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
     	            });
     	    });
     	    setTimeout("loadReferral()", 20000);
@@ -136,7 +136,7 @@
 	        
 	        if(r.result)
 	            $.each(r.result, function(i, v){
-	            	$('#searchYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+	            	$('#searchYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'" target="_blank">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
 	            });
 	    });
 
