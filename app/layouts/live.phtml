@@ -107,6 +107,21 @@
     	    setTimeout("loadReferral()", 20000);
     	});
     }
+    function loadClick()
+    {
+        $(function(){
+            $.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/click', function(r){
+                
+                if(r.result)
+                	$('#clickToday > table').empty();
+                    $.each(r.result, function(i, v){
+                    	$('#clickToday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+                    });
+            });
+            
+        
+        });
+    }
 	$(document).ready(function() {
 		$.ajaxSetup({ cache: false });
 		setInterval(function() {
@@ -123,6 +138,14 @@
 	            	$('#searchYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
 	            });
 	    });
+
+	    $.getJSON('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/click', {periode:'yesterday'}, function(r){
+	        
+	        if(r.result)
+	            $.each(r.result, function(i, v){
+	            	$('#clickYesterday > table').append('<tr><td>'+ (v._id ? '<a href="'+v._id+'">'+v._id.substr(0, 40)+' ...</a>' : '&nbsp;') +'</td><td>'+v.total+'</td></tr>');
+	            });
+	    });	    
 	    
 	});
 	</script>

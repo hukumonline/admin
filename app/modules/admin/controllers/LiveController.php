@@ -42,4 +42,16 @@ class Admin_LiveController extends Zend_Controller_Action
 		
 		$this->getResponse()->setBody(Zend_Json::encode($referral));
 	}
+	
+	public function clickAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+	
+		$request = $this->getRequest();
+	
+		$click = App_Model_Mongodb_RequestLog::click($request->getParam('periode'));
+	
+		$this->getResponse()->setBody(Zend_Json::encode($click));
+	}
 }
