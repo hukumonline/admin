@@ -126,7 +126,8 @@
 		$.ajaxSetup({ cache: false });
 		setInterval(function() {
 			$('#logreq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest');
-			$('#livereq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest/log/today');
+			$('#todayreq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest/log/today');
+			$('#livereq').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/live/logrequest/log/minute');
 		},3000);
 		fetchTimeline();
 		loadReferral();

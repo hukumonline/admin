@@ -31,6 +31,14 @@ class Admin_LiveController extends Zend_Controller_Action
 				]
 			];
 		
+		elseif ($request->getParam('log') == 'minute')
+			$query = [
+				'access_time' => [
+					'$lte' => new \MongoDate(time()),
+				]
+			];
+		
+		
 		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count());
 	}
 	
