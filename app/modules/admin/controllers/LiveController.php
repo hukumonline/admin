@@ -69,7 +69,7 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
 		
-		echo round(App_Model_Mongodb_RequestLog::desktop()['result'][0]['percentage']) . '%';
+		echo int (App_Model_Mongodb_RequestLog::desktop()['result'][0]['percentage']) . '%';
 	}
 	
 	public function referralAction()
