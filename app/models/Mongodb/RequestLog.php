@@ -18,8 +18,17 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		],
 		'full_url' => new \MongoRegex("/".$device."/i"),
 		];
-		$total = self::all($query)->count();
+		$total = self::all()->count();
 		$pipeline = [
+			[
+				'$match' => [
+					'access_time' => [
+						'$gte' => new \MongoDate( strtotime('-1 minute') ),
+						'$lte' => new \MongoDate(),
+					],
+					'full_url' => new \MongoRegex("/".$device."/i"),
+				]
+			],
 			[
 				'$group' => [
 					'_id' => 0,
@@ -28,7 +37,6 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			],
 			[
 				'$project' => [
-					'count' => 1,
 					'percentage' => [
 						'$multiply' => [[
 							'$divide' => [
