@@ -4,14 +4,19 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	protected static $_db = 'hol';
 	protected static $_collection = 'requestlog';
 	
-	public static function desktop()
+	public static function device($device)
 	{
+		if ($device == 'desktop')
+			$device = "www.hukumonline.com";
+		else
+			$device = "m.hukumonline.com";
+		
 		$query = [
 		'access_time' => [
 		'$gte' => new \MongoDate( strtotime('-1 minute') ),
 		'$lte' => new \MongoDate(),
 		],
-		'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
+		'full_url' => new \MongoRegex("/".$device."/i"),
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
