@@ -22,13 +22,13 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				'count' => ['$sum' => 1]
 				]
 				],
-				'$project' => [
-				'percentage' => [
-				'$multiply' => [
-				'$count', 100 / $total
-				]
-				]
-				],
+				['$project' => [
+					'percentage' => [
+						'$multiply' => [
+							'$count', 100 / $total
+						]
+					]
+				]],
 				[
 				'$sort' => ['percentage' => -1]
 				]
