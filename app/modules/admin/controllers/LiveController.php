@@ -50,35 +50,7 @@ class Admin_LiveController extends Zend_Controller_Action
 				]
 			];
 		
-		elseif ($request->getParam('log') == 'desktop')
-			$query = [
-				'access_time' => [
-					'$gte' => new \MongoDate( strtotime('-1 minute') ),
-					'$lte' => new \MongoDate(),
-				],
-				'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
-			];
-			$total = App_Model_Mongodb_RequestLog::all($query)->count();
-			$ag = App_Model_Mongodb_RequestLog::getMongoCollection()->aggregate(
-					['$match' => $query],
-					[
-					'$group' => [
-						'_id' => '$agent',
-						'count' => ['$sum' => 1]
-					],
-					'$project' => [
-						'percentage' => [
-							'$multiply' => [
-								'$count', 100 / $total
-							] 
-						]
-					]
-				],
-				[
-					'$sort' => ['percentage' => -1]
-				]
-			);
-			print_r($ag);
+			
 		
 		
 		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count());
@@ -90,6 +62,41 @@ class Admin_LiveController extends Zend_Controller_Action
 		
 		$requestLog = App_Model_Mongodb_RequestLog::all()->skip(0)->limit(1)->sort(['access_time'=>-1]);
 		$this->view->assign('reqlog',$requestLog->getNext());
+	}
+	
+	public function desktopAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+		
+		$query = [
+		'access_time' => [
+		'$gte' => new \MongoDate( strtotime('-1 minute') ),
+		'$lte' => new \MongoDate(),
+		],
+		'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
+		];
+		$total = App_Model_Mongodb_RequestLog::all($query)->count();
+		$ag = App_Model_Mongodb_RequestLog::getMongoCollection()->aggregate(
+				['$match' => $query],
+				[
+				'$group' => [
+				'_id' => '$agent',
+				'count' => ['$sum' => 1]
+				],
+				'$project' => [
+				'percentage' => [
+				'$multiply' => [
+				'$count', 100 / $total
+				]
+				]
+				]
+				],
+				[
+				'$sort' => ['percentage' => -1]
+				]
+		);
+		print_r($ag);
 	}
 	
 	public function referralAction()
