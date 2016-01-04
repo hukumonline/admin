@@ -15,13 +15,21 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		'access_time' => [
 		'$gte' => new \MongoDate( strtotime('-1 minute') ),
 		'$lte' => new \MongoDate(),
-		]
+		],
+		'full_url' => new \MongoRegex("/".$device."/i"),
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
 			[
 				'$group' => [
-					'_id' => '$full_url',
+					'_id' => [
+						[
+							'$and' => [
+								['full_url' => new \MongoRegex("/www.hukumonline.com/i")],
+								['full_url' => new \MongoRegex("/m.hukumonline.com/i")]
+							]
+						]
+					],
 					'count' => ['$sum' => 1]
 				]
 			],
