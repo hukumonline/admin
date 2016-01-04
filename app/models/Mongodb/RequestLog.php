@@ -24,16 +24,15 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			['$match' => $query],
 			[
 				'$group' => [
-					'_id' => '$full_url',
+					'_id' => 0,
 					'count' => ['$sum' => 1]
 				]
 			],
 			[
 				'$project' => [
-					'count' => 1,
 					'percentage' => [
 						'$multiply' => [
-							'$count', 100 / $total
+							100, $count / $total
 						]
 					]
 				]
