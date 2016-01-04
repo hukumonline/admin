@@ -14,27 +14,26 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
 		];
 		$total = self::all($query)->count();
-		return self::getMongoCollection()->aggregate(
-				[
+		$pipeline = [
 				'$group' => [
-				'_id' => '$full_url',
-				'count' => ['$sum' => 1]
+					'_id' => '$full_url',
+					'count' => ['$sum' => 1]
 				]
-				],
-				['$project' => [
+			],
+			[
+				'$project' => [
 					'percentage' => [
 						'$multiply' => [
 							'$count', 100 / $total
 						]
 					]
-				]],
-				[
-				'$sort' => ['percentage' => -1]
-				],
-				[
-				'allowDiskUse' => true
 				]
-		);
+			],
+			[
+				'$sort' => ['percentage' => -1]
+			];
+		$options = ['allowDiskUse' => true];
+		return self::getMongoCollection()->aggregate($pipeline,$options);
 	}
 	public static function referral($periode)
 	{
