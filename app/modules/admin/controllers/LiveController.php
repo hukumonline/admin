@@ -59,7 +59,9 @@ class Admin_LiveController extends Zend_Controller_Action
 				'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
 			];
 			$total = App_Model_Mongodb_RequestLog::all($query)->count();
-			$ag = App_Model_Mongodb_RequestLog::getMongoCollection()->aggregate([
+			$ag = App_Model_Mongodb_RequestLog::getMongoCollection()->aggregate(
+					['$match' => $query],
+					[
 					'$group' => [
 						'_id' => '$agent',
 						'count' => ['$sum' => 1]
