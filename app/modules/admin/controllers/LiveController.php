@@ -62,7 +62,7 @@ class Admin_LiveController extends Zend_Controller_Action
 				['$match' => $query],
 				[
 					'$group' => [
-						'_id' => 0,
+						'_id' => '$full_url',
 						'total' => ['$sum' => 1]
 					],
 					'$project' => [
