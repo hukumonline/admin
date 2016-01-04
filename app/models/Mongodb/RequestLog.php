@@ -21,6 +21,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		
 		$total = self::all($query)->count();
 		$pipeline = [
+			['$match' => $query],
 			[
 				'$group' => [
 					'_id' => '$full_url',
