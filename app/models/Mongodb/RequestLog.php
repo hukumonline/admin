@@ -15,6 +15,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
+			['$match' => $query],
 			[
 				'$group' => [
 					'_id' => 0,
@@ -35,7 +36,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			]
 		];
 		$options = ['allowDiskUse' => true];
-		return self::getMongoCollection()->aggregate($pipeline,$options);
+		return self::getMongoCollection()->aggregate($pipeline);
 	}
 	public static function referral($periode)
 	{
