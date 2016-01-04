@@ -50,6 +50,35 @@ class Admin_LiveController extends Zend_Controller_Action
 				]
 			];
 		
+		elseif ($request->getParam('log') == 'desktop')
+			$query = [
+				'access_time' => [
+					'$gte' => new \MongoDate( strtotime('-1 minute') ),
+					'$lte' => new \MongoDate(),
+				],
+				'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
+			];
+			$ag = App_Model_Mongodb_RequestLog::getMongoCollection()->aggregate(
+				['$match' => $query],
+				[
+					'$group' => [
+						'_id' => 0,
+						'total' => ['$sum' => 1]
+					],
+					'$project' => [
+						'percentage' => [
+							'$multiply' => [
+								'$count', 100 / total
+							] 
+						]
+					]
+				],
+				[
+					'$sort' => ['percentage' => -1]
+				]
+			);
+			print_r($ag);
+		
 		
 		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count());
 	}
