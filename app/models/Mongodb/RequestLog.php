@@ -17,7 +17,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		$pipeline = [
 			[
 				'$group' => [
-					'_id' => '$full_url',
+					'_id' => 0,
 					'count' => ['$sum' => 1]
 				]
 			],
