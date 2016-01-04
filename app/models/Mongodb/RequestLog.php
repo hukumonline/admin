@@ -18,20 +18,11 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		],
 		'full_url' => new \MongoRegex("/".$device."/i"),
 		];
-		$total = self::all()->count();
+		$total = self::all($query)->count();
 		$pipeline = [
 			[
-				'$match' => [
-					'access_time' => [
-						'$gte' => new \MongoDate( strtotime('-1 minute') ),
-						'$lte' => new \MongoDate(),
-					],
-					'full_url' => new \MongoRegex("/".$device."/i"),
-				]
-			],
-			[
 				'$group' => [
-					'_id' => '$agent',
+					'_id' => 0,
 					'count' => ['$sum' => 1]
 				]
 			],
