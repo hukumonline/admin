@@ -12,15 +12,22 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			$device = "m.hukumonline.com";
 		
 		$query = [
-		'access_time' => [
-		'$gte' => new \MongoDate( strtotime('-1 minute') ),
-		'$lte' => new \MongoDate(),
-		],
-		'full_url' => new \MongoRegex("/".$device."/i"),
+			'access_time' => [
+				'$gte' => new \MongoDate( strtotime('-1 minute') ),
+				'$lte' => new \MongoDate(),
+			]
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
-			['$match' => $query],
+			[
+				'$match' => [
+					'access_time' => [
+						'$gte' => new \MongoDate( strtotime('-1 minute') ),
+						'$lte' => new \MongoDate(),
+					],
+					'full_url' => new \MongoRegex("/".$device."/i")
+				]
+			],
 			[
 				'$group' => [
 					'_id' => '$agent',
