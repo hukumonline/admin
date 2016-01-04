@@ -30,10 +30,10 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				'$project' => [
 					'count' => 1,
 					'percentage' => [
-						'$multiply' => [
+						'$multiply' => [[
 							'$divide' => [
 								'$count', $total
-							],
+							]],
 							100
 						]
 					]
