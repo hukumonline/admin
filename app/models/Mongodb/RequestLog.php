@@ -20,12 +20,12 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				'$group' => [
 				'_id' => '$agent',
 				'count' => ['$sum' => 1]
+				]
 				],
 				'$project' => [
 				'percentage' => [
 				'$multiply' => [
 				'$count', 100 / $total
-				]
 				]
 				]
 				],
