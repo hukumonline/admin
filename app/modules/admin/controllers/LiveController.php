@@ -39,6 +39,17 @@ class Admin_LiveController extends Zend_Controller_Action
 				]
 			];
 		
+		elseif ($request->getParam('log') == 'customer')
+			$query = [
+				'access_time' => [
+					'$gte' => new \MongoDate( strtotime(date('Y-m-d 23:59:59', strtotime('-2 days'))) ),
+					'$lte' => new \MongoDate(),
+				],
+				'kopel' => [
+					'$exists' => true
+				]
+			];
+		
 		
 		echo number_format(App_Model_Mongodb_RequestLog::all($query)->count());
 	}
