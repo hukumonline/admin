@@ -22,12 +22,13 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		$pipeline = [
 			[
 				'$group' => [
-					'_id' => '$agent',
+					'_id' => 0,
 					'count' => ['$sum' => 1]
 				]
 			],
 			[
 				'$project' => [
+					'count' => 1,
 					'percentage' => [
 						'$multiply' => [
 							'$divide' => [
