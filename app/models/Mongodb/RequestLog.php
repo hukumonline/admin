@@ -15,6 +15,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
+			[
 				'$group' => [
 					'_id' => '$full_url',
 					'count' => ['$sum' => 1]
@@ -31,7 +32,8 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			],
 			[
 				'$sort' => ['percentage' => -1]
-			];
+			]
+		];
 		$options = ['allowDiskUse' => true];
 		return self::getMongoCollection()->aggregate($pipeline,$options);
 	}
