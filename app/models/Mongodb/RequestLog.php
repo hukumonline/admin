@@ -31,15 +31,18 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			],
 			[
 				'$group' => [
-					'_id' => 0,
+					'_id' => '$agent',
 					'count' => ['$sum' => 1]
 				]
 			],
 			[
 				'$project' => [
 					'percentage' => [
-						'$multiply' => [
-							100,$total/$count
+						'$multiply' => [[
+							'$divide' => [
+								$total,'$count'
+							]],
+							100
 						]
 					]
 				]
