@@ -12,11 +12,11 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			$device = "m.hukumonline.com";
 		
 		$query = [
-			'access_time' => [
-				'$gte' => new \MongoDate( strtotime('-1 minute') ),
-				'$lte' => new \MongoDate(),
-			],
-			'full_url' => new \MongoRegex("/".$device."/i"),
+		'access_time' => [
+		'$gte' => new \MongoDate( strtotime('-1 minute') ),
+		'$lte' => new \MongoDate(),
+		],
+		'full_url' => new \MongoRegex("/".$device."/i"),
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
@@ -30,9 +30,9 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				'$project' => [
 					'percentage' => [
 						'$multiply' => [
-							'$divide' => [
+							'$count', '$divide' => [
 								100, $total
-							], '$count'							
+							]
 						]
 					]
 				]
