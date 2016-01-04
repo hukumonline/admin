@@ -69,34 +69,8 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
 		
-		$query = [
-		'access_time' => [
-		'$gte' => new \MongoDate( strtotime('-1 minute') ),
-		'$lte' => new \MongoDate(),
-		],
-		'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
-		];
-		$total = App_Model_Mongodb_RequestLog::all($query)->count();
-		$ag = App_Model_Mongodb_RequestLog::getMongoCollection()->aggregate(
-				['$match' => $query],
-				[
-				'$group' => [
-				'_id' => '$agent',
-				'count' => ['$sum' => 1]
-				],
-				'$project' => [
-				'percentage' => [
-				'$multiply' => [
-				'$count', 100 / $total
-				]
-				]
-				]
-				],
-				[
-				'$sort' => ['percentage' => -1]
-				]
-		);
-		print_r($ag);
+		
+		print_r(App_Model_Mongodb_RequestLog::desktop());
 	}
 	
 	public function referralAction()

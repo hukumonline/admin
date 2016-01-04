@@ -4,6 +4,36 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	protected static $_db = 'hol';
 	protected static $_collection = 'requestlog';
 	
+	public static function desktop()
+	{
+		$query = [
+		'access_time' => [
+		'$gte' => new \MongoDate( strtotime('-1 minute') ),
+		'$lte' => new \MongoDate(),
+		],
+		'full_url' => new \MongoRegex("/www.hukumonline.com/i"),
+		];
+		$total = self::all($query)->count();
+		return self::getMongoCollection()->aggregate(
+				['$match' => $query],
+				[
+				'$group' => [
+				'_id' => '$agent',
+				'count' => ['$sum' => 1]
+				],
+				'$project' => [
+				'percentage' => [
+				'$multiply' => [
+				'$count', 100 / $total
+				]
+				]
+				]
+				],
+				[
+				'$sort' => ['percentage' => -1]
+				]
+		);
+	}
 	public static function referral($periode)
 	{
 		$date = [
