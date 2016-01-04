@@ -18,35 +18,21 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		],
 		'full_url' => new \MongoRegex("/".$device."/i"),
 		];
-		$total = self::all()->count();
+		$total = self::all($query)->count();
 		$pipeline = [
-			['$match' => $query],
 			[
 				'$group' => [
-					'_id' => 0,
+					'_id' => [
+						'full_url' => new \MongoRegex("/".$device."/i")
+					],
 					'count' => ['$sum' => 1]
 				]
 			],
 			[
 				'$project' => [
 					'percentage' => [
-						'$concat' => [
-							[
-								'$substr' => [
-									[
-										'$multiply' => [
-											[
-												'$divide' => [
-													$total,'$count'
-												]
-											],
-											100
-										]
-									],
-									0,2
-								]
-							],
-							'','%'
+						'$multiply' => [
+							'$count', 100 / $total
 						]
 					]
 				]
