@@ -15,6 +15,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		];
 		$total = self::all($query)->count();
 		return self::getMongoCollection()->aggregate(
+				['$match' => $query],
 				[
 				'$group' => [
 				'_id' => 0,
