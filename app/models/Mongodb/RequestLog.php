@@ -18,7 +18,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				['$match' => $query],
 				[
 				'$group' => [
-				'_id' => '$agent',
+				'_id' => 0,
 				'count' => ['$sum' => 1]
 				]
 				],
