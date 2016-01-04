@@ -29,7 +29,8 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 					]
 				]],
 				[
-				'$sort' => ['percentage' => -1]
+				'$sort' => ['percentage' => -1],
+				'$allowDiskUse' => true
 				]
 		);
 	}
