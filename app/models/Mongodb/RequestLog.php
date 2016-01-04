@@ -15,8 +15,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		'access_time' => [
 		'$gte' => new \MongoDate( strtotime('-1 minute') ),
 		'$lte' => new \MongoDate(),
-		],
-		'full_url' => new \MongoRegex("/".$device."/i"),
+		]
 		];
 		$total = self::all($query)->count();
 		$pipeline = [
@@ -35,6 +34,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			],
 			[
 				'$project' => [
+					'count' => 1,
 					'percentage' => [
 						'$multiply' => [
 							'$count', 100 / $total
