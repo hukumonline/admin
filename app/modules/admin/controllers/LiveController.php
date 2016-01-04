@@ -70,7 +70,7 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->_helper->viewRenderer->setNoRender();
 		
 		
-		echo round(App_Model_Mongodb_RequestLog::desktop(),2);
+		print_r(App_Model_Mongodb_RequestLog::desktop());
 	}
 	
 	public function referralAction()
