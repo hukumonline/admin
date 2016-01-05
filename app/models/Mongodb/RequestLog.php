@@ -24,7 +24,9 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 			['$match' => $query],
 			[
 				'$group' => [
-					'_id' => '$full_url',
+					'_id' => [
+						'full_url' => new \MongoRegex("/".$device."/i")
+					],
 					'count' => ['$sum' => 1]
 				]
 			],
