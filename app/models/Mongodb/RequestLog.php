@@ -6,9 +6,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	
 	public static function device()
 	{
-		$total = self::all()->count();
-		$pipeline = [
-			['$match' => [
+		$query = [
                     'access_time' => [
                          '$gte' => new \MongoDate( strtotime('-1 minute') ),
                          '$lte' => new \MongoDate(),
@@ -17,8 +15,10 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
                          ['full_url' => new \MongoRegex("/www.hukumonline.com/i")],
                          ['full_url' => new \MongoRegex("/m.hukumonline.com/i")],
                       ]
-               ] 
-			],
+               ];
+		$total = self::all($query)->count();
+		$pipeline = [
+			['$match' => $query],
 			[
 				'$group' => [
 					'_id' => '$full_url',

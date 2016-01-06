@@ -92,17 +92,6 @@ class Admin_LiveController extends Zend_Controller_Action
 		
 	}
 	
-	public function mobileAction()
-	{
-		$this->_helper->layout()->disableLayout();
-		$this->_helper->viewRenderer->setNoRender();
-		
-		//echo round(App_Model_Mongodb_RequestLog::device('mobile')['result'][0]['percentage']) . '%';
-		echo '<pre>';
-		print_r(App_Model_Mongodb_RequestLog::device('mobile'));
-		echo '</pre>';
-	}
-	
 	public function referralAction()
 	{
 		$this->_helper->layout()->disableLayout();
