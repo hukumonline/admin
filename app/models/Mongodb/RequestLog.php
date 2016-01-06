@@ -10,7 +10,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 		$pipeline = [
 			['$match' => [
                     'access_time' => [
-                         '$gte' => new \MongoDate( strtotime('-1 minute') ),
+                         '$gte' => new \MongoDate( strtotime(date('Y-m-d 23:59:59', strtotime('-2 days') ),
                          '$lte' => new \MongoDate(),
                      ],
                      '$or' => [
