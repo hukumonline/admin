@@ -1,20 +1,20 @@
 <li>
-	<?php if (isset($this->reqlog->kopel)) : ?>
+	<?php if (isset($this->reqlog['kopel'])) : ?>
 	<?php
-	$rowUser = App_Model_Show_User::show()->getUserById($this->reqlog->kopel);
-	$topInfo = '<a href="#">'.$rowUser['fullName'].'</a>'.' <small>'.$this->reqlog->ip.'</small>';
+	$rowUser = App_Model_Show_User::show()->getUserById($this->reqlog['kopel']);
+	$topInfo = '<a href="#">'.$rowUser['fullName'].'</a>'.' <small>'.$this->reqlog['ip'].'</small>';
 	?>
 	<i class="fa fa-user bg-aqua"></i>
-	<?php elseif (isset($this->reqlog->bot)) : ?>
+	<?php elseif (isset($this->reqlog['bot'])) : ?>
 	<?php
-	$topInfo = '<a href="http://www.ip-tracker.org/locator/ip-lookup.php?ip='.$this->reqlog->ip.'" target="_blank">'.$this->reqlog->ip.'</a>'.' <small>'.$this->reqlog->bot.'</small>';
+	$topInfo = '<a href="http://www.ip-tracker.org/locator/ip-lookup.php?ip='.$this->reqlog['ip'].'" target="_blank">'.$this->reqlog['ip'].'</a>'.' <small>'.$this->reqlog['bot'].'</small>';
 	?>
 	<i class="fa fa-exchange bg-yellow"></i>
 	<?php else : ?>
 	<?php
-	$topInfo = '<a href="http://www.ip-tracker.org/locator/ip-lookup.php?ip='.$this->reqlog->ip.'" target="_blank">'.$this->reqlog->ip.'</a>';
+	$topInfo = '<a href="http://www.ip-tracker.org/locator/ip-lookup.php?ip='.$this->reqlog['ip'].'" target="_blank">'.$this->reqlog['ip'].'</a>';
 	?>
-	<?php if ( $this->isMobile($this->reqlog->agent) ) : ?>
+	<?php if ( $this->isMobile($this->reqlog['agent']) ) : ?>
 	<i class="fa fa-car bg-purple"></i>
 	<?php else : ?>
 	<i class="fa fa-desktop bg-teal"></i>
@@ -25,7 +25,7 @@
 		<h3 class="timeline-header"><a href="#"><?php echo $topInfo; ?></a></h3>
 		<div class="timeline-body">
 		<?php
-		$furl = $this->reqlog->full_url;
+		$furl = $this->reqlog['full_url'];
 		$url = pathinfo($furl);
 		$guid = basename($url['dirname']);
 		$catalogDb = App_Model_Show_Catalog::show()->getCatalogByGuid($guid);
@@ -42,16 +42,16 @@
 		<?php echo $furl; ?>
 		<?php endif; ?>
 		<div class="box-body">
-			<?php if (isset($this->reqlog->refer_url)) : ?>
-			<p class="text-fuchsia"><i class="icon fa fa-pie-chart"></i> <?php echo $this->reqlog->refer_url; ?></p>
+			<?php if (isset($this->reqlog['refer_url'])) : ?>
+			<p class="text-fuchsia"><i class="icon fa fa-pie-chart"></i> <?php echo $this->reqlog['refer_url']; ?></p>
 			<?php endif; ?>
-			<p class="text-muted"><i class="icon fa fa-user-secret"></i> <?php echo $this->reqlog->agent; ?></p>
+			<p class="text-muted"><i class="icon fa fa-user-secret"></i> <?php echo $this->reqlog['agent']; ?></p>
 		</div>
 		</div>
 		<div class="timeline-footer">
-			<span class="label label-primary"><?php echo $this->reqlog->browser; ?></span>
-			<span class="label label-primary"><?php echo $this->reqlog->version; ?></span>
-			<span class="label label-primary"><?php echo $this->reqlog->platform; ?></span>
+			<span class="label label-primary"><?php echo $this->reqlog['browser']; ?></span>
+			<span class="label label-primary"><?php echo $this->reqlog['version']; ?></span>
+			<span class="label label-primary"><?php echo $this->reqlog['platform']; ?></span>
 		</div>
 	</div>
 </li>

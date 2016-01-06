@@ -60,8 +60,10 @@ class Admin_LiveController extends Zend_Controller_Action
 	{
 		$this->_helper->layout()->disableLayout();
 		
-		$requestLog = App_Model_Mongodb_RequestLog::all()->skip(0)->limit(1)->sort(['access_time'=>-1]);
-		$this->view->assign('reqlog',$requestLog->getNext());
+		//$requestLog = App_Model_Mongodb_RequestLog::all()->skip(0)->limit(1)->sort(['access_time'=>-1]);
+		$requestLog = App_Model_Mongodb_RequestLog::getMongoCollection()->find()->limit(1)->sort(['access_time'=>-1]);
+		$requestLog = $requestLog->getNext();
+		$this->view->assign('reqlog',$requestLog);
 	}
 	
 	public function deviceAction()
