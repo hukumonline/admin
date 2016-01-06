@@ -64,15 +64,32 @@ class Admin_LiveController extends Zend_Controller_Action
 		$this->view->assign('reqlog',$requestLog->getNext());
 	}
 	
-	public function desktopAction()
+	public function deviceAction()
 	{
 		$this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
 		
-		//echo round(App_Model_Mongodb_RequestLog::device('desktop')['result'][0]['percentage']) . '%';
-		echo '<pre>';
-		print_r(App_Model_Mongodb_RequestLog::device('desktop'));
-		echo '</pre>';
+		$request = $this->getRequest();
+		
+		$device = App_Model_Mongodb_RequestLog::device();
+		
+		$d = $m = 0;
+		foreach ($device['result'] as $key => $value) {
+			if (parse_url($value['_id'])['host'] == 'www.hukumonline.com') {
+				$d += $value['percentage'];
+			}
+			else
+			{
+				$m += $value['percentage'];
+			}
+		}
+		
+		
+		if ($request->getParam('platform') == 'desktop')
+			echo round($d).'%';
+		elseif ($request->getParam('platform') == 'mobile')
+			echo round($m).'%';
+		
 	}
 	
 	public function mobileAction()

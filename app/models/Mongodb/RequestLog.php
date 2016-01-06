@@ -4,24 +4,21 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 	protected static $_db = 'hol';
 	protected static $_collection = 'requestlog';
 	
-	public static function device($device)
+	public static function device()
 	{
-		if ($device == 'desktop')
-			$device = "www.hukumonline.com";
-		else
-			$device = "m.hukumonline.com";
-		
-		$query = [
-		'access_time' => [
-		'$gte' => new \MongoDate( strtotime('-1 minute') ),
-		'$lte' => new \MongoDate(),
-		],
-		'full_url' => new \MongoRegex("/".$device."/i")
-		];
-		
 		$total = self::all()->count();
 		$pipeline = [
-			['$match' => $query],
+			['$match' => [
+                    'access_time' => [
+                         '$gte' => new \MongoDate( strtotime('-320 days') ),
+                         '$lte' => new \MongoDate(),
+                     ],
+                     '$or' => [
+                         ['full_url' => new \MongoRegex("/www.hukumonline.com/i")],
+                         ['full_url' => new \MongoRegex("/m.hukumonline.com/i")],
+                      ]
+               ] 
+			],
 			[
 				'$group' => [
 					'_id' => '$full_url',
@@ -41,7 +38,7 @@ class App_Model_Mongodb_RequestLog extends Shanty_Mongo_Document
 				'$sort' => ['percentage' => -1]
 			]
 		];
-		$options = ['allowDiskUse' => true];
+		//$options = ['allowDiskUse' => true];
 		return self::getMongoCollection()->aggregate($pipeline);
 	}
 	public static function referral($periode)
