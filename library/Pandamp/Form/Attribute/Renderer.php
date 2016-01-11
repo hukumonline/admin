@@ -76,6 +76,7 @@ class Pandamp_Form_Attribute_Renderer
 //	            return $sReturn;
 
 				$view = new Zend_View();
+				$view->label = $this->label;
 				$view->name = $this->name;
 				$view->value = $this->value;
 				$view->setScriptPath(dirname(__FILE__));
