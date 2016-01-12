@@ -26,6 +26,14 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 	
 	public function addCache($folderGuid)
 	{
+		/**
+		 * aktual, utama, berita, klinik, editorial, fokus, after office, tajuk, tokoh, isu hangat, resensi, jeda, kolom, info, pojok peradilan, berita foto, talks, past event, gallery
+		 * fb29, lt4aaa29322bdbb, fb16, lt4a0a533e31979, lt54b470ce7255c, fb4, lt51b824118f00d, fb18, fb12, lt4a6f7d5377193, fb17, fb14, fb7, fb9, lt55dd40da17f5c, lt4de5c32a53bd4, lt4c93230c9d0a5, lt4a607b5e3c2f2, lt4f0fefa26f140 
+		 */
+		if (!in_array($folderGuid, ['fb29','lt4aaa29322bdbb','fb16','lt4a0a533e31979','lt54b470ce7255c','fb4','lt51b824118f00d','fb18','fb12','lt4a6f7d5377193','fb17','fb14','fb7','fb9','lt55dd40da17f5c','lt4de5c32a53bd4','lt4c93230c9d0a5','lt4a607b5e3c2f2','lt4f0fefa26f140'])) {
+			return;
+		}
+		
 		$db = $this->getDbHandler('hid');
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		
