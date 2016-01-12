@@ -19,7 +19,40 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$this->toSolr($catalogGuid, $lang);
 		$this->toDoc($catalogGuid, $lang);
 		
+		$this->addCache($folderGuid);
+		
 		return true;
+	}
+	
+	public function addCache($folderGuid)
+	{
+		$db = $this->getDbHandler('hid');
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$sql = $db->select();
+		
+		$sql->from('KutuSetting', ['dataCache']);
+		$sql->where('id=?',1);
+		
+		$row = $db->fetchRow($sql);
+		
+		if (isset($row) && !empty($row))
+		{
+			$un = unserialize($row->dataCache);
+			if (!in_array($folderGuid, $un))
+			{
+				$un[] = $folderGuid;
+			}
+			$un = serialize($un);
+		}
+		else
+		{
+			$un = serialize([$folderGuid]);
+		}
+		
+		
+		$data = ['dataCache'=>$un];
+		$db->update('KutuSetting',$data,"id=1");
 	}
 	
 	public function toShortUrl($catalogGuid, $folderGuid = null, $ip = null, $kopel = null, $lang)
@@ -1227,11 +1260,14 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$multidb->init();
 		
 		$this->db = $multidb->getDb('db1');		//id
+		$this->db2 = $multidb->getDb('db2');	//hid
 		$this->db4 = $multidb->getDb('db4');	//en
 		$this->db3 = $multidb->getDb('db3');	//shortUrl
 		
 		if ($lang == "id")
 			return $this->db;
+		elseif ($lang == "hid")
+			return $this->db2;
 		elseif ($lang == "en")
 			return $this->db4;
 		else
