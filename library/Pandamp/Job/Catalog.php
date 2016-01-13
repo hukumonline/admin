@@ -44,9 +44,9 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		
 		$row = $db->fetchRow($sql);
 		
-		if (isset($row) && !empty($row))
+		$un = unserialize($row->dataCache);
+		if($un!="")
 		{
-			$un = unserialize($row->dataCache);
 			if (!in_array($folderGuid, $un))
 			{
 				$un[] = $folderGuid;
