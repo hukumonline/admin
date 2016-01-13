@@ -448,6 +448,24 @@ class Dms_CatalogController extends Zend_Controller_Action
                 }
             }
 
+            $tblSetting = new App_Model_Db_Table_Setting();
+			$rowSetting = $tblSetting->find(1)->current();
+			$un = unserialize($rowSetting->dataCache);
+			if($un!="")
+			{
+				if (!in_array($sourceNode, $un))
+				{
+					$un[] = $sourceNode;
+				}
+				$un = serialize($un);
+			}
+			else
+			{
+				$un = serialize([$sourceNode]);
+			}
+			
+			$rowSetting->dataCache = $un;
+			$rowSetting->save();
         }
 
         $sessHistory = new Zend_Session_Namespace('BROWSER_HISTORY');
