@@ -36,8 +36,14 @@ class FixController extends Application_Controller_Cli
 				
 				
 			echo 'urutan: '.$iCount ." - ";
+
 			
-			$title = $this->getCatalogAttribute($row->guid, 'fixedCommentTitle');
+			if ($row->profileGuid=='klinik')
+				$title = $this->getCatalogAttribute($row->guid, 'fixedCommentTitle');
+			else
+				$title = $this->getCatalogAttribute($row->guid, 'fixedTitle');
+			
+			
 			if ($title) {
 				$slug = Pandamp_Utility_String::removeSign($title, '-', true);
 				
