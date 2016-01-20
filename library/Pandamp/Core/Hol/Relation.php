@@ -42,8 +42,8 @@ class Pandamp_Core_Hol_Relation
     	return $this->findperaturanyear($result);
     	*/
     	
-    	$data = array_merge(self::up($guid),self::down($guid),self::current($guid));
-    	return self::findperaturanyear($data);
+    	$data = array_merge(self::up($guid),self::down($guid),self::current($guid),self::current2($guid));
+    	return $data;
     }
     
     public function down($guid)
@@ -99,13 +99,30 @@ class Pandamp_Core_Hol_Relation
     public function current($guid)
     {
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$row = $tblRelatedItem->fetchRow("itemType='history' AND `relatedGuid`='$guid'");
+    	$d = [];
+    	$dc = 0;
+    	if ($row) {
+			$d[$dc]['itemGuid'] = $row['relatedGuid'];
+			$d[$dc]['relatedGuid'] = $row['relatedGuid'];
+			$d[$dc]['relateAs'] = $row['relateAs'];
+			$d[$dc]['parent'] = $row['valueStringRelation'];
+    	}
+    	return $d;
+    }
+    
+    public function current2($guid)
+    {
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	$row = $tblRelatedItem->fetchRow("itemType='history' AND `itemGuid`='$guid'");
     	$d = [];
     	$dc = 0;
-		$d[$dc]['itemGuid'] = $row->itemGuid;
-		$d[$dc]['relatedGuid'] = $row->relatedGuid;
-		$d[$dc]['relateAs'] = $row->relateAs;
-		$d[$dc]['parent'] = $row->valueStringRelation;
+    	if ($row) {
+			$d[$dc]['itemGuid'] = $row['itemGuid'];
+			$d[$dc]['relatedGuid'] = $row['relatedGuid'];
+			$d[$dc]['relateAs'] = $row['relateAs'];
+			$d[$dc]['parent'] = $row['valueStringRelation'];
+    	}
     	return $d;
     }
     
