@@ -11,8 +11,6 @@
  */
 class Pandamp_Core_Hol_Relation
 {
-	const EOL = ",";
-	
     private $catalogGuid;
     //private $_dbSource;
     
@@ -34,7 +32,7 @@ class Pandamp_Core_Hol_Relation
     	//$this->_dbSource->setFetchMode(Zend_Db::FETCH_OBJ);
     	//$rowset = $this->_dbSource->fetchAll($sqlSource);
     	
-    	$data = self::up($guid).self::down($guid).$guid;
+    	/*$data = self::up($guid).self::down($guid).$guid;
     	$result = array();
     	$c = 0;
     	foreach (explode(',', $data) as $item) {
@@ -42,22 +40,32 @@ class Pandamp_Core_Hol_Relation
     		$c++;
     	}
     	return $this->findperaturanyear($result);
+    	*/
+    	
+    	$data = array_merge(self::up($guid),self::down($guid),self::current($guid));
+    	return self::findperaturanyear($data);
     }
     
     public function down($guid)
     {
-    	$d = '';
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	$rowset = $tblRelatedItem->fetchAll("itemType='history' AND `relatedGuid`='$guid'");
     	if ($rowset)
     	{
+    		$d = [];
+    		$dc=0;
     		foreach ($rowset as $row)
     		{
     			// down
     			if ($row->relatedGuid==$guid) {
-    				$ig = $row->itemGuid . self::EOL;
-    				$d .= $ig . self::down($row->itemGuid);
+    				$d[$dc]['itemGuid'] = $row->itemGuid; 
+    				$d[$dc]['relatedGuid'] = $row->relatedGuid; 
+    				$d[$dc]['relateAs'] = $row->relateAs; 
+    				$d[$dc]['parent'] = $row->valueStringRelation; 
+    				$d = array_merge($d,self::down($row->itemGuid));
+    				
     			}
+    			$dc++;
     		}
     	}
     	return $d;
@@ -67,18 +75,37 @@ class Pandamp_Core_Hol_Relation
     {
     	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
     	$rowset = $tblRelatedItem->fetchAll("itemType='history' AND `itemGuid`='$guid'");
-    	$d = '';
     	if ($rowset)
     	{
+    		$d = [];
+    		$dc = 0;
     		foreach ($rowset as $row)
     		{
     			// up
     			if ($row->itemGuid==$guid) {
-    				$ig = $row->relatedGuid . self::EOL;
-    				$d .= $ig . self::up($row->relatedGuid);
+    				$d[$dc]['itemGuid'] = $row->relatedGuid;
+    				$d[$dc]['relatedGuid'] = $row->relatedGuid;
+    				$d[$dc]['relateAs'] = $row->relateAs;
+    				$d[$dc]['parent'] = $row->valueStringRelation;
+    				$d = array_merge($d,self::up($row->relatedGuid));
     			}
+    			
+    			$dc++;
     		}
     	}
+    	return $d;
+    }
+    
+    public function current($guid)
+    {
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$row = $tblRelatedItem->fetchRow("itemType='history' AND `itemGuid`='$guid'");
+    	$d = [];
+    	$dc = 0;
+		$d[$dc]['itemGuid'] = $row->itemGuid;
+		$d[$dc]['relatedGuid'] = $row->relatedGuid;
+		$d[$dc]['relateAs'] = $row->relateAs;
+		$d[$dc]['parent'] = $row->valueStringRelation;
     	return $d;
     }
     
