@@ -43,7 +43,7 @@ class Pandamp_Core_Hol_Relation
     	*/
     	
     	$data = array_merge(self::up($guid),self::down($guid),self::current($guid),self::current2($guid));
-    	return $data;
+    	return self::findperaturanyear($data);
     }
     
     public function down($guid)
