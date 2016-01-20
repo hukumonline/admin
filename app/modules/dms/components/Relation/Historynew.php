@@ -14,7 +14,8 @@ class Dms_Relation_Historynew
 		$this->view->addHelperPath(ROOT_DIR.'/library/Pandamp/Controller/Action/Helper', 'Pandamp_Controller_Action_Helper');
 
 		$bpm = new Pandamp_Core_Hol_Relation();
-		$this->view->aData = $bpm->getHistorynew($catalogGuid,$folderGuid);
+		//$this->view->aData = $bpm->getHistorynew($catalogGuid,$folderGuid);
+		$this->view->aData = $bpm->getHistory2($catalogGuid);
 
 		$this->view->catalogGuid = $catalogGuid;
 		$this->view->folderGuid = $folderGuid;

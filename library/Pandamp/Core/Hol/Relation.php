@@ -11,7 +11,76 @@
  */
 class Pandamp_Core_Hol_Relation
 {
+	const EOL = ",";
+	
     private $catalogGuid;
+    //private $_dbSource;
+    
+    /*function __construct()
+    {
+    	$this->_dbSource = Zend_Db::factory("Pdo_Mysql", array(
+    			'host'     => '175.103.48.153',
+    			'username' => 'JusticeServer13',
+    			'password' => '13JusticeServer',
+    			'dbname'   => 'holemp'
+    	));
+    }*/
+    
+    public function getHistory2($guid)
+    {
+    	//$sqlSource = "SELECT * FROM `KutuRelatedItem` WHERE `itemType`='history' AND (`itemGuid`='$guid' OR `relatedGuid`='$guid')";
+    	//$sqlSource = "SELECT * FROM `KutuRelatedItem` WHERE `itemType`='history' AND `relatedGuid`='$guid'"; // down
+    	//$sqlSource = "SELECT * FROM `KutuRelatedItem` WHERE `itemType`='history' AND `itemGuid`='$guid'"; // up
+    	//$this->_dbSource->setFetchMode(Zend_Db::FETCH_OBJ);
+    	//$rowset = $this->_dbSource->fetchAll($sqlSource);
+    	
+    	$data = self::up($guid).self::down($guid).$guid;
+    	$result = array();
+    	$c = 0;
+    	foreach (explode(',', $data) as $item) {
+    		$result[$c]['itemGuid'] = $item;
+    		$c++;
+    	}
+    	return $this->findperaturanyear($result);
+    }
+    
+    public function down($guid)
+    {
+    	$d = '';
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$rowset = $tblRelatedItem->fetchAll("itemType='history' AND `relatedGuid`='$guid'");
+    	if ($rowset)
+    	{
+    		foreach ($rowset as $row)
+    		{
+    			// down
+    			if ($row->relatedGuid==$guid) {
+    				$ig = $row->itemGuid . self::EOL;
+    				$d .= $ig . self::down($row->itemGuid);
+    			}
+    		}
+    	}
+    	return $d;
+    }
+    
+    public function up($guid)
+    {
+    	$tblRelatedItem = new App_Model_Db_Table_RelatedItem();
+    	$rowset = $tblRelatedItem->fetchAll("itemType='history' AND `itemGuid`='$guid'");
+    	$d = '';
+    	if ($rowset)
+    	{
+    		foreach ($rowset as $row)
+    		{
+    			// up
+    			if ($row->itemGuid==$guid) {
+    				$ig = $row->relatedGuid . self::EOL;
+    				$d .= $ig . self::up($row->relatedGuid);
+    			}
+    		}
+    	}
+    	return $d;
+    }
     
     public function getHistorynew($guid,$node)
     {
@@ -405,7 +474,7 @@ class Pandamp_Core_Hol_Relation
     	return;
     }
     
-    public function findperaturanyear(array $id, $parent)
+    public function findperaturanyear(array $id, $parent=0)
     {
     	/*$solr = new Apache_Solr_Service( 'nihki:sirkulasi@202.153.129.35', '8983', '/solr/core-catalog' );
     	if ( ! $solr->ping() ) {
