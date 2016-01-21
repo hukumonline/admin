@@ -540,29 +540,34 @@ class Pandamp_Core_Hol_Relation
     		}
     	}
     	$sSolr = substr_replace($sSolr,"",-4).")";
-    	
-    	$solrResult = $solrAdapter->find($sSolr,0,$numi, 'fixedDate desc','POST');
-    	$solrNumFound = $solrResult->response->numFound;
-    	
-    	$data = array();
-    	
-    	for($ii=0;$ii<$numi;$ii++)
-    	{
-	    	if(isset($solrResult->response->docs[$ii]))
+    	try {
+	    	$solrResult = $solrAdapter->find($sSolr,0,$numi, 'fixedDate desc','POST');
+	    	$solrNumFound = $solrResult->response->numFound;
+	    	
+	    	$data = array();
+	    	
+	    	for($ii=0;$ii<$numi;$ii++)
 	    	{
-		    	$row = $solrResult->response->docs[$ii];
-		    	$data[$ii]['id'] = $row->id;
-	    		$data[$ii]['title'] = $row->title;
-	    		$data[$ii]['year'] = $row->year;
-	    		$data[$ii]['fixedDate'] = $solrAdapter->translateSolrDate($row->fixedDate);
-	    		$relateAs = $this->search($id, 'itemGuid', $row->id);
-	    		$data[$ii]['relateAs'] = ($relateAs[0]) ? $relateAs[0]['relateAs'] : '' ;
-	    		$data[$ii]['relatedGuid'] = ($relateAs[0]) ? $relateAs[0]['relatedGuid'] : '' ;
-	    		$data[$ii]['parent'] = ($relateAs[0]) ? $relateAs[0]['parent'] : '' ;
+		    	if(isset($solrResult->response->docs[$ii]))
+		    	{
+			    	$row = $solrResult->response->docs[$ii];
+			    	$data[$ii]['id'] = $row->id;
+		    		$data[$ii]['title'] = $row->title;
+		    		$data[$ii]['year'] = $row->year;
+		    		$data[$ii]['fixedDate'] = $solrAdapter->translateSolrDate($row->fixedDate);
+		    		$relateAs = $this->search($id, 'itemGuid', $row->id);
+		    		$data[$ii]['relateAs'] = ($relateAs[0]) ? $relateAs[0]['relateAs'] : '' ;
+		    		$data[$ii]['relatedGuid'] = ($relateAs[0]) ? $relateAs[0]['relatedGuid'] : '' ;
+		    		$data[$ii]['parent'] = ($relateAs[0]) ? $relateAs[0]['parent'] : '' ;
+		    	}
 	    	}
+	    	
+	    	return $data;
     	}
-    	
-    	return $data;
+    	catch (Exception $e)
+    	{
+    		
+    	}
     }
     
     public function search($array, $key, $value)
