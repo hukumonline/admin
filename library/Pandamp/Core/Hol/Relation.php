@@ -528,6 +528,9 @@ class Pandamp_Core_Hol_Relation
     	
     	//Pandamp_Debug::manager($this->search($id, 'itemGuid', 'lt546455c9b16cb'));
     	
+    	if (empty($id)) 
+    		return; 
+    	
     	$solrAdapter = Pandamp_Search::manager();
     	
     	$numi = count($id);
