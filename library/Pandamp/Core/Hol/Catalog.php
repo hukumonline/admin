@@ -306,8 +306,9 @@ class Pandamp_Core_Hol_Catalog
 
         /**
          * @todo BLOCK solr core-catalog	
+         */
         $indexingEngine = Pandamp_Search::manager();
-        $indexingEngine->indexCatalog($catalogGuid); */
+        $indexingEngine->indexCatalog($catalogGuid); 
         
         /**
 		 * @todo BLOCK New solr corehol	
@@ -419,9 +420,49 @@ class Pandamp_Core_Hol_Catalog
 		}
 		*/
 		
+        self::addCache($folderGuid);
 		
         //after indexing, update isIndex and indexedDate in table KutuCatalog
         return $catalogGuid;
+    }
+    
+    public function addCache($folderGuid)
+    {
+    	/**
+    	 * aktual, utama, berita, klinik, editorial, fokus, after office, tajuk, tokoh, isu hangat, resensi, jeda, kolom, info, pojok peradilan, berita foto, talks, past event, gallery
+    	 * fb29, lt4aaa29322bdbb, fb16, lt4a0a533e31979, lt54b470ce7255c, fb4, lt51b824118f00d, fb18, fb12, lt4a6f7d5377193, fb17, fb14, fb7, fb9, lt55dd40da17f5c, lt4de5c32a53bd4, lt4c93230c9d0a5, lt4a607b5e3c2f2, lt4f0fefa26f140
+    	 */
+    	if (!in_array($folderGuid, ['fb29','lt4aaa29322bdbb','fb16','lt4a0a533e31979','lt54b470ce7255c','fb4','lt51b824118f00d','fb18','fb12','lt4a6f7d5377193','fb17','fb14','fb7','fb9','lt55dd40da17f5c','lt4de5c32a53bd4','lt4c93230c9d0a5','lt4a607b5e3c2f2','lt4f0fefa26f140'])) {
+    		return;
+    	}
+    	
+    	$db = Zend_Registry::get('db2');
+    	$db->setFetchMode(Zend_Db::FETCH_OBJ);
+    	
+    	$sql = $db->select();
+    	
+    	$sql->from('KutuSetting', ['dataCache']);
+    	$sql->where('id=?',1);
+    	
+    	$row = $db->fetchRow($sql);
+    	
+    	$un = unserialize($row->dataCache);
+    	if($un!="")
+    	{
+    		if (!in_array($folderGuid, $un))
+    		{
+    			$un[] = $folderGuid;
+    		}
+    		$un = serialize($un);
+    	}
+    	else
+    	{
+    		$un = serialize([$folderGuid]);
+    	}
+    	
+    	
+    	$data = ['dataCache'=>$un];
+    	$db->update('KutuSetting',$data,"id=1");
     }
     
     public function getFolders($catalogGuid)

@@ -22,34 +22,25 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	private $_conn;
 	private $_lang;
 
-        private $_return;
+    private $_return;
 
-
-
-
-        public function __construct($solrHost, $solrPort, $solrHomeDir)
+	public function __construct($solrHost, $solrPort, $solrHomeDir)
 	{
 		$sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 		
-            $this->_solr = new Apache_Solr_Service( $solrHost, $solrPort, $solrHomeDir );
+        $this->_solr = new Apache_Solr_Service( $solrHost, $solrPort, $solrHomeDir );
 
-            $this->_return = $sReturn;
+        $this->_return = $sReturn;
 
-            $pos = strpos($sReturn,"/en/");
+        $pos = strpos($sReturn,"/en/");
             
-            if ($pos !== false)  {
-                $this->_conn = Zend_Registry::get('db3');
-                $this->_lang = "en";
-            } else {
-                $this->_conn = Zend_Registry::get('db1');
-                $this->_lang = "id";
-            }
-            
-            /*
-            else
-            {
-                $this->_conn = Zend_Db_Table_Abstract::getDefaultAdapter();
-            }*/
+        if ($pos !== false)  {
+        	$this->_conn = Zend_Registry::get('db3');
+            $this->_lang = "en";
+		} else {
+			$this->_conn = Zend_Registry::get('db1');
+			$this->_lang = "id";
+        }
 
 	}
 	public function setExtractor($type, $extractor)
@@ -207,6 +198,12 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	}
 	private function _createSolrDocument(&$row)
 	{
+		$cf = array();
+		
+		$docSystemName = null;
+		$docOriginalName = null;
+		$docMimeType = null;
+		
 		$part = new Apache_Solr_Document();
 	  	$part->id = $row->guid;
 	  	$part->shortTitle = $row->shortTitle;
@@ -217,15 +214,35 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	$part->createdDate = $this->getDateInSolrFormat($row->createdDate);
 	  	$part->modifiedBy = $row->modifiedBy;
 	  	$part->modifiedDate = $this->getDateInSolrFormat($row->modifiedDate);
+	  	$part->deletedBy = $row->deletedBy;
+	  	$part->deletedDate = $this->getDateInSolrFormat($row->deletedDate);
+	  	$part->price = (!$row->price==null)? $row->price : 0;
+	  	$part->sticky = (!$row->sticky==null)? $row->sticky : 0;
 	  	$part->status = (!$row->status==null)? $row->status : 0;
+	  	
 	  	/*$part->url = ''; 
 	  	
 	  	if ($this->_lang == "id")
 	  		$part->serviceId = 'hol';
 	  	else 
 	  		$part->serviceId = "en";*/
-	  		
-	  		
+
+	  	
+	  	$queryCF = "SELECT * FROM KutuCatalogFolder where catalogGuid='".$row->guid."'";
+	  	$resultsCF = $this->_conn->query($queryCF);
+	  	$rowsetAttrCF = $resultsCF->fetchAll(PDO::FETCH_OBJ);
+	  	$rowCountCF = count($rowsetAttrCF);
+	  	for($x=0;$x<$rowCountCF;$x++)
+	  	{
+		  	$rowAttrCF = $rowsetAttrCF[$x];
+		  	$cf[] = $rowAttrCF->folderGuid;
+	  	}
+	  	
+	  	$part->kategoriId = $cf;
+	  	
+	  	$part->shortenerUrl = $this->generateShortener($row->shortTitle);
+	  	
+	  	$part->fileImage = $this->fileImageUrl($row->guid);
 	  	  
 	  	//$rowsetAttr = $row->findDependentRowsetCatalogAttribute();
 	  	
@@ -256,10 +273,10 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		$part->subTitle = $rowAttr->value;
 	  	  	  		break;
 	  	  	  	case 'fixedContent':
-	  	  	  		$part->content = $this->clean_string_input($rowAttr->value);
+	  	  	  		$part->content = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedKeywords':
-	  	  	  		$part->keywords = $rowAttr->value;
+	  	  	  		$part->keywords = array_map('trim', explode(',', $rowAttr->value));
 	  	  	  		break;
 	  	  	  	case 'fixedDescription':
 	  	  	  		$part->description = $rowAttr->value;
@@ -295,10 +312,10 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 //	  	  	  		$part->commentTitle = $rowAttr->value;
 //	  	  	  		break;
 	  	  	  	case 'fixedCommentQuestion':
-	  	  	  		$part->question = $this->clean_string_input($rowAttr->value);
+	  	  	  		$part->question = (new Pandamp_Utility_Posts)->sanitize_post_title($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedAnswer':
-	  	  	  		$part->answer = $this->clean_string_input($rowAttr->value);
+	  	  	  		$part->answer = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
 	  	  	  		break;
 //	  	  	  	case 'fixedJudul':
 //	  	  	  		$part->judul = $rowAttr->value;
@@ -308,9 +325,16 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 //	  	  	  		break;
 	  	  	  	case 'fixedSelectNama':
 	  	  	  		$part->kontributor = $rowAttr->value;
+	  	  	  		if ($kt = $this->fileImageUrl($rowAttr->value)) {
+	  	  	  			$part->kontributorImage = $kt;
+	  	  	  		}
 	  	  	  		break;
+	  	  	  	case 'fixedSource' :
 	  	  	  	case 'fixedSelectMitra':
 	  	  	  		$part->sumber = $rowAttr->value;
+	  	  	  		if ($fiu = $this->fileImageUrl($rowAttr->value,$lang)) {
+	  	  	  			$part->sumberImage = $fiu;
+	  	  	  		}
 	  	  	  		break;
 	  	  	  	case 'fixedSelect':
 	  	  	  		
@@ -374,13 +398,14 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  	case 'fixedKategoriKlinik':
 	  	  	  		$part->kategoriklinik = $rowAttr->value;
 	  	  	  		
-				  	$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
-					$resultsKK = $this->_conn->query($queryKK);
+				  	//$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
+					//$resultsKK = $this->_conn->query($queryKK);
 					
-					$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
+					//$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
 					
-					$part->kategori = $rowsetAttrKK[0]->value;
+					//$part->kategori = $rowsetAttrKK[0]->value;
 					
+					$part->kategori = $this->getCatalogAttribute($rowAttr->value, 'fixedTitle');
 	  	  	  		
 	  	  	  		/*
 	  	  	  		switch (strtolower($part->kategoriklinik))
@@ -741,18 +766,19 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		break;
 	  	  	  	case 'docSystemName':
 	  	  	  		$docSystemName = $rowAttr->value;
+	  	  	  		$docSystemName = $rowAttr->value;
 	  	  	  		break;
 	  	  	  	case 'docSize':
-	  	  	  		// $part->fileSize = $rowAttr->value; //TODO conver to float first
+	  	  	  		$part->fileSize = $rowAttr->value;
 	  	  	  		break;
 				default:
-					if(isset($part->all))
+					if(isset($part->_text_))
 					{
-						$part->all .= ' '.$rowAttr->value;
+						$part->_text_ .= ' '.$rowAttr->value;
 					}
 					else 
 					{
-						$part->all = $rowAttr->value;
+						$part->_text_ = $rowAttr->value;
 					}
 			}
 			 
@@ -760,8 +786,13 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 		if($row->profileGuid=='kutu_doc')
 		{
 			//extract text from the file
-			$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType);
-			//$sContent = $this->clean_string_input($sContent);
+			if (isset($docSystemName) || isset($docOriginalName) || isset($docMimeType)) {
+				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType);
+				//$sContent = $this->clean_string_input($sContent);
+			}
+			else
+				$sContent = '';
+			
 			if(isset($part->content))
 			{
 				$part->content .= ' '.$sContent;
@@ -774,6 +805,195 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	return $part;
 	}
 	
+	private function generateShortener($shortTitle)
+	{
+		$shortUrl = null;
+	
+		$db = Zend_Registry::get('db4');
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+	
+		$sql = $db->select();
+	
+		$sql->from('shorturls', ['id']);
+		$sql->where("url LIKE '%$shortTitle%'");
+	
+		$row = $db->fetchRow($sql);
+	
+		if (isset($row) && !empty($row))
+		{
+			$hex = dechex($row->id);
+	
+			$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
+			$shortUrl = $web->url->short.'/'.$hex;
+		}
+	
+		return $shortUrl;
+	}
+	
+	private function fileImageUrl($guid)
+	{
+		$fileImage=null;
+		$rowImage = $this->getRelated($guid,'RELATED_IMAGE',false,"relatedGuid DESC");
+		if ($rowImage) {
+			$i=0;
+			foreach ($rowImage as $row)
+			{
+				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName');
+				if ($rowDocSystemName)
+				{
+					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
+					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
+					$ext = strtolower($ext);
+						
+					if (substr($catalogGuid,0,2) !== 'lt') {
+						$catalogGuid = $row->itemGuid;
+					}
+		
+					$ig = $this->getItemRelated($catalogGuid,'RELATED_IMAGE');
+					if ($ig)
+						$guid = $ig->relatedGuid;
+						
+						
+					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
+						$fileImage[$i]['original'] = $ori;
+					}
+		
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
+						$fileImage[$i]['thumbnail'] = $th;
+					}
+		
+					$file = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
+					$keys = array_keys($file->toArray());
+					foreach ($keys as $key)
+					{
+						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "local")) {
+							$fileImage[$i][$key] = $img;
+						}
+					}
+					
+		
+					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle"))
+					{
+						$fileImage[$i]['caption'] = strip_tags(trim($caption));
+					}
+		
+				}
+				
+				$i++;
+			}
+		
+			return Zend_Json::encode($fileImage);
+		}
+		else
+		{
+		}
+		
+		return;
+		
+	}
+	
+	public function giu($guid, $itemguid, $ext, $prefix=null,$default="remote")
+	{
+		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
+	
+		$imageDir = $config->static->dir->images;
+		$imageUrl = $config->static->url->images;
+	
+		$url1 = @getimagesize($imageUrl.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext);
+		$url2 = @getimagesize($imageUrl.'/'.$prefix.$itemguid.'.'.$ext);
+	
+		if ($default=="remote") {
+			$chkImg1 = is_array($url1);
+			$chkImg2 = is_array($url2);
+		}
+		else
+		{
+			$chkImg1 = file_exists($imageDir.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext);
+			$chkImg2 = file_exists($imageDir.'/'.$prefix.$itemguid.'.'.$ext);
+		}
+	
+		if ($chkImg1) {
+			$image = $imageUrl.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext;
+		}
+		else if ($chkImg2)
+		{
+			$image = $imageUrl.'/'.$prefix.$itemguid.'.'.$ext;
+		}
+		else
+		{
+			$image = null;
+		}
+	
+		return $image;
+	}
+	
+	private function getCatalogAttribute($guid,$attributeGuid)
+	{
+		$db = $this->_conn;
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+	
+		$sql = $db->select();
+		$sql->from('KutuCatalogAttribute', ['value']);
+		$sql->where('catalogGuid=?',$guid);
+		$sql->where('attributeGuid=?',$attributeGuid);
+		$row = $db->fetchRow($sql);
+	
+		$sql = $sql->__toString();
+	
+		return ($row) ? $row->value : '';
+	}
+	
+	private function getRelated($relatedGuid,$relateAs,$asRow,$order=null,$multi=false)
+	{
+		$db = $this->_conn;
+	
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+	
+		$sql = $db->select();
+	
+		$sql->from('KutuRelatedItem', '*');
+		$sql->where('relatedGuid=?',$relatedGuid);
+	
+		if ($multi) {
+			$data = $this->implode_with_keys(", ", $relateAs, "'");
+			$sql->where("relateAs IN ($data)");
+		}
+		else
+			$sql->where('relateAs=?',$relateAs);
+	
+	
+		if ($order !== null) {
+			$sql->order($order);
+		}
+	
+		if ($asRow) {
+			return $db->fetchRow($sql);
+		}
+	
+		return $db->fetchAll($sql);
+	
+	}
+	
+	private function getItemRelated($itemGuid,$relateAs)
+	{
+		$db = $this->_conn;
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		$sql = $db->select();
+		$sql->from('KutuRelatedItem', '*');
+		$sql->where('itemGuid=?',$itemGuid);
+		$sql->where('relateAs=?',$relateAs);
+		return $db->fetchRow($sql);
+	}
+	
+	private function implode_with_keys($glue, $array, $valwrap)
+	{
+		if (is_array($array)) {
+			foreach ($array as $key => $value) {
+				$ret[] = $valwrap.$value.$valwrap;
+			}
+			return implode($glue,$ret);
+		}
+	}
 	
 	public function reIndexCatalog_ZendDb()
 	{
@@ -1258,7 +1478,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
         
         public function getDateInSolrFormat($date) {
             if($date=='0000-00-00 00:00:00' OR $date=='0000-00-00' OR $date=='' OR $date==NULL) {
-                return '1999-12-31T00:00:00Z';
+                return '1999-12-31T23:59:59Z';
             }
             else
             {
@@ -1350,7 +1570,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 					        unlink($outpath);
 					        //echo 'content PDF: '. $sDir.' ' . strlen($value);
 					        if(strlen($value) > 20)
-					        	return $this->clean_string_input($value);
+					        	return (new Pandamp_Utility_Posts)->sanitize_post_content($value);
 					        else 
 					        {
 					        	echo 'content file kosong';
