@@ -332,7 +332,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  	case 'fixedSource' :
 	  	  	  	case 'fixedSelectMitra':
 	  	  	  		$part->sumber = $rowAttr->value;
-	  	  	  		if ($fiu = $this->fileImageUrl($rowAttr->value,$lang)) {
+	  	  	  		if ($fiu = $this->fileImageUrl($rowAttr->value)) {
 	  	  	  			$part->sumberImage = $fiu;
 	  	  	  		}
 	  	  	  		break;
