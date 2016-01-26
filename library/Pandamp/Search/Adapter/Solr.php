@@ -854,11 +854,11 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 						$guid = $ig->relatedGuid;
 						
 						
-					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
+					if ($ori = $this->giu($guid, $catalogGuid, $ext, null)) {
 						$fileImage[$i]['original'] = $ori;
 					}
 		
-					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_")) {
 						$fileImage[$i]['thumbnail'] = $th;
 					}
 		
@@ -866,7 +866,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 					$keys = array_keys($file->toArray());
 					foreach ($keys as $key)
 					{
-						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "local")) {
+						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_')) {
 							$fileImage[$i][$key] = $img;
 						}
 					}
