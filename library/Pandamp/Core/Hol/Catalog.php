@@ -31,7 +31,18 @@ class Pandamp_Core_Hol_Catalog
         }
         
         $slug = Pandamp_Utility_String::removeSign($title, '-', true);
+        
+        if ($aData['keywordintegrasi']) {
+        	$ckey = explode(',', $aData['fixedKeywords']);
+        	$mckey = array_merge($aData['keywordintegrasi'], $ckey);
+        	$umckey = array_intersect_key($mckey, array_unique(array_map('strtolower', $mckey)));
+        	$umckey = rtrim(implode(',', $umckey),',');
         	
+        	$aData['fixedKeywords'] = $umckey;
+        	
+        	unset($aData['keywordintegrasi']);
+        } 
+        
         $tblCatalog = new App_Model_Db_Table_Catalog();
 
         $gman = new Pandamp_Core_Guid();

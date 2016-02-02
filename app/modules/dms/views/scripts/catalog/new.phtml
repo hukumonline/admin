@@ -35,7 +35,9 @@ $this->headStyle()->captureStart();
 .t_a_ui_paginator span.t_a_ui_active { background-color: #555; padding: 6px 8px; line-height: 9px; height: 9px; width: 7px; }
 .ephotos { overflow: auto; border: 1px solid #444; padding: 5px; }
 .ephotos li { float: left; margin-right: 10px; margin-bottom: 15px; }
-
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    color: black;
+}
 <?php $this->headStyle()->captureEnd(); ?>
 <?php $this->headTitle('Add new article'); ?>
 <!-- Content Header (Page header) -->
@@ -574,6 +576,7 @@ $(function () {
 	});
 	
     $("input[name=fixedTitle]").prop('required',true);
+    $(".select2").prop('required',true);
 	$('#newPost').validator().on('submit', function (e) {
 	  	if (e.isDefaultPrevented()) {
 	    	$('#confirmDialog').html('form is not valid!Please check again')
@@ -620,6 +623,8 @@ $(function () {
 	});    
 	
 	$('#searchButton').click();
+	
+	$(".select2").select2();
 });
 function addFormAttribute(v,fileId,name)
 {
