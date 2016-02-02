@@ -3,6 +3,7 @@ $this->headLink()
 	->appendStylesheet($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css');
 
 $this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/select2/select2.min.js')
 	->appendFile($this->cdn('scripts') . '/plugins/jQuery/jquery.tagsinput.min.js')
 	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/scripts/moment.js')
 	->appendFile($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/scripts/bootstrap-datetimepicker.js')
@@ -37,7 +38,9 @@ div.tagsinput span.tag { border: 1px solid #a5d24a; -moz-border-radius:2px; -web
 div.tagsinput span.tag a { font-weight: bold; color: #82ad2b; text-decoration:none; font-size: 11px; }
 div.tagsinput input { width:80px; margin:0px; font-family: helvetica; font-size: 13px; border:1px solid transparent; padding:5px; background: transparent; color: #000; outline:0px; margin-right:5px; margin-bottom:5px; }
 div.tagsinput div { display:block; float: left; }
-
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    color: black;
+}
 <?php $this->headStyle()->captureEnd(); ?>
 <?php $this->headTitle('Edit catalog'); ?>
 <!-- Content Header (Page header) -->
@@ -372,8 +375,9 @@ div.tagsinput div { display:block; float: left; }
 </section>
 <?php $this->headScript()->captureStart(); ?>
 $(function () {
+	$(".select2").select2();
 	$("input[name=fixedTitle]").prop('required',true);
-	
+	$(".select2").prop('required',true);
 	$.validator.addMethod('shortTitle', function(value) {
 		value = value.replace(/^\s+|\s+$/g, '');
 		var regex = new RegExp(/^[a-z0-9\-]+$/);
