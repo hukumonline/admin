@@ -377,8 +377,9 @@ div.tagsinput div { display:block; float: left; }
 <?php $this->headScript()->captureStart(); ?>
 $(function () {
 	$(".select2").select2();
+	
 	$("input[name=fixedTitle]").prop('required',true);
-	$(".select2").prop('required',true);
+	
 	$.validator.addMethod('shortTitle', function(value) {
 		value = value.replace(/^\s+|\s+$/g, '');
 		var regex = new RegExp(/^[a-z0-9\-]+$/);
