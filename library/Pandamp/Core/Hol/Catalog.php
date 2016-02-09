@@ -32,7 +32,7 @@ class Pandamp_Core_Hol_Catalog
         
         $slug = Pandamp_Utility_String::removeSign($title, '-', true);
         
-        if ($aData['keywordintegrasi']) {
+        if (isset($aData['keywordintegrasi']) && !empty($aData['keywordintegrasi'])) {
         	$ckey = explode(',', $aData['fixedKeywords']);
         	$mckey = array_merge($aData['keywordintegrasi'], $ckey);
         	$umckey = array_intersect_key($mckey, array_unique(array_map('strtolower', $mckey)));
