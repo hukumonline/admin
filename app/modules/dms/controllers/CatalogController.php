@@ -828,9 +828,14 @@ class Dms_CatalogController extends Zend_Controller_Action
     	else
     		$q .= ' status:99 profile:'.$category.' -profile:kutu_contact -profile:kutu_doc -profile:comment -profile:partner -profile:author -profile:about_us -profile:kategoriklinik -profile:kutu_email -profile:kutu_kotik -profile:kutu_mitra';
     
+    	if ($category=="(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan)")
+    		$orderBy = "fixedDate desc";
+    	else
+    		$orderBy = "publishedDate desc";
+    	
     	$indexing = Pandamp_Search::manager();
     	
-    	$hits = $indexing->find($q, 0, $limit,"publishedDate desc");
+    	$hits = $indexing->find($q, 0, $limit,$orderBy);
     	$solrNumFound = count($hits->response->docs);
     
     	if($solrNumFound>$limit)
