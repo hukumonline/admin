@@ -407,6 +407,9 @@ $(function () {
 					term:request.term,
 					category:$("#category").val()
 				},
+				success: function(data){
+					response(data);
+				}
 			});
 		},
 		select: function( event, ui ) {
