@@ -154,6 +154,12 @@ class Dms_CatalogController extends Zend_Controller_Action
         $w9 = new Dms_Relation_Historynew($catalogGuid, $node);
         $this->view->widgetHistorynew = $w9;
         
+        if ($r->getParam('deb')==1) {
+	        require_once($modDir.'/components/Relation/History2.php');
+	        $h2 = new Dms_Relation_History2($catalogGuid);
+	        $this->view->widgetHistory2 = $h2;
+        }
+        
         require_once($modDir.'/components/Relation/LegalBasis.php');
         $w6 = new Dms_Relation_LegalBasis($catalogGuid, $node);
         $this->view->widgetLegalBasis = $w6;
@@ -814,10 +820,13 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$request = $this->getRequest();
     	$q 		 = $request->getParam('term');
     	$profile = $request->getParam('profile');
+    	$category = $request->getParam('category');
     	$limit 	 = $request->getParam('limit', 10);
     	
     	if ($profile)
-    		$q .= ' profile:' . $profile;
+    		$q .= ' status:99 profile:' . $profile;
+    	else
+    		$q .= ' status:99 profile:'.$category.' -profile:kutu_contact -profile:kutu_doc -profile:comment -profile:partner -profile:author -profile:about_us -profile:kategoriklinik -profile:kutu_email -profile:kutu_kotik -profile:kutu_mitra';
     
     	$indexing = Pandamp_Search::manager();
     	

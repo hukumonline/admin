@@ -322,6 +322,13 @@ div.tagsinput div { display:block; float: left; }
 					</div>
 					<div class="box-body">
 						<p class="margin">Enter relation (you don't have to remember title exactly, there are suggestions based on your input):</p>
+	        			<div class="form-group">
+	        				<select id="category" name="category" class="form-control">
+	        					<option value="article">Artikel Berita</option>
+	        					<option value="klinik">Klinik</option>
+	        					<option value="(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan)">Peraturan</option>
+	        				</select>
+	        			</div>
 						<div class="form-group">
 							<select id="relate" name="relate" class="form-control">
 								<option value="">Relate As:</option>
@@ -426,7 +433,17 @@ $(function () {
 	});
 	
 	$('#relInput').autocomplete({
-		source: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/suggest?limit=10",
+		source: function(request,response){
+			$.ajax({
+				url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/suggest",
+				dataType:"json",
+				data:{
+					limit:10,
+					term:request.term,
+					category:$("#category").val()
+				},
+			});
+		},
 		select: function( event, ui ) {
 			if ($("#relate").val() === "") {
 				alert("Select Relation Type!");
