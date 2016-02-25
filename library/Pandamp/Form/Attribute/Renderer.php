@@ -415,7 +415,7 @@ class Pandamp_Form_Attribute_Renderer
 				
 	        	$view = new Zend_View();
 	        	$view->label = $this->label;
-				$view->name = $this->name;
+				$view->name = $this->name.'[]';
 				$view->value = $this->value;
 				$view->defaultValues = $data;
 				$view->setScriptPath(dirname(__FILE__));
