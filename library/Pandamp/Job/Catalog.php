@@ -364,7 +364,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					case 'fixedContent':
 						//$part->content = $this->clean_string_input($rowAttr->value);
 						$part->content = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
-					break;
+						break;
+					case 'fixedNarsum':
 					case 'fixedKeywords':
 						$part->keywords = array_map('trim', explode(',', $rowAttr->value));
 						break;

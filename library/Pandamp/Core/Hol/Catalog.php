@@ -43,6 +43,12 @@ class Pandamp_Core_Hol_Catalog
         	unset($aData['keywordintegrasi']);
         } 
         
+        if (isset($aData['fixedNarsum']) && !empty($aData['fixedNarsum'])) {
+        	$fn = implode(',', $aData['fixedNarsum']);
+        	
+        	$aData['fixedNarsum'] = $fn;
+        }
+        
         $tblCatalog = new App_Model_Db_Table_Catalog();
 
         $gman = new Pandamp_Core_Guid();
