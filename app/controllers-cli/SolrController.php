@@ -624,6 +624,7 @@ class SolrController extends Application_Controller_Cli
 					//$part->content = $this->clean_string_input($rowAttr->value);
 					$part->content = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
 					break;
+				case 'fixedNarsum':
 				case 'fixedKeywords':
 					$part->keywords = array_map('trim', explode(',', $rowAttr->value));
 					break;
