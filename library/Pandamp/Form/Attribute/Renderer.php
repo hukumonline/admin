@@ -314,9 +314,6 @@ class Pandamp_Form_Attribute_Renderer
 	        break;
 	        case 12:
 	        	
-	        	if ($this->profileGuid == 'talks')
-	        		$this->profileGuid = 'narsum';
-	        	
 				$tblCatalog = new App_Model_Db_Table_Catalog();
 				$rowset = $tblCatalog->fetchAll("profileGuid='$this->profileGuid'",'shortTitle asc');
 				
@@ -395,7 +392,38 @@ class Pandamp_Form_Attribute_Renderer
 	        	 
 	        break;
 	        
-			case 101: //publishing status
+	        case 15:
+	        	
+				$tblCatalog = new App_Model_Db_Table_Catalog();
+				$rowset = $tblCatalog->fetchAll("profileGuid='narsum'",'shortTitle asc');
+				
+				$i = 0;
+				$a = array();
+				$data = array();
+				
+				foreach ($rowset as $row)
+				{
+					$rowsetCatalogAttribute = $row->findDependentRowsetCatalogAttribute();
+					$rowCatalogAttribute = $rowsetCatalogAttribute->findByAttributeGuid('fixedTitle');
+					$a[$i]['label']= ((is_object($rowCatalogAttribute)) ? trim($rowCatalogAttribute->value) : '');
+					$a[$i]['value']= "$row->guid";
+					$a[$i]['selected']= ($i==0)? "true" : "false";
+					$i++;
+				}
+				
+				$data =  Zend_Json::decode(Zend_Json::encode($a));      	
+				
+	        	$view = new Zend_View();
+	        	$view->label = $this->label;
+				$view->name = $this->name;
+				$view->value = $this->value;
+				$view->defaultValues = $data;
+				$view->setScriptPath(dirname(__FILE__));
+				return $view->render('select3.phtml');
+	        
+	        break;
+	        
+	        case 101: //publishing status
 				require_once(CONFIG_PATH.'/master-status.php');
 				$aStatus = MasterStatus::getPublishingStatus();
 				
