@@ -20,7 +20,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
                 
                 $desc = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;
                 
-                $attributeRenderer = new Pandamp_Form_Attribute_Renderer($row3->guid,null,$row3->type,null, $profileGuid, $desc, 'partner',$folderGuid);
+                $attributeRenderer = new Pandamp_Form_Attribute_Renderer($row3->guid,null,$row3->type,null, $profileGuid, $desc, 'partner');
 
                 // $aRenderedAttributes[$row3->guid]['description'] = $row3->description;
                 //$aRenderedAttributes[$row3->guid]['description'] = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;
@@ -84,7 +84,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 
             return $aReturn;
 	}
-	function generateFormEdit($catalogGuid, $folderGuid=null)
+	function generateFormEdit($catalogGuid)
 	{
 		$zl = Zend_Registry::get("Zend_Locale");
 		
@@ -127,7 +127,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
 				if ($zl->getLanguage() == 'en')
 					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid, $desc, 'clinic_partner');
 				else
-					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid, $desc, 'partner', $folderGuid);
+					$attributeRenderer = new Pandamp_Form_Attribute_Renderer($rowAttribute->guid,$attributeValue,$rowAttribute->type,null, $rowCatalog->profileGuid, $desc, 'partner');
 				
 				//$aRenderedAttributes[$rowAttribute->guid]['description'] = ($rowAttribute->description == 'Category')? 'Kategori Klinik' : $rowAttribute->description;
 				
