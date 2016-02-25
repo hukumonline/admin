@@ -673,7 +673,7 @@ class Dms_CatalogController extends Zend_Controller_Action
         else
         {
             $gen = new Pandamp_Form_Helper_CatalogInputGenerator();
-            $aRender = $gen->generateFormEdit($catalogGuid);
+            $aRender = $gen->generateFormEdit($catalogGuid,$sessHistory->currentNode);
             $this->view->aRenderedAttributes = $aRender;
             
             /*$catalogFolderDb = new App_Model_Db_Table_CatalogFolder();
@@ -703,7 +703,7 @@ class Dms_CatalogController extends Zend_Controller_Action
 	        
             if ($id) {
             	$gen = new Pandamp_Form_Helper_CatalogInputGenerator();
-            	$aRender = $gen->generateFormEdit($id);
+            	$aRender = $gen->generateFormEdit($id,$aData['folderGuid']);
             	$this->view->aRenderedAttributes = $aRender;
             	
             	//$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($id);
