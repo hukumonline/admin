@@ -16,8 +16,10 @@ class Pandamp_Form_Attribute_Renderer
 	var $type;
 	var $attribs;
 	var $profileGuid;
+	var $other;
+	var $folderGuid;
 	
-	public function __construct($attributeGuid=null, $value=null, $type=null, $attribs=null, $profileGuid=null, $desc=null, $other=null)
+	public function __construct($attributeGuid=null, $value=null, $type=null, $attribs=null, $profileGuid=null, $desc=null, $other=null, $folderGuid=null)
 	{
 		$this->name = $attributeGuid;
 		$this->value = $value;
@@ -26,6 +28,7 @@ class Pandamp_Form_Attribute_Renderer
 		$this->profileGuid = $profileGuid;
 		$this->label = $desc;
 		$this->other = $other;
+		$this->folderGuid = $folderGuid
 	}
 	
 	public function render()
@@ -265,8 +268,9 @@ class Pandamp_Form_Attribute_Renderer
 			
 	        case 8 :
 	        	
-				$tblCatalog = new App_Model_Db_Table_Catalog();
-				$rowset = $tblCatalog->fetchAll("profileGuid='$this->other'",'shortTitle asc');
+				//$tblCatalog = new App_Model_Db_Table_Catalog();
+				//$rowset = $tblCatalog->fetchAll("profileGuid='$this->other'",'shortTitle asc');
+				$rowset = App_Model_Show_Catalog::show()->fetchCatalogPF($this->other,$this->folderGuid);
 				$i = 0;
 				$a = array();
 				$data = array();

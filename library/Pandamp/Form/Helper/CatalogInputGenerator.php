@@ -20,7 +20,7 @@ class Pandamp_Form_Helper_CatalogInputGenerator
                 
                 $desc = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;
                 
-                $attributeRenderer = new Pandamp_Form_Attribute_Renderer($row3->guid,null,$row3->type,null, $profileGuid, $desc, 'partner');
+                $attributeRenderer = new Pandamp_Form_Attribute_Renderer($row3->guid,null,$row3->type,null, $profileGuid, $desc, 'partner',$folderGuid);
 
                 // $aRenderedAttributes[$row3->guid]['description'] = $row3->description;
                 //$aRenderedAttributes[$row3->guid]['description'] = ($row3->description == 'Category')? 'Kategori Klinik' : $row3->description;

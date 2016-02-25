@@ -108,6 +108,22 @@ class App_Model_Show_Catalog extends App_Model_Db_DefaultAdapter
 
         return $rows;
     }
+    
+    public function fetchCatalogPF($profileGuid,$folderGuid)
+    {
+    	$db = parent::_dbSelect();
+    	$select = $db->from('KutuCatalog')
+	    	->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array())
+	    	->where('KutuCatalog.profileGuid=?',$profileGuid)
+	    	->where('KutuCatalogFolder.folderGuid=?',$folderGuid);
+    	
+    	$conn = self::$_db;
+    	$conn->setFetchMode(Zend_Db::FETCH_OBJ);
+    	$rows = $conn->fetchAll($select);
+    	
+    	return $rows;
+    }
+    
     public function getCountCatalogsInFolder($folderGuid)
     {
     	$db = parent::_dbSelect();
