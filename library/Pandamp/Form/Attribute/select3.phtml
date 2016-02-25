@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="form-group col-xs-7">
 		<label><?php echo $this->label; ?></label>
-		<select class="form-control select2" name="<?php echo $this->name;?>" id="<?php echo $this->id;?>" multiple="multiple" data-placeholder="Select a Narasumber" style="width: 100%;">
+		<select class="form-control" name="<?php echo $this->name;?>" id="<?php echo $this->id;?>" multiple="multiple" data-placeholder="Select a Narasumber" style="width: 100%;">
 		<!--	<option value="0">---Pilih Salah Satu---</option>-->
 			<?php foreach($this->defaultValues as $val) {?>
 				<option value="<?php echo $val['value']?>" 
