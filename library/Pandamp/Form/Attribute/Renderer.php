@@ -314,6 +314,9 @@ class Pandamp_Form_Attribute_Renderer
 	        break;
 	        case 12:
 	        	
+	        	if ($this->profileGuid == 'talks')
+	        		$this->profileGuid = 'narsum';
+	        	
 				$tblCatalog = new App_Model_Db_Table_Catalog();
 				$rowset = $tblCatalog->fetchAll("profileGuid='$this->profileGuid'",'shortTitle asc');
 				
