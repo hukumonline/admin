@@ -28,7 +28,7 @@ class Pandamp_Form_Attribute_Renderer
 		$this->profileGuid = $profileGuid;
 		$this->label = $desc;
 		$this->other = $other;
-		$this->folderGuid = $folderGuid
+		$this->folderGuid = $folderGuid;
 	}
 	
 	public function render()
