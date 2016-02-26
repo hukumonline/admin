@@ -596,7 +596,7 @@ $(function () {
 	});
 	
     $("input[name=fixedTitle]").prop('required',true);
-    $(".select2").prop('required',true);
+    $("#keywordintegrasi").prop('required',true);
 	$('#newPost').validator().on('submit', function (e) {
 	  	if (e.isDefaultPrevented()) {
 	    	$('#confirmDialog').html('form is not valid!Please check again')
@@ -644,7 +644,7 @@ $(function () {
 	
 	$('#searchButton').click();
 	
-	$(".select2").select2({
+	$("#keywordintegrasi").select2({
 		sorter: function(data) {
         return data.sort(function(a, b) {
             return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
