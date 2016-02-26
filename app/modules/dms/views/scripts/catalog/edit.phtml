@@ -389,7 +389,7 @@ $(function () {
             return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
         });
     	}
-	}).on("select2:select", function (e) { 
+	}).on("#keywordintegrasi:select", function (e) { 
     $('.select2-selection__rendered li.select2-selection__choice').sort(function(a, b) {
         return $(a).text() < $(b).text() ? -1 : $(a).text() > $(b).text() ? 1 : 0;
     }).prependTo('.select2-selection__rendered');
