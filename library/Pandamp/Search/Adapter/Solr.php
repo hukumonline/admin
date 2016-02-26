@@ -276,6 +276,8 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
 	  	  	  		$part->content = (new Pandamp_Utility_Posts)->sanitize_post_content($rowAttr->value);
 	  	  	  		break;
 	  	  	  	case 'fixedNarsum':
+					$part->narsum = array_map('trim', explode(',', $rowAttr->value));
+					break;
 	  	  	  	case 'fixedKeywords':
 	  	  	  		$part->keywords = array_map('trim', explode(',', $rowAttr->value));
 	  	  	  		break;
