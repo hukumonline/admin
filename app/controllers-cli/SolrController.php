@@ -1332,7 +1332,7 @@ class SolrController extends Application_Controller_Cli
 	public function getCountCatalog($guid, $profileGuid, $type, $lang='id')
 	{
 		$valueText=null;
-		if (isset($profileGuid) && !in_array($profileGuid, array('partner','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
+		if (isset($profileGuid) && !in_array($profileGuid, array('partner','narsum','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
 			switch ($type) {
 				case 'desktop':
 					if (in_array($profileGuid, array('article','isuhangat','kutu_agenda'))) {
