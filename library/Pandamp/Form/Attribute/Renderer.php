@@ -417,7 +417,9 @@ class Pandamp_Form_Attribute_Renderer
 	        	$view->label = $this->label;
 				$view->name = $this->name.'[]';
 				$view->id = $this->name;
-				$view->value = $this->value;
+				$r = explode(",", $this->value);
+				$view->value = "'" . implode("','", $r) . "'";
+				$view->profile = 'narsum';
 				$view->defaultValues = $data;
 				$view->setScriptPath(dirname(__FILE__));
 				return $view->render('select3.phtml');

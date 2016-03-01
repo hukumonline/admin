@@ -4,14 +4,7 @@
 		<select class="form-control select2" name="<?php echo $this->name;?>" id="<?php echo $this->id;?>" multiple="multiple" data-placeholder="Select a Narasumber" style="width: 100%;">
 		<!--	<option value="0">---Pilih Salah Satu---</option>-->
 			<?php foreach($this->defaultValues as $val) {?>
-				<option value="<?php echo $val['value']?>" 
-					<?php 
-						if(isset($this->value) && $this->value != '')
-							if($val['value']== $this->value) echo 'selected';
-						else
-							if($val['selected']=='true') echo 'selected';
-					?>
-					>
+				<option value="<?php echo $val['value']?>">
 					<?php echo $val['label'];?>
 				</option>
 			<?php }?>
@@ -31,7 +24,9 @@ $(function () {
         return $(a).text() < $(b).text() ? -1 : $(a).text() > $(b).text() ? 1 : 0;
     }).prependTo('.select2-selection__rendered');
 	});
-	
+	<?php if ($this->profile=='narsum' && isset($this->value)) : ?>
+	$("#<?php echo $this->id;?>").select2('val',[<?php echo $this->value; ?>]);
+	<?php endif; ?>
 
 });
 <?php $this->headScript()->captureEnd(); ?>
