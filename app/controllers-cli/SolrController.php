@@ -1502,7 +1502,7 @@ class SolrController extends Application_Controller_Cli
 				{
 					case 'application/pdf':
 						
-						$ch = curl_init('http://175.103.48.153:8983/solr/corehol/update/extract?literal.id='.$guid.'&literal.name=content&commit=true');
+						$ch = curl_init('http://175.103.48.153:8983/solr/corehol/update/extract?literal.id='.$guid.'&commit=true');
 						curl_setopt ($ch, CURLOPT_POSTFIELDS, array('myfile'=>new CurlFile($sDir)));
 						curl_setopt ($ch, CURLOPT_POST, 1);
 						$result = curl_exec ($ch);
