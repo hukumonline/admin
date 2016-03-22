@@ -1502,11 +1502,7 @@ class SolrController extends Application_Controller_Cli
 				{
 					case 'application/pdf':
 						
-						$registry = Zend_Registry::getInstance();
-						$application = Zend_Registry::get(Pandamp_Keys::REGISTRY_APP_OBJECT);
-						$res = $application->getOption('resources')['indexing']['solr']['write'];
-						
-						$ch = curl_init($res["host"].":".$res["port"].$res["dir1"].'/update/extract?literal.id='.$guid.'&literal.name=content&commit=true');
+						$ch = curl_init('http://192.168.0.61:8983/solr/update/extract?literal.id='.$guid.'&literal.name=content&commit=true');
 						curl_setopt ($ch, CURLOPT_POST, 1);
 						curl_setopt ($ch, CURLOPT_POSTFIELDS, array('myfile'=>'@'.$sDir));
 						$result = curl_exec ($ch);
