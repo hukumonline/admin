@@ -1504,6 +1504,8 @@ class SolrController extends Application_Controller_Cli
 						
 						$ch = curl_init('http://192.168.0.61:8983/solr/update/extract?literal.id='.$guid.'&literal.name=content&commit=true');
 						curl_setopt ($ch, CURLOPT_POSTFIELDS, array('myfile'=>'@'.$sDir));
+						//curl_setopt ($ch, CURLOPT_POST, 1);
+						
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 							'Content-Type: application/pdf'
 						));
