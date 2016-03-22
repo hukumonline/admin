@@ -1507,7 +1507,7 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt ($ch, CURLOPT_POST, 1);
 						$result = curl_exec ($ch);
 						
-						$pdfExtractor = $this->_pdfExtractor;
+						/*$pdfExtractor = $this->_pdfExtractor;
 						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);
 						if ($ret == 0)
 						{
@@ -1527,7 +1527,7 @@ class SolrController extends Application_Controller_Cli
 							return '';
 						if ($ret == 1)
 							print "Could not find pdf file.\n";
-							return '';
+							return '';*/
 						break;
 					case 'text/html':
 					case 'text/plain':
