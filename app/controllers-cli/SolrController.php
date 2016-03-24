@@ -1510,7 +1510,7 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type:multipart/form-data'));
 						$result = curl_exec ($ch);*/
 						
-						/*$mapping_array = [
+						$mapping_array = [
 							"literal.id" => $guid,
 							"fmap.content" => "content",
 							"commit" => "true"
@@ -1521,7 +1521,7 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
 						$cfile = curl_file_create($sDir);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
+						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => '@'.$cfile));
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));
 						//Execute curl.
 						if(!curl_exec($ch) == TRUE)
@@ -1529,9 +1529,9 @@ class SolrController extends Application_Controller_Cli
 							throw new Exception('Curl Error:' . curl_error($ch));
 							echo "<br/>Curl Error:<br/>" . curl_error($ch);
 						}
-						curl_close($ch);*/
+						curl_close($ch);
 						
-						system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
+						//system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
 						
 						/*$pdfExtractor = $this->_pdfExtractor;
 						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);
