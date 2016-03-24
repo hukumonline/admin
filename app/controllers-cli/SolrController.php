@@ -1503,12 +1503,32 @@ class SolrController extends Application_Controller_Cli
 					case 'application/pdf':
 						
 						//$ch = curl_init('http://175.103.48.153:8983/solr/corehol/update/extract?literal.id='.$guid.'&literal.name=content&commit=true');
-						$ch = curl_init('http://175.103.48.153:8983/solr/corehol/update/extract?literal.id='.$guid.'&fmap.content=content&commit=true');
+						/*$ch = curl_init('http://175.103.48.153:8983/solr/corehol/update/extract?literal.id='.$guid.'&fmap.content=content&commit=true');
 						curl_setopt ($ch, CURLOPT_POSTFIELDS, array('myfile'=>'@'.$sDir));
 						curl_setopt ($ch, CURLOPT_POST, 1);
 						curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type:multipart/form-data'));
-						$result = curl_exec ($ch);
+						$result = curl_exec ($ch);*/
+						
+						$mapping_array = [
+							"literal.id" => $guid,
+							"fmap.content" => "content",
+							"commit" => "true"
+						];
+						$ch = curl_init();
+						$solr_extraction_endpoint = "http://192.168.0.61:8983/solr/corehol/update/extract";
+						curl_setopt($ch, CURLOPT_POST, TRUE);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
+						$cfile = curl_file_create($sDir);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, array('file' => $cfile));
+						//Execute curl.
+						if(!curl_exec($ch) == TRUE)
+						{
+							throw new Exception('Curl Error:' . curl_error($ch));
+							echo "<br/>Curl Error:<br/>" . curl_error($ch);
+						}
+						curl_close($ch);
 						
 						/*$pdfExtractor = $this->_pdfExtractor;
 						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);
