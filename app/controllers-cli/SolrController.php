@@ -1506,6 +1506,7 @@ class SolrController extends Application_Controller_Cli
 						$ch = curl_init('http://175.103.48.153:8983/solr/corehol/update/extract?literal.id='.$guid.'&fmap.content=content&commit=true');
 						curl_setopt ($ch, CURLOPT_POSTFIELDS, array('myfile'=>'@'.$sDir));
 						curl_setopt ($ch, CURLOPT_POST, 1);
+						curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type:multipart/form-data'));
 						$result = curl_exec ($ch);
 						
