@@ -1524,7 +1524,7 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_HEADER, true);
 						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						
-						$args['file'] = curl_file_create($sDir, 'application/pdf', $fileName);
+						$args['file'] = curl_file_create('@'.$sDir, 'application/pdf', $fileName);
 						//curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
 						
