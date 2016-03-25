@@ -1516,17 +1516,13 @@ class SolrController extends Application_Controller_Cli
 							"commit" => "true"
 						];
 						$ch = curl_init();
-						$solr_extraction_endpoint = "http://192.168.0.61:8983/solr/corehol/update/extract";
+						$solr_extraction_endpoint = "http://175.103.48.153:8983/solr/corehol/update/extract";
 						curl_setopt($ch, CURLOPT_POST, TRUE);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
-						//$cfile = curl_file_create($sDir);
+						$cfile = curl_file_create($sDir);
 						
-						//$args['myfile'] = curl_file_create($sDir);
-						//$args['file'] = curl_file_create($sDir, 'multipart/form-data', $fileName);
-						$args['myfile'] = new CurlFile($sDir);
-						//curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
-						curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						
 						//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));
 						//Execute curl.
