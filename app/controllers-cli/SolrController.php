@@ -1521,10 +1521,9 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
 						$cfile = curl_file_create($sDir);
-						
+						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));						
 						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						
-						//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));
 						//Execute curl.
 						if(!curl_exec($ch) == TRUE)
 						{
