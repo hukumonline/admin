@@ -1524,7 +1524,8 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_HEADER, true);
 						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						
-						$args['file'] = curl_file_create($sDir, 'multipart/form-data', $fileName);
+						$args['file'] = curl_file_create($sDir);
+						//$args['file'] = curl_file_create($sDir, 'multipart/form-data', $fileName);
 						//curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
 						
@@ -1537,6 +1538,7 @@ class SolrController extends Application_Controller_Cli
 							echo "<br/>Curl Error:<br/>" . curl_error($ch);
 						}
 						$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+						echo $solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')."\n";
 						echo $httpCode;
 						curl_close($ch);
 						
