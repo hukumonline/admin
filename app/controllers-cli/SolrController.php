@@ -1529,12 +1529,15 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
 						
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));
+						curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 						//Execute curl.
 						if(!curl_exec($ch) == TRUE)
 						{
 							throw new Exception('Curl Error:' . curl_error($ch));
 							echo "<br/>Curl Error:<br/>" . curl_error($ch);
 						}
+						$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+						echo $httpCode;
 						curl_close($ch);
 						
 						//system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
