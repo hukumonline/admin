@@ -1081,7 +1081,7 @@ class SolrController extends Application_Controller_Cli
 				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType, $lang);
 				//$sContent = $this->clean_string_input($sContent);
 			}
-			else
+			/*else
 				$sContent = '';
 			
 			
@@ -1092,7 +1092,7 @@ class SolrController extends Application_Controller_Cli
 			else
 			{
 				$part->content = $sContent;
-			}
+			}*/
 		}
 		}
 		return $part;
@@ -1521,7 +1521,7 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
 						$cfile = curl_file_create($sDir);
-						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));						
+						//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));						
 						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						
 						//Execute curl.
