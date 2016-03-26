@@ -1515,9 +1515,9 @@ class SolrController extends Application_Controller_Cli
 							"fmap.content" => "content",
 							"commit" => "true"
 						];
-						$ch = curl_init();
+						//$ch = curl_init();
 						$solr_extraction_endpoint = "http://175.103.48.153:8983/solr/corehol/update/extract";
-						curl_setopt($ch, CURLOPT_POST, TRUE);
+						/*curl_setopt($ch, CURLOPT_POST, TRUE);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
 						$cfile = curl_file_create($sDir);
@@ -1530,6 +1530,26 @@ class SolrController extends Application_Controller_Cli
 							throw new Exception('Curl Error:' . curl_error($ch));
 							echo "<br/>Curl Error:<br/>" . curl_error($ch);
 						}
+						curl_close($ch);*/
+						
+						$cfile = getCurlValue($sDir,'application/pdf',$fileName);
+						$data = array('file' => $cfile);
+						$ch = curl_init();
+						$options = array(CURLOPT_URL => ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')),
+								CURLOPT_RETURNTRANSFER => true,
+								CURLINFO_HEADER_OUT => true, //Request header
+								CURLOPT_HEADER => true, //Return header
+								CURLOPT_SSL_VERIFYPEER => false, //Don't veryify server certificate
+								CURLOPT_POST => true,
+								CURLOPT_POSTFIELDS => $data
+						);
+						
+						curl_setopt_array($ch, $options);
+						$result = curl_exec($ch);
+						$header_info = curl_getinfo($ch,CURLINFO_HEADER_OUT);
+						$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+						$header = substr($result, 0, $header_size);
+						$body = substr($result, $header_size);
 						curl_close($ch);
 						
 						//system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
@@ -1595,6 +1615,23 @@ class SolrController extends Application_Controller_Cli
 		}
 		
 		return;
+	}
+	
+	function getCurlValue($filename, $contentType, $postname)
+	{
+		// PHP 5.5 introduced a CurlFile object that deprecates the old @filename syntax
+		// See: https://wiki.php.net/rfc/curl-file-upload
+		if (function_exists('curl_file_create')) {
+			return curl_file_create($filename, $contentType, $postname);
+		}
+	
+		// Use the old style if using an older version of PHP
+		$value = "@{$this->filename};filename=" . $postname;
+		if ($contentType) {
+			$value .= ';type=' . $contentType;
+		}
+	
+		return $value;
 	}
 	
 	function clean_string_input($input)
