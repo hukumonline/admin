@@ -1552,16 +1552,16 @@ class SolrController extends Application_Controller_Cli
 						$body = substr($result, $header_size);
 						curl_close($ch);*/
 						
-						//system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
-						system('curl "'.($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')).'" -F "myfile=@"'.$sDir.' '.$outpath, $ret);
+						system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
+						//system('curl "'.($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')).'" -F "myfile=@"'.$sDir);
 						
 						/*$pdfExtractor = $this->_pdfExtractor;
-						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);*/
+						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);
 						if ($ret == 0)
 						{
 							$value = file_get_contents($outpath);
 							unlink($outpath);
-							//echo 'content PDF: '. $sDir.' ' . strlen($value)."\n";
+							echo 'content PDF: '. $sDir.' ' . strlen($value)."\n";
 							if(strlen($value) > 20)
 								return (new Pandamp_Utility_Posts)->sanitize_post_content($value);
 							else
@@ -1575,7 +1575,7 @@ class SolrController extends Application_Controller_Cli
 							return '';
 						if ($ret == 1)
 							print "Could not find pdf file.\n";
-							return '';
+							return '';*/
 						break;
 					case 'text/html':
 					case 'text/plain':
