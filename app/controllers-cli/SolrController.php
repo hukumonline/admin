@@ -1532,7 +1532,7 @@ class SolrController extends Application_Controller_Cli
 						}
 						curl_close($ch);*/
 						
-						$cfile = $this->getCurlValue($sDir,'application/pdf',$fileName);
+						$cfile = $this->getCurlValue($sDir,'multipart/form-data',$fileName);
 						$data = array('file' => $cfile);
 						$ch = curl_init();
 						$options = array(CURLOPT_URL => ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')),
