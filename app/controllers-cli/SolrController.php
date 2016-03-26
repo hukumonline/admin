@@ -1512,7 +1512,6 @@ class SolrController extends Application_Controller_Cli
 						
 						$mapping_array = [
 							"literal.id" => "$guid",
-							"fmap.content" => "content",
 							"commit" => "true"
 						];
 						//$ch = curl_init();
