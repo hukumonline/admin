@@ -1609,13 +1609,13 @@ class SolrController extends Application_Controller_Cli
 						}
 						break;
 					default :
-						return '';
+						//return '';
 						break;
 				}
 			}
 		}
 		
-		return;
+		//return;
 	}
 	
 	function getCurlValue($filename, $contentType, $postname)
