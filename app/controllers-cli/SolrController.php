@@ -1099,7 +1099,7 @@ class SolrController extends Application_Controller_Cli
 			unset($part->_text_);
 		}
 		}
-		Pandamp_Debug::manager($part);
+		
 		return $part;
 	}
 	
