@@ -1552,7 +1552,7 @@ class SolrController extends Application_Controller_Cli
 						$body = substr($result, $header_size);
 						curl_close($ch);*/
 						
-						shell_exec('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
+						shell_exec('curl "http://175.103.48.153:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
 						//system('curl "'.($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')).'" -F "myfile=@"'.$sDir);
 						
 						/*$pdfExtractor = $this->_pdfExtractor;
