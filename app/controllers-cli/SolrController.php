@@ -1515,7 +1515,7 @@ class SolrController extends Application_Controller_Cli
 							"fmap.content" => "content",
 							"commit" => "true"
 						];
-						//$ch = curl_init();
+						$ch = curl_init();
 						$solr_extraction_endpoint = "http://192.168.0.61:8983/solr/corehol/update/extract";
 						curl_setopt($ch, CURLOPT_POST, TRUE);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
