@@ -1081,7 +1081,7 @@ class SolrController extends Application_Controller_Cli
 				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType, $lang);
 				//$sContent = $this->clean_string_input($sContent);
 			}
-			/*else
+			else
 				$sContent = '';
 			
 			
@@ -1092,14 +1092,9 @@ class SolrController extends Application_Controller_Cli
 			else
 			{
 				$part->content = $sContent;
-			}*/
-		}
-		if ($part->_text_ == 0)
-		{
-			unset($part->_text_);
+			}
 		}
 		}
-		
 		return $part;
 	}
 	
@@ -1522,11 +1517,11 @@ class SolrController extends Application_Controller_Cli
 						];
 						//$ch = curl_init();
 						$solr_extraction_endpoint = "http://192.168.0.61:8983/solr/corehol/update/extract";
-						/*curl_setopt($ch, CURLOPT_POST, TRUE);
+						curl_setopt($ch, CURLOPT_POST, TRUE);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
 						$cfile = curl_file_create($sDir);
-						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));						
+						//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));						
 						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						
 						//Execute curl.
@@ -1535,8 +1530,8 @@ class SolrController extends Application_Controller_Cli
 							throw new Exception('Curl Error:' . curl_error($ch));
 							echo "<br/>Curl Error:<br/>" . curl_error($ch);
 						}
-						curl_close($ch);*/
-						
+						curl_close($ch);
+						die;
 						/*$cfile = $this->getCurlValue($sDir,'multipart/form-data',$fileName);
 						$data = array('file' => $cfile);
 						$ch = curl_init();
@@ -1557,7 +1552,7 @@ class SolrController extends Application_Controller_Cli
 						$body = substr($result, $header_size);
 						curl_close($ch);*/
 						
-						system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
+						//system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
 						//system('curl "'.($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')).'" -F "myfile=@"'.$sDir);
 						
 						/*$pdfExtractor = $this->_pdfExtractor;
