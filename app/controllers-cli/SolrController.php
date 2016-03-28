@@ -1095,7 +1095,6 @@ class SolrController extends Application_Controller_Cli
 			}*/
 		}
 		}
-		Pandamp_Debug::manager($part);
 		return $part;
 	}
 	
