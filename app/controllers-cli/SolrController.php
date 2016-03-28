@@ -64,7 +64,6 @@ class SolrController extends Application_Controller_Cli
 			try {
 				$solr->addDocuments( $documents );
 				$solr->commit();
-				Pandamp_Debug::manager($solr);
 				//$solr->optimize();
 			}
 			catch ( Exception $e ) {
@@ -1082,7 +1081,7 @@ class SolrController extends Application_Controller_Cli
 				$sContent = $this->_extractText($row->guid, $docSystemName, $docOriginalName, $docMimeType, $lang);
 				//$sContent = $this->clean_string_input($sContent);
 			}
-			else
+			/*else
 				$sContent = '';
 			
 			
@@ -1093,9 +1092,10 @@ class SolrController extends Application_Controller_Cli
 			else
 			{
 				$part->content = $sContent;
-			}
+			}*/
 		}
 		}
+		Pandamp_Debug::manager($part);
 		return $part;
 	}
 	
@@ -1555,7 +1555,7 @@ class SolrController extends Application_Controller_Cli
 						
 						system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
 						//system('curl "'.($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')).'" -F "myfile=@"'.$sDir);
-						return;
+						
 						/*$pdfExtractor = $this->_pdfExtractor;
 						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);
 						if ($ret == 0)
