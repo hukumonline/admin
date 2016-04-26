@@ -13,8 +13,9 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$kopel = (isset($this->params['kopel']))? $this->params['kopel'] : '';
 		$lang = (isset($this->params['lang']))? $this->params['lang'] : 'id';
 		
-		if ($lang !== 'en')
+		if ($lang !== 'en') {
 			$this->toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang);
+		}
 		
 		$this->toSolr($catalogGuid, $lang);
 		$this->toDoc($catalogGuid, $lang);
@@ -68,6 +69,10 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		
 		$catalog = $this->getCatalog($catalogGuid, ['profileGuid','shortTitle'], $lang);
+		
+		if (!$catalog) {
+			echo $catalogGuid;die;
+		}
 		
 		if ($catalog->profileGuid == 'kutu_doc') {
 			$this->log()->notice('guid: ' . $catalogGuid . ' adalah dokumen tidak perlu shortUrl');
