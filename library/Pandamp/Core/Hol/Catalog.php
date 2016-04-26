@@ -55,13 +55,16 @@ class Pandamp_Core_Hol_Catalog
         $catalogGuid = (isset($aData['guid']) && !empty($aData['guid']))? $aData['guid'] : $gman->generateGuid();
         $folderGuid = (isset($aData['folderGuid']) && !empty($aData['folderGuid']))? $aData['folderGuid'] : '';
 
+        if (isset($aData['shortTitle']) && !empty($aData['shortTitle']))
+        	$slug = $aData['shortTitle'];
+        
         //if not empty, there are 2 possibilities
         $where = $tblCatalog->getAdapter()->quoteInto('guid=?', $catalogGuid);
         if($tblCatalog->fetchRow($where))
         {
             $rowCatalog = $tblCatalog->find($catalogGuid)->current();
 
-            $rowCatalog->shortTitle = (isset($aData['shortTitle']))?$aData['shortTitle']:$slug;
+            $rowCatalog->shortTitle = $slug;
             $rowCatalog->publishedDate = (isset($aData['publishedDate']))?$aData['publishedDate']:$rowCatalog->publishedDate;
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))?$aData['expiredDate']:$rowCatalog->expiredDate;
             $rowCatalog->status = (isset($aData['status']))?$aData['status']:$rowCatalog->status;
@@ -73,7 +76,7 @@ class Pandamp_Core_Hol_Catalog
             $rowCatalog = $tblCatalog->fetchNew();
 
             $rowCatalog->guid = $catalogGuid;
-            $rowCatalog->shortTitle = (isset($aData['shortTitle']))?$aData['shortTitle']:$slug;
+            $rowCatalog->shortTitle = $slug;
             $rowCatalog->profileGuid = $profileGuid;
             $rowCatalog->publishedDate = (isset($aData['publishedDate']))? $aData['publishedDate']:'0000-00-00 00:00:00';
             $rowCatalog->expiredDate = (isset($aData['expiredDate']))? $aData['expiredDate'] : '0000-00-00 00:00:00';
