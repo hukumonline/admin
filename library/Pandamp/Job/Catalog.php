@@ -71,7 +71,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$catalog = $this->getCatalog($catalogGuid, ['profileGuid','shortTitle'], $lang);
 		
 		if (!$catalog) {
-			echo $catalogGuid;die;
+			return true;
 		}
 		
 		if ($catalog->profileGuid == 'kutu_doc') {
