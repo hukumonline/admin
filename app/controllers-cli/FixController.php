@@ -84,7 +84,12 @@ class FixController extends Application_Controller_Cli
 		$select->from('KutuCatalog', '*');
 		$select->where("profileGuid NOT IN ('partner','narsum','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup')");
 		$select->where("status=?",99);
-		$select->where("createdDate >= DATE_SUB(CURDATE(),INTERVAL $day DAY)"); // within the $day last
+		
+		if ($day==1)
+			$select->where("createdDate >= DATE_SUB(NOW(),INTERVAL 1 DAY)"); // NOW() return exactly to the second
+		else
+			$select->where("createdDate >= DATE_SUB(CURDATE(),INTERVAL $day DAY)"); // within the $day last
+		
 		$rowsFound = $db->fetchAll($select);
 		
 		echo 'There are '.count($rowsFound)." catalog(s)\n";
@@ -103,31 +108,21 @@ class FixController extends Application_Controller_Cli
 		
 			echo 'urutan: '.$iCount ." - ";
 		
+			try {
 				
-			if ($row->profileGuid=='klinik')
-				$title = $this->getCatalogAttribute($row->guid, 'fixedCommentTitle');
-			else
-				$title = $this->getCatalogAttribute($row->guid, 'fixedTitle');
-				
-				
-			if ($title) {
-		
-				try {
-					
-					$desktop = $this->getCountCatalog($row->guid, $row->profileGuid, 'desktop');
-					$mobile = $this->getCountCatalog($row->guid, $row->profileGuid, 'mobile');
-		
-					//update document
-					/*$this->addHitsBySolr(json_encode([[
-							"id" => $row->guid,
-							"desktop" => ["set" => $desktop],
-							"mobile" => ["set" => $mobile]
-						]]));*/
-				}
-				catch (Zend_Exception $e)
-				{
-					throw new Zend_Exception($e->getMessage());
-				}
+				$desktop = $this->getCountCatalog($row->guid, $row->profileGuid, 'desktop');
+				$mobile = $this->getCountCatalog($row->guid, $row->profileGuid, 'mobile');
+	
+				//update document
+				$this->addHitsBySolr(json_encode([[
+						"id" => $row->guid,
+						"desktop" => ["set" => $desktop],
+						"mobile" => ["set" => $mobile]
+					]]));
+			}
+			catch (Zend_Exception $e)
+			{
+				throw new Zend_Exception($e->getMessage());
 			}
 				
 			echo "guid:[".$row->guid."]desktop:[".$desktop."]mobile:[".$mobile."][".$row->createdDate."]".$n."\n";
