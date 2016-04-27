@@ -82,6 +82,7 @@ class FixController extends Application_Controller_Cli
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$select = $db->select();
 		$select->from('KutuCatalog', '*');
+		$select->where("profileGuid NOT IN ('partner','narsum','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup')");
 		$select->where("status=?",99);
 		$select->where("createdDate >= DATE_SUB(CURDATE(),INTERVAL $day DAY)"); // within the $day last
 		$rowsFound = $db->fetchAll($select);
