@@ -82,6 +82,7 @@ class FixController extends Application_Controller_Cli
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$select = $db->select();
 		$select->from('KutuCatalog', '*');
+		$select->where("status=?",99);
 		$select->where("createdDate >= DATE_SUB(CURDATE(),INTERVAL $day DAY)"); // within the $day last
 		$rowsFound = $db->fetchAll($select);
 		
