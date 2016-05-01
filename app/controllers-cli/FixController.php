@@ -139,7 +139,7 @@ class FixController extends Application_Controller_Cli
 	{
 		$indexing = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','indexing');
 	
-		$ch = curl_init('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=10000');
+		$ch = curl_init('http://'.$indexing->solr->write->host.':'.$indexing->solr->write->port.$indexing->solr->write->dir1.'/update?commitWithin=100000');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
