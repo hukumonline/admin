@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Description of Catalog
- *
- * @author nihki <nihki@madaniyah.com>
- */
 class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
 {
     protected $_name = 'KutuCatalog';
@@ -22,5 +16,58 @@ class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
 
         parent::_setupDatabaseAdapter();
     }
+    
+	public function convert($entity)
+	{
+		return new App_Model_Catalog($entity); 
+	}
+	
+    public function fetchCatalogInFolder($folderGuid = null, $start = null, $end = null, $order = null, $attr = null)
+    {
+    	$select = $this->select()->from('KutuCatalog');
+    
+    	if ($folderGuid !== null) {
+    		$select->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array())
+    		->where('KutuCatalogFolder.folderGuid=?',$folderGuid);
+    	}
+    		
+    	if ($attr) {
+    		if (isset($attr['status']) && !empty($attr['status'])) {
+    			$select->where('status = ?', $attr['status']);
+    		}
+    	}
+    		
+    	if ($order !== null) {
+    		$select->order('KutuCatalog.'.$order);
+    	}
+    		
+    	if ($start !== null || $end !== null) {
+    		$select->limit($end,$start);
+    	}
+    	/*$sql = $select->__toString();
+    		print_r($sql);die;*/
+    	$rs = $select->query()->fetchAll();
+    	return new Pandamp_Model_RecordSet($rs, $this);
+    }
+    
+	public function getCountCatalogInFolder($folderGuid=null, $attr = null)
+	{
+		$select = $this->select()
+				  ->from('KutuCatalog',array('num_files'=>'COUNT(*)'));
+		
+		if ($folderGuid !== null) {
+			$select->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array())
+			->where('KutuCatalogFolder.folderGuid=?',$folderGuid);
+		}
+		
+		if ($attr) {
+			if (isset($attr['status']) && !empty($attr['status'])) {
+				$select->where('status = ?', $attr['status']);
+			}
+		}
+		 
+		$row = $select->query()->fetch();
+		return ($row) ? $row['num_files'] : 0;
+	}
+	
 }
-?>

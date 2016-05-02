@@ -7,6 +7,81 @@
  */
 class Api_FolderController extends Zend_Controller_Action
 {
+	public function getchildreninjson2Action()
+	{
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+		 
+		// Make sure nothing is cached
+		header("Cache-Control: must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+		header("Expires: ".gmdate("D, d M Y H:i:s", mktime(date("H")-2, date("i"), date("s"), date("m"), date("d"), date("Y")))." GMT");
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+		header('Content-Type: application/json');
+	
+		sleep(1);
+	
+		$acl = Pandamp_Acl::manager();
+	
+		$auth = Zend_Auth::getInstance();
+		if (!$auth->hasIdentity()) {
+			echo "You aren't login";
+		}
+	
+		$identity = $auth->getIdentity();
+	
+		$username = $identity->username;
+	
+		$id = ($_REQUEST["id"]=="#")?"root":$_REQUEST["id"];
+	
+		$aJson = array();
+	
+		$folder = new App_Model_Db_Table_Folder();
+		$rowset = $folder->fetchChildren($id);
+	
+		$i=0;
+		foreach ($rowset as $row) {
+			if (($identity->name == "Master") || ($identity->name == "Super Admin"))
+				$content = 'all-access';
+			else
+				$content = $row->type;
+			 
+			if ($acl->getPermissionsOnContent('', $identity->name, $content))
+			{
+				if ($row->title == "Kategori" || $row->title == "Peraturan" || $row->title == "Putusan")
+				{
+					$title = "<font color=red><b>".$row->title."</b></font>";
+				}
+				else
+				{
+					$title = $row->title;
+				}
+				 
+				$aJson[$i]['id'] = $row->guid;
+				$aJson[$i]['text'] = $title;
+				$checkLeaf = $folder->fetchAll("path like '%$row->guid/%'");
+				if ($checkLeaf->count() > 0)
+				{
+					$aJson[$i]['children'] = true;
+				}
+				else
+				{
+					$aJson[$i]['children'] = false;
+				}
+	
+			}
+			else
+			{
+				continue;
+			}
+			 
+			$i++;
+		}
+		 
+		$this->_response->setBody(Zend_Json::encode($aJson));
+	}
+	
     public function getchildreninjsonAction()
     {
         // Make sure nothing is cached

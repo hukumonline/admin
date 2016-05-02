@@ -1,0 +1,69 @@
+<header class="main-header">
+	<!-- Logo -->
+	<a href="<?php echo ROOT_URL; ?>" class="logo">
+		<!-- mini logo for sidebar mini 50x50 pixels -->
+		<span class="logo-mini"><b>N</b>P</span>
+		<!-- logo for regular state and mobile devices -->
+		<span class="logo-lg"><b>Hol</b>NP-BETA</span>
+	</a>
+	<nav class="navbar navbar-static-top" role="navigation">
+		<!-- Sidebar toggle button-->
+		<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</a>
+		<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav">
+				<?php if ($this->getLanguage() == "id") : ?>
+				<li class="active notifications-menu">
+					<a href="#">Indonesia</a>
+				</li>
+				<li class="messages-menu">
+					<a href="<?php echo ROOT_URL; ?>/en" target="_blank">
+						English
+					</a>
+				</li>
+				<?php else : ?>
+				<li class="active notifications-menu">
+					<a href="#">English</a>
+				</li>
+				<li class="messages-menu">
+					<a href="<?php echo ROOT_URL; ?>/id" target="_blank">
+						Indonesia
+					</a>
+				</li>
+				<?php endif; ?>
+				<?php $auth = Zend_Auth::getInstance(); ?>
+				<?php if ($auth->hasIdentity()) : ?>
+				<!-- User Account: style can be found in dropdown.less -->
+				<li class="dropdown user user-menu">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  		<img src="<?php echo $this->UA(); ?>" class="user-image" alt="User Image">
+                  		<span class="hidden-xs"><?php echo $auth->getIdentity()->fullName; ?></span>
+                	</a>
+                	<ul class="dropdown-menu">
+                		<!-- User image -->
+                		<li class="user-header">
+                    		<img src="<?php echo $this->UA(); ?>" class="img-circle" alt="User Image">
+                    		<p><?php echo $auth->getIdentity()->fullName; ?></p>
+                  		</li>
+                  		<!-- Menu Footer-->
+                  		<li class="user-footer">
+                    		<div class="pull-left">
+                      			<a href="<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $this->getLanguage(); ?>/customer/user/edit/id/<?php echo $auth->getIdentity()->kopel; ?>" class="btn btn-default btn-flat">Profile</a>
+                    		</div>
+                    		<div class="pull-right">
+                      			<a href="<?php echo Pandamp_Application::getResource('identity')->logoutUrl.'/returnUrl/'.base64_encode("http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']); ?>" class="btn btn-default btn-flat">Sign out</a>
+                    		</div>
+                  		</li>	
+                	</ul>
+				</li>
+				<?php endif; ?>
+				
+			</ul>
+		
+		</div>
+	</nav>
+</header>

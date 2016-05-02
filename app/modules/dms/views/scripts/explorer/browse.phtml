@@ -1,169 +1,310 @@
-<!-- Left column/section -->
-<section class="column width6 first">
-	<h3><?php echo $this->flashMessenger(); ?></h3>	
-    <div class="colgroup leading">
-        <div class="column width6 first">
-            <?php
-            if ($this->getLanguage() == 'id')
-                $tag = "www.hukumonline.com";
-            else
-                $tag = "en.hukumonline.com";
-            ?>
+<?php 
+$this->headLink()
+	->appendStylesheet($this->cdn('scripts') . '/plugins/iCheck/flat/blue.css');
 
-            <div id="myjquerymenu" class="jquerycssmenu">
-            <ul>
-                <li><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/new/node/<?php echo $this->currentNode; ?>">New</a></li>
-                <li><a href="#" id="linkEditFolder">Edit</a></li>
-                <li><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/search">Search Folder</a></li>
-                <li><a href="#" id="linkMoveFolder">Move to</a></li>
-                <li><a href="#" id="linkCopyFolder">Copy to</a></li>
-                <li><a href="#" id="linkDeleteFolder">Delete</a></li>
-                <li><a href="#" id="linkForceDeleteFolder">Force Delete Folders and Its Catalogs</a></li>
-            </ul>
-            <br style="clear: left" />
-            </div>
-            
-            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
-            <?php echo $this->slideMenu->render(); ?>
+$this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/iCheck/icheck.min.js');
 
-            <fieldset>
-                <legend>Navigation</legend>
-                <?php echo $this->widget2->render(); ?>
-            </fieldset>
-            <fieldset>
-                <legend>Data Center</legend>
-                <?php echo $this->widget1->render(); ?>
-            </fieldset>
-            <h5>Number of Catalogs: <?php echo $this->totalItems; ?> Record(s)</h5>
-            <form id="frmCatalogs" name="frmCatalogs" method="post">
-                <div class="align-left">
-                Sort By:
-                <select id="sort" name="sort">
-                    <option value="title">Title</option>
-                    <option value="publishedDate">Published Date</option>
-                    <option value="createdDate">Created Date</option>
-                </select>
-                <select id="sortBy" name="sortBy">
-                    <option value="asc">Ascending</option>
-                    <option value="desc" selected>Descending</option>
-                </select>
-                </div>
-                <div class="align-right">
-                <select id="ws" name="ws">
-                    <option value="withselected">With selected:</option>
-                    <option value="delete">Delete</option>
-                    <option value="edit">Edit</option>
-                    <option value="copy">Copy</option>
-                    <option value="move">Move</option>
-                    <option value="recycle">Recycle</option>
-                </select>
-                </div>
-                <div style="display:none"></div>
-                <table class="display stylized" id="catalog">
-                    <thead>
-                        <tr>
-                            <th><input name="select_deselect" value="1" type="checkbox"></th>
-                            <th>Title</th>
-                            <th>Section</th>
-                            <th>Published</th>
-                            <th>Created on</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php //foreach ($this->hits->response->docs as $hit) {  ?>
-                    <?php 
-                    $now = date('Y-m-d H:i:s');
-                    foreach ($this->hits as $hit) { 
-                    ?>
-                        <tr>
-                            <td><input type='checkbox' name='catalogGuid[]' id='catalogGuid' value='<?php echo $hit['guid']; ?>' class="check_me"></td>
-                            <td>
-                                <?php if($hit['profileGuid'] == 'kutu_doc') { ?>
-                                    <a href="<?php echo ROOT_URL; ?>/browser/downloadfile/guid/<?php echo $hit['guid']; ?>"><div class="searchResultTitle">File: <?php try { echo $this->getCatalogAttribute($hit['guid'],'fixedTitle').' ['.$hit['guid'].']'; } catch (Exception $e) { echo ''; } ?></div></a>
-                                <?php } else if ($hit['profileGuid'] == 'clinic' || $hit['profileGuid'] == 'klinik') { ?>
-                                    <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $hit['guid']; ?>/node/<?php echo $this->currentNode; ?>" title="<?php echo $this->getCatalogAttribute($hit['guid'],'fixedDescription'); ?>"><?php try { echo $this->getCatalogAttribute($hit['guid'],'fixedCommentTitle'); } catch (Exception $e) { echo 'No-Title'; } ?></a>
-                                <?php } else { ?>
-                                    <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $hit['guid']; ?>/node/<?php echo $this->currentNode; ?>" title="<?php echo $this->getCatalogAttribute($hit['guid'],'fixedDescription'); ?>"><?php try { echo $this->getCatalogAttribute($hit['guid'],'fixedTitle'); } catch (Exception $e) { echo 'No-Title'; } ?></a>
-                                <?php } ?>
-                                <br><small>id:<?php echo $hit['guid']; ?> - by: <?php echo $hit['createdBy']; ?>&nbsp;<span class="subtitle"><?php echo $hit['publishedDate']; ?></span></small>
-                                <?php if ($hit['profileGuid'] == 'klinik') { ?>
-                                <?php $rowUser = App_Model_Show_User::show()->getUserByName($hit['createdBy']); ?>
-                                <br><small><?php echo $rowUser['email']; ?></small>
-                                <?php } ?>
-                            </td>
-                            <td><abbr><?php echo $hit['profileGuid']; ?></abbr></td>
-                            <td>
-                                <?php 
-                                
-//                                $t = str_replace("Z", "", $hit['publishedDate']);
-//                                $d = explode("T", $t);
-//                                $publishedDate = $d[0].' '.$d[1];
-//
-//                                $et = str_replace("Z", "", $hit['expiredDate']);
-//                                $ed = explode("T", $et);
-//                                $expiredDate = $ed[0].' '.$ed[1];
-//                                if ($expiredDate == "1999-12-31 00:00:00") $expiredDate = '0000-00-00 00:00:00';
+?>
 
-                                if ($now <= $hit['publishedDate'] && $hit['status'] == 99) {
-                                    $status = "publish_y";
-                                    $ht = "Published, but is Pending";
-                                }
-				else if (($now <= $hit['expiredDate'] || $hit['expiredDate'] == '0000-00-00 00:00:00') && $hit['status'] == 99) {
-                                    $status = "publish_g";
-                                    $ht = "Published and is Current";
-				} 
-				else if ($now > $hit['expiredDate'] && $hit['status'] == 99) {
-                                    $status = "publish_r";
-                                    $ht = "Published, but has Expired";
-				}
-				else if ($hit['status'] == 0 || $hit['status'] == 1) {
-                                    $status = "publish_x";
-                                    $ht = "Not Published";
-				}
-				else if ($hit['status'] == -1) {
-                                    $status = "disabled";
-                                    $ht = "Archived";
-				}
-                                ?>
-
-                                <div class="ta-center" title="<?php echo $ht; ?>">
-                                    <img src="<?php echo $this->cdn('images'); ?>/<?php echo $status; ?>.png">
-                                </div>
-                            </td>
-                            <td nowrap>
-                                <?php echo date('d.m.y H:i:s',strtotime($hit['createdDate'])); ?><br>
-                                <small>modifiedBy: <?php echo $hit['modifiedBy']; ?></small>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                    </tbody>
-                </table>
-            </form>
-            <table width='100%'>
-            <tr>
-                <td align=right><div id='catalogPagination' class="pagination"></div></td>
-            </tr>
-            </table>
-        </div>
-    </div>
-
-
-    <div class="clear">&nbsp;</div>
-
+<section class="content-header">
+<?php echo $this->breadcrumbs->render(); ?>
 </section>
-<!-- End of Left column/section -->
+<div id="dialog-catalog" class="hide">
+	<h4>Profile:</h4>
+	<?php echo $this->profile(null,true); ?>
+</div>
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<form method="post" action="" name="catalogForm" id="catalogForm" class="form-horizontal" role="form">
+					<div class="box-header with-border">
+						<h3 class="box-title">&nbsp;</h3>
+						<div class="box-tools pull-left">
+						
+						</div>	
+					</div>
+					<div class="box-body no-padding">
+						<div class="mailbox-controls">
+							<a href="javascript:;" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
+							<div class="btn-group">
+								<a href="javascript:;" class="btn btn-default btn-sm deletecatalog"><i class="fa fa-trash-o"></i> Delete</a>
+								<a href="javascript:;" class="btn btn-default btn-sm editcatalog"><i class="fa fa-edit"></i> Edit</a>
+								<a href="javascript:;" id="newcatalog" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Add New</a>
+							</div>
+							<a href="javascript:;" class="btn btn-default btn-sm copycatalog"><i class="fa fa-copy"></i> Copy</a>
+							<a href="javascript:;" class="btn btn-default btn-sm movecatalog"><i class="fa fa-exchange"></i> Move</a>
+							<div class="pull-right">
+								<?php
+									$start=($this->paginator['current']-1)*$this->limit;
+									$s1=$start+1;
+									$position = $this->paginator['current'] * $this->limit;
+								?>
+								<?php echo $s1.'-'.$position; ?>/<?php echo $this->totalItems; ?>
+								<div class="btn-group">
+								<?php if(isset($this->paginator['previous'])): ?>
+								<a class="btn btn-default btn-sm" href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->currentNode; ?>/page/<?php echo $this->paginator['previous']; ?>"><i class="fa fa-chevron-left"></i></a>
+								<?php else: ?>
+								<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-left"></i></a>
+								<?php endif; ?>
+								
+								<?php if(isset($this->paginator['next'])): ?>
+								<a class="btn btn-default btn-sm" href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->currentNode; ?>/page/<?php echo $this->paginator['next']; ?>"><i class="fa fa-chevron-right"></i></a>
+								<?php else: ?>
+								<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-right"></i></a>
+								<?php endif; ?>
+								</div>
+							</div>
+						</div>
+						<div class="table-responsive mailbox-messages">
+							<table class="table table-hover table-striped">
+								<?php $now = date('Y-m-d H:i:s'); ?>
+								<?php foreach ($this->rowset as $row) : ?>
+								<tbody>
+									<td><input type="checkbox" name='catalogGuid[]' id='catalogGuid' value='<?php echo $row->guid; ?>'></td>
+									<td class="mailbox-star">
+									<?php
+									if ($now <= $row->publishedDate && $row->status == 99) {
+										$status = "publish_y";
+										$ht = "Published, but is Pending";
+									}
+									else if (($now <= $row->expiredDate || $row->expiredDate == '0000-00-00 00:00:00') && $row->status == 99) {
+										$status = "publish_g";
+										$ht = "Published and is Current";
+									}
+									else if ($now > $row->expiredDate && $row->status == 99) {
+										$status = "publish_r";
+										$ht = "Published, but has Expired";
+									}
+									else if ($row->status == 0) {
+										$status = "publish_x";
+										$ht = "Draft";
+									}
+									else if ($row->status == -1) {
+										$status = "disabled";
+										$ht = "Archived";
+									}
+									else if ($row->status == 2) {
+										$status = "exclamation";
+										$ht = "UnPublished";
+									}
+									else if ($row->status == 1) {
+										$status = "cancel";
+										$ht = "Not Applicable";
+									}
+									else if ($row->status == -2) {
+										$status = "delete";
+										$ht = "Deleted";
+									}
+									
+									?>
+									<span title="<?php echo $ht; ?>">
+										<img class="middle" src="<?php echo $this->cdn('images'); ?>/<?php echo $status; ?>.png">
+									</span>
+									
+									</td>
+									<td class="mailbox-name"><?php echo $row->createdBy; ?></td>
+									<td class="mailbox-subject">
+										<?php if ($row->profileGuid == 'kutu_doc') : ?>
+										<a href="">File: <?php echo $this->getCatalogAttribute($row->guid,'fixedTitle'); ?></a>
+										<?php elseif ($row->profileGuid == 'clinic' || $row->profileGuid == 'klinik') : ?>
+										<a href=""><?php echo $this->getCatalogAttribute($row->guid,'fixedCommentTitle'); ?></a>
+										<?php elseif ($row->profileGuid == 'comment') : ?>
+										<a href=""><?php echo $this->getCatalogAttribute($row->guid,'fixedJudul'); ?></a>
+										<?php else : ?>
+										<a href=""><?php echo $this->getCatalogAttribute($row->guid,'fixedTitle'); ?></a>
+										<?php endif; ?>
+									
+									</td>
+									<td class="mailbox-date"><?php if (isset($row->createdDate) && ($row->createdDate != "0000-00-00 00:00:00")) : echo Pandamp_Lib_Formater::get_date($row->createdDate); endif; ?></td>
+								</tbody>
+								<?php endforeach; ?>
+							</table>
+						</div>
+					</div>
+					<div class="box-footer no-padding">
+						<div class="mailbox-controls">
+							<div class="form-inline" style="float:left">
+								<div class="btn-group">
+									<label>Show
+										<select name="showperpage" id="showperpage" onchange="this.form.submit()" class="form-control">
+											<?php if ($this->totalItems < 11) { ?>
+											<option value="10">10 rows</option>
+											<?php } else if ($this->totalItems < 26) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<?php } else if ($this->totalItems < 51) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<?php } else if ($this->totalItems < 101) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<option value="100">100 rows</option>
+											<?php } else if ($this->totalItems < 251) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<option value="100">100 rows</option>
+											<option value="250">250 rows</option>
+											<?php } else { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<option value="100">100 rows</option>
+											<option value="250">250 rows</option>
+											<option value="500">500 rows</option>
+											<?php } ?>
+										</select>
+									</label>
+								</div>
+								<div class="btn-group">
+									<label>Status
+										<?php echo $this->catalogStatus(array('id' => 'status', 'name' => 'status', 'class' => 'form-control')); ?>
+									</label>
+								</div>
+							</div>
+							<div class="pull-right">
+								<?php
+									$start=($this->paginator['current']-1)*$this->limit;
+									$s1=$start+1;
+									$position = $this->paginator['current'] * $this->limit;
+								?>
+								<?php echo $s1.'-'.$position; ?>/<?php echo $this->totalItems; ?>
+								<div class="btn-group">
+								<?php if(isset($this->paginator['previous'])): ?>
+								<a class="btn btn-default btn-sm" href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->currentNode; ?>/page/<?php echo $this->paginator['previous']; ?>"><i class="fa fa-chevron-left"></i></a>
+								<?php else: ?>
+								<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-left"></i></a>
+								<?php endif; ?>
+								
+								<?php if(isset($this->paginator['next'])): ?>
+								<a class="btn btn-default btn-sm" href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/<?php echo $this->currentNode; ?>/page/<?php echo $this->paginator['next']; ?>"><i class="fa fa-chevron-right"></i></a>
+								<?php else: ?>
+								<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-right"></i></a>
+								<?php endif; ?>
+								</div>
+							</div>
+							
+						</div>
+						
+					</div>
+				</form>
+			</div>		
+		</div>
+	</div>
+</section>
+<?php $this->headScript()->captureStart(); ?>
+$(function () {
+    $("#showperpage").val('<?php echo $this->layout()->showperpage; ?>');
+    $("#status").val('<?php echo $this->layout()->status; ?>');
+    
+	$('.mailbox-messages input[type="checkbox"]').iCheck({
+		checkboxClass: 'icheckbox_flat-blue',
+		radioClass: 'iradio_flat-blue'
+	});
 
-<!-- Right column/section -->
-<aside class="column width2">
-    <div id="rightmenu">
-        <?php echo $this->action('sidebar','user','customer'); ?>
-    </div><br>
-    <div id="showDiv1" style="width:100%;text-align:center;">
-    <?php echo $this->action('browse','manager','agenda'); ?>
-    <?php //echo $this->ajaxActionRenderer(ROOT_URL.'/'.$this->getLanguage().'/agenda/manager/browse'); ?>
-    </div>
-    <div class="content-box">
-        <?php echo $this->action('rightdown','misc','dms',array('node'=>$this->currentNode)); ?>
-    </div>
-</aside>
-<!-- End of Right column/section -->
+	//Enable check and uncheck all functionality
+	$(".checkbox-toggle").click(function () {
+		var clicks = $(this).data('clicks');
+		if (clicks) {
+			//Uncheck all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+			$(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+		} else {
+			//Check all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("check");
+			$(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+		}
+		$(this).data("clicks", !clicks);
+	});
+
+	$("#newcatalog").click(function(){
+		var dialogcatalog = $( "#dialog-catalog" ).removeClass('hide').dialog({
+			width: 420,
+			modal: true,
+			title: "New Catalog",
+			buttons: [{
+				text: "Cancel",
+				"class" : "btn btn-xs",
+				click: function() {
+					$(this).dialog("close");
+				}
+			},
+			{
+				text: "OK",
+				"class" : "btn btn-primary btn-xs",
+				click: function() {
+					var idPredefineDetail=$(this).closest( "#dialog-catalog" ).children("select[name=profile]").val();
+					if (idPredefineDetail) {
+						window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/new/profile/"+idPredefineDetail+"/node/<?php echo $this->currentNode; ?>";
+					}
+				}
+			}
+			]
+		});
+	});
+	
+	$(".editcatalog").click(function() {
+		var ids = new Array();
+		$('input[type="checkbox"]:checked').each(function() {
+			ids.push($(this).val());
+		});
+
+		for(var i = 0; i< ids.length; i++){
+			var href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/edit/guid/"+ids[i]+"/node/<?php echo $this->currentNode; ?>";
+			window.open(href,"_blank");
+		}
+		
+		return false;
+	});
+
+	$(".deletecatalog").click(function() {
+		checkValues = new Array();
+		a=0;
+    	$('input[type="checkbox"]:checked').each(function(){
+        	checkValues[a]=$(this).val();
+        	a++;
+		});	
+		if(checkValues.length==0)
+        {
+        	alert('NO CATALOG SELECTED');
+            return false;
+        }
+		window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/delete-confirm/guid/"+checkValues;
+	});
+	
+	$(".copycatalog").click(function() {
+		checkValues = new Array();
+		a=0;
+    	$('input[type="checkbox"]:checked').each(function(){
+        	checkValues[a]=$(this).val();
+        	a++;
+		});
+		if(checkValues.length==0)
+        {
+        	alert('NO CATALOG SELECTED');
+            return false;
+        }
+		window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/copy-folder/guid/"+checkValues;	
+	});
+
+	$(".movecatalog").click(function() {
+		checkValues = new Array();
+		a=0;
+    	$('input[type="checkbox"]:checked').each(function(){
+        	checkValues[a]=$(this).val();
+        	a++;
+		});
+		if(checkValues.length==0)
+        {
+        	alert('NO CATALOG SELECTED');
+            return false;
+        }
+		window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/move-folder/sourceNode/"+currentNode+"/guid/"+checkValues;	
+	});
+
+});
+<?php $this->headScript()->captureEnd(); ?>
