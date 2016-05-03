@@ -1,0 +1,28 @@
+<?php 
+if (Zend_Controller_Front::getInstance()->getRouter()->getCurrentRouteName() == 'dms_catalog_add')
+	$title = 'Site';
+elseif ($this->layout()->folderGuid=='root')
+	$title = 'Catalog';
+else 
+	$title = $this->getFolder($this->layout()->folderGuid)->title;
+?>
+<?php
+if ($this->getLanguage() == 'id')
+	$tag = "www.hukumonline.com";
+elseif ($this->getLanguage() == 'id')
+	$tag = "en.hukumonline.com";
+else 
+	$tag = "Below are the list of catalogs:";
+?>
+<h1><?php echo $title; ?> <small><?php echo $tag; ?></small></h1>
+<ol class="breadcrumb">
+	<?php for ($i=0; $i<count($this->aPath);$i++) : ?>
+		<?php if ($i != count($this->aPath)-1) : ?>
+	    <li><a href="<?php echo $this->aPath[$i]['url']; ?>"><?php echo str_replace('Root','Home',$this->aPath[$i]['title']); ?></a></li>
+		<?php else : ?>
+	    <li><a href="<?php echo $this->aPath[$i]['url']; ?>"><?php echo str_replace('Root','Home',$this->aPath[$i]['title']); ?></a></li>
+		<?php endif; ?>
+	
+	<?php endfor; ?>
+
+</ol>
