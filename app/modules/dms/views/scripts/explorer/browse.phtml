@@ -109,11 +109,11 @@ $this->headScript()
 										<?php if ($row->profileGuid == 'kutu_doc') : ?>
 										<a href="">File: <?php echo $this->getCatalogAttribute($row->guid,'fixedTitle'); ?></a>
 										<?php elseif ($row->profileGuid == 'clinic' || $row->profileGuid == 'klinik') : ?>
-										<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $row->guid; ?>/node/<?php echo $this->currentNode; ?>"><?php echo $this->getCatalogAttribute($row->guid,'fixedCommentTitle'); ?></a>
+										<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $row->guid; ?>/node/<?php echo $this->currentNode; ?>" target="_blank"><?php echo $this->getCatalogAttribute($row->guid,'fixedCommentTitle'); ?></a>
 										<?php elseif ($row->profileGuid == 'comment') : ?>
 										<a href=""><?php echo $this->getCatalogAttribute($row->guid,'fixedJudul'); ?></a>
 										<?php else : ?>
-										<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $row->guid; ?>/node/<?php echo $this->currentNode; ?>"><?php echo $this->getCatalogAttribute($row->guid,'fixedTitle'); ?></a>
+										<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $row->guid; ?>/node/<?php echo $this->currentNode; ?>" target="_blank"><?php echo $this->getCatalogAttribute($row->guid,'fixedTitle'); ?></a>
 										<?php endif; ?>
 									
 									</td>
