@@ -1,8 +1,13 @@
 <?php 
 $this->headLink()
-	->appendStylesheet($this->cdn('scripts') . '/plugins/iCheck/flat/blue.css');
+	->appendStylesheet($this->cdn('scripts') . '/plugins/daterangepicker/daterangepicker-bs3.css')
+	->appendStylesheet($this->cdn('scripts') . '/plugins/iCheck/flat/blue.css')
+	->appendStylesheet($this->cdn('scripts') . '/plugins/timepicker/bootstrap-timepicker.min.css');
 
 $this->headScript()
+	->appendFile('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js')
+	->appendFile($this->cdn('scripts') . '/plugins/daterangepicker/daterangepicker.js')
+	->appendFile($this->cdn('scripts') . '/plugins/timepicker/bootstrap-timepicker.min.js')
 	->appendFile($this->cdn('scripts') . '/plugins/iCheck/icheck.min.js');
 
 ?>
@@ -10,9 +15,86 @@ $this->headScript()
 <section class="content-header">
 <?php echo $this->breadcrumbs->render(); ?>
 </section>
+<!-- Select Profile -->
 <div id="dialog-catalog" class="hide">
 	<h4>Profile:</h4>
 	<?php echo $this->profile(null,true); ?>
+</div>
+<!-- Advanced Search -->
+<div id="advs-modal-form" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue bigger">Advanced Search</h4>
+			</div>
+			<div class="modal-body no-padding">
+				<table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+				<tbody>
+					<tr>
+						<td>Query</td>
+						<td>
+							<input name="p" type="text" placeholder="Search ..." class="form-control input-xlarge" id="modal-search-input" />
+						</td>
+					</tr>
+					<tr>
+						<td>Profile</td>
+						<td>
+							<?php echo $this->profile(); ?>
+						</td>
+					</tr>
+					<tr>
+						<td>Tanggal</td>
+						<td>
+							<div class="input-group">
+								<button class="btn btn-default pull-right" id="drp">
+                        			<i class="fa fa-calendar"></i> Date range picker
+                        			<i class="fa fa-caret-down"></i>
+                      			</button>
+							</div>
+						
+						</td>
+					</tr>
+					<tr>
+						<td>Start Time</td>
+						<td>
+							<div class="input-group bootstrap-timepicker" style="width: 180px">
+								<input id="timepicker1" type="text" class="form-control" />
+								<span class="input-group-addon">
+									<i class="fa fa-clock-o"></i>
+								</span>
+							</div>
+						
+						</td>
+					</tr>
+					<tr>
+						<td>End Time</td>
+						<td>
+							<div class="input-group bootstrap-timepicker" style="width: 180px">
+								<input id="timepicker2" type="text" class="form-control" />
+								<span class="input-group-addon">
+									<i class="fa fa-clock-o"></i>
+								</span>
+							</div>
+						
+						</td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<a href="javascript:;" class="btn btn-sm" data-dismiss="modal">
+					<i class="icon-remove"></i>
+					Cancel
+				</a>
+				
+				<a href="javascript:;" id="goadv" class="btn btn-sm btn-primary">
+					<i class="icon-search"></i>
+					GO
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
 <section class="content">
 	<div class="row">
@@ -219,6 +301,78 @@ $(function () {
 			$(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
 		}
 		$(this).data("clicks", !clicks);
+	});
+	
+	$('#drp').daterangepicker(
+            {
+              format: 'YYYY-MM-DD',	
+              ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+              },
+              startDate: moment().subtract(29, 'days'),
+              endDate: moment()
+            },
+        function (start, end) {
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+	);
+	
+	$('#timepicker1').timepicker({
+		defaultTime:'0',
+		minuteStep: 1,
+		showSeconds: true,
+		showMeridian: false
+	}).next().on('click', function(){
+		$(this).prev().focus();
+	});
+	
+	$('#timepicker2').timepicker({
+		minuteStep: 1,
+		showSeconds: true,
+		showMeridian: false
+	}).next().on('click', function(){
+		$(this).prev().focus();
+	});
+	
+	$("#goadv").click(function(){
+		var query = $("#modal-search-input").val(),
+			profile = $("#profile").val(), 
+			drp1 = $("input[name='daterangepicker_start']").val(), 
+			drp2 = $("input[name='daterangepicker_end']").val(), 
+			tp1 = $("#timepicker1").val(), 
+			tp2 = $("#timepicker2").val();
+			
+		var selq='';
+		if (query !== '') {
+			selq = query;
+		}
+		if ($("#profile option:selected").val() !== '') {
+			if (query !== '') {
+				selq += ' profile:'+profile;
+			}
+			else
+			{
+				selq += 'profile:'+profile;
+			}
+			
+		}
+		if (drp1 !== '' && drp2 !== '') {
+			if ((query !== '') || ($("#profile option:selected").val() !== '')) {
+				selq += ' <?php echo $this->layout()->sort; ?>:[' + drp1 + 'T' + tp1 + 'Z TO ' + drp2 + 'T' + tp2 + 'Z]';
+			}
+			else 
+			{
+				selq += '<?php echo $this->layout()->sort; ?>:[' + drp1 + 'T' + tp1 + 'Z TO ' + drp2 + 'T' + tp2 + 'Z]';
+			}
+			
+		}
+		
+		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=" + encodeURIComponent(selq).replace(/%20/g,'+');
 	});
 
 	$("#newcatalog").click(function(){

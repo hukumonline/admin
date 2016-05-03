@@ -83,6 +83,7 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		
 		$this->_helper->layout()->showperpage = $limit;
 		$this->_helper->layout()->status = $status;
+		$this->_helper->layout()->sort = $sort;
 		
 		$this->view->assign('currentNode', $node);
 		$this->view->assign('limit', $limit);
