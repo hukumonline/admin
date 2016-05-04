@@ -106,7 +106,32 @@ class Pandamp_Core_Hol_Catalog
         $rowsetCatalogAttribute = $rowCatalog->findDependentRowsetCatalogAttribute();
         foreach ($rowsetProfileAttribute as $rowProfileAttribute)
         {
-            if($rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid))
+        	$aid = $rowProfileAttribute->attributeGuid;
+        	$rowCatalogAttribute = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue( $catalogGuid, $rowProfileAttribute->attributeGuid);
+        	if ($rowCatalogAttribute)
+        	{
+        		$ca = new App_Model_Db_Table_CatalogAttribute();
+        		$ca->update(
+        			[
+        				'value' => $aData[$aid]
+        			], 
+        			[
+        				'catalogGuid = ?' => $catalogGuid,
+        				'attributeGuid = ?'	=> $rowProfileAttribute->attributeGuid
+        			]
+        		);
+        	}
+        	else
+        	{
+        		$ca = new App_Model_Db_Table_CatalogAttribute();
+        		$ca->insert([
+        			'catalogGuid' => $catalogGuid,
+        			'attributeGuid' => $rowProfileAttribute->attributeGuid,
+        			'value'	=> $aData[$aid]
+        		]);
+        	}
+        	
+            /*if($rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid))
             {
                 $rowCatalogAttribute = $rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid);
             }
@@ -117,11 +142,11 @@ class Pandamp_Core_Hol_Catalog
                 $rowCatalogAttribute->catalogGuid = $catalogGuid;
                 $rowCatalogAttribute->attributeGuid = $rowProfileAttribute->attributeGuid;
 
-            }
+            }*/
 
-            $rowCatalogAttribute->value = (isset($aData[$rowProfileAttribute->attributeGuid]))?$aData[$rowProfileAttribute->attributeGuid]:'';
+//             $rowCatalogAttribute->value = (isset($aData[$rowProfileAttribute->attributeGuid]))?$aData[$rowProfileAttribute->attributeGuid]:'';
 
-            $rowCatalogAttribute->save();
+//             $rowCatalogAttribute->save();
         }
         
         //category
