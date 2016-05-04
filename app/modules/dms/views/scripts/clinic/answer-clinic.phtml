@@ -47,17 +47,7 @@ div.tagsinput div { display:block; float: left; }
 <?php $this->headTitle('Jawab klinik'); ?>
 <!-- Content Header (Page header) -->
 <section class="content-header">
-	<?php
-	if ($this->getLanguage() == 'id')
-		$tag = "www.hukumonline.com";
-	else
-		$tag = "en.hukumonline.com";
-	?>
-	<h1>
-		Site
-		<small><?php echo $tag; ?></small>
-	</h1>
-	<?php echo $this->widget2->render(); ?>
+<?php echo $this->breadcrumbs->render(); ?>
 </section>
 <!-- Main content -->
 <section class="content">
@@ -349,7 +339,17 @@ $(function () {
             return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
         });
     	}
-	}).on("select2:select", function (e) { 
+	})
+	.on("change",function(e){
+		console.log($(this).val());
+		$.post('<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/updcattr',
+		{
+			attr:$(this).attr('id'),
+			value:$(this).val(),
+			guid:'<?php echo $this->catalogGuid; ?>'			
+		});
+	})
+	.on("select2:select", function (e) { 
     $('.select2-selection__rendered li.select2-selection__choice').sort(function(a, b) {
         return $(a).text() < $(b).text() ? -1 : $(a).text() > $(b).text() ? 1 : 0;
     }).prependTo('.select2-selection__rendered');
@@ -385,7 +385,24 @@ $(function () {
 		sideBySide: true
 	});
 	
-	$('#fixedKeywords').tagsInput();
+	$('#fixedKeywords').tagsInput({onAddTag:function(e,t) {
+		$.post('<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/updcattr',
+		{
+			attr:$(this).attr('id'),
+			value:$(this).val(),
+			guid:'<?php echo $this->catalogGuid; ?>'			
+		});
+	},
+	onRemoveTag:function(t){
+		$.post('<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/updcattr',
+		{
+			attr:$(this).attr('id'),
+			value:t,
+			act:'del',
+			guid:'<?php echo $this->catalogGuid; ?>'			
+		});
+	}
+	});
 	
 	$("[rel=tooltip]").tooltip({ placement: 'right'});
 	
@@ -733,6 +750,41 @@ $(function () {
 		
 	});
 	
+	//var data = new Object();
+	$('#fixedDescription,#fixedCommentTitle,#fixedSelectMitra,#fixedSelectNama,#fixedKategoriKlinik').change(function(){
+		//data[$(this).attr('name')] = $(this).val();
+		//console.log($(this).val());
+		$('#confirmDialog').html('').addClass('mloading');
+		$.ajax({
+			url:'<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/updcattr',
+			type: 'POST',
+			data: {
+				attr:$(this).attr('name'),
+				value:$(this).val(),
+				guid:'<?php echo $this->catalogGuid; ?>'
+			},
+			success: function(response) {
+				if ('RESULT_OK' == response) {
+					/*$('#messageDialog').html('Data has been updated successfully.')
+					.dialog({
+						width: 420,
+						resizable: false,
+						modal: true,
+						title: "Message",
+						open: function(event, ui) {
+							setTimeout(function() {
+									$('#' + event.target.id).dialog('option', 'hide', 'fade').dialog('destroy');
+									$('#confirmDialog').removeClass('mloading');
+									$('#messageDialog').html('');
+									
+								}, 3000);
+						}
+					});*/
+				}
+			}
+		});
+	});
+	
 });
 
 function updateImageSet(el)
@@ -775,4 +827,46 @@ function addFormAttribute(v,fileId,name)
 	"<input type='text' name='attr_" + v + "_" + fileId + "[]' class='form-control' placeholder='"+ucfirst(v)+": "+name+"'></div>"+
 	"</div>");
 }
+
+function FCKeditor_OnComplete( editorInstance ){
+	editorInstance.Events.AttachEvent( 'OnBlur', function(){
+		var inst = FCKeditorAPI.GetInstance(editorInstance.Name);
+		var sValue = inst.GetHTML();
+		$('#confirmDialog').html('').addClass('mloading');
+		$.ajax({
+			url:'<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/updcattr',
+			type: 'POST',
+			data: {
+				attr:editorInstance.Name,
+				value:sValue,
+				guid:'<?php echo $this->catalogGuid; ?>'
+			},
+			success: function(response) {
+				if ('RESULT_OK' == response) {
+					if (editorInstance.Name == 'fixedCommentQuestion')
+						var t = "Your Question";
+					else
+						var t = "Your Answer";
+						
+					$('#messageDialog').html(t + ' has been updated successfully.')
+					.dialog({
+						width: 420,
+						resizable: false,
+						modal: true,
+						title: "Message",
+						open: function(event, ui) {
+							setTimeout(function() {
+									$('#' + event.target.id).dialog('option', 'hide', 'fade').dialog('destroy');
+									$('#confirmDialog').removeClass('mloading');
+									$('#messageDialog').html('');
+									
+								}, 3000);
+						}
+					});
+				}
+			}
+		});
+	}) ;
+}
+
 <?php $this->headScript()->captureEnd(); ?>
