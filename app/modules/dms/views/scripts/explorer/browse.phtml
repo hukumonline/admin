@@ -238,7 +238,7 @@ $(function () {
 				text: "OK",
 				"class" : "btn btn-primary btn-xs",
 				click: function() {
-					var idPredefineDetail=$(this).closest( "#dialog-catalog" ).children("select[name=profile]").val();
+					var idPredefineDetail=$(this).closest( "#dialog-catalog" ).children("select[name=pg]").val();
 					if (idPredefineDetail) {
 						window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/new/profile/"+idPredefineDetail+"/node/<?php echo $this->currentNode; ?>";
 					}
