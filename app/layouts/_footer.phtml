@@ -132,7 +132,7 @@ $(function () {
 	
 	$("#goadv").click(function(){
 		var query = $("#modal-search-input").val(),
-			profile = $("#profile").val(), 
+			profile = $("#advs-modal-form select[name=pg] option:selected").val(), 
 			drp1 = $("input[name='daterangepicker_start']").val(), 
 			drp2 = $("input[name='daterangepicker_end']").val(), 
 			tp1 = $("#timepicker1").val(), 
@@ -142,7 +142,7 @@ $(function () {
 		if (query !== '') {
 			selq = query;
 		}
-		if ($("#profile option:selected").val() !== '') {
+		if ($("#advs-modal-form #pg option:selected").val() !== '') {
 			if (query !== '') {
 				selq += ' profile:'+profile;
 			}
@@ -153,7 +153,7 @@ $(function () {
 			
 		}
 		if (drp1 !== '' && drp2 !== '') {
-			if ((query !== '') || ($("#profile option:selected").val() !== '')) {
+			if ((query !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
 				selq += ' <?php echo $this->layout()->sort; ?>:[' + drp1 + 'T' + tp1 + 'Z TO ' + drp2 + 'T' + tp2 + 'Z]';
 			}
 			else 
@@ -162,7 +162,7 @@ $(function () {
 			}
 			
 		}
-		
+
 		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=" + encodeURIComponent(selq).replace(/%20/g,'+');
 	});
 });
