@@ -32,7 +32,7 @@ class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
     	}
     		
     	if ($attr) {
-    		if (isset($attr['status']) && !empty($attr['status'])) {
+    		if (isset($attr['status']) && ($attr['status']!== '')) {
     			$select->where('status = ?', $attr['status']);
     		}
     	}
