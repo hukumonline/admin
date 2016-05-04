@@ -667,8 +667,9 @@ $(function () {
     		if (cqValue) {
 			    $("#showfckdatquestion").val(cqValue);   
 			}
-			
-    		var vardata = $('#editPost').serialize();
+			var jsCurrentNode = $("#dmstree").jstree("get_selected");
+    		var vardata = $('#editPost').serializeArray();
+    		vardata.push({name: 'selectedNode', value: jsCurrentNode});
     		$('.box-footer > button').attr({'disabled':'disabled'});
     		$('#wait').html('Simpan database...tunggu...').addClass('label label-warning').fadeIn();
     		$.post('', vardata, function(data){
