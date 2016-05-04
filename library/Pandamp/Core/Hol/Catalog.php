@@ -91,7 +91,7 @@ class Pandamp_Core_Hol_Catalog
         }
         try
         {
-//             $catalogGuid = $rowCatalog->save();
+            $catalogGuid = $rowCatalog->save();
         }
         catch (Exception $e)
         {
@@ -121,7 +121,7 @@ class Pandamp_Core_Hol_Catalog
 
             $rowCatalogAttribute->value = (isset($aData[$rowProfileAttribute->attributeGuid]))?$aData[$rowProfileAttribute->attributeGuid]:'';
 
-//             $rowCatalogAttribute->save();
+            $rowCatalogAttribute->save();
         }
         
         //category
