@@ -23,7 +23,7 @@ class Pandamp_Controller_Action_Helper_Profile
         $tblProfile = new App_Model_Db_Table_Profile();
         $row = $tblProfile->fetchAll();
 
-        $select_profile = "<select name=\"profile\" id=\"profile\" class=\"form-control\" style=\"width: 60%;\">\n";
+        $select_profile = "<select name=\"pg\" id=\"pg\" class=\"form-control\" style=\"width: 60%;\">\n";
         if ($profile) {
             $rowProfile = $tblProfile->find($profile)->current();
             $select_profile .= "<option value='$rowProfile->guid' selected>$rowProfile->title</option>";

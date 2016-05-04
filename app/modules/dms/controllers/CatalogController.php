@@ -579,11 +579,11 @@ class Dms_CatalogController extends Zend_Controller_Action
         $folderGuid = $r->getParam('node');
         $profileGuid = $r->getParam('profile');
 
-        $modDir = $this->getFrontController()->getModuleDirectory();
-        require_once($modDir.'/components/Menu/FolderBreadcrumbs.php');
-        $w = new Dms_Menu_FolderBreadcrumbs($folderGuid);
-        $this->view->widget2 = $w;
-        
+		$modDir = $this->getFrontController()->getModuleDirectory();
+		require_once($modDir.'/components/Menu/FolderBreadcrumbs2.php');
+		$w = new Dms_Menu_FolderBreadcrumbs2($folderGuid);
+		$this->view->assign('breadcrumbs', $w);
+		
         $this->view->profile = $profileGuid;
         
         $this->view->guid = (new Pandamp_Core_Guid())->generateGuid();
@@ -656,10 +656,10 @@ class Dms_CatalogController extends Zend_Controller_Action
         $message = "";
 
         $modDir = $this->getFrontController()->getModuleDirectory();
-        require_once($modDir.'/components/Menu/FolderBreadcrumbs.php');
-        $w = new Dms_Menu_FolderBreadcrumbs($sessHistory->currentNode);
-        $this->view->widget2 = $w;
-
+        require_once($modDir.'/components/Menu/FolderBreadcrumbs2.php');
+        $w = new Dms_Menu_FolderBreadcrumbs2($sessHistory->currentNode);
+        $this->view->assign('breadcrumbs', $w);
+        
         $modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
         
         $this->view->assign('catalog', $modelCatalog);

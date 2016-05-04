@@ -46,17 +46,7 @@ div.tagsinput div { display:block; float: left; }
 <?php $this->headTitle('Edit catalog'); ?>
 <!-- Content Header (Page header) -->
 <section class="content-header">
-	<?php
-	if ($this->getLanguage() == 'id')
-		$tag = "www.hukumonline.com";
-	else
-		$tag = "en.hukumonline.com";
-	?>
-	<h1>
-		Site
-		<small><?php echo $tag; ?></small>
-	</h1>
-	<?php echo $this->widget2->render(); ?>
+<?php echo $this->breadcrumbs->render(); ?>
 </section>
 <!-- Main content -->
 <section class="content">
@@ -705,7 +695,9 @@ $(function () {
         CKEDITOR.instances[instance].updateElement();
     }
     }
-    		var vardata = $('#editPost').serialize();
+    		var jsCurrentNode = $("#dmstree").jstree("get_selected");
+    		var vardata = $('#editPost').serializeArray();
+    		vardata.push({name: 'selectedNode', value: jsCurrentNode});
     		$('.box-footer > button').attr({'disabled':'disabled'});
     		$('#wait').html('Simpan database...tunggu...').addClass('label label-warning').fadeIn();
     		$.post('', vardata, function(data){

@@ -91,7 +91,7 @@ class Pandamp_Core_Hol_Catalog
         }
         try
         {
-            $catalogGuid = $rowCatalog->save();
+//             $catalogGuid = $rowCatalog->save();
         }
         catch (Exception $e)
         {
@@ -121,14 +121,37 @@ class Pandamp_Core_Hol_Catalog
 
             $rowCatalogAttribute->value = (isset($aData[$rowProfileAttribute->attributeGuid]))?$aData[$rowProfileAttribute->attributeGuid]:'';
 
-            $rowCatalogAttribute->save();
+//             $rowCatalogAttribute->save();
+        }
+        
+        //category
+        if (isset($aData['selectedNode']) && !empty($aData['selectedNode']))
+        {
+        	$categories = array_map('trim', explode(',', $aData['selectedNode']));
+        	
+        	$tblCatalogFolder = new App_Model_Db_Table_CatalogFolder();
+        	$cf = $tblCatalogFolder->fetchAll("catalogGuid='$catalogGuid'");
+        	if (count($cf)) {
+        		foreach ($cf as $cfol) {
+        			$cts[] = $cfol->folderGuid;
+        			if (!in_array($cfol->folderGuid, $categories))
+        			{
+        				$tblCatalogFolder->delete("catalogGuid='$cfol->catalogGuid' AND folderGuid='$cfol->folderGuid'");
+        			}
+        		}
+        	}
+        	
+        	foreach ($categories as $category)
+        	{
+        		$rowCatalog->copyToFolder($category);
+        	}
         }
 
         //save to table CatalogFolder only if folderGuid is not empty
-        if (!empty($folderGuid))
+        /*if (!empty($folderGuid))
         {
             $rowCatalog->copyToFolder($folderGuid);
-        }
+        }*/
         
         // copy to other categories
         /*if (!empty($aData['categories'])) {

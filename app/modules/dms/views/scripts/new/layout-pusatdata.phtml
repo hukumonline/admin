@@ -15,7 +15,9 @@
 		->prependStylesheet('//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css')
 		->prependStylesheet('//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css')
 		->prependStylesheet($this->cdn('styles') . '/bootstrap/css/bootstrap.min.css')
-		->prependStylesheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css');
+		->prependStylesheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
+		->prependStylesheet($this->cdn('scripts') . '/plugins/daterangepicker/daterangepicker-bs3.css')
+		->prependStylesheet($this->cdn('scripts') . '/plugins/timepicker/bootstrap-timepicker.min.css');
 	
 	?>
 	<!-- Bootstrap 3.3.5 -->
@@ -44,16 +46,7 @@
 		<?php echo $this->layout()->content; ?>
 	</div><!-- /.content-wrapper -->
 	
-	
-	<footer class="main-footer">
-       	<div class="pull-right hidden-xs">
-       		<b>Version</b> 2.3.0
-       	</div>
-       	<strong>&copy; 2015</strong>
-   	</footer>
-	<!-- Add the sidebar's background. This div must be placed
-           immediately after the control sidebar -->
-	<div style="position: fixed; height: auto;" class="control-sidebar-bg"></div>
+	<?php echo $this->render('_footer.phtml'); ?>
 </div>
 <script src="<?php echo $this->cdn('scripts'); ?>/hol/pandamp/namespace.js"></script>
 <script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jQuery-2.1.4.min.js"></script>
