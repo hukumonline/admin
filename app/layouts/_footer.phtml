@@ -5,7 +5,9 @@ $this->headScript()
 	->appendFile($this->cdn('scripts') . '/plugins/timepicker/bootstrap-timepicker.min.js');
 
 ?>
-
+<?php 
+if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
+?>
 <!-- Advanced Search -->
 <div id="advs-modal-form" class="modal fade" tabindex="-1">
 	<div class="modal-dialog">
