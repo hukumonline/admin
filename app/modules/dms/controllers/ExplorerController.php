@@ -57,8 +57,7 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		$node = $request->getParam('node','root');
 		$limit = $request->getParam('showperpage',25);
 		$status = $request->getParam('status');
-		$sort = $request->getParam('sort','createdDate');
-		$sortBy = $request->getParam('by','desc');
+		$sortby = $request->getParam('sortby','createdDate desc');
 		
 		$offset = ($pageIndex > 0) ? ($pageIndex - 1) * $limit : 0;
 		
@@ -73,11 +72,11 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		}
 		elseif ($node == "lt4b11e8c86c8a4") { // Published
 			$status = "99";
-			$sort = "publishedDate";
+			$sortby = "publishedDate desc";
 		}
 		
 		$catalogDb = new App_Model_Db_Table_Catalog();
-		$rowset = $catalogDb->fetchCatalogInFolder($node,$offset,$limit,$sort.' '.$sortBy,['status'=>$status]);
+		$rowset = $catalogDb->fetchCatalogInFolder($node,$offset,$limit,$sortby,['status'=>$status]);
 		$numOfRows = $catalogDb->getCountCatalogInFolder($node,['status'=>$status]);
 		
 		$paginator = new Zend_Paginator(new Pandamp_Utility_PaginatorAdapter($rowset, $numOfRows));
@@ -95,14 +94,17 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		$w = new Dms_Menu_FolderBreadcrumbs2($node);
 		$this->view->assign('breadcrumbs', $w);
 		
-		$this->_helper->layout()->showperpage = $limit;
-		$this->_helper->layout()->status = $status;
-		$this->_helper->layout()->sort = $sort;
-		
 		$this->view->assign('currentNode', $node);
 		$this->view->assign('limit', $limit);
 		$this->view->assign('totalItems',$numOfRows);
 		$this->view->assign('rowset',$rowset);
 		$this->view->assign('paginator',$paginator);
+		$this->view->assign('sortby',$sortby);
+		
+		$this->_helper->layout()->showperpage = $limit;
+		$this->_helper->layout()->status = $status;
+		
+		$sortby = str_replace(array("desc","asc"), "", $sortby);
+		$this->_helper->layout()->sort = trim($sortby);
 	}
 }

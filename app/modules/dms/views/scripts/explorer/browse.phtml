@@ -166,6 +166,16 @@ $this->headScript()
 										<?php echo $this->catalogStatus(array('id' => 'status', 'name' => 'status', 'class' => 'form-control')); ?>
 									</label>
 								</div>
+								<div class="btn-group">
+									<label>Sort
+										<select name="sortby" id="sortby" onchange="this.form.submit()" class="form-control">
+											<option value="createdDate asc">createdDate A TO Z</option>
+											<option value="createdDate desc">createdDate Z TO A</option>
+											<option value="publishedDate asc">publishedDate A To Z</option>
+											<option value="publishedDate desc">publishedDate Z To A</option>
+										</select>
+									</label>
+								</div>
 							</div>
 							<div class="pull-right">
 								<?php
@@ -201,6 +211,7 @@ $this->headScript()
 $(function () {
     $("#showperpage").val('<?php echo $this->layout()->showperpage; ?>');
     $("#status").val('<?php echo $this->layout()->status; ?>');
+    $("#sortby").val('<?php echo $this->sortby; ?>');
     
 	$('.mailbox-messages input[type="checkbox"]').iCheck({
 		checkboxClass: 'icheckbox_flat-blue',
