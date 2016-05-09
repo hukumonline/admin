@@ -26,7 +26,12 @@ class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
     {
     	$select = $this->select()->from('KutuCatalog');
     
-    	if ($folderGuid !== null) {
+		if (in_array($folderGuid, ['lt4b11ece54d870','lt4b11e8fde1e42','lt4b11ecf5408d2','lt4b11e8c86c8a4'])) {
+    		$select->where('profileGuid=?', 'klinik');
+    	}
+    		
+    	// Approved, Draft, NA, Published
+    	if ($folderGuid !== null & !in_array($folderGuid, ['lt4b11ece54d870','lt4b11e8fde1e42','lt4b11ecf5408d2','lt4b11e8c86c8a4'])) {
     		$select->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array())
     		->where('KutuCatalogFolder.folderGuid=?',$folderGuid);
     	}
@@ -36,7 +41,7 @@ class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
     			$select->where('status = ?', $attr['status']);
     		}
     	}
-    		
+    	
     	if ($order !== null) {
     		$select->order('KutuCatalog.'.$order);
     	}
@@ -55,7 +60,12 @@ class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
 		$select = $this->select()
 				  ->from('KutuCatalog',array('num_files'=>'COUNT(*)'));
 		
-		if ($folderGuid !== null) {
+		if (in_array($folderGuid, ['lt4b11ece54d870','lt4b11e8fde1e42','lt4b11ecf5408d2','lt4b11e8c86c8a4'])) {
+    		$select->where('profileGuid=?', 'klinik');
+    	}
+    		
+    	// Approved, Draft, NA, Published
+    	if ($folderGuid !== null & !in_array($folderGuid, ['lt4b11ece54d870','lt4b11e8fde1e42','lt4b11ecf5408d2','lt4b11e8c86c8a4'])) {
 			$select->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array())
 			->where('KutuCatalogFolder.folderGuid=?',$folderGuid);
 		}
