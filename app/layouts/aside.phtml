@@ -45,7 +45,27 @@ $(function () {
 		e.preventDefault();
 		var node = $(e.target).closest("li");
 		var href = node.children("a").attr("href");
-		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/"+node[0].id;
+		if (true)
+			switch(node.context.text)
+			{
+				case "Approved":
+					window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/1/node/"+node[0].id;
+					break;
+				case "Draft":
+					window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/0/node/"+node[0].id;
+					break;
+				case "NA":
+					window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/2/node/"+node[0].id;
+					break;
+				case "Published":	
+					window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/99/node/"+node[0].id;
+					break;
+				case "Selected":	
+					window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/clinic/browse/status/9/node/"+node[0].id;
+					break;
+				default:
+					window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/explorer/browse/node/"+node[0].id;
+			}
 		
 	})
 	.bind( "ready.jstree open_node.jstree", function (e, data) {
