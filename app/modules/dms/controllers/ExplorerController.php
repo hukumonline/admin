@@ -62,6 +62,15 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		
 		$offset = ($pageIndex > 0) ? ($pageIndex - 1) * $limit : 0;
 		
+		if ($node == "lt4b11ece54d870") // Approved
+			$status = "1";
+		elseif ($node == "lt4b11e8fde1e42") // Draft
+			$status = "0";
+		elseif ($node == "lt4b11ecf5408d2") // NA (Not Available)
+			$status = "2";
+		elseif ($node == "lt4b11e8c86c8a4") // Published
+			$status = "99";
+		
 		$catalogDb = new App_Model_Db_Table_Catalog();
 		$rowset = $catalogDb->fetchCatalogInFolder($node,$offset,$limit,$sort.' '.$sortBy,['status'=>$status]);
 		$numOfRows = $catalogDb->getCountCatalogInFolder($node,['status'=>$status]);
