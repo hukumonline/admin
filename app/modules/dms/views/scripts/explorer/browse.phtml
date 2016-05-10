@@ -63,6 +63,7 @@ $this->headScript()
 								<?php $now = date('Y-m-d H:i:s'); ?>
 								<?php foreach ($this->rowset as $row) : ?>
 								<tbody>
+								<tr>
 									<td><input type="checkbox" name='catalogGuid[]' id='catalogGuid' value='<?php echo $row->guid; ?>'></td>
 									<td class="mailbox-star">
 									<?php
@@ -119,6 +120,7 @@ $this->headScript()
 									
 									</td>
 									<td class="mailbox-date"><?php if (isset($row->createdDate) && ($row->createdDate != "0000-00-00 00:00:00")) : echo Pandamp_Lib_Formater::get_date($row->createdDate); endif; ?></td>
+								</tr>
 								</tbody>
 								<?php endforeach; ?>
 							</table>

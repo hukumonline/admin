@@ -1,4 +1,6 @@
-<table width="100%">
+<div class="table-responsive mailbox-messages">
+<table class="table table-hover table-striped">
+	<tbody>	
     <tr>
         <td class="ta-left">
             <table>
@@ -10,14 +12,14 @@
                     if ($this->rowCatalog->profileGuid == "kutu_putusan") {
                     if (($row['name'] == "Title") || ($row['name'] == "Sub Title")) {
                     ?>
-                        <td width="200">&nbsp;</td>
+                        <td width="100">&nbsp;</td>
                     <?php } else { ?>
-                        <td width="200"><h6><?php echo $row['name']; ?></h6></td>
+                        <td width="100"><h5><?php echo $row['name']; ?></h5></td>
                     <?php 
                     }
                     }
                     else { ?>
-                        <td width="200"><h6><?php echo $row['name']; ?></h6></td>
+                        <td width="100"><h5><?php echo $row['name']; ?></h5></td>
                     <?php } ?>
 
                     <td width="10">&nbsp;</td>
@@ -34,4 +36,6 @@
             </table>
         </td>
     </tr>
+    </tbody>
 </table>
+</div>

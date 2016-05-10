@@ -106,7 +106,7 @@ class Pandamp_Core_Hol_Catalog
         $rowsetCatalogAttribute = $rowCatalog->findDependentRowsetCatalogAttribute();
         foreach ($rowsetProfileAttribute as $rowProfileAttribute)
         {
-        	$aid = $rowProfileAttribute->attributeGuid;
+        	/*$aid = $rowProfileAttribute->attributeGuid;
         	$rowCatalogAttribute = App_Model_Show_CatalogAttribute::show()->getCatalogAttributeValue( $catalogGuid, $rowProfileAttribute->attributeGuid);
         	if ($rowCatalogAttribute)
         	{
@@ -129,9 +129,9 @@ class Pandamp_Core_Hol_Catalog
         			'attributeGuid' => $rowProfileAttribute->attributeGuid,
         			'value'	=> $aData[$aid]
         		]);
-        	}
+        	}*/
         	
-            /*if($rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid))
+            if($rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid))
             {
                 $rowCatalogAttribute = $rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid);
             }
@@ -142,11 +142,11 @@ class Pandamp_Core_Hol_Catalog
                 $rowCatalogAttribute->catalogGuid = $catalogGuid;
                 $rowCatalogAttribute->attributeGuid = $rowProfileAttribute->attributeGuid;
 
-            }*/
+            }
 
-//             $rowCatalogAttribute->value = (isset($aData[$rowProfileAttribute->attributeGuid]))?$aData[$rowProfileAttribute->attributeGuid]:'';
+            $rowCatalogAttribute->value = (isset($aData[$rowProfileAttribute->attributeGuid]))?$aData[$rowProfileAttribute->attributeGuid]:'';
 
-//             $rowCatalogAttribute->save();
+            $rowCatalogAttribute->save();
         }
         
         //category
