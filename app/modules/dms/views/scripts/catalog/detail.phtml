@@ -1,18 +1,6 @@
 <?php $this->headStyle()->captureStart(); ?>
 .mloading{margin:0 auto; background:url(<?php echo $this->cdn('styles'); ?>/images/index.gif) center no-repeat; height:20px; line-height:20px}
-.dvLoading
-{
-	background:url(<?php echo $this->cdn('styles'); ?>/images/ajaxLoader.gif) no-repeat center center;
-	height: 100px;
-	width: 100px;
-	position: fixed;
-	z-index: 1000;
-	left: 50%;
-	top: 50%;
-	margin: -25px 0 0 -25px;
-}
 <?php $this->headStyle()->captureEnd(); ?>
-
 <section class="content-header">
 <?php echo $this->breadcrumbs->render(); ?>
 </section>
@@ -82,10 +70,6 @@
 		</div>
 		<div class="col-md-9">
 			<div class="mailbox-controls">
-				<?php if ($this->getShareCount($this->guid,'twitter') ||
-						$this->getShareCount($this->guid,'facebook') ||
-					$this->getCountShortener($this->guid) ||
-				$this->getCountCatalog($this->guid,'mobile')) : ?>
 				
 				<?php if ($this->getShareCount($this->guid,'twitter')) : ?>
 				<a class="btn btn-social btn-twitter" title="Share Twitter"><i class="fa fa-twitter"></i> <?php echo $this->getShareCount($this->guid,'twitter'); ?></a>
@@ -108,7 +92,6 @@
             	<?php endif; ?>
             	
             	<div style="padding-bottom:10px"></div>
-            	<?php endif; ?>
 				
 				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/edit/guid/<?php echo $this->guid; ?>/node/<?php echo $this->currentNode; ?>" target="_blank" class="btn btn-default btn-sm editcatalog"><i class="fa fa-edit"></i> Edit</a>
 				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/delete-confirm/guid/<?php echo $this->guid; ?>" target="_blank" class="btn btn-default btn-sm deletecatalog"><i class="fa fa-trash-o"></i> Delete</a>
