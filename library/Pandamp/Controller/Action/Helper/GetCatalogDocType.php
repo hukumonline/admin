@@ -60,7 +60,7 @@ class Pandamp_Controller_Action_Helper_GetCatalogDocType
 
 //                                $sDir = ROOT_URL.'/uploads/images';
                                 if (Pandamp_Lib_Formater::thumb_exists($sDir."/".$relatedGuid."/tn_".$catalogGuid.".gif")) { $thumb = $sDir."/".$relatedGuid."/tn_".$catalogGuid.".gif"; 	}
-                                if (!isset($thumb)) { $thumb = ROOT_URL."/file_type/image_new.gif"; }
+                                if (!isset($thumb)) { $thumb = $sDir."/file_type/image_new.gif"; }
 
                                 $screenshot = "<img src=\"".$thumb."\" />";
 
@@ -72,7 +72,7 @@ class Pandamp_Controller_Action_Helper_GetCatalogDocType
 
 //                                $sDir = ROOT_URL.'/uploads/images';
                                 if (Pandamp_Lib_Formater::thumb_exists($sDir."/".$relatedGuid."/tn_".$catalogGuid.".jpg")) { $thumb = $sDir."/".$relatedGuid."/tn_".$catalogGuid.".jpg"; 	}
-                                if (!isset($thumb)) { $thumb = ROOT_URL."/file_type/jpg.gif"; }
+                                if (!isset($thumb)) { $thumb = $sDir."/file_type/jpg.gif"; }
 
                                 $screenshot = "<img src=\"".$thumb."\" />";
 

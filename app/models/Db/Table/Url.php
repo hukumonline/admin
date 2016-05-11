@@ -14,4 +14,12 @@ class App_Model_Db_Table_Url extends Zend_Db_Table_Abstract
 
         parent::_setupDatabaseAdapter();
     }
+    
+   	public function countUrl($uri)
+   	{
+    	$db = $this->_db->query("select count(*) as count from clicks as a, urls as b where a.urlid = b.id and b.url = '".$uri."'");
+    	
+    	$dataFetch = $db->fetch();
+   		return $dataFetch['count'];
+   	}
 }

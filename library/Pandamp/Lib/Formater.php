@@ -181,7 +181,7 @@ class Pandamp_Lib_Formater
         }
         else
         {
-            return Pandamp_Lib_Formater::url_exists($thumbnail);
+            return (new Pandamp_Lib_Formater)->url_exists($thumbnail);
         }
     }
     static function getRealIpAddr()
