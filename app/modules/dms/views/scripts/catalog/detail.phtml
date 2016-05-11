@@ -435,7 +435,7 @@
                 			<tr id="<?php echo $rel->itemGuid; ?>_<?php echo $rel->relatedGuid; ?>_<?php echo $rel->relateAs; ?>">
                 				<td>
                 					<?php
-									if ($this->catalog->profileGuid == 'klinik' || $this->catalog->profileGuid == 'clinic') {
+									if ($this->rowCatalog['profileGuid'] == 'klinik' || $this->rowCatalog['profileGuid'] == 'clinic') {
 										$title = $this->getCatalogAttribute($rel->itemGuid,'fixedCommentTitle');
 									}
 									else
