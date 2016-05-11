@@ -1,120 +1,695 @@
-<!-- Left column/section -->
-<section class="column width6 first">
+<?php $this->headStyle()->captureStart(); ?>
+.mloading{margin:0 auto; background:url(<?php echo $this->cdn('styles'); ?>/images/index.gif) center no-repeat; height:20px; line-height:20px}
+.dvLoading
+{
+	background:url(<?php echo $this->cdn('styles'); ?>/images/ajaxLoader.gif) no-repeat center center;
+	height: 100px;
+	width: 100px;
+	position: fixed;
+	z-index: 1000;
+	left: 50%;
+	top: 50%;
+	margin: -25px 0 0 -25px;
+}
+<?php $this->headStyle()->captureEnd(); ?>
 
-    <div class="colgroup leading">
-        <div class="column width6 first">
-            <?php
-            if ($this->getLanguage() == 'id')
-                $tag = "www.hukumonline.com";
-            else
-                $tag = "en.hukumonline.com";
-            ?>
-            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="Search <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
-            <fieldset>
-                <legend>Navigation</legend>
-                <?php echo $this->widget2->render(); ?>
-            </fieldset>
-            <fieldset>
-                <legend>Data Center</legend>
-                <h4><?php echo $this->catalogTitle; ?></h4>
-                <h6><?php echo $this->catalogSubTitle; ?></h6>
-                <p>
-                    <label for="price">Price:</label>
-                    <?php echo $this->rowCatalog['price']; ?>
-                </p>
-                <hr>
-                <?php echo $this->widget1->render(); ?>
-            </fieldset>
-            <?php //echo $this->widgetImageFiles->render(); ?>
-
-            <div class="ta-center">
-                <div id="galleryLoading"></div>
-                <div id="content"></div>
-            </div>
-
-            <?php
-            Zend_Session::sessionExists('cfg') ? Zend_Session::namespaceUnset('cfg') : '';
-            $configGallery = new Zend_Session_Namespace("cfg");
-            if (sizeof($configGallery->allThumbs) > $configGallery->perPage) {
-            ?>
-
-            <table width="800px;">
-                <tr>
-                    <td>
-                        <ul id="pagination">
-                            <?php for ($j = 1; $j <= ceil(sizeof($configGallery->allThumbs) / $configGallery->perPage); $j++) { ?>
-                            <li id="<?php echo $j; ?>"><?php echo $j; ?></li>
-                            <?php } ?>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-
-            <?php } ?>
-
-            <?php echo $this->widgetFiles->render(); ?>
-            <?php echo $this->widgetHistorynew->render(); ?>
-            <?php echo $this->widgetHistory->render(); ?>
-            <?php echo $this->widgetIregulation->render(); ?>
-            <?php echo $this->widgetLegalBasis->render(); ?>
-            <?php echo $this->widgetImplementingRegulation->render(); ?>
-            <?php echo $this->widget3->render(); ?>
-            <?php echo $this->widget4->render(); ?>
-        </div>
-    </div>
-
-
-    <div class="clear">&nbsp;</div>
-
+<section class="content-header">
+<?php echo $this->breadcrumbs->render(); ?>
 </section>
-<!-- End of Left column/section -->
-
-<!-- Right column/section -->
-<aside class="column width2">
-    <div id="rightmenu">
-        <?php echo $this->action('sidebar','user','customer'); ?>
-    </div>
-    <?php echo $this->action('rightdown','catalog','dms',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode)); ?>
-    <?php echo $this->action('view','manager','comment',array('guid'=>$this->catalogGuid,'node'=>$this->currentNode)); ?>
-    
-</aside>
-<!-- End of Right column/section -->
-
-<script type="text/javascript">
-$(document).ready(function(){
-    function displayLoad()
-    {
-        $("#galleryLoading").fadeIn(900,0);
-        $("#galleryLoading").html("<img src='<?php echo $this->cdn('images'); ?>/bigLoader.gif' />");
-    }
-    function hideLoad()
-    {
-        $("#galleryLoading").fadeOut('slow');
-    }
-
-    //Default Starting Page Results
-    $("#pagination li:first").css({'color' : '#FF0084'}).css({'border' : 'none'});
-
-    displayLoad();
-    $("#content").load("<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/gallery/guid/<?php echo $this->catalogGuid; ?>/node/<?php echo $this->currentNode; ?>",hideLoad());
-    //Pagination Click
-    $("#pagination li").click(function(){
-
-            displayLoad();
-
-            //CSS Styles
-            $("#pagination li")
-            .css({'border' : 'solid #dddddd 1px'})
-            .css({'color' : '#0063DC'});
-
-            $(this)
-            .css({'color' : '#FF0084'})
-            .css({'border' : 'none'});
-
-            //Loading Data
-            var pageNum = this.id;
-
-            $("#content").load("<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/gallery/guid/<?php echo $this->catalogGuid; ?>/node/<?php echo $this->currentNode; ?>/page/" + pageNum,hideLoad());
-    });
+<?php echo $this->flashMessenger(); ?>
+<section class="content">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">Catalog</h3>
+				</div>
+				<div class="box-body">
+					<strong><i class="fa fa-book margin-r-5"></i>  Guid</strong>
+					<p class="text-muted"><?php echo $this->rowCatalog['guid']; ?></p>
+					<hr>
+					<strong><i class="fa fa-map-marker margin-r-5"></i> Slug</strong>
+					<p><?php echo $this->rowCatalog['shortTitle']; ?></p>
+					<hr>
+					<strong><i class="fa fa-pencil margin-r-5"></i> Profile</strong>
+					<p><?php echo $this->rowCatalog['profileGuid']; ?></p>
+					<hr>
+					<strong><i class="fa fa-calendar margin-r-5"></i> publishedDate</strong>
+					<p><?php echo $this->rowCatalog['publishedDate']; ?></p>
+					<strong><i class="fa fa-calendar-o margin-r-5"></i> expiredDate</strong>
+					<p><?php echo $this->rowCatalog['expiredDate']; ?></p>
+					<strong><i class="fa fa-calendar-minus-o margin-r-5"></i> createdDate</strong>
+					<p><?php echo $this->rowCatalog['createdDate']; ?></p>
+					<strong><i class="fa fa-calendar-plus-o margin-r-5"></i> modifiedDate</strong>
+					<p><?php echo $this->rowCatalog['modifiedDate']; ?></p>
+					<strong><i class="fa fa-eraser margin-r-5"></i> deletedDate</strong>
+					<p><?php echo $this->rowCatalog['deletedDate']; ?></p>
+					<hr>
+					<strong><i class="fa fa-user margin-r-5"></i> createdBy</strong>
+					<p><?php echo $this->rowCatalog['createdBy']; ?></p>
+					<strong><i class="fa fa-user-plus margin-r-5"></i> modifiedBy</strong>
+					<p><?php echo $this->rowCatalog['modifiedBy']; ?></p>
+					<?php if ($this->rowCatalog['deletedBy']) : ?>
+					<strong><i class="fa fa-user-times margin-r-5"></i> deletedBy</strong>
+					<p><?php echo $this->rowCatalog['deletedBy']; ?></p>
+					<?php endif; ?>
+					<hr>
+					<?php
+					$now = date('Y-m-d H:i:s');
+					
+					if ($now <= $this->rowCatalog['publishedDate'] && $this->rowCatalog['status'] == 99) {
+						$ht = "Published, but is Pending";
+					}
+					else if (($now <= $this->rowCatalog['expiredDate'] || $this->rowCatalog['expiredDate'] == '0000-00-00 00:00:00') && $this->rowCatalog['status'] == 99) {
+						$ht = "Published and is Current";
+					}
+					else if ($now > $this->rowCatalog['expiredDate'] && $this->rowCatalog['status'] == 99) {
+						$ht = "Published, but has Expired";
+					}
+					else if ($this->rowCatalog['status'] == 0) {
+						$ht = "Not Published";
+					}
+					else if ($this->rowCatalog['status'] == -1) {
+						$ht = "Archived";
+					}
+					
+					?>
+					<strong><i class="fa fa-hourglass-2 margin-r-5"></i> Status</strong>
+					<p><?php echo $ht; ?></p>
+					
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="mailbox-controls">
+				<?php if ($this->getShareCount($this->guid,'twitter') ||
+						$this->getShareCount($this->guid,'facebook') ||
+					$this->getCountShortener($this->guid) ||
+				$this->getCountCatalog($this->guid,'mobile')) : ?>
+				
+				<?php if ($this->getShareCount($this->guid,'twitter')) : ?>
+				<a class="btn btn-social btn-twitter" title="Share Twitter"><i class="fa fa-twitter"></i> <?php echo $this->getShareCount($this->guid,'twitter'); ?></a>
+            	<?php endif; ?>
+            	
+				<?php if ($this->getShareCount($this->guid,'facebook')) : ?>
+				<a class="btn btn-social btn-facebook" title="Share Facebook"><i class="fa fa-facebook"></i> <?php echo $this->getShareCount($this->guid,'facebook'); ?></a>
+            	<?php endif; ?>
+            	
+            	<?php if ($this->getCountShortener($this->guid)) : ?>
+            	<a class="btn btn-social btn-dropbox" title="Shortener"><i class="fa fa-skype"></i> <?php echo $this->getCountShortener($this->guid); ?></a>
+            	<?php endif; ?>
+            	
+            	<?php if ($this->getCountCatalog($this->guid,'mobile')) : ?>
+            	<a class="btn btn-social btn-bitbucket" title="Mobile"><i class="fa fa-automobile"></i> <?php echo $this->getCountCatalog($this->guid,'mobile'); ?></a>
+            	<?php endif; ?>
+            	
+            	<?php if ($this->getCountCatalog($this->guid,'desktop')) : ?>
+            	<a class="btn btn-social btn-github" title="Desktop"><i class="fa fa-desktop"></i> <?php echo $this->getCountCatalog($this->guid,'desktop'); ?></a>
+            	<?php endif; ?>
+            	
+            	<div style="padding-bottom:10px"></div>
+            	<?php endif; ?>
+				
+				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/edit/guid/<?php echo $this->guid; ?>/node/<?php echo $this->currentNode; ?>" target="_blank" class="btn btn-default btn-sm editcatalog"><i class="fa fa-edit"></i> Edit</a>
+				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/delete-confirm/guid/<?php echo $this->guid; ?>" target="_blank" class="btn btn-default btn-sm deletecatalog"><i class="fa fa-trash-o"></i> Delete</a>
+				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/relation/search/relatedGuid/<?php echo $this->guid; ?>/node/<?php echo $this->currentNode; ?>" target="_blank" class="btn btn-default btn-sm deletecatalog"><i class="fa fa-trash-o"></i> Add Relation</a>
+				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/copy-folder/guid/<?php echo $this->guid; ?>" target="_blank" class="btn btn-default btn-sm deletecatalog"><i class="fa fa-trash-o"></i> Copy To Folder</a>
+				<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/move-folder/guid/<?php echo $this->guid; ?>" target="_blank" class="btn btn-default btn-sm deletecatalog"><i class="fa fa-trash-o"></i> Move To Folder</a>
+			</div>
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+                  <li class="active"><a href="#detail" data-toggle="tab">Detail</a></li>
+                  <?php if ($this->getDownloadDocument($this->guid)) : ?>
+                  <li><a href="#files" data-toggle="tab">Files</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getLocation($this->guid)) : ?>
+                  <li><a href="#location" data-toggle="tab">Location</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getLegalBasis($this->guid)) : ?>
+                  <li><a href="#lb" data-toggle="tab">Dasar Hukum</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getImplementingRegulations($this->guid)) : ?>
+                  <li><a href="#pp" data-toggle="tab">PP</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getIR($this->guid)) : ?>
+                  <li><a href="#ppnew" data-toggle="tab">PP-New</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getHistory($this->guid)) : ?>
+                  <li><a href="#sejarah" data-toggle="tab">Sejarah</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getHistoryNew($this->guid)) : ?>
+                  <li><a href="#sejarahnew" data-toggle="tab">Sejarah <span class="badge bg-green">New</span></a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getCatalogRelation($this->guid)) : ?>
+                  <li><a href="#relasi" data-toggle="tab">Relasi</a></li>
+                  <?php endif; ?>
+                  <?php if ($this->getOthers($this->guid)) : ?>
+                  <li><a href="#other" data-toggle="tab">Others</a></li>
+                  <?php endif; ?>
+                </ul>
+                <div class="tab-content">
+                	<div class="active tab-pane" id="detail">
+                		<div class="box box-primary">
+                			<div class="box-header">
+                				<h3 class="box-title"><?php echo $this->getCatalogAttribute($this->guid,'fixedTitle'); ?></h3>
+                				<h6><?php echo $this->getCatalogAttribute($this->guid,'fixedSubTitle'); ?></h6>
+                				<p>
+                    				<label for="price">Price:</label>
+                    				<?php echo $this->rowCatalog['price']; ?>
+                				</p>
+                			</div>
+                			<div class="box-body no-padding">
+                				<?php echo $this->widget1->render(); ?>
+                			</div>
+                		</div>
+                	</div>
+                	<?php if ($this->getDownloadDocument($this->guid)) : ?>
+                	<div class="tab-pane" id="files">
+                		<?php $document = $this->getDownloadDocument($this->guid); ?>
+                		<table id="downloaddocument" class="table table-striped table-bordered table-hover">
+                		<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th>Type</th>
+							<th>Title</th>
+							<th>Size</th>
+							<th>Order</th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php foreach ($document as $doc) : ?>
+						<tr id="rowDoc_<?php echo $doc->itemGuid; ?>">
+							<td width="5%" class="center">
+								<input type="checkbox" name='catalogGuid[]' id='catalogGuid' value='<?php echo $doc->itemGuid; ?>' class='checkbox' />
+							</td>
+							<td class="center" width="5%"><?php echo $this->getCatalogDocType($doc->itemGuid,$doc->relatedGuid); ?></td>
+							<td>
+								<?php if ($doc->relateAs == "RELATED_FILE") : ?>
+								<a href="" target="_blank" rel="<?php echo $doc->relateAs; ?>" class="rowDocAction">
+								<?php else : ?>
+								<a href="" target="_blank" rel="<?php echo $doc->relateAs; ?>" class="rowDocAction">
+								<?php endif; ?>
+								<?php echo $this->getCatalogAttribute($doc->itemGuid,'fixedTitle'); ?>
+								</a>
+							</td>
+							<td><?php echo $this->getCatalogDocSize($doc->itemGuid); ?></td>
+							<td>
+								<input type="text" name="order" id="<?php echo $doc->itemGuid; ?>" value="<?php echo $this->getCatalogAttribute($doc->itemGuid,'docViewOrder'); ?>" style="width:30px;text-align:center;" />
+							</td>
+						</tr>
+						<?php endforeach; ?>
+						<tr>
+							<td colspan="5">
+								<div class="form-group">
+									<label>
+										<select id="uof" name="uof" class="form-control">
+							                <option value="withselected">With selected:</option>
+							                <option value="delete">Delete</option>
+							                <option value="edit">Edit</option>
+				            			</select>
+			            			</label>
+		            			</div>
+							</td>
+						</tr>
+						</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getLocation($this->guid)) : ?>
+                	<div class="tab-pane" id="location">
+                		<?php $folders = $this->getLocation($this->guid); ?>
+                		<table id="location" class="table">
+                		<tbody>
+                			<?php foreach ($folders as $folder) : ?>
+                			<tr id="rowfol_<?php echo $folder->guid; ?>">
+                				<td>
+                					<?php if ($folder->guid == $this->currentNode) { ?>
+                					<img src="<?php echo $this->cdn('images'); ?>/page_right.gif">
+                					<?php } ?>
+                					<a href="" target="_blank"><?php echo $folder->title; ?></a>
+                					<span data-rel="popover" data-placement="right" data-content="id:<?php echo $folder->guid; ?>"><i class='icon-info-sign green'></i></span>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" rel="<?php echo $folder->guid; ?>" class="remfolAction"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getLegalBasis($this->guid)) : ?>
+                	<div class="tab-pane" id="lb">
+                		<?php $lb = $this->getLegalBasis($this->guid); ?>
+                		<table id="legalbasis" class="table">
+                		<tbody>
+                			<?php foreach ($lb as $l) : ?>
+                			<tr id="<?php echo $l->itemGuid; ?>_<?php echo $l->relatedGuid; ?>_<?php echo $l->relateAs; ?>">
+                				<td>
+                					<?php if ($this->getCatalogAttribute($l->itemGuid,'fixedTitle')) : ?>
+                					<a href="" target="_blank">
+                						<?php echo $this->getCatalogAttribute($l->itemGuid,'fixedTitle'); ?>
+                					</a>
+                					<?php endif; ?>
+                					<span data-rel="popover" data-placement="right" data-content="itemGuid:<?php echo $l->itemGuid; ?>"><i class='icon-info-sign green'></i></span>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" rel="<?php echo $l->itemGuid; ?>_<?php echo $l->relatedGuid; ?>_<?php echo $l->relateAs; ?>" class="rowLegalBasisAction"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getImplementingRegulations($this->guid)) : ?>
+                	<div class="tab-pane" id="pp">
+                		<?php $gir = $this->getImplementingRegulations($this->guid); ?>
+                		<table id="implementingregulations" class="table">
+                		<tbody>
+                			<?php foreach ($gir as $ir) : ?>
+                			<tr id="<?php echo $ir->itemGuid; ?>_<?php echo $ir->relatedGuid; ?>_<?php echo $ir->relateAs; ?>">
+                				<td>
+                					<?php if ($this->getCatalogAttribute($ir->relatedGuid,'fixedTitle')) : ?>
+                					<a href="" target="_blank">
+                						<?php echo $this->getCatalogAttribute($ir->relatedGuid,'fixedTitle'); ?>
+                					</a><br>
+                					<?php endif; ?>
+                					<small>
+                						<?php if ($this->getCatalogAttribute($ir->relatedGuid,'fixedSubTitle')) : ?><?php echo $this->getCatalogAttribute($ir->relatedGuid,'fixedSubTitle'); ?>&nbsp;&raquo;&nbsp;<?php endif; ?>
+                						<span data-rel="popover" data-placement="right" data-content="relatedGuid:<?php echo $ir->relatedGuid; ?>"><i class='icon-info-sign green'></i></span>
+                					</small>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" rel="<?php echo $ir->itemGuid; ?>_<?php echo $ir->relatedGuid; ?>_<?php echo $ir->relateAs; ?>" class="rowLegalBasisAction"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getIR($this->guid)) : ?>
+                	<div class="tab-pane" id="ppnew">
+                		<?php $girnew = $this->getIR($this->guid); ?>
+                		<table id="girnew" class="table">
+                		<tbody>
+                			<?php foreach ($girnew as $irn) : ?>
+                			<tr id="<?php echo $irn->itemGuid; ?>_<?php echo $irn->relatedGuid; ?>_<?php echo $irn->relateAs; ?>">
+                				<td>
+                					<?php if ($this->getCatalogAttribute($irn->itemGuid,'fixedTitle')) : ?>
+                					<a href="" target="_blank">
+                						<?php echo $this->getCatalogAttribute($irn->itemGuid,'fixedTitle'); ?>
+                					</a><br>
+                					<?php endif; ?>
+                					<small>
+                						<?php if ($this->getCatalogAttribute($irn->itemGuid,'fixedSubTitle')) : ?><?php echo $this->getCatalogAttribute($irn->itemGuid,'fixedSubTitle'); ?>&nbsp;&raquo;&nbsp;<?php endif; ?>
+                						<span data-rel="popover" data-placement="right" data-content="itemGuid:<?php echo $irn->itemGuid; ?>"><i class='icon-info-sign green'></i></span>
+                					</small>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" rel="<?php echo $irn->itemGuid; ?>_<?php echo $irn->relatedGuid; ?>_<?php echo $irn->relateAs; ?>" class="rowLegalBasisAction"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>	
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getHistory($this->guid)) : ?>
+                	<div class="tab-pane" id="sejarah">
+                		<?php $history = $this->getHistory($this->guid); ?>
+                		<table id="history" class="table">
+                		<tbody>
+                			<?php foreach ($history as $h) : ?>
+                			<tr id="<?php echo $h['nodeLeft']; ?>_<?php echo $h['nodeRight']; ?>_RELATED_HISTORY">
+                				<td>
+                					<a href="" target="_blank">
+                						<?php echo $h['title']; ?>
+                					</a><br>
+                					<small>
+                						<?php echo $h['subTitle']; ?>&nbsp;&raquo;&nbsp;
+                						<span data-rel="popover" data-placement="right" data-content="id:<?php echo $h['node']; ?>"><i class='icon-info-sign green'></i></span>
+                					</small>
+                					<?php if ($h['description']) { ?>
+                					<br><strong>Notes: </strong><?php echo $h['description']; ?>
+                					<?php } ?>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" rel="<?php echo $h['nodeLeft']; ?>_<?php echo $h['nodeRight']; ?>_RELATED_HISTORY" class="rowLegalBasisAction"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getHistoryNew($this->guid)) : ?>
+                	<div class="tab-pane" id="sejarahnew">
+                		<?php $aData = $this->getHistoryNew($this->guid); ?>
+                		<?php $year = ''; ?>
+                		<table id="newhistory" class="table">
+                		<thead>
+						<tr>
+							<th>Year</th>
+							<th colspan="2">Title</th>
+						</tr>
+						</thead>
+                		<tbody>
+                			<?php foreach ($aData as $key => $value) : ?>
+                			<tr>
+                				<?php if ($value['year'] != $year) : ?>
+                				<?php $year = $value['year']; ?>
+                				<td><?php echo $year; ?></td>
+                				<?php else : ?>
+                				<td>&nbsp;</td>
+                				<?php endif; ?>
+                				<td>
+                					<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $value['id']; ?>/node/<?php echo $this->getNode($value['id']); ?>" target="_blank">
+										<?php echo $value['title']; ?>
+									</a>
+									<?php if ($ch = $this->getChildHistory($value['id'],$value['parent'])) : ?>
+									<div style="padding:8px 10px;">
+										<ul>
+											<?php foreach ($ch as $c) : ?>
+											<?php if (($value['year'] >= $c['year']) && ($value['fixedDate'] >= $c['fixedDate'])) : ?>
+											<?php
+											if ($c['relateAs'] == "AMEND") {
+												$st = "Mengubah";
+											}
+											if ($c['relateAs'] == "REPEAL") {
+												$st = "Mencabut";
+											}
+											if ($c['relateAs'] == "ISROOT") {
+												$st = "Mencabut sebagian";
+											}
+											if ($c['relateAs'] == "ESTABLISH") {
+												$st = "Menetapkan";
+											}
+											?>
+											<li>
+												<?php echo $st; ?>&nbsp;<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $c['id']; ?>/node/<?php echo $this->getNode($c['id']); ?>" target="_blank"><?php echo $c['title']; ?></a>
+												<?php if ($c['id'] !== $c['parent']) : ?>
+												&nbsp;&raquo;&nbsp;
+												<a href="javascript:;" class="historynew" data-guid="<?php echo $c['relatedGuid']; ?>" data-historyid="<?php echo $c['id']; ?>" data-status="<?php echo $c['relateAs']; ?>">
+													<i class="fa fa-trash"></i>
+												</a>
+												<?php endif; ?>
+											</li>
+											<?php endif; ?>
+											<?php endforeach; ?>
+										</ul>
+									</div>
+									<?php endif; ?>
+                				</td>
+                				<td class="text-center">
+                					<?php if ($value['id'] !== $value['parent']) : ?>
+                					<a href="javascript:;" class="historynew" data-guid="<?php echo $value['relatedGuid']; ?>" data-historyid="<?php echo $value['id']; ?>" data-status="<?php echo $value['relateAs']; ?>">
+                						<img alt="" src="<?php echo $this->cdn('images'); ?>/delete.png" height="16" width="16">
+                					</a>
+                					<?php else : ?>
+                					<a href="javascript:;" class="parenthistorynew" data-guid="<?php echo $value['id']; ?>">
+                						<img alt="" src="<?php echo $this->cdn('images'); ?>/cancel.png" height="16" width="16">
+                					</a>
+                					<?php endif; ?>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getCatalogRelation($this->guid)) : ?>
+                	<div class="tab-pane" id="relasi">
+                		<?php $relation = $this->getCatalogRelation($this->guid); ?>
+                		<table id="relation" class="table">
+                		<tbody>
+                			<?php foreach ($relation as $rel) : ?>
+                			<tr id="<?php echo $rel->itemGuid; ?>_<?php echo $rel->relatedGuid; ?>_<?php echo $rel->relateAs; ?>">
+                				<td>
+                					<?php
+									if ($this->catalog->profileGuid == 'klinik' || $this->catalog->profileGuid == 'clinic') {
+										$title = $this->getCatalogAttribute($rel->itemGuid,'fixedCommentTitle');
+									}
+									else
+									{
+										$title = $this->getCatalogAttribute($rel->itemGuid,'fixedTitle');
+									} 
+									?>
+									
+									<?php if ($this->getCatalogAttribute($rel->itemGuid,'fixedSubTitle')) : ?>
+									<small>
+										<?php echo $this->getCatalogAttribute($rel->itemGuid,'fixedSubTitle'); ?>
+										
+									</small><br>
+									<?php endif; ?>
+									
+									<?php if ($title) : ?>
+									<a href="" target="_blank">
+										<?php echo $title; ?>
+									</a>
+									<?php endif; ?>
+									
+									<small><span data-rel="popover" data-placement="top" data-content="itemGuid:<?php echo $rel->itemGuid; ?>&nbsp;&ndash;&nbsp;<?php echo $rel->relateAs; ?>"><i class='fa fa-info-sign green'></i></span></small>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" rel="<?php echo $rel->itemGuid; ?>_<?php echo $rel->relatedGuid; ?>_<?php echo $rel->relateAs; ?>" class="rowLegalBasisAction"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                	<?php if ($this->getOthers($this->guid)) : ?>
+                	<div class="tab-pane" id="other">
+                		<?php $others = $this->getOthers($this->guid); ?>
+                		<table id="others" class="table">
+                		<tbody>
+                			<?php foreach ($others as $ot) : ?>
+                			<tr id="row_<?php echo $ot['node']; ?>">
+                				<td>
+                					<?php if ($ot['node'] == $this->guid) { ?>
+                					<img src="<?php echo $this->cdn('images'); ?>/page_right.gif">
+                					<?php } ?>
+                					<a href="" target="_blank">
+                						<?php echo $ot['title']; ?>
+                					</a>
+                					<small><?php echo $ot['subTitle']; ?></small>
+                					<?php if ($ot['description']) { ?>
+                					<br><strong>Notes: </strong><?php echo $ot['description']; ?>
+                					<?php } ?>
+                				</td>
+                				<td class="text-center">
+                					<a href="javascript:;" onclick="remlb();return false;"><i class="fa fa-trash"></i> </a>
+                				</td>
+                			</tr>
+                			<?php endforeach; ?>
+                		</tbody>
+                		</table>
+                	</div>
+                	<?php endif; ?>
+                	
+                </div>
+			</div>
+		</div>
+	</div>
+</section>
+<div id="waiting"></div>
+<div id="dialog"></div>
+<div id="confirmDialog"></div>
+<?php $this->headScript()->captureStart(); ?>
+$(function () {
+	var currentNode = "<?php echo $this->currentNode; ?>",
+		guid = "<?php echo $this->guid; ?>";
+		
+	$('#uof').change(function(){
+		checkValues = new Array();
+		a=0;
+    	$('input[type="checkbox"]:checked').each(function(){
+        	checkValues[a]=$(this).val();
+        	a++;
+		});
+		if ($("#uof").val() == "edit") {
+			if(checkValues.length==0)
+			{
+				alert('No Document Selected');
+				$("#uof").val("withselected");
+				return false;
+			}
+			else if ($("a.rowDocAction").attr("rel")=="RELATED_IMAGE")
+			{
+				alert('Not Supported');
+				$("#uof").val("withselected");
+				return false;
+			
+			}
+			else
+			{
+				$('#confirmDialog').load('<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/editdoc/itemGuid/'+checkValues+'/relatedGuid/<?php echo $this->guid; ?>/folderGuid/<?php echo $this->currentNode; ?>')
+				.dialog({
+					title: "Edit Upload Form",
+					modal: true,
+			        height: 500,
+			        width: 500,
+			        close:function(){
+			        	$(this).dialog('destroy');
+			        	$('#confirmDialog').empty();
+			        }
+				});
+			}
+		}
+		else if ($("#uof").val() == "delete")
+		{
+			if(checkValues.length==0)
+			{
+				alert('No Document Selected');
+				$("#uof").val("withselected");
+				return false;
+			}
+			else
+			{
+				window.location = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/delete-confirm/guid/"+checkValues;
+			}
+		}
+		
+		return false;
+	});
+	
+	$("a.remfolAction").click(function(){
+		var self = this;
+		$('#confirmDialog').html('<?php echo addslashes("Are you sure?"); ?>')
+		.dialog({
+			title: "Confirm",
+			resizable: false,
+			modal: true,
+			buttons: [
+	          {
+	        	  html: "<i class='fa fa-trash bigger-110'></i>&nbsp; Yes",
+	        	  "class" : "btn btn-danger btn-xs",
+	        	  click: function() {
+		        	  	$(this).dialog('destroy');
+		        	  	$('#confirmDialog').empty();
+		        	  	$('#waiting').html('').addClass('mloading');
+	        		  	var id = $(self).attr('rel');
+						$.ajax({
+							type: 'POST',
+							url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/catalog/remove-from-folder",
+							data: { guid:guid, folderGuid: id },
+							success: function(response) {
+								if ('RESULT_OK' == response) {
+									$('#rowfol_' + id).fadeOut('slow');
+									$('#waiting').removeClass('mloading');
+									//window.location.reload();
+								}
+								else
+									alert(response);
+							}
+						});
+	        		  
+	        	  }
+	          },
+	          {
+	        	  html: "<i class='fa fa-remove bigger-110'></i>&nbsp; No",
+	        	  "class" : "btn btn-xs",
+	        	  click: function() {
+	        		  $(this).dialog('destroy');
+	        		  $('#confirmDialog').empty();
+	        	  }
+	          }
+			]
+		});
+	});
+	
+	$("a.rowLegalBasisAction").click(function(){
+		var self = this;
+		$('#confirmDialog').html('<?php echo addslashes("Are you sure?"); ?>')
+		.dialog({
+			title: "Confirm",
+			resizable: false,
+			modal: true,
+			buttons: [
+	          {
+	        	  html: "<i class='fa fa-trash bigger-110'></i>&nbsp; Yes",
+	        	  "class" : "btn btn-danger btn-xs",
+	        	  click: function() {
+		        	  	$(this).dialog('destroy');
+		        	  	$('#confirmDialog').empty();
+		        	  	var t = $(self).attr('rel'),
+		        	  		arr = $(self).attr('rel').split('_');
+		        	  	$("a[rel='"+t+"']").html('').addClass('mloading');
+						$.ajax({
+							type: 'POST',
+							url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/delete",
+							data: { itemGuid:arr[0], relatedGuid: arr[1], relateAs: arr[2]+'_'+arr[3] },
+							success: function(response) {
+								if ('RESULT_OK' == response) {
+									$('#'+t).fadeOut('slow');
+									//window.location.reload();
+								}
+								else
+									alert(response);
+							}
+						});
+	        		  
+	        	  }
+	          },
+	          {
+	        	  html: "<i class='fa fa-remove bigger-110'></i>&nbsp; No",
+	        	  "class" : "btn btn-xs",
+	        	  click: function() {
+	        		  $(this).dialog('destroy');
+	        		  $('#confirmDialog').empty();
+	        	  }
+	          }
+			]
+		});
+		
+	});
+	
+	$('.parenthistorynew').click(function(e){
+       	e.preventDefault();
+        var elem = $(this);
+		if(confirm ('This is the parent of the history tree, if you remove this then all history related will be removed, Are you sure ?')) {
+           	$.ajax({
+           		type:"post"
+           		,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/deleteparenthistory"
+           		,data: "guid="+ elem.attr('data-guid')
+       			,success: function() {
+       				elem.html("Data has been deleted successfully");
+       				setTimeout(function() {
+       					 location.reload()
+					},1000);
+                }		
+        	});    
+    	}
+	});
+	
+	$('.historynew').click(function(e){
+                	e.preventDefault();
+                    var elem = $(this);
+                    if(confirm ('Are you sure ?')) {
+                    	$.ajax({
+                    		type:"post"
+                    		,url:"<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/deletehistory"
+                    		,data: "itemGuid="+ elem.attr('data-historyid') + "&relatedGuid="+ elem.attr('data-guid') +"&relateAs="+ elem.attr('data-status')
+                			,success: function() {
+                				elem.html("Data has been deleted successfully");
+                				setTimeout(function() {
+               					 location.reload()
+               					  },1000);
+                			}		
+                    	});    
+                    }
+                });
+	
 });
-</script>
+<?php $this->headScript()->captureEnd(); ?>

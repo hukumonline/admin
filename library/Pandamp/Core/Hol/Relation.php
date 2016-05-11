@@ -1109,7 +1109,7 @@ class Pandamp_Core_Hol_Relation
         return $this->getRelatedItem($catalogGuid,'RELATED_ITEM');
     }
 }
-class UtilHistorySort
+/*class UtilHistorySort
 {
     static private $sortfield = null;
     static private $sortorder = 1;
@@ -1122,4 +1122,4 @@ class UtilHistorySort
         self::$sortorder = $asc? 1 : -1;
         usort($v, array('UtilHistorySort', 'sort_callback'));
     }
-}
+}*/

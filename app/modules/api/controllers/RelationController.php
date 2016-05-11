@@ -9,6 +9,9 @@ class Api_RelationController extends Zend_Controller_Action
 {
     function deleteAction()
     {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	
         $req = $this->getRequest();
         $itemGuid = ($req->getParam('itemGuid'))? $req->getParam('itemGuid') : 'XXX';
         $relatedGuid = ($req->getParam('relatedGuid')) ? $req->getParam('relatedGuid') : 'XXX';
@@ -20,7 +23,7 @@ class Api_RelationController extends Zend_Controller_Action
         $tblRelatedItem = new App_Model_Db_Table_RelatedItem();
         $tblRelatedItem->delete("itemGuid='$itemGuid' AND relatedGuid='$relatedGuid' AND relateAs='$relateAs'");
 
-        exit();
+        $this->getResponse()->setBody('RESULT_OK');
     }
     function deleteparenthistoryAction()
     {

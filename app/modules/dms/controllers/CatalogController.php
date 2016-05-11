@@ -114,7 +114,34 @@ class Dms_CatalogController extends Zend_Controller_Action
         $this->_helper->layout()->searchQuery = $query;
         $this->view->user = $this->_user;
     }
-    function detailAction()
+    
+    public function detailAction()
+    {
+    	$this->_helper->layout->setLayout('new/layout-pusatdata');
+    	
+    	$request = $this->getRequest();
+    	
+    	$node = $request->getParam('node','root');
+    	$catalogGuid = $request->getParam('guid');
+    	
+    	$modDir = $this->getFrontController()->getModuleDirectory();
+    	require_once($modDir.'/components/Menu/FolderBreadcrumbs2.php');
+    	$w = new Dms_Menu_FolderBreadcrumbs2($node);
+    	$this->view->assign('breadcrumbs', $w);
+    	
+        $modDir = $this->getFrontController()->getModuleDirectory("dms");
+        require_once($modDir.'/components/Catalog/Detail.php');
+        $w = new Dms_Catalog_Detail($catalogGuid, $node);
+        $this->view->assign('widget1', $w);
+        
+    	$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
+    	$this->view->assign('rowCatalog', $modelCatalog);
+    	
+    	$this->view->assign('guid', $catalogGuid);
+    	$this->view->assign('currentNode', $node);
+    }
+    
+    function detailOldAction()
     {
         $r = $this->getRequest();
         $catalogGuid = $r->getParam('guid');
@@ -233,6 +260,32 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$num_rows = count($catalogGuid);
     	$this->view->numberOfRows = $num_rows;
     }
+    
+    /**
+     * Edit document
+     *
+     * @return void
+     */
+    public function editdocAction()
+    {
+    	$this->_helper->getHelper('layout')->disableLayout();
+    
+    	$request = $this->getRequest();
+    
+    	$itemGuid = explode(',',$request->getParam('itemGuid'));
+    
+    	$relatedGuid = $request->getParam('relatedGuid');
+    	$folderGuid = $request->getParam('folderGuid');
+    
+    	$this->view->assign('catalogGuid', $itemGuid);
+    	$this->view->assign('relatedGuid', $relatedGuid);
+    	$this->view->assign('folderGuid', $folderGuid);
+    
+    	$num_rows = count($itemGuid);
+    	$this->view->assign('numberOfRows', $num_rows);
+    
+    }
+    
     function recycleAction()
     {
         $this->_helper->layout->disableLayout();
