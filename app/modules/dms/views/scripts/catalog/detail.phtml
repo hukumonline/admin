@@ -186,7 +186,7 @@
 							<td class="center" width="5%"><?php echo $this->getCatalogDocType($doc->itemGuid,$doc->relatedGuid); ?></td>
 							<td>
 								<?php if ($doc->relateAs == "RELATED_FILE") : ?>
-								<a href="" target="_blank" rel="<?php echo $doc->relateAs; ?>" class="rowDocAction">
+								<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/browser/download-file/guid/<?php echo $doc->itemGuid; ?>/parent/<?php echo $doc->relatedGuid; ?>" target="_blank" rel="<?php echo $doc->relateAs; ?>" class="rowDocAction">
 								<?php else : ?>
 								<a href="" target="_blank" rel="<?php echo $doc->relateAs; ?>" class="rowDocAction">
 								<?php endif; ?>
@@ -228,7 +228,7 @@
                 					<?php if ($folder->guid == $this->currentNode) { ?>
                 					<img src="<?php echo $this->cdn('images'); ?>/page_right.gif">
                 					<?php } ?>
-                					<a href="" target="_blank"><?php echo $folder->title; ?></a>
+                					<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $this->guid; ?>/node/<?php echo $folder->guid; ?>" target="_blank"><?php echo $folder->title; ?></a>
                 					<span data-rel="popover" data-placement="right" data-content="id:<?php echo $folder->guid; ?>"><i class='icon-info-sign green'></i></span>
                 				</td>
                 				<td class="text-center">
@@ -250,7 +250,7 @@
                 			<tr id="<?php echo $l->itemGuid; ?>_<?php echo $l->relatedGuid; ?>_<?php echo $l->relateAs; ?>">
                 				<td>
                 					<?php if ($this->getCatalogAttribute($l->itemGuid,'fixedTitle')) : ?>
-                					<a href="" target="_blank">
+                					<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $l->itemGuid; ?>/node/<?php echo $this->getNode($l->itemGuid); ?>" target="_blank">
                 						<?php echo $this->getCatalogAttribute($l->itemGuid,'fixedTitle'); ?>
                 					</a>
                 					<?php endif; ?>
@@ -275,7 +275,7 @@
                 			<tr id="<?php echo $ir->itemGuid; ?>_<?php echo $ir->relatedGuid; ?>_<?php echo $ir->relateAs; ?>">
                 				<td>
                 					<?php if ($this->getCatalogAttribute($ir->relatedGuid,'fixedTitle')) : ?>
-                					<a href="" target="_blank">
+                					<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $ir->relatedGuid; ?>/node/<?php echo $this->getNode($ir->relatedGuid); ?>" target="_blank">
                 						<?php echo $this->getCatalogAttribute($ir->relatedGuid,'fixedTitle'); ?>
                 					</a><br>
                 					<?php endif; ?>
@@ -303,7 +303,7 @@
                 			<tr id="<?php echo $irn->itemGuid; ?>_<?php echo $irn->relatedGuid; ?>_<?php echo $irn->relateAs; ?>">
                 				<td>
                 					<?php if ($this->getCatalogAttribute($irn->itemGuid,'fixedTitle')) : ?>
-                					<a href="" target="_blank">
+                					<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $irn->itemGuid; ?>/node/<?php echo $this->getNode($irn->itemGuid); ?>" target="_blank">
                 						<?php echo $this->getCatalogAttribute($irn->itemGuid,'fixedTitle'); ?>
                 					</a><br>
                 					<?php endif; ?>
@@ -330,7 +330,7 @@
                 			<?php foreach ($history as $h) : ?>
                 			<tr id="<?php echo $h['nodeLeft']; ?>_<?php echo $h['nodeRight']; ?>_RELATED_HISTORY">
                 				<td>
-                					<a href="" target="_blank">
+                					<a href="<?php echo $this->baseUrl(); ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $h['node']; ?>/node/<?php echo $this->getNode($h['node']); ?>" target="_blank">
                 						<?php echo $h['title']; ?>
                 					</a><br>
                 					<small>
@@ -691,6 +691,36 @@ $(function () {
                     	});    
                     }
                 });
+	
+	$("input[name='order']").change(function() {
+		var self = this;
+		var ids = $(self).attr('id');
+		var od = $(self).val();
+		$.ajax({
+			url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/relation/catalogorder",
+			type: 'POST',
+			data: { id: ids, order: od },
+			success: function(response) {
+				if ('RESULT_OK' == response) {
+					
+					$('#dialog').html('<?php echo $this->escape('The document(s) have been re-ordered successfully.'); ?>')
+					.dialog({
+						title: "<?php echo $this->escape('Message'); ?>",
+						modal: true,
+						show: { effect: 'fade' },
+						open: function(event, ui) {
+							setTimeout(function() {
+								$('#' + event.target.id).dialog('option', 'hide', 'fade').dialog('destroy');
+								window.location.reload();
+							}, 3000);
+						}
+					});
+				
+				}
+			}
+		});
+		
+	});
 	
 });
 <?php $this->headScript()->captureEnd(); ?>

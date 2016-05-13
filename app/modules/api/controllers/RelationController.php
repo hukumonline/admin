@@ -48,4 +48,30 @@ class Api_RelationController extends Zend_Controller_Action
     	
     	exit();
     }
+    function catalogorderAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    	
+    	$request = $this->getRequest();
+    	$result  = 'RESULT_ERROR';
+    	if ($request->isPost()) {
+    		$viewOrder 	= $request->getPost('order');
+    		$id     	= $request->getPost('id');
+    			
+    		$tblCatalogAttribute = new App_Model_Db_Table_CatalogAttribute();
+    		$where2 = "catalogGuid='$id' AND attributeGuid='docViewOrder'";
+    		$rowCatalogAttribute = $tblCatalogAttribute->fetchRow($where2);
+    			
+    		if ($rowCatalogAttribute)
+    		{
+    			$rowCatalogAttribute->value = $viewOrder;
+    			$rowCatalogAttribute->save();
+    				
+    		}
+    	
+    		$result = 'RESULT_OK';
+    	}
+    	$this->getResponse()->setBody($result);
+    }
 }
