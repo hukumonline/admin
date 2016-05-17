@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>CMS Hukumonline</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link href="<?php echo $this->cdn('styles'); ?>/favicon.ico" rel="shortcut icon" type="image/ico" />
+	<?php
+	$this->headLink()
+		->prependStylesheet($this->cdn('scripts') . '/hol/jquery/jstree/jstree.min.css')
+		->prependStylesheet($this->cdn('styles') . '/dist/css/skins/_all-skins.min.css')
+		->prependStylesheet($this->cdn('styles') . '/dist/css/AdminLTE.min.css')
+		->prependStylesheet('//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css')
+		->prependStylesheet('//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css')
+		->prependStylesheet($this->cdn('styles') . '/bootstrap/css/bootstrap.min.css')
+		->prependStylesheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
+		->prependStylesheet($this->cdn('scripts') . '/plugins/daterangepicker/daterangepicker-bs3.css')
+		->prependStylesheet($this->cdn('scripts') . '/plugins/timepicker/bootstrap-timepicker.min.css');
+	
+	?>
+	<!-- Bootstrap 3.3.5 -->
+	<!-- Font Awesome 4.4.0 -->
+	<!-- Ionicons 2.0.1 -->
+	<?php
+    /**
+     * Compress CSS and JS if it is enabled
+     */ 
+    echo $this->compressor('css');
+	?>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition skin-yellow-light sidebar-mini">
+<div class="wrapper">
+	<?php echo $this->render('_header.phtml'); ?>
+	<?php echo $this->render("aside.phtml"); ?>
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<?php echo $this->layout()->content; ?>
+	</div><!-- /.content-wrapper -->
+	
+	<?php echo $this->render('_footer.phtml'); ?>
+</div>
+<script src="<?php echo $this->cdn('scripts'); ?>/hol/pandamp/namespace.js"></script>
+<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQuery/jquery.json.min.js"></script>
+<script src="<?php echo $this->cdn('scripts'); ?>/plugins/jQueryUI/jquery-ui.min.js"></script>
+<script src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/cookie/jquery.cookie.js"></script>
+<script src="<?php echo $this->cdn('scripts'); ?>/hol/jquery/jstree/jstree.js"></script>
+<script src="<?php echo $this->cdn('styles'); ?>/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?php echo $this->cdn('scripts'); ?>/plugins/fastclick/fastclick.min.js"></script>
+<script src="<?php echo $this->cdn('styles'); ?>/dist/js/app.min.js"></script>
+<script src="<?php echo $this->cdn('styles'); ?>/dist/js/demo.js"></script>
+<?php
+/**
+ * Put all widget's javascript to the bottom of page 
+ */
+echo $this->compressor('js', 'bottomBody'); 
+?>
+</body>
+</html>
