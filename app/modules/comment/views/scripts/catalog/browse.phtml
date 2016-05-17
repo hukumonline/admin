@@ -1,74 +1,166 @@
-<!-- Left column/section -->
-<section class="column width6 first">
+<?php 
+$this->headLink()
+	->appendStylesheet($this->cdn('scripts') . '/plugins/iCheck/flat/blue.css');
 
-    <div class="colgroup leading">
-        <div class="column width6 first">
-            <?php
-            if ($this->getLanguage() == 'id')
-                $tag = "www.hukumonline.com";
-            else
-                $tag = "en.hukumonline.com";
-            ?>
+$this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/iCheck/icheck.min.js');
 
-            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="DMS <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
-            <h5>Hukumonline Comment</h5>
-            <h6><a href="javascript:void(0);" id="deleteAction">delete</a></h6>
-            <div class="box box-success" id="message"></div>
-            <table class="display stylized" id="holcomment">
-                <thead>
-                    <th width="5%"><input name="select_deselect" id="select_deselect" type="checkbox"></th>
-                    <th>Comment</th>
-                    <th>Created on</th>
-                    <th>Status</th>
-                </thead>
-                <tbody>
-
-                    <?php $i=$this->offset+1; foreach ($this->commentList as $comment) { ?>
-                    <tr class="<?php echo ($i%2 ? 'gradeX' : 'gradeC'); ?>" id="row_<?php echo $comment->id; ?>">
-                        <td><input type='checkbox' name='cid[]' id='cid' value='<?php echo $comment->id; ?>' class="check_me"></td>
-                        <td>
-                            <a href="http://www.hukumonline.com/berita/baca/<?php echo $comment->object_id; ?>/<?php echo $this->getCatalogShortTitle($comment->object_id); ?>#comments" title="<?php echo $comment->email; ?>" target="_blank"><?php echo $comment->title; ?></a>
-                            <br><small>id:<?php echo $comment->id; ?> - by: <?php echo $comment->name; ?></small>
-                            <br><?php echo $comment->comment; ?>
-                            <br><a href="<?php echo $comment->id; ?>" class="delete">delete</a>
-                        </td>
-                        <td><?php echo Pandamp_Lib_Formater::get_date($comment->date); ?>
-                        <br><small>ip:<?php echo $comment->ip; ?></small>
-                        </td>
-                        <td nowrap>
-                        <?php if ($comment->published == 99) { ?>
-                            
-                            <a href="<?php echo $comment->id; ?>/st/0" class="status">Active</a>
-                            
-                        <?php } else { ?>
-                            
-                            <a href="<?php echo $comment->id; ?>/st/1" class="status">Not Active</a>
-                        
-                        <?php } ?>
-                        </td>
-                    </tr>
-                    <?php $i++; } ?>
-
-                </tbody>
-            </table>
-            <table width='100%'>
-            <tr>
-                <td align=right><div id='commentPagination' class="pagination"></div></td>
-            </tr>
-            </table>
-        </div>
-    </div>
-
-	<div id="confirmDialog" style="display:none"></div>
-    <div class="clear">&nbsp;</div>
-
+?>
+<section class="content-header">
+	<h1>Comment <small>Below are the list of comment:</small></h1>
+    <ol class="breadcrumb">
+		<li><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/browse"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Comment</li>
+    </ol>
 </section>
-<!-- End of Left column/section -->
+<?php if ($this->paginator->getTotalItemCount() == 0) : ?>
+Not found any comment <br />
+<?php else : ?>
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-body no-padding">
+					<div class="mailbox-controls">
+						<button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
+						<button class="btn btn-default btn-sm delete"><i class="fa fa-trash-o"></i> Delete</button>
+						<div class="pull-right">
+							<?php
+							$start=($this->currentPageNumber-1)*$this->perpage;
+							$s1=$start+1;
+							$position = $this->currentPageNumber * $this->perpage;
+							?>
+							<?php echo $s1.'-'.$position; ?>/<?php echo $this->paginator->getTotalItemCount(); ?>
+							<?php echo $this->paginationControl($this->paginator,'Sliding','partial/post2pagination.phtml'); ?>
+						</div>
+					</div>
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped">
+						<?php foreach ($this->commentList as $comment) : ?>
+						<tbody>
+							<tr id="commentRow_<?php echo $comment->id; ?>">
+							<td><input type="checkbox" name='cid[]' id='cid' value='<?php echo $comment->id; ?>'></td>
+							<td class="mailbox-star">
+								<a href="http://www.hukumonline.com/berita/baca/<?php echo $comment->object_id; ?>/<?php echo $this->getCatalogShortTitle($comment->object_id); ?>#comments" title="<?php echo $comment->email; ?>" target="_blank"><?php echo $comment->title; ?></a>
+								<br><small>id:<?php echo $comment->id; ?> - by: <?php echo $comment->name; ?></small>
+								<br><?php echo $comment->comment; ?>
+								<br><a href="<?php echo $comment->id; ?>" class="delete"><i class="fa fa-remove"></i> delete</a>
+							</td>
+							<td class="mailbox-subject"><?php echo Pandamp_Lib_Formater::get_date($comment->date); ?>
+							<br><small>ip:<?php echo $comment->ip; ?></small>
+							</td>
+							<td>
+								<?php if ($comment->published == 99) : ?>
+								<a href="<?php echo $comment->id; ?>/st/0" class="status">Active</a>
+								<?php else : ?>
+								<a href="<?php echo $comment->id; ?>/st/1" class="status">Not Active</a>
+								<?php endif; ?>
+							</td>
+							</tr>
+						</tbody>
+						<?php endforeach; ?>
+						</table>
+					</div>
+				</div>
+				<div class="box-footer no-padding">
+					<div class="mailbox-controls">
+						<button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
+						<button class="btn btn-default btn-sm delete"><i class="fa fa-trash-o"></i> Delete</button>
+						<div class="pull-right">
+							<?php
+							$start=($this->currentPageNumber-1)*$this->perpage;
+							$s1=$start+1;
+							$position = $this->currentPageNumber * $this->perpage;
+							?>
+							<?php echo $s1.'-'.$position; ?>/<?php echo $this->paginator->getTotalItemCount(); ?>
+							<?php echo $this->paginationControl($this->paginator,'Sliding','partial/post2pagination.phtml'); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<?php $this->headScript()->captureStart(); ?>
+$(function () {
+	$('.mailbox-messages input[type="checkbox"]').iCheck({
+		checkboxClass: 'icheckbox_flat-blue',
+		radioClass: 'iradio_flat-blue'
+	});
 
-<!-- Right column/section -->
-<aside class="column width2">
-    <div id="rightmenu">
-        <?php echo $this->action('sidebar','user','customer'); ?>
-    </div><br>
-</aside>
-<!-- End of Right column/section -->
+	//Enable check and uncheck all functionality
+	$(".checkbox-toggle").click(function () {
+		var clicks = $(this).data('clicks');
+		if (clicks) {
+			//Uncheck all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+			$(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+		} else {
+			//Check all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("check");
+			$(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+		}
+		$(this).data("clicks", !clicks);
+	});
+
+	$('.status').click(function(){
+		var removeId = $(this).attr('href'),
+            qString = removeId.split('/'),
+            cId = qString[0];
+
+		if (confirm("Are you sure?")) {
+			window.location = '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/status/id/'+removeId;
+		}
+
+		return false;
+	});
+	
+	$('.delete').click(function(){
+        var removeId = $(this).attr('href');
+
+		if (confirm("Are you sure?")) {
+        	window.location = '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/delete/id/'+removeId;
+    	}
+
+    	return false;
+    });
+	
+	$('#deleteAction').click(function() {
+		var numSelected = $('input[type="checkbox"]:checked').length;
+		var self = this;
+		if (0 == numSelected) {
+			alert('Please select at least one comment');
+		}
+		else
+		{
+			var ids = new Array();
+			$('input[type="checkbox"]:checked').each(function() {
+            	ids.push($(this).val());
+            });
+            
+            $.ajax({
+   				url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/delcom",
+   				type: 'POST',
+   				data: { id: $.toJSON(ids) },
+                beforeSend: function()
+                {
+   					for (var i in ids) {
+   						$('#row_' + ids[i]).addClass('loading').text('processing...');
+   					}
+                },
+   				success: function(response) {
+   					if ('RESULT_OK' == response) {
+   						for (var i in ids) {
+  							$('#row_' + ids[i]).fadeOut('slow').removeClass('loading').text('delete');
+   						}
+   					}
+   				}
+            });
+		}
+	});
+	
+	
+                
+});
+<?php $this->headScript()->captureEnd(); ?>
+<?php endif; ?>

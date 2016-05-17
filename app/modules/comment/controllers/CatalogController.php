@@ -10,7 +10,9 @@ class Comment_CatalogController extends Zend_Controller_Action
     protected $_user;
     function  preDispatch()
     {
-        $this->_helper->layout->setLayout('layout-comment');
+        //$this->_helper->layout->setLayout('layout-comment');
+        $this->_helper->layout->setLayout('layout-newpolling');
+        
         $auth = Zend_Auth::getInstance();
 
 		$identity = Pandamp_Application::getResource('identity');
@@ -56,16 +58,9 @@ class Comment_CatalogController extends Zend_Controller_Action
 			{
 				if (($rowset->status == 1 && $zl->getLanguage() == 'id') || ($rowset->status == 2 && $zl->getLanguage() == 'en') || ($rowset->status == 3))
 				{
-					// it means that user offline other than admin
-					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
-					
-					if (isset($aReturn['name']))
+					if (($this->_user->name !== "Master") && ($this->_user->name !== "Super Admin"))
 					{
-						//if (($aReturn[1] !== "admin"))
-						if (($aReturn['name'] !== "Master") && ($aReturn['name'] !== "Super Admin"))
-						{
-							$this->_forward('temporary','error','admin'); 
-						}
+						$this->_forward('temporary','error','admin'); 
 					}
 				}
 			}
@@ -90,25 +85,40 @@ class Comment_CatalogController extends Zend_Controller_Action
     }
     function browseAction()
     {
-        if ($this->getRequest()->isXmlHttpRequest())
+        /*if ($this->getRequest()->isXmlHttpRequest())
         {
             $this->_helper->layout()->disableLayout();
-        }
+        }*/
         
         $r = $this->getRequest();
         $limit = ($r->getParam('limit'))?$r->getParam('limit'):10;
         $this->view->limit =$limit;
         $itemsPerPage = $limit;
         $this->view->itemsPerPage = $itemsPerPage;
-        $offset = ($r->getParam('offset'))?$r->getParam('offset'):0;
-        $this->view->offset = $offset;
+        //$offset = ($r->getParam('offset'))?$r->getParam('offset'):0;
+        //$this->view->offset = $offset;
+        
+        $pageIndex = $r->getParam('page',1);
+        
+        $offset = ($pageIndex > 0) ? ($pageIndex - 1) * $itemsPerPage : 0;
 
         $commentList = App_Model_Show_Comment::show()->fetchComment($offset, $limit);
         $this->view->commentList = $commentList;
 
-        $this->view->totalItems = App_Model_Show_Comment::show()->getNumOfComment();
-
-        $this->_helper->layout()->headerTitle = "Comment";
+        $numOfRows = (new App_Model_Db_Table_Comment)->fetchAll()->count();
+        
+        //$totalItems = App_Model_Show_Comment::show()->getNumOfComment();
+        
+        $paginator = Zend_Paginator::factory($numOfRows);
+        $paginator->setCurrentPageNumber($pageIndex);
+        $paginator->setItemCountPerPage($itemsPerPage);
+        
+        $this->view->assign('perpage',$itemsPerPage);
+        //$this->view->assign('totalItems',$totalItems);
+        $this->view->assign('paginator',$paginator);
+        $this->view->assign('currentPageNumber',$paginator->getCurrentPageNumber());
+        
+        //$this->_helper->layout()->headerTitle = "Comment";
     }
     
     public function delcomAction()

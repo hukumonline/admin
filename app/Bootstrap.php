@@ -8,6 +8,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected function _initAutoload()
     {
+    	require_once 'htmlpurifier/HTMLPurifier/Bootstrap.php';
+    	HTMLPurifier_Bootstrap::registerAutoload();
+    	 
         $moduleLoader = new Zend_Application_Module_Autoloader(array(
                 'namespace' => 'App',
                 'basePath' => APPLICATION_PATH));

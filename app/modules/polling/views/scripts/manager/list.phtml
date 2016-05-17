@@ -1,0 +1,192 @@
+<?php 
+$this->headLink()
+	->appendStylesheet($this->cdn('scripts') . '/plugins/iCheck/flat/blue.css');
+
+$this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/iCheck/icheck.min.js');
+
+?>
+<section class="content-header">
+	<h1>Polling <small>Below are the list of polling:</small></h1>
+    <ol class="breadcrumb">
+		<li><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/polling/manager/list"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Polling</li>
+    </ol>
+</section>
+<?php if ($this->paginator->getTotalItemCount() == 0) : ?>
+Not found any polling <br />
+<?php else : ?>
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title"></h3>
+					<div class="box-tools pull-right">
+						<form method="post" action="" name="pollingForm" id="pollingForm" class="form-horizontal" role="form">
+							<div class="has-feedback">
+								<input type="text" name="searchpolling" class="form-control input-sm" placeholder="Search Polling" value="<?php if (isset($this->exp['polling'])) : ?><?php echo $this->exp['polling']; ?><?php endif; ?>">
+								<span class="fa fa-search form-control-feedback"></span>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="box-body no-padding">
+					<div class="mailbox-controls">
+						<button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
+						<div class="btn-group">
+							<button class="btn btn-default btn-sm delete"><i class="fa fa-trash-o"></i> Delete</button>
+							<button class="btn btn-default btn-sm edit"><i class="fa fa-edit"></i> Edit</button>
+							<button class="btn btn-default btn-sm" onclick="location.href='<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/polling/manager/add'"><i class="fa fa-plus"></i> Add New</button>
+						</div>
+						<div class="pull-right">
+							<?php
+							$start=($this->currentPageNumber-1)*$this->perpage;
+							$s1=$start+1;
+							$position = $this->currentPageNumber * $this->perpage;
+							?>
+							<?php echo $s1.'-'.$position; ?>/<?php echo $this->paginator->getTotalItemCount(); ?>
+							<?php echo $this->paginationControl($this->paginator,'Sliding','partial/post2pagination.phtml',array('params' => $this->params)); ?>
+						</div>
+					</div>
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped">
+						<?php foreach ($this->rowset as $row) : ?>
+						<tbody>
+							<tr id="pollRow_<?php echo $row->guid; ?>">
+							<td><input type="checkbox" name='catalogGuid[]' id='catalogGuid' value='<?php echo $row->guid; ?>'></td>
+							<td class="mailbox-star">
+								<?php if ($this->getPollingHits($row->guid)) : ?>
+								<?php echo $this->getPollingHits($row->guid); ?> Hits
+								<?php else : ?>
+								&nbsp;
+								<?php endif; ?>
+							</td>
+							<td class="mailbox-subject">[<?php if (isset($row->checkedTime) && ($row->checkedTime != "0000-00-00 00:00:00")) : echo Pandamp_Lib_Formater::get_date($row->checkedTime); endif; ?>] - <a href="http://www.hukumonline.com/polling/<?php echo $row->guid ?>" target="_blank"><?php echo $row->title; ?></a></td>
+							</tr>
+						</tbody>
+						<?php endforeach; ?>
+						</table>
+					</div>
+				</div>
+				<div class="box-footer no-padding">
+					<div class="mailbox-controls">
+						<button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
+						<div class="btn-group">
+							<button class="btn btn-default btn-sm delete"><i class="fa fa-trash-o"></i> Delete</button>
+							<button class="btn btn-default btn-sm edit"><i class="fa fa-edit"></i> Edit</button>
+							<button class="btn btn-default btn-sm" onclick="location.href='<?php echo ROOT_URL; ?>'"><i class="fa fa-plus"></i> Add New</button>
+						</div>
+						<div class="pull-right">
+							<?php
+							$start=($this->currentPageNumber-1)*$this->perpage;
+							$s1=$start+1;
+							$position = $this->currentPageNumber * $this->perpage;
+							?>
+							<?php echo $s1.'-'.$position; ?>/<?php echo $this->paginator->getTotalItemCount(); ?>
+							<?php echo $this->paginationControl($this->paginator,'Sliding','partial/post2pagination.phtml',array('params' => $this->params)); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<div id="confirmDialog"></div>
+<div id="messageDialog"></div>
+<?php $this->headScript()->captureStart(); ?>
+$(function () {
+	$('.mailbox-messages input[type="checkbox"]').iCheck({
+		checkboxClass: 'icheckbox_flat-blue',
+		radioClass: 'iradio_flat-blue'
+	});
+
+	//Enable check and uncheck all functionality
+	$(".checkbox-toggle").click(function () {
+		var clicks = $(this).data('clicks');
+		if (clicks) {
+			//Uncheck all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+			$(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+		} else {
+			//Check all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("check");
+			$(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+		}
+		$(this).data("clicks", !clicks);
+	});
+	
+	$(".edit").click(function() {
+		var ids = new Array();
+		$('input[type="checkbox"]:checked').each(function() {
+			ids.push($(this).val());
+		});
+
+		for(var i = 0; i< ids.length; i++){
+			var href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/polling/manager/edit/pollid/"+ids[i];
+			window.open(href,"_blank");
+		}
+		
+		return false;
+	});
+	
+	$(".delete").click(function(){
+		ids = new Array();
+		$('input[type="checkbox"]:checked').each(function() {
+			ids.push($(this).val());
+		});
+		if ($('input[type="checkbox"]').is(":checked")) {
+			$('#confirmDialog').html('Do you really want to delete this poll?')		
+			.dialog({
+				width: 420,
+				resizable: false,
+				modal: true,
+				title: "Confirm",
+				buttons: [{
+					html: "<i class='fa fa-trash'></i>&nbsp; Yes",
+					"class" : "btn btn-danger btn-xs",
+					click: function() {
+						$(this).dialog('destroy');
+						$.ajax({
+							type: 'POST',
+							url: '<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage() ?>/polling/manager/delete',
+							data: { guid: $.toJSON(ids) },
+							success: function(response) {
+								if ('RESULT_OK' == response) {
+								for (var i in ids) {
+									$('#pollRow_' + ids[i]).fadeOut('slow');
+								}
+								$('#messageDialog').html('<?php echo $this->escape('The polling have been deleted successfully.'); ?>')
+								.dialog({
+									title: "<?php echo $this->escape('Message'); ?>",
+									modal: true,
+									show: { effect: 'fade' },
+									open: function(event, ui) {
+										setTimeout(function() {
+											$('#' + event.target.id).dialog('option', 'hide', 'fade').dialog('destroy');
+											window.location.reload();
+										},3000);
+									}
+								});
+								
+								}
+							}
+						});
+					}
+				},
+				{
+					html: "<i class='fa fa-remove'></i>&nbsp; Cancel",
+					"class" : "btn btn-xs",
+					click: function() {
+						$( this ).dialog( "destroy" );
+						$('#confirmDialog').empty();
+					}
+				}
+				]
+			});		
+		}
+	
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>
+<?php endif; ?>

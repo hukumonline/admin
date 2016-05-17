@@ -1,0 +1,15 @@
+<?php if (isset($this->next) || isset($this->previous)) : ?>
+<div class="btn-group">
+	<?php if(isset($this->previous)): ?>
+	<button class="btn btn-default btn-sm" onclick="location.href='<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/browse/page/<?php echo $this->previous; ?>'"><i class="fa fa-chevron-left"></i></button>
+	<?php else: ?>
+	<button class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-left"></i></button>
+	<?php endif; ?>
+	
+	<?php if(isset($this->next)): ?>
+	<button class="btn btn-default btn-sm" onclick="location.href='<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/comment/catalog/browse/page/<?php echo $this->next; ?>'"><i class="fa fa-chevron-right"></i></button>
+	<?php else: ?>
+	<button class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-right"></i></button>
+	<?php endif; ?>
+</div>
+<?php endif; ?>
