@@ -1,0 +1,23 @@
+<?php if ($this->getShareCount($this->guid,'twitter') ||
+	$this->getShareCount($this->guid,'facebook') ||
+  $this->getCountCatalog($this->guid,'desktop') ||
+$this->getCountCatalog($this->guid,'mobile')) : ?>
+				
+<?php if ($this->getShareCount($this->guid,'twitter')) : ?>
+<a class="btn btn-social btn-twitter" title="Share Twitter"><i class="fa fa-twitter"></i> <?php echo $this->getShareCount($this->guid,'twitter'); ?></a>
+<?php endif; ?>
+            	
+<?php if ($this->getShareCount($this->guid,'facebook')) : ?>
+<a class="btn btn-social btn-facebook" title="Share Facebook"><i class="fa fa-facebook"></i> <?php echo $this->getShareCount($this->guid,'facebook'); ?></a>
+<?php endif; ?>
+            	
+<?php if ($this->getCountCatalog($this->guid,'mobile')) : ?>
+<a class="btn btn-social btn-bitbucket" title="Mobile"><i class="fa fa-automobile"></i> <?php echo $this->getCountCatalog($this->guid,'mobile'); ?></a>
+<?php endif; ?>
+            	
+<?php if ($this->getCountCatalog($this->guid,'desktop')) : ?>
+<a class="btn btn-social btn-github" title="Desktop"><i class="fa fa-desktop"></i> <?php echo $this->getCountCatalog($this->guid,'desktop'); ?></a>
+<?php endif; ?>
+            	
+<div style="padding-bottom:10px"></div>
+<?php endif; ?>

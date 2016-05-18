@@ -107,4 +107,44 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		$sortby = str_replace(array("desc","asc"), "", $sortby);
 		$this->_helper->layout()->sort = trim($sortby);
 	}
+	
+	public function fetchCountCatalogAction()
+	{
+		$this->_helper->layout->disableLayout();
+		
+		$request = $this->getRequest();
+		
+		$catalogGuid = $request->getParam('guid');
+		
+		$this->view->assign('guid',$catalogGuid);
+	}
+	
+	public function fetchCountCatalogShortenerAction()
+	{
+		$this->_helper->layout->disableLayout();
+		
+		$request = $this->getRequest();
+		
+		$catalogGuid = $request->getParam('guid');
+		
+		$config = Pandamp_Config::getConfig();
+		
+		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
+		 
+		$short = "";
+		$uri = $config->web->url->base . "/berita/baca/" . $catalogGuid . "/" . $modelCatalog['shortTitle'];
+		$q = "url:\"".$uri."\"";
+		if ($hits_hkmn = $this->view->shortUrl($q,0,1,['q.op' => 'AND','fl' => 'id'])) {
+			if (isset($hits_hkmn->response->docs[0]))
+			{
+				$row_hkmn = $hits_hkmn->response->docs[0];
+				$hex = dechex($row_hkmn->id);
+				$short = $config->web->url->short.'/'.$hex;
+			}
+		}
+		
+		
+		$this->view->assign('guid',$catalogGuid);
+		$this->view->assign('shortUrl', $short);
+	}
 }

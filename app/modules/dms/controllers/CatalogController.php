@@ -124,8 +124,6 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$node = $request->getParam('node','root');
     	$catalogGuid = $request->getParam('guid');
     	
-    	$config = Pandamp_Config::getConfig();
-    	
     	$modDir = $this->getFrontController()->getModuleDirectory();
     	require_once($modDir.'/components/Menu/FolderBreadcrumbs2.php');
     	$w = new Dms_Menu_FolderBreadcrumbs2($node);
@@ -139,21 +137,8 @@ class Dms_CatalogController extends Zend_Controller_Action
     	$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
     	$this->view->assign('rowCatalog', $modelCatalog);
     	
-    	$short = "";
-    	$uri = $config->web->url->base . "/berita/baca/" . $catalogGuid . "/" . $modelCatalog['shortTitle'];
-    	$q = "url:\"".$uri."\"";
-    	if ($hits_hkmn = $this->view->shortUrl($q,0,1,['q.op' => 'AND','fl' => 'id'])) {
-    		if (isset($hits_hkmn->response->docs[0]))
-    		{
-    			$row_hkmn = $hits_hkmn->response->docs[0];
-    			$hex = dechex($row_hkmn->id);
-    			$short = $config->web->url->short.'/'.$hex;
-    		}
-    	}
-    	
     	$this->view->assign('guid', $catalogGuid);
     	$this->view->assign('currentNode', $node);
-    	$this->view->assign('shortUrl', $short);
     }
     
     function detailOldAction()
