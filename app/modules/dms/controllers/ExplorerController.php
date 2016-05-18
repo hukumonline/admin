@@ -132,15 +132,27 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		$modelCatalog = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
 		 
 		$short = "";
-		$uri = $config->web->url->base . "/berita/baca/" . $catalogGuid . "/" . $modelCatalog['shortTitle'];
-		$q = "url:\"".$uri."\"";
-		if ($hits_hkmn = $this->view->shortUrl($q,0,1,['q.op' => 'AND','fl' => 'id'])) {
-			if (isset($hits_hkmn->response->docs[0]))
-			{
-				$row_hkmn = $hits_hkmn->response->docs[0];
-				$hex = dechex($row_hkmn->id);
-				$short = $config->web->url->short.'/'.$hex;
-			}
+		
+		if ($modelCatalog['profileGuid']=='article') {
+			$uri = "berita/baca/".$modelCatalog['guid']."/".$modelCatalog['shortTitle'];
+		}
+		else if ($modelCatalog['profileGuid']=='klinik') {
+			$uri = "klinik/detail/".$modelCatalog['guid']."/".$modelCatalog['shortTitle'];
+		}
+		else if (in_array($modelCatalog['profileGuid'], array('kutu_putusan','kutu_peraturan','kutu_rancangan_peraturan','kutu_peraturan_kolonial')))
+		{
+			$node = $this->view->getNode($modelCatalog['guid']);
+			$lnode = $this->view->getLabelNode($node);
+			$uri = "pusatdata/detail/".$modelCatalog['guid']."/".$lnode."/".$node."/".$modelCatalog['shortTitle'];
+		}
+		
+		$url = $config->web->url->base . DS . $uri;
+		
+		$urlDb = new App_Model_Db_Table_Url();
+		$shortid = $urlDb->fetchRow("url = '".$url."'");
+		if (isset($shortid->id)) {
+			$hex = dechex($shortid->id);
+			$short = $config->web->url->short.'/'.$hex;
 		}
 		
 		
