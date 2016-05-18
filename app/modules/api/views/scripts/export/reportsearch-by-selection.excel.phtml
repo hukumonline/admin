@@ -1,0 +1,195 @@
+<?php
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+		
+require_once("Spreadsheet/Excel/Writer/Format.php");
+require_once("Spreadsheet/Excel/Writer/BIFFwriter.php");
+require_once("Spreadsheet/Excel/Writer/Worksheet.php");
+require_once("Spreadsheet/Excel/Writer/Workbook.php");
+require_once("Spreadsheet/Excel/Writer/Parser.php");
+require_once("Spreadsheet/Excel/Writer.php");
+
+$workbook = new Spreadsheet_Excel_Writer_Workbook("-");
+$worksheet = &$workbook->addWorksheet('Article');
+
+/* set judul */
+$judul =& $workbook->addformat();
+$judul->setsize(12);
+$judul->setbold();
+$judul->setalign('center');
+/* set for each header judul */
+$judul1 =& $workbook->addformat();
+$judul1->setsize(8);
+$judul1->setbold();
+$judul1->setalign('center');
+$judul1->setalign('vcenter');
+$judul1->setborder(1);
+/* set for each value of database */
+$judul2 =& $workbook->addformat();
+$judul2->setsize(8);
+$judul2->setalign('center');
+$judul2->setalign('vcenter');
+
+$judul3 =& $workbook->addformat();
+$judul3->setsize(8);
+$judul3->setalign('left');
+$judul3->setTextWrap();
+$judul3->setalign('vcenter');
+
+/* set for each header judul */
+$judul5 =& $workbook->addformat();
+$judul5->setsize(8);
+$judul5->setbold();
+$judul5->setalign('center');
+$judul5->setalign('vcenter');
+$judul5->setborder(1);
+
+/* set value for line */
+$judul7 =& $workbook->addformat();
+$judul7->setsize(8);
+$judul7->setbold();
+$judul7->setborder(1);
+
+$sky =& $workbook->addformat();
+$sky->setsize(15);
+
+$worksheet->writestring(0, 0, "Review: ".$this->daterange,$judul);
+$worksheet->mergecells(0,0,0,5);
+
+$worksheet->writestring(2, 0, "No.",$judul5);
+$worksheet->writestring(3, 0, "",$judul7);
+$worksheet->mergecells(2,0,3,0);
+$worksheet->setColumn(0,0,5);
+
+$worksheet->writestring(2, 1, "Tanggal",$judul5);
+$worksheet->writestring(3, 1, "",$judul7);
+$worksheet->mergecells(2,1,3,1);
+$worksheet->setColumn(1,1,13);
+
+$worksheet->writestring(2,2, "Title",$judul1);
+$worksheet->writestring(3,2,"",$judul7);
+$worksheet->mergecells(2,2,3,2);
+$worksheet->setColumn(2,2,100);
+
+$worksheet->writestring(2,3,"Author",$judul1);
+$worksheet->writestring(3,3,"",$judul7);
+$worksheet->mergecells(2,3,3,3);
+
+$worksheet->writestring(2,4,"Mobile",$judul1);
+$worksheet->writestring(3,4,"",$judul7);
+$worksheet->mergecells(2,4,3,4);
+
+$worksheet->writestring(2, 5, "Desktop",$judul1);
+$worksheet->writestring(3, 5, "",$judul7);
+$worksheet->mergecells(2,5,3,5);
+
+$worksheet->writestring(2, 6, "Total",$judul1);
+$worksheet->writestring(3, 6, "",$judul7);
+$worksheet->mergecells(2,6,3,6);
+
+
+$i=4;
+foreach ($this->selectedRows as $guid)
+{
+	$mcf = new Core_Models_Db_Table_CatalogFolder();
+	$cf = $mcf->fetchAll("catalogGuid='".$guid."'");
+	if ($cf) {
+		foreach ($cf as $c) {
+			$kf[] = array(
+					'0'=>$c->folderGuid,
+					'1'=>$c->catalogGuid
+					);
+		}
+	}
+}
+
+
+// http://forums.phpfreaks.com/topic/219274-print-duplicate-records-once-from-an-array-into-a-table/
+foreach ($kf as $data){
+    $tmp[$data[0]][] = $data[1];
+}
+
+foreach ($tmp as $course => $data){
+	$folderDb = new Core_Models_Db_Table_Folder();
+	$folder = $folderDb->find($course)->current();
+	if ($folder) {
+		$worksheet->writestring($i, 0, strtoupper($folder->title),$judul2);
+		
+		$j=0;
+		foreach ($data as $key => $value){
+			$i++;
+			$tblCatalog = new Core_Models_Db_Table_Catalog();
+			$rowset = $tblCatalog->find($value)->current();
+			if ($rowset) {
+				$worksheet->writenumber($i, 0, ++$j,$judul2);
+				$worksheet->writestring($i, 1, Pandamp_Lib_Formater::get_date($rowset->publishedDate),$judul3);
+				
+				$rowsetCatalogAttribute = $rowset->findDependentRowsetCatalogAttribute();
+				$tableProfileAttribute = new Core_Models_Db_Table_ProfileAttribute();
+				$profileGuid = $rowset->profileGuid;
+				$where = $tableProfileAttribute->getAdapter()->quoteInto('profileGuid=?', $profileGuid);
+				$rowsetProfileAttribute = $tableProfileAttribute->fetchAll($where,'viewOrder ASC');
+				
+				if ($profileGuid=="klinik") {
+					$rowCatalogAttributeTitle = $rowsetCatalogAttribute->findByAttributeGuid('fixedCommentTitle');
+					
+					$catalogAttributeDb = new Core_Models_Db_Table_CatalogAttribute();
+					
+					$author = $rowsetCatalogAttribute->findByAttributeGuid('fixedSelectNama');
+					$source = $rowsetCatalogAttribute->findByAttributeGuid('fixedSelectMitra');
+					$category = $rowsetCatalogAttribute->findByAttributeGuid('fixedKategoriKlinik');
+					
+					$penjawab = $catalogAttributeDb->getCatalogAttributeValue($author->value, "fixedTitle");
+					$mitra = $catalogAttributeDb->getCatalogAttributeValue($source->value, "fixedTitle");
+					$kategori = $catalogAttributeDb->getCatalogAttributeValue($category->value, "fixedTitle");
+					
+					$notes = "Kategori:$kategori - Mitra:$mitra - Penjawab:$penjawab - Penanya:$rowset->createdBy";
+					
+					//$worksheet->writenote($i, 2, $notes);
+					
+					$worksheet->writestring($i, 2, strip_tags($rowCatalogAttributeTitle->value),$judul3);
+					$worksheet->writestring($i, 3, $penjawab,$judul3);
+					$worksheet->writestring($i, 7, "Mitra:".$mitra,$judul3);
+					$worksheet->writestring($i, 8, "Kategori:".$kategori,$judul3);
+					$worksheet->writestring($i, 9, "Penanya:".$rowset->createdBy,$judul3);
+				} 
+				else
+				{
+					$rowCatalogAttributeTitle = $rowsetCatalogAttribute->findByAttributeGuid('fixedTitle');
+					$rowCatalogAttributeAuthor = $rowsetCatalogAttribute->findByAttributeGuid('fixedAuthor');
+					
+					$worksheet->writestring($i, 2, strip_tags($rowCatalogAttributeTitle->value),$judul3);
+					$worksheet->writestring($i, 3, $rowCatalogAttributeAuthor->value,$judul3);
+				}
+				
+				
+				
+				$mobile = 0;
+				$desktop = 0;
+				if ($this->helperLoader("dms")->getCountCatalog($rowset->guid,'mobile')) {
+					$mobile = $this->getCountCatalog($rowset->guid,'mobile');
+				}
+				if ($this->helperLoader("dms")->getCountCatalog($rowset->guid,'desktop')) {
+					$desktop = $this->getCountCatalog($rowset->guid,'desktop');
+				}
+				
+				
+				$worksheet->writestring($i, 4, $mobile,$judul3);
+				$worksheet->writestring($i, 5, $desktop,$judul3);
+				$worksheet->writestring($i, 6, $mobile+$desktop,$judul3);
+				
+				
+			}
+			
+		}
+		
+		$worksheet->writeblank(++$i, 5, $sky);
+		
+	}
+	
+	$i++;
+}
+
+$workbook->close();
+unset($worksheet);
+unset($workbook);
+?>

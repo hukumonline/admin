@@ -56,16 +56,9 @@ class Dms_FolderController extends Zend_Controller_Action
 			{
 				if (($rowset->status == 1 && $zl->getLanguage() == 'id') || ($rowset->status == 2 && $zl->getLanguage() == 'en') || ($rowset->status == 3))
 				{
-					// it means that user offline other than admin
-					$aReturn = App_Model_Show_AroGroup::show()->getUserGroup($this->_user->packageId);
-					
-					if (isset($aReturn['name']))
+					if (($this->_user->name !== "Master") && ($this->_user->name !== "Super Admin"))
 					{
-						//if (($aReturn[1] !== "admin"))
-						if (($aReturn['name'] !== "Master") && ($aReturn['name'] !== "Super Admin"))
-						{
-							$this->_forward('temporary','error','admin'); 
-						}
+						$this->_forward('temporary','error','admin'); 
 					}
 				}
 			}
@@ -88,6 +81,335 @@ class Dms_FolderController extends Zend_Controller_Action
 			*/
         }
     }
+    
+    public function addAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    	
+    	$request = $this->getRequest();
+    	
+    	if ($request->isPost()) {
+    		$title = $request->getPost('title');
+    		$guid = $request->getPost('guid');
+    		$desc = $request->getPost('description');
+    		$viewOrder = $request->getPost('viewOrder');
+    		$cmsParams = $request->getPost('cmsParams');
+    		$tof = $request->getPost('tof');
+    		$asrot = $request->getPost('asroot');
+    			
+    		if ($asrot==1) $guid = 'root';
+    	
+    		$prm = '{"menu":true,"st":"'.$cmsParams.'"}';
+    	
+    		$zl = Zend_Registry::get('Zend_Locale');
+    		$lang = $zl->getLanguage();
+    			
+    		$auth = Zend_Auth::getInstance();
+    		$group = $auth->getIdentity()->name;
+    		$group = strtolower(str_replace(" ", "", $group));
+    			
+    		/*$frontendOptions = array('lifetime' => 3600,'automatic_serialization' => true,'cache_id_prefix' => 'sidebar_');
+    		 $backendOptions = array('cache_dir' => TEMP_DIR . '/cache/category');
+    		$cache = Zend_Cache::factory('Core','File',$frontendOptions,$backendOptions);*/
+    			
+    		//$cache = Pandamp_Cache::getInstance();
+    		//$cache->remove('dmstree_'.$lang.'_'.$group);
+    		//$cache->remove("categoryCheckbox");
+    	
+    		$modelFolder = new App_Model_Db_Table_Folder();
+    		$rowFolder = $modelFolder->createRow();
+    	
+    		$rowFolder->parentGuid = $guid;
+    		$rowFolder->title = $title;
+    		$rowFolder->description = $desc;
+    		$rowFolder->viewOrder = ($viewOrder) ? $viewOrder : 0;
+    		$rowFolder->cmsParams = ($cmsParams) ? $prm : '';
+    		$rowFolder->type = $tof;
+    	
+    		$id = $rowFolder->save();
+    	
+    		$this->_response->setBody(Zend_Json::encode(
+    				array(
+    						'text' => $title,
+    						'asrot' => $asrot,
+    						'id' => $id
+    				)
+    		));
+    	
+    	}
+    	 
+    }
+    
+    public function editAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    
+    	if ($request->isPost()) {
+    
+    		$title = $request->getPost('title');
+    		$guid = $request->getPost('guid');
+    		$desc = $request->getPost('description');
+    		$viewOrder = $request->getPost('viewOrder');
+    		$cmsParams = $request->getPost('cmsParams');
+    		$tof = $request->getPost('tof');
+    
+    		$prm = '{"menu":true,"st":"'.$cmsParams.'"}';
+    
+    		$modelFolder = new App_Model_Db_Table_Folder();
+    		$rowFolder = $modelFolder->find($guid)->current();
+    		if ($rowFolder) {
+    
+    			$zl = Zend_Registry::get('Zend_Locale');
+    			$lang = $zl->getLanguage();
+    
+    			$auth = Zend_Auth::getInstance();
+    			$group = $auth->getIdentity()->name;
+    			$group = strtolower(str_replace(" ", "", $group));
+    				
+    			//$cache = Pandamp_Cache::getInstance();
+    			//$cache->remove('dmstree_'.$lang.'_'.$group);
+    			//$cache->remove("categoryCheckbox");
+    
+    			$rowFolder->title = $title;
+    			$rowFolder->description = $desc;
+    			$rowFolder->viewOrder = ($viewOrder) ? $viewOrder : 0;
+    			$rowFolder->cmsParams = ($cmsParams) ? $prm : '';
+    			$rowFolder->type = $tof;
+    
+    			$id = $rowFolder->save();
+    
+    			$this->_response->setBody(Zend_Json::encode(
+    					array(
+    							'text' => $title,
+    							'id' => $id
+    					)
+    			));
+    
+    		}
+    	}
+    
+    
+    }
+    
+    public function deleteAction()
+    {
+    	/**
+    	 * Folder tidak bisa dihapus
+    	 * jika folder mengandung sub-folder | catalog
+    	 * Selain itu bisa dihapus
+    	 * Untuk memilih lebih dari satu folder
+    	 * tekan select+klik, alt+klik pada mac | ctrl+klik pada windows(linux)
+    	 */
+    
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    
+    	if ($request->isPost()) {
+    		$guid = $request->getPost('id');
+    		$tbl = new App_Model_Db_Table_Folder();
+    		$rowset = $tbl->find($guid);
+    		if(count($rowset))
+    		{
+    			$row = $rowset->current();
+    			try {
+    					
+    				$zl = Zend_Registry::get('Zend_Locale');
+    				$lang = $zl->getLanguage();
+    					
+    				$auth = Zend_Auth::getInstance();
+    				$group = $auth->getIdentity()->name;
+    				$group = strtolower(str_replace(" ", "", $group));
+    					
+    				//$cache = Pandamp_Cache::getInstance();
+    				//$cache->remove('dmstree_'.$lang.'_'.$group);
+    				//$cache->remove("categoryCheckbox");
+    					
+    				$row->delete();
+    					
+    				$this->_response->setBody(Zend_Json::encode(
+    						array(
+    								'success' => 'true',
+    								'text' => $row->title,
+    								'id' => $guid
+    						)
+    				));
+    
+    			}
+    			catch (Exception $e)
+    			{
+    				$this->_response->setBody(Zend_Json::encode(
+    						array(
+    								'success' => 'false',
+    								'text' => $row->title.' ... '.$e->getMessage(),
+    								'id' => $guid
+    						)
+    				));
+    					
+    
+    			}
+    
+    		}
+    
+    	}
+    
+    }
+    
+    public function forcedeleteAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    
+    	if ($request->isPost()) {
+    		$folderGuid = $request->getPost('id');
+    			
+    		$hol = new Pandamp_Core_Hol_Folder();
+    		$hol->forceDelete($folderGuid);
+    	}
+    }
+    
+    public function moveAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    
+    	if ($request->isPost()) {
+    		$targetGuid = $request->getPost("targetGuid");
+    		$currentGuid = $request->getPost("folderGuid");
+    			
+    		$modelFolder = new App_Model_Db_Table_Folder();
+    		$rowFolder = $modelFolder->find($currentGuid)->current();
+    		$rowTargetFolder = $modelFolder->find($targetGuid)->current();
+    			
+    		if (empty($currentGuid) || $currentGuid == 'root') {
+    			$response = Zend_Json::encode(array('success' => 'false','text' => 'Cant move root','id' => $currentGuid));
+    		}
+    		else
+    		{
+    			try {
+    					
+    				$zl = Zend_Registry::get('Zend_Locale');
+    				$lang = $zl->getLanguage();
+    					
+    				$auth = Zend_Auth::getInstance();
+    				$group = $auth->getIdentity()->name;
+    				$group = strtolower(str_replace(" ", "", $group));
+    					
+    				//$cache = Pandamp_Cache::getInstance();
+    				//$cache->remove('dmstree_'.$lang.'_'.$group);
+    				//$cache->remove("categoryCheckbox");
+    
+    				$rowFolder->move($targetGuid);
+    					
+    				$response = Zend_Json::encode(array('success' => 'true','text' => $rowFolder->title.' pindah ke folder '.$rowTargetFolder->title,'id' => $rowFolder->guid));
+    			}
+    			catch (Exception $e)
+    			{
+    				$response = Zend_Json::encode(array('success' => 'false','text' => $e->getMessage(),'id' => $rowFolder->guid));
+    			}
+    
+    		}
+    			
+    		$this->_response->setBody($response);
+    			
+    	}
+    
+    }
+    
+    public function copyAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    
+    	if ($request->isPost()) {
+    		$targetGuid = $request->getPost("targetGuid");
+    		$currentGuid = $request->getPost("folderGuid");
+    
+    		$modelFolder = new App_Model_Db_Table_Folder();
+    		$rowFolder = $modelFolder->find($currentGuid)->current();
+    		$rowTargetFolder = $modelFolder->find($targetGuid)->current();
+    
+    
+    		if (empty($currentGuid) || $currentGuid == 'root') {
+    			$response = Zend_Json::encode(array('success' => 'false','text' => 'Cant move root','id' => $currentGuid));
+    		}
+    		else
+    		{
+    			try {
+    					
+    				$zl = Zend_Registry::get('Zend_Locale');
+    				$lang = $zl->getLanguage();
+    					
+    				$auth = Zend_Auth::getInstance();
+    				$group = $auth->getIdentity()->name;
+    				$group = strtolower(str_replace(" ", "", $group));
+    					
+    				//$cache = Pandamp_Cache::getInstance();
+    				//$cache->remove('dmstree_'.$lang.'_'.$group);
+    				//$cache->remove("categoryCheckbox");
+    					
+    				$newRow = $modelFolder->createRow();
+    				$newRow->copy($targetGuid,$currentGuid);
+    
+    				$response = Zend_Json::encode(array('success' => 'true','text' => $rowFolder->title.' disalin ke folder '.$rowTargetFolder->title,'id' => $rowFolder->guid));
+    			}
+    			catch (Exception $e)
+    			{
+    				$response = Zend_Json::encode(array('success' => 'false','text' => $e->getMessage(),'id' => $rowFolder->guid));
+    			}
+    				
+    		}
+    			
+    		$this->_response->setBody($response);
+    
+    
+    	}
+    
+    }
+    
+    public function checkAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    
+    	$request = $this->getRequest();
+    
+    	if ($request->isPost()) {
+    		$guid = $request->getParam('id');
+    			
+    		$tblFolder = new App_Model_Db_Table_Folder();
+    		$rowFolder = $tblFolder->find($guid)->current();
+    		if ($rowFolder) {
+    			$prm = Zend_Json::decode($rowFolder->cmsParams);
+    			$this->_response->setBody(Zend_Json::encode(
+    					array(
+    							'guid' => $rowFolder->guid,
+    							'title' => $rowFolder->title,
+    							'desc' => $rowFolder->description,
+    							'parentGuid' => $rowFolder->parentGuid,
+    							'path' => $rowFolder->path,
+    							'type' => $rowFolder->type,
+    							'viewOrder' => $rowFolder->viewOrder,
+    							'cmsParams' => $prm['st']
+    					)
+    			));
+    
+    		}
+    			
+    	}
+    }
+    
     function newAction()
     {
         $r = $this->getRequest();
@@ -134,7 +456,7 @@ class Dms_FolderController extends Zend_Controller_Action
 
         $this->_helper->layout()->headerTitle = "Folder Management: Add New Folder";
     }
-    function editAction()
+    function editOldAction()
     {
         $r = $this->getRequest();
 
@@ -170,7 +492,7 @@ class Dms_FolderController extends Zend_Controller_Action
         
         $this->_helper->layout()->headerTitle = "Folder Management: Edit Folder";
     }
-    function deleteAction()
+    function deleteOldAction()
     {
         $r = $this->getRequest();
 
@@ -205,7 +527,7 @@ class Dms_FolderController extends Zend_Controller_Action
         $this->view->message = "Folder(s) have been deleted.";
 
     }
-    public function forcedeleteAction()
+    public function forcedeleteOldAction()
     {
         $r = $this->getRequest();
 
@@ -239,7 +561,7 @@ class Dms_FolderController extends Zend_Controller_Action
         }
         $this->view->message = "Folder(s) have been deleted.";
     }
-    public function moveAction()
+    public function moveOldAction()
     {
         $urlReferer = $_SERVER['HTTP_REFERER'];
 
@@ -317,7 +639,7 @@ class Dms_FolderController extends Zend_Controller_Action
 
         $this->_helper->layout()->headerTitle = "Folder Management: Move Folder";
     }
-    public function copyAction()
+    public function copyOldAction()
     {
         $urlReferer = $_SERVER['HTTP_REFERER'];
 

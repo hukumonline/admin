@@ -1,0 +1,169 @@
+<?php
+
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+		
+require_once("Spreadsheet/Excel/Writer/Format.php");
+require_once("Spreadsheet/Excel/Writer/BIFFwriter.php");
+require_once("Spreadsheet/Excel/Writer/Worksheet.php");
+require_once("Spreadsheet/Excel/Writer/Workbook.php");
+require_once("Spreadsheet/Excel/Writer/Parser.php");
+require_once("Spreadsheet/Excel/Writer.php");
+
+function _traverseFolder($folderGuid, $sGuid, $level)
+{
+$workbook = new Spreadsheet_Excel_Writer_Workbook("-");
+$worksheet = &$workbook->addWorksheet('Peraturan');
+
+/* set judul */
+$judul =& $workbook->addformat();
+$judul->setsize(12);
+$judul->setbold();
+$judul->setalign('center');
+/* set for each header judul */
+$judul1 =& $workbook->addformat();
+$judul1->setsize(8);
+$judul1->setbold();
+$judul1->setalign('center');
+$judul1->setalign('vcenter');
+$judul1->setborder(1);
+/* set for each value of database */
+$judul2 =& $workbook->addformat();
+$judul2->setsize(8);
+$judul2->setalign('center');
+$judul2->setalign('vcenter');
+
+$judul3 =& $workbook->addformat();
+$judul3->setsize(8);
+$judul3->setalign('left');
+$judul3->setTextWrap();
+$judul3->setalign('vcenter');
+
+/* set for each header judul */
+$judul5 =& $workbook->addformat();
+$judul5->setsize(8);
+$judul5->setbold();
+$judul5->setalign('center');
+$judul5->setalign('vcenter');
+$judul5->setborder(1);
+
+/* set value for line */
+$judul7 =& $workbook->addformat();
+$judul7->setsize(8);
+$judul7->setbold();
+$judul7->setborder(1);
+
+$worksheet->writestring(0, 0, "Daftar Peraturan",$judul);
+$worksheet->mergecells(0,0,0,4);
+
+$worksheet->writestring(2, 0, "No.",$judul5);
+$worksheet->writestring(3, 0, "",$judul7);
+$worksheet->mergecells(2,0,3,0);
+$worksheet->setColumn(0,0,5);
+$worksheet->writestring(2,1, "Folder",$judul1);
+$worksheet->writestring(3,1,"",$judul7);
+$worksheet->mergecells(2,1,3,1);
+$worksheet->setColumn(1,1,30);
+$worksheet->writestring(2,2,"NOF",$judul1);
+$worksheet->writestring(3,2,"",$judul7);
+$worksheet->mergecells(2,2,3,2);
+$worksheet->writestring(2,3,"Field",$judul1);
+$worksheet->writestring(3,3,"",$judul7);
+$worksheet->mergecells(2,3,3,3);
+$worksheet->setColumn(3,3,30);
+$worksheet->writestring(2, 4, "Peraturan/Putusan",$judul1);
+$worksheet->writestring(3, 4, "",$judul7);
+$worksheet->mergecells(2,4,3,4);
+$worksheet->setColumn(4,4,100);
+
+$j=0;
+$k=0;
+$p=0;
+$i=5;
+	
+$tblFolder = new App_Model_Db_Table_Folder();
+$rowSet = $tblFolder->fetchChildren($folderGuid);
+$row = $tblFolder->find($folderGuid)->current();
+$tblCatalog = new App_Model_Db_Table_Catalog();
+$rows = $tblCatalog->exportToExcel($row->guid);
+if (count($rows)) {
+$worksheet->writestring($i, 1, "$row->title",$judul3);
+$worksheet->writenumber($i, 0, ++$j,$judul2);
+foreach ($rows as $rowset) 
+{
+	$worksheet->writenumber($i, 2, ++$k,$judul2);
+	$rowsetCatalogAttribute = $rowset->findDependentRowsetCatalogAttribute(); 
+	$tableProfileAttribute = new App_Model_Db_Table_ProfileAttribute();
+	$profileGuid = $rowset->profileGuid;
+	$where = $tableProfileAttribute->getAdapter()->quoteInto('profileGuid=?', $profileGuid);
+	$rowsetProfileAttribute = $tableProfileAttribute->fetchAll($where,'viewOrder ASC');
+	$aAttribute = array();
+	$n=2;
+	$tblAttribute = new App_Model_Db_Table_Attribute();
+	foreach ($rowsetProfileAttribute as $rowProfileAttribute)
+	{
+		if($rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid))
+		{
+			$rowCatalogAttribute = $rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid);
+			$rowsetAttribute = $tblAttribute->find($rowCatalogAttribute->attributeGuid);
+			if(count($rowsetAttribute))
+			{
+				$rowAttribute = $rowsetAttribute->current();
+				$worksheet->writestring($i, 3, "$rowAttribute->name",$judul3);
+				$worksheet->writestring($i, 4, "$rowCatalogAttribute->value",$judul3);
+			}
+		}
+		$i++;
+	}
+	
+}
+}
+if (isset($rowSet)) {
+$no='0';
+foreach($rowSet as $row)
+{
+//	$sGuid .= _traverseFolder($row->guid, '', $level+1)."";
+	$worksheet->writenumber($i, 0, ++$j,$judul2);
+	$worksheet->writestring($i, 1, "$row->title",$judul3);
+	
+	$tblCatalog = new App_Model_Db_Table_Catalog();
+	$rows = $tblCatalog->exportToExcel($row->guid);
+	foreach ($rows as $rowset) 
+	{
+		// reset numbering to 0
+		if ($no<>$row->guid) {
+			$nop = 0;
+			$no = $row->guid;
+		}
+		$worksheet->writenumber($i, 2, ++$nop,$judul2);
+		$rowsetCatalogAttribute = $rowset->findDependentRowsetCatalogAttribute(); 
+		$tableProfileAttribute = new App_Model_Db_Table_ProfileAttribute();
+		$profileGuid = $rowset->profileGuid;
+		$where = $tableProfileAttribute->getAdapter()->quoteInto('profileGuid=?', $profileGuid);
+		$rowsetProfileAttribute = $tableProfileAttribute->fetchAll($where,'viewOrder ASC');
+		$aAttribute = array();
+		$tblAttribute = new App_Model_Db_Table_Attribute();
+		foreach ($rowsetProfileAttribute as $rowProfileAttribute)
+		{
+			if($rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid))
+			{
+				$rowCatalogAttribute = $rowsetCatalogAttribute->findByAttributeGuid($rowProfileAttribute->attributeGuid);
+				$rowsetAttribute = $tblAttribute->find($rowCatalogAttribute->attributeGuid);
+				if(count($rowsetAttribute))
+				{
+					$rowAttribute = $rowsetAttribute->current();
+					$worksheet->writestring($i, 3, "$rowAttribute->name",$judul3);
+					$worksheet->writestring($i, 4, "$rowCatalogAttribute->value",$judul3);
+				}
+			}
+			$i++;
+		}
+		
+	}
+	$i++;
+}
+}
+//$workbook->send('FUPP.xls');
+$workbook->close();		
+}
+
+_traverseFolder($this->folderGuid,'',0);

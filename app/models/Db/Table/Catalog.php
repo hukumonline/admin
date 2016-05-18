@@ -80,4 +80,16 @@ class App_Model_Db_Table_Catalog extends Zend_Db_Table_Abstract
 		return ($row) ? $row['num_files'] : 0;
 	}
 	
+	public function exportToExcel($folderGuid)
+	{
+		$select = $this->select()
+						->from($this)
+						->join('KutuCatalogFolder','KutuCatalog.guid=KutuCatalogFolder.catalogGuid',array())
+						->where('KutuCatalogFolder.folderGuid=?',$folderGuid)
+						->order('KutuCatalog.publishedDate DESC');
+	
+		$rows = $this->fetchAll($select);
+	
+		return $rows;
+	}
 }

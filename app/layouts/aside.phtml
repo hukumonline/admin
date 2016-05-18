@@ -23,12 +23,95 @@
 			<li class="header">MAIN NAVIGATION</li>
 			<li id="dmstree"></li>
 		</ul>
+		
+		<div id="dialog-folder" style="display:none">
+			<p class="validateFolderTips"></p>
+			<form id="formfolder">
+				<fieldset>
+					<p>
+						<label for="title">Folder Title</label><br>
+						<input type="text" name="title" id="title" class="text ui-widget-content ui-corner-all" />
+					</p>
+					<p>
+						<label for="description">Description</label><br>
+					 	<textarea id="description" name="description" cols="30" rows="5"></textarea>
+					</p>
+					<p>
+					 	<label for="viewOrder">Menu View Order</label><br>
+					 	<input type="text" id="viewOrder" name="viewOrder" class="text ui-widget-content ui-corner-all" />
+					</p>
+					<p>
+					 	<label for="cmsParams">Cms Parameters</label><br>
+					 	<input type="text" id="cmsParams" name="cmsParams" class="text ui-widget-content ui-corner-all" />
+					</p>
+					<p>
+						<label for="typeoffolder">Type of Folder</label><br>
+	                	<select name="tof" id="tof" class="ui-widget-content ui-corner-all">
+	                		<option value="">Choose:</option>
+	                        <option value="cms">Berita</option>
+	                        <option value="cms-en">CMS En</option>
+	                        <option value="dms">Peraturan</option>
+	                        <option value="eventcalendar">Project</option>
+	                        <option value="klinik">Klinik</option>
+	                        <option value="marketing">Marketing</option>
+	                        <option value="membership">Membership</option>
+	                        <option value="menu">Menu</option>
+							<option value="store">Store</option>
+	                   	</select>
+	                   	<input type="hidden" id="guid" name="guid" />
+					</p>
+					<p>
+						<input type="checkbox" name="asroot" id="asroot" value="1" />&nbsp;Set as ROOT
+					</p>
+				</fieldset>
+			</form>
+		</div>
 				
 	</section>
 	<!-- /.sidebar -->
 </aside>
 <?php $this->headScript()->captureStart(); ?>
 $(function () {
+	var name	= $( "#title" ),
+	desc		= $( "#description" ),
+	viewOrder 	= $( "#viewOrder" ),
+	cmsParams 	= $( "#cmsParams" ),
+	tof 		= $( "#tof" ),
+	guid 		= $( "#guid" ),
+	tips 		= $( ".validateFolderTips" );
+
+	function updateTips( t ) {
+		tips
+			.text( t )
+			.addClass( "ui-state-highlight" );
+		 setTimeout(function() {
+			 tips.removeClass( "ui-state-highlight", 1500 );
+			 }, 500 );
+	}
+	
+	function checkLength( o, n, min, max ) {
+		if ( o.val().length > max || o.val().length < min ) {
+			o.addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+					 min + " and " + max + "." );
+					 return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	//override dialog's title function to allow for HTML titles
+	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+		_title: function(title) {
+			var $title = this.options.title || '&nbsp;'
+			if( ("title_html" in this.options) && this.options.title_html == true )
+				title.html($title);
+			else title.text($title);
+		}
+	}));
+	
 	$("#dmstree").jstree({
 		"core" : {
 			"check_callback" : true,
@@ -39,7 +122,433 @@ $(function () {
 				}
 			}
 		},
+		"contextmenu": {
+			select_node : true,
+			"items": function (n) {
+				return {
+					"expand": {
+						"label": "Expand All",
+						"icon": "icon-expand",
+						"action": function(data) {
+							var inst = $.jstree.reference(data.reference);
+							inst.open_all(data.reference);
+						}
+					},
+					"collapse": {
+						"label": "Collapse All",
+						"icon": "icon-collapse-alt",
+						"action": function(data) {
+							var inst = $.jstree.reference(data.reference);
+							inst.close_all(data.reference);
+						}
+					},
+					"export": {
+						"separator_before" : true,
+						"label": "Export File",
+						"icon": "icon-external-link",
+						"action": function (data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/export/peraturan/format/excel/folderGuid/"+ obj.id;
+						}
+					},
+					"download": {
+						"label": "Download File",
+						"icon": "icon-download",
+						"action": function (data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/folder/downloadfile/folderGuid/"+ obj.id;
+						}
+					},
+					"create": {
+						"separator_before" : true,
+						"label": "Create",
+						"icon": "icon-plus-sign",
+						"action": function (data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							var dialogfolder = $( "#dialog-folder" ).removeClass('hide').dialog({
+								modal: true,
+								title: "Add New Folder",
+								buttons: [
+									{
+										text: "Cancel",
+										"class" : "btn btn-xs",
+										click: function() {
+											$( this ).dialog( "destroy" );
+											tips.empty();
+											$( this ).find('form')[0].reset();
+										}
+									},
+									{
+										text: "OK",
+										"class" : "btn btn-primary btn-xs",
+										click: function() {
+											var bValid = true;
+											name.removeClass( "ui-state-error" );
+											bValid = bValid && checkLength( name, "title", 3, 250 );
+											if ( bValid ) {
+												guid.val(obj.id);
+												$.ajax({
+							        				url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/add",
+							        				type: "post",
+							        				data: $('#formfolder').serialize(),
+							        				error: function(XMLHttpRequest, textStatus, errorThrown) {
+							        					updateTips("An error has occurred making the request: " + errorThrown);
+							        				},
+							        				success: function(response) {
+							        					response = $.parseJSON(response);
+							        					$("#dialog-folder").dialog().dialog('destroy');
+							        					$('#formfolder')[0].reset();
+							        					if (response.asrot==1) {
+							        						//$("#dmstree").jstree('create_node', '#', {'id' : response.id, 'text' : response.text}, 'last');
+							        						inst.create_node("#", response, "last");
+							        					}
+							        					else
+							        					{
+							        						inst.create_node(data.reference, response, "last");
+							        					}
+							        					
+							        				}
+							        			});
+											}
+										}
+									}
+								]
+							});
+							
+						}
+					},
+					"rename": {
+						"label": "Rename",
+						"icon": "icon-edit",
+						"action": function (data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							var dialogren = $( "#dialog-folder" ).removeClass('hide').dialog({
+								modal: true,
+								title: "Rename Folder:"+obj.text,
+								open:function(){
+									$.ajax({
+										url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/check",
+										type: "post",
+										data: {id:obj.id},
+										error: function(XMLHttpRequest, textStatus, errorThrown) {
+											updateTips("An error has occurred making the request: " + errorThrown);
+										},
+										success: function(response) {
+											response = $.parseJSON(response);
+											
+											name.val(response.title);
+											desc.val(response.desc);
+											viewOrder.val(response.viewOrder);
+											cmsParams.val(response.cmsParams);
+											tof.val(response.type);	
+
+											if (response.parentGuid==response.guid) {
+												$("#asroot").prop('checked', true).attr('disabled', true);
+											}	
+											else
+											{
+												$("#asroot").attr('disabled', true);
+											}
+																						
+										}
+									});
+								},
+								close:function(){
+									$( this ).dialog( "destroy" );
+									$( this ).find('form')[0].reset();
+								},
+								buttons: [
+									{
+										text: "Cancel",
+										"class" : "btn btn-xs",
+										click: function() {
+											$( this ).dialog( "destroy" ); 
+											$( this ).find('form')[0].reset();
+										} 
+									},
+									{
+										text: "OK",
+										"class" : "btn btn-primary btn-xs",
+										click: function() {
+											var bValid = true;
+											name.removeClass( "ui-state-error" );
+
+											bValid = bValid && checkLength( name, "title", 3, 16 );
+
+											if ( bValid ) {
+															
+												guid.val(obj.id);
+
+													$.ajax({
+														url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/edit",
+														type: "post",
+														data: $('#formfolder').serialize(),
+														error: function(XMLHttpRequest, textStatus, errorThrown) {
+															updateTips("An error has occurred making the request: " + errorThrown);
+														},
+														success: function(response) {
+															response = $.parseJSON(response);
+															console.log(response);
+															
+															$("#dialog-folder").dialog().dialog('destroy');
+
+															$('#formfolder')[0].reset();
+
+															inst.rename_node(data.reference, response.text);
+
+														}
+													});
+														
+											 }
+													
+										} 
+									}
+								]
+							});
+						}
+					},
+					"remove": {
+						"label": "Delete",
+						"icon": "icon-remove",
+						"action": function (data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							objs = inst.get_selected(data.reference);
+							
+							if ($.isArray(objs)) {
+								$('#confirmDialog').html('These items will be permanently deleted and cannot be recovered. <?php echo addslashes("Are you sure?"); ?>')
+								.dialog({
+									resizable: false,
+									modal: true,
+									title: "Confirm",
+									buttons: [
+										{
+											html: "<i class='icon-trash bigger-110'></i>&nbsp; Delete all items",
+											"class" : "btn btn-danger btn-xs",
+											click: function() {
+												var x1, x2;
+
+												obj = objs.slice();
+												for(x1 = 0, x2 = obj.length; x1 < x2; x1++) {
+													var fid = obj[x1]['id'];
+													
+													$.ajax({
+														url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/delete",
+														type: "post",
+														data: {id:fid},
+														error: function(XMLHttpRequest, textStatus, errorThrown) {
+															alert("An error has occurred making the request: " + errorThrown);
+														},
+														success: function(response) {
+															response = $.parseJSON(response);
+															//console.log(response);
+															//alert(response);
+
+															if (response.success=='false') {
+																$.gritter.add({
+																	title: 'Warning Notification',
+																	text: response.text,
+																	class_name: 'gritter-error'
+																});
+														
+																return false;													
+															}
+															else
+															{
+																inst.delete_node(response.id);
+															}
+															
+														}
+													});
+												
+													
+												}
+												
+												//inst.delete_node(objs);
+											
+												$( this ).dialog( "destroy" );
+												$('#confirmDialog').empty();
+											}
+										}
+										,
+										{
+											html: "<i class='icon-remove bigger-110'></i>&nbsp; Cancel",
+											"class" : "btn btn-xs",
+											click: function() {
+												$( this ).dialog( "close" );
+											}
+										}
+									
+									]
+								});
+								
+							}
+							else
+							{
+								
+							}
+						}
+					},
+					"forcedelete": {
+						"separator_before" : true,
+						"label"	: "Force Delete",
+						"icon": "icon-minus",
+						"action": function (data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							objs = inst.get_selected(data.reference);
+							if ($.isArray(objs)) {
+								$('#confirmDialog').html('<div class="alert alert-info bigger-110">These items will be permanently deleted and cannot be recovered.</div><div class="space-6"></div><p class="bigger-110 bolder center grey"><i class="icon-hand-right blue bigger-120"></i><?php echo addslashes("Are you sure?"); ?></p>')
+								.dialog({
+									resizable: false,
+									modal: true,
+									title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i> Confirm</h4></div>",
+									title_html: true,
+									buttons: [
+							          {
+							        	  html: "<i class='icon-trash bigger-110'></i>&nbsp; Delete all items",
+							        	  "class" : "btn btn-danger btn-xs",
+							        	  click: function() {
+							        		  var x1, x2;
+
+							        		  obj = objs.slice();
+							        		  for(x1 = 0, x2 = obj.length; x1 < x2; x1++) {
+							        			  var fid = obj[x1]['id'];
+
+							        			  $.ajax({
+							        				  url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/forcedelete",
+							        				  type: "post",
+							        				  data: {id:fid},
+							        				  error: function(XMLHttpRequest, textStatus, errorThrown) {
+							        					  alert("An error has occurred making the request: " + errorThrown);
+							        				  },
+							        				  success: function(response) {
+															inst.delete_node(response.id);
+							        				  }
+							        			  });
+							        			  
+							        		  }
+
+							        		  $( this ).dialog( "destroy" );
+							        		  $('#confirmDialog').empty();
+							        	  }
+							          },
+							          {
+							        	  html: "<i class='icon-remove bigger-110'></i>&nbsp; Cancel",
+							        	  "class" : "btn btn-xs",
+							        	  click: function() {
+							        		  $( this ).dialog( "close" );
+							        	  }
+							          }
+									]
+									
+								});
+								
+							}
+						}
+					},
+					"ccp" : {
+						"separator_before" : true,
+						"label"	: "Edit",
+						"submenu" : {
+							"cut" : {
+								"label"	: "Cut",
+								"icon": "icon-cut",
+								"action" : function (data) {
+									var inst = $.jstree.reference(data.reference),
+									obj = inst.get_node(data.reference);
+									if(inst.is_selected(obj)) {
+										inst.cut(inst.get_selected());
+									}
+									else
+									{
+										inst.cut(obj);
+									}
+									
+								}
+							},
+							"copy" : {
+								"label"	: "Copy",
+								"icon": "icon-copy",
+								"action" : function (data) {
+									var inst = $.jstree.reference(data.reference),
+									obj = inst.get_node(data.reference);
+									if(inst.is_selected(obj)) {
+										inst.copy(inst.get_selected());
+									}
+									else {
+										inst.copy(obj);
+									}									
+								}
+							},
+							"paste" : {
+								"label"	: "Paste",
+								"icon": "icon-paste",
+								"action" : function (data) {
+									var inst = $.jstree.reference(data.reference),
+									obj = inst.get_node(data.reference);
+									
+									inst.paste(obj);
+								}
+							}
+						}
+					}
+					
+					
+				};
+			}
+		},
 		"plugins" : [ "contextmenu", "dnd" ]	
+	})
+	.bind( "move_node.jstree", function( event, data ) {
+		$.ajax({
+			url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/move",
+			type: "post",
+			data: {targetGuid:data.node.parent,folderGuid:data.node.id},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("move: An error has occurred making the request: " + errorThrown);
+			},
+			success: function(response) {
+				response = $.parseJSON(response);
+				
+				$.gritter.add({
+					title: 'This is a sticky notice!',
+					text: response.text,
+					class_name: 'gritter-success'
+				});
+		
+				return false;													
+				
+			}
+		});
+	})
+	.bind( "copy_node.jstree", function( event, data ) {
+		$.ajax({
+			url: "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/folder/copy",
+			type: "post",
+			data: {targetGuid:data.node.parent,folderGuid:data.original.id},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("copy: An error has occurred making the request: " + errorThrown);
+			},
+			success: function(response) {
+				response = $.parseJSON(response);
+				
+				$.gritter.add({
+					title: 'This is a sticky notice!',
+					text: response.text,
+					class_name: 'gritter-success'
+				});
+		
+				return false;													
+				
+			}
+		});
+	
+	
 	})
 	.bind( "dblclick.jstree", function( e ) {
 		e.preventDefault();
