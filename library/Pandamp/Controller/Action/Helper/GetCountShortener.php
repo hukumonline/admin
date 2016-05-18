@@ -14,6 +14,8 @@ class Pandamp_Controller_Action_Helper_GetCountShortener
 		}
 		$view = $viewRenderer->view;
 		
+		$config = Pandamp_Config::getConfig();
+		
 		$catalogs = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
 		
 		if (($catalogs) && (!in_array($catalogs['profileGuid'], array('partner','author','kategoriklinik')))) {
@@ -35,7 +37,7 @@ class Pandamp_Controller_Action_Helper_GetCountShortener
 				$uri = "pusatdata/detail/".$catalogs['guid']."/".$lnode."/".$node."/".$catalogs['shortTitle'];
 			}
 			
-			$url = ROOT_URL . DS . $uri;
+			$url = $config->web->url->base . DS . $uri;
 			
 			$urlDb = new App_Model_Db_Table_Url();
 			$countUrls = $urlDb->countUrl($url);
