@@ -131,7 +131,7 @@ class SolrController extends Application_Controller_Cli
 			$select->where($query);
 		}
 		
-		$select->order('createdDate ASC');
+		$select->order('createdDate DESC');
 		
 		//$sql = $select->__toString();
 		
@@ -1335,7 +1335,7 @@ class SolrController extends Application_Controller_Cli
 		if (isset($profileGuid) && !in_array($profileGuid, array('partner','narsum','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
 			switch ($type) {
 				case 'desktop':
-					if (in_array($profileGuid, array('article','isuhangat','kutu_agenda','video'))) {
+					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video'))) {
 						$valueText = 'TICKER';
 					}
 					else if ($profileGuid=='klinik') {
@@ -1349,7 +1349,7 @@ class SolrController extends Application_Controller_Cli
 					break;
 						
 				case 'mobile':
-					if (in_array($profileGuid, array('article','isuhangat','kutu_agenda','video'))) {
+					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video'))) {
 						$valueText = 'TICKER-MOBILE';
 					}
 					else if ($profileGuid=='klinik') {
