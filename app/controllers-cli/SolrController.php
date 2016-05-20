@@ -540,9 +540,9 @@ class SolrController extends Application_Controller_Cli
 		
 		//$part->shortenerUrl = $this->generateShortener($row->shortTitle);
 		
-		if (in_array($row->profileGuid, array('article','kutu_agenda','klinik','partner'))) {
+		//if (in_array($row->profileGuid, array('article','kutu_agenda','klinik','partner'))) {
 			$part->fileImage = $this->fileImageUrl($row->guid,$lang);
-		}
+		//}
 		
 		if ($row->profileGuid == "klinik") {
 			$rk = $this->getRelated($row->guid,"RELATED_Clinic",false,"relatedGuid desc",false,$lang);
