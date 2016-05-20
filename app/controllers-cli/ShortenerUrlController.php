@@ -2,6 +2,110 @@
 require_once( 'Apache/Solr/Service.php' );
 class ShortenerUrlController extends Application_Controller_Cli
 {
+	public function reindexAction()
+	{
+		$request = $this->getRequest();
+		$query = $request->getParam('q');
+		$path = $request->getParam('path');
+		
+		if (empty($path)) {
+			echo "Define solr path first.\n";
+			exit;
+		}
+		else
+		{
+			echo "path:".$path."\n";
+		}
+		
+		$solr = &$this->_solr;
+		
+		$solr->setPath('/solr/'.$path);
+		
+		if ( ! $solr->ping() ) {
+			echo "Solr service not responding.\n";
+			exit;
+		}
+		else
+		{
+			echo "is ON\n";
+		}
+		
+		echo "Start indexing\n";
+		
+		$db = $this->getDbHandler('sh');
+		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		$select = $db->select();
+		$select->from('shorturls', '*');
+		
+		if (isset($query) && !empty($query))
+		{
+			$select->where($query);
+		}
+		
+		$select->order('createdate DESC');
+		
+		//$sql = $select->__toString();
+		
+		$rowsFound = $db->fetchAll($select);
+		
+		echo 'There are '.count($rowsFound)." catalog(s)\n";
+		
+		$documents = array();
+		
+		$rowCount = count($rowsFound);
+		for($iCount=0;$iCount<$rowCount;$iCount++) {
+			$row = $rowsFound[$iCount];
+				
+			if (isset($rowsFound[$iCount+1])) {
+				$nextRow = $rowsFound[$iCount+1];
+				$n = "-next:[".$nextRow->id."]";
+			}
+			else
+				$n = '';
+				
+				
+			echo 'urutan: '.$iCount ." - ";
+				
+			$documents[$iCount] = $this->_createSolrDocument($row);
+				
+			if($iCount%1000 == 0)
+			{
+				try {
+					$solr->addDocuments( $documents );
+					$solr->commit();
+					$documents = array();
+				}
+				catch (Exception $e)
+				{
+					echo "Error occured when processing record starting from number: ". ($iCount - 1000) . ' to '.$iCount."\n";
+					throw new Zend_Exception($e->getMessage());
+				}
+			}
+				
+			echo "guid:[".$row->id."][".$row->createdate."]".$n."\n";
+				
+			flush();
+		}
+		
+		//
+		//
+		// Load the documents into the index
+		//
+		try {
+			$solr->addDocuments( $documents );
+			$solr->commit();
+			$solr->optimize();
+		}
+		catch ( Exception $e ) {
+			echo $e->getMessage();
+		}
+		
+		
+		sleep(1);
+		
+		echo "Indexing completed\n";
+	}
+	
 	public function shorturlAction()
 	{
 		$request = $this->getRequest();
