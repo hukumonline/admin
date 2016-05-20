@@ -323,7 +323,7 @@ class ShortenerUrlController extends Application_Controller_Cli
 	{
 		$part = new Apache_Solr_Document();
 		$part->id = $row->id;
-		$part->url = $row->link;
+		$part->url = $row->url;
 		$part->createdate = $this->getDateInSolrFormat($row->createdate);
 		$part->remoteip = $row->remoteip;
 		$part->kopel = (isset($row->kopel))? $row->kopel : '';
