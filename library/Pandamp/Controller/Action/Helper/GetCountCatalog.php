@@ -13,7 +13,7 @@ class Pandamp_Controller_Action_Helper_GetCountCatalog
 		if (($catalogs) && (!in_array($catalogs['profileGuid'], array('partner','author','kategoriklinik')))) {
 			switch ($type) {
 				case 'desktop':
-					if ($catalogs['profileGuid']=='article') {
+					if (in_array($catalogs['profileGuid'], array('article','talks','isuhangat','kutu_agenda','video','infografis'))) {
 						$valueText = 'TICKER';
 					}
 					else if ($catalogs['profileGuid']=='klinik') {
@@ -27,7 +27,7 @@ class Pandamp_Controller_Action_Helper_GetCountCatalog
 					break;
 					
 				case 'mobile':
-					if ($catalogs['profileGuid']=='article') {
+					if (in_array($catalogs['profileGuid'], array('article','talks','isuhangat','kutu_agenda','video','infografis'))) {
 						$valueText = 'TICKER-MOBILE';
 					}
 					else if ($catalogs['profileGuid']=='klinik') {

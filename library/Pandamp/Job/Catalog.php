@@ -1174,7 +1174,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		if (isset($profileGuid) && !in_array($profileGuid, array('partner','narsum','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
 			switch ($type) {
 				case 'desktop':
-					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video'))) {
+					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video','infografis'))) {
 						$valueText = 'TICKER';
 					}
 					else if ($profileGuid=='klinik') {
@@ -1188,7 +1188,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					break;
 	
 				case 'mobile':
-					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video'))) {
+					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video','infografis'))) {
 						$valueText = 'TICKER-MOBILE';
 					}
 					else if ($profileGuid=='klinik') {
