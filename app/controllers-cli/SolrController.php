@@ -33,7 +33,8 @@ class SolrController extends Application_Controller_Cli
 		$catalogGuid = $request->getParam('guid');
 		$path = $request->getParam('path');
 		
-		$solr = &$this->_solr;
+		//$solr = &$this->_solr;
+		$solr = new Apache_Solr_Service( '192.168.0.65', '8983' );
 		$solr->setPath('/solr/'.$path);
 		
 		if ( ! $solr->ping() ) {
