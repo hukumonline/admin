@@ -112,6 +112,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$regulationType = $request->getParam('regulationType');
     	$regulationSelected = $request->getParam('regulationSelected');
     	$putusanSelected = $request->getParam('putusanSelected');
+    	$createdBy = $request->getParam('createdBy');
     	$status = $request->getParam('status');
     	$sort = $request->getParam('sort','publishedDate');
     	$order = $request->getParam('order','desc');
@@ -134,15 +135,20 @@ class Search_DmsController extends Zend_Controller_Action
     	if ($status) {
     		$query = $query." status:".$status;
     	}
-    	
+    	if ($category) {
+    		$query = $query.' profile:'.$category;
+    		$sort = "createdDate";
+    		$order = "desc";
+    	} 
+    	 
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
     		$query = $query." kategori:".$kategoriklinik;
     	
     	if ($regulationSelected == 1 or $putusanSelected == 1)
     		$query = $query." regulationType:".$regulationType;
     	
-    	if ($category) 
-    		$query = $query.' profile:'.$category;
+    	if ($createdBy)
+    		$query = $query.' createdBy:'.$createdBy;
     	
     	
     	$hits = $indexingEngine->find($query, $offset, $perpage,$sort." ".$order);
@@ -225,6 +231,7 @@ class Search_DmsController extends Zend_Controller_Action
     	
     	$this->_helper->layout()->searchQuery = $xq;
     	$this->_helper->layout()->kategoriklinik = $kategoriklinik;
+    	$this->_helper->layout()->createdBy = $createdBy;
     	$this->_helper->layout()->category = $category;
     	$this->_helper->layout()->clinicSelected = $clinic_selected;
     	$this->_helper->layout()->putusanSelected = $putusanSelected;
@@ -236,6 +243,83 @@ class Search_DmsController extends Zend_Controller_Action
     	$time = $time_end - $time_start;
     	
     	$this->view->assign('time',round($time,2));
+    }
+    
+    public function facetauthorAction()
+    {
+    	$request = $this->getRequest();
+    	$q = $wq = $request->getParam('q');
+    	$createdBy = $request->getParam('createdBy');
+    	if ($q) {
+    		if(!preg_match("/(id:|shortTitle:|profile:|publishedDate:|expiredDate:|createdDate:|modifiedDate:|createdBy:|modifiedBy:|status:|author:|fixedDate:|regulationType:|regulationOrder:|kategori:|kategoriklinik:|kontributor:|sumber:|year:|number:|title:)/i", $q))
+    		{
+    			require_once( 'Apache/Solr/Service.php' );
+    			$q = Apache_Solr_Service::escape($q);
+    		}
+    	
+    		$query = $q;
+    	}
+    	else
+    	{
+    		$query = "";
+    	}
+    	 
+    	$query = str_replace('\\', '', $query);
+    	 
+    	$indexingEngine = Pandamp_Search::manager();
+    	 
+    	$hits = $indexingEngine->find($query,0,1);
+    	 
+    	if (isset($hits->response->docs[0])) {
+    		$content = 0;
+    		$data = array();
+    	
+    		foreach ($hits->facet_counts->facet_fields->createdBy as $facet => $count)
+    		{
+    			if ($count == 0 || in_array($facet, array('comment','partner','kategoriklinik','kutu_signup')))
+    			{
+    				continue;
+    			}
+    			else
+    			{
+    				$f = str_replace(array('kutu_'), "", $facet);
+    				$f = str_replace("peraturan_kolonial","peraturan kolonial",$f);
+    				$f = str_replace("rancangan_peraturan","rancangan peraturan",$f);
+    				$f = str_replace("about_us","tentang kami",$f);
+    				$f = str_replace("kotik","kode etik jurnalis",$f);
+    				$f = str_replace("kategoriklinik","kategori klinik",$f);
+    				$f = str_replace("mitra","mitra hukumonline",$f);
+    				$f = str_replace("partner","mitra klinik",$f);
+    				$f = str_replace("author","penjawab klinik",$f);
+    				//$f = str_replace("article","artikel",$f);
+    				$f = str_replace("comment","komentar",$f);
+    				$f = str_replace("doc","pelengkap",$f);
+    				$f = str_replace("signup","pendaftaran",$f);
+    				$f = str_replace("financial_services","financial services",$f);
+    				$f = str_replace("general_corporate","general corporate",$f);
+    				$f = str_replace("oil_and_gas","oil and gas",$f);
+    				$f = str_replace("executive_alert","executive alert",$f);
+    				$f = str_replace("manufacturing_&_industry","manufacturing & industry",$f);
+    				$f = str_replace("consumer_goods","consumer goods",$f);
+    				$f = str_replace("telecommunications_and_media","telecommunications and media",$f);
+    				$f = str_replace("executive_summary","executive summary",$f);
+    				$f = str_replace("hot_news","hot news",$f);
+    				$f = str_replace("hot_issue_ile","hot issue ILE",$f);
+    				$f = str_replace("hot_issue_ild","hot issue ILD",$f);
+    				$f = str_replace("hot_issue_ilb","hot issue ILB",$f);
+    	
+    				$data[$content]['facet'] = $f;
+    				$data[$content]['profile'] = $facet;
+    				$data[$content]['count'] = $count;
+    			}
+    			 
+    			$content++;
+    		}
+    	
+    		$this->view->assign('aData', $data);
+    		$this->view->assign('createdBy', $createdBy);
+    		$this->view->assign('query', urlencode($wq));
+    	}
     }
     
     public function facetjpAction()
