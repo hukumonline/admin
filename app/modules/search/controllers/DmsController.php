@@ -134,18 +134,18 @@ class Search_DmsController extends Zend_Controller_Action
     	
     	if ($status) {
     		$query = $query." status:".$status;
-    	}
-    	if ($category) {
-    		$query = $query.' profile:'.$category;
     		$sort = "createdDate";
     		$order = "desc";
-    	} 
-    	 
+    	}
+    	
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
     		$query = $query." kategori:".$kategoriklinik;
     	
     	if ($regulationSelected == 1 or $putusanSelected == 1)
     		$query = $query." regulationType:".$regulationType;
+    	
+    	if ($category) 
+    		$query = $query.' profile:'.$category;
     	
     	if ($createdBy)
     		$query = $query.' createdBy:'.$createdBy;
