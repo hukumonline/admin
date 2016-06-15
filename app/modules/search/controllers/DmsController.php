@@ -134,8 +134,6 @@ class Search_DmsController extends Zend_Controller_Action
     	
     	if ($status) {
     		$query = $query." status:".$status;
-    		$sort = "createdDate";
-    		$order = "desc";
     	}
     	
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
