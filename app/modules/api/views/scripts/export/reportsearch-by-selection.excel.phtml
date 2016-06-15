@@ -90,7 +90,7 @@ $worksheet->mergecells(2,6,3,6);
 $i=4;
 foreach ($this->selectedRows as $guid)
 {
-	$mcf = new Core_Models_Db_Table_CatalogFolder();
+	$mcf = new App_Model_Db_Table_CatalogFolder();
 	$cf = $mcf->fetchAll("catalogGuid='".$guid."'");
 	if ($cf) {
 		foreach ($cf as $c) {
@@ -109,7 +109,7 @@ foreach ($kf as $data){
 }
 
 foreach ($tmp as $course => $data){
-	$folderDb = new Core_Models_Db_Table_Folder();
+	$folderDb = new App_Model_Db_Table_Folder();
 	$folder = $folderDb->find($course)->current();
 	if ($folder) {
 		$worksheet->writestring($i, 0, strtoupper($folder->title),$judul2);
@@ -117,14 +117,14 @@ foreach ($tmp as $course => $data){
 		$j=0;
 		foreach ($data as $key => $value){
 			$i++;
-			$tblCatalog = new Core_Models_Db_Table_Catalog();
+			$tblCatalog = new App_Model_Db_Table_Catalog();
 			$rowset = $tblCatalog->find($value)->current();
 			if ($rowset) {
 				$worksheet->writenumber($i, 0, ++$j,$judul2);
 				$worksheet->writestring($i, 1, Pandamp_Lib_Formater::get_date($rowset->publishedDate),$judul3);
 				
 				$rowsetCatalogAttribute = $rowset->findDependentRowsetCatalogAttribute();
-				$tableProfileAttribute = new Core_Models_Db_Table_ProfileAttribute();
+				$tableProfileAttribute = new App_Model_Db_Table_ProfileAttribute();
 				$profileGuid = $rowset->profileGuid;
 				$where = $tableProfileAttribute->getAdapter()->quoteInto('profileGuid=?', $profileGuid);
 				$rowsetProfileAttribute = $tableProfileAttribute->fetchAll($where,'viewOrder ASC');
@@ -132,7 +132,7 @@ foreach ($tmp as $course => $data){
 				if ($profileGuid=="klinik") {
 					$rowCatalogAttributeTitle = $rowsetCatalogAttribute->findByAttributeGuid('fixedCommentTitle');
 					
-					$catalogAttributeDb = new Core_Models_Db_Table_CatalogAttribute();
+					$catalogAttributeDb = new App_Model_Db_Table_CatalogAttribute();
 					
 					$author = $rowsetCatalogAttribute->findByAttributeGuid('fixedSelectNama');
 					$source = $rowsetCatalogAttribute->findByAttributeGuid('fixedSelectMitra');

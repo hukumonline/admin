@@ -1,86 +1,210 @@
-<!-- Left column/section -->
-<section class="column width6 first">
+<?php 
+$this->headLink()
+	->appendStylesheet($this->cdn('scripts') . '/plugins/iCheck/flat/blue.css');
 
-    <div class="colgroup leading">
-        <div class="column width6 first">
-            <?php
-            if ($this->getLanguage() == 'id')
-                $tag = "www.hukumonline.com";
-            else
-                $tag = "en.hukumonline.com";
-            ?>
-            <h3>Site: <a href="http://<?php echo $tag; ?>" target="_blank" title="Search <?php echo $tag; ?>"><?php echo $tag; ?></a></h3>
-            <h5>Search Result: <?php echo $this->totalItems; ?> Record(s)</h5>
-            <form id="frmCatalogs" name="frmCatalogs">
-                <table class="display stylized" id="catalog">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Title</th>
-                            <th>Section</th>
-                            <th>Published</th>
-                            <th>Created on</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php $x=$this->sOffset+1; for($i=0; $i<$this->numberOfRows;$i++) { ?>
-                        <tr>
-                            <td><?php echo $x; ?></td>
-                            <td>
-                                <a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $this->data[$i][0]; ?>/node/<?php echo $this->data[$i][2]; ?>" title="publishedDate: <?php echo $this->data[$i][8]; ?>"><?php try { echo $this->data[$i][1];} catch (Exception $e) { echo 'No-Title'; } ?></a>
-                                <br><small>by: <?php echo $this->data[$i][5]; ?></small>
-                                <?php if ($this->data[$i][3] == 'klinik') : ?>
-                                <?php $rowUser = App_Model_Show_User::show()->getUserByName($this->data[$i][5]); ?>
-                                <br><small><?php echo $rowUser['email']; ?></small>
-                                <?php endif; ?>
-                            </td>
-                            <td><abbr><?php echo $this->data[$i][3]; ?></abbr></td>
-                            <td>
-                            <?php
-							if (($this->data[$i][9] == 99) || ($this->data[$i][3] == 1))
-								$status = "publish_g";
-							else 
-								$status = "publish_x";
-                            ?>
-                            
-                                <div class="ta-center">
-                                    <img src="<?php echo $this->cdn('images'); ?>/<?php echo $status; ?>.png">
-                                </div>
+$this->headScript()
+	->appendFile($this->cdn('scripts') . '/plugins/iCheck/icheck.min.js');
 
-                            </td>
-                            <td>
-                                <?php echo $this->data[$i][4]; ?><br>
-                                <small>modifiedBy: <?php echo $this->data[$i][7]; ?></small>
-                            </td>
-                        </tr>
-                    <?php $x++; } ?>
-                    </tbody>
-                </table>
-            </form>
-            <table width='100%'>
-            <tr>
-                <td align=right><div id='catalogSearchPagination' class="pagination"></div></td>
-            </tr>
-            </table>
-        </div>
-    </div>
+?>
 
-
-    <div class="clear">&nbsp;</div>
-
+<section class="content-header">
+<?php echo $this->breadcrumbs->render(); ?>
 </section>
-<!-- End of Left column/section -->
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<form id="frmsearch" name="frmsearch" action="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse" method="get">
+				<div class="box-header with-border">
+					<h3 class="box-title">Search Result: <?php echo $this->totalItems; ?></h3>
+					<small>(<?php echo $this->time; ?> detik)</small>
+					<div class="box-tools pull-right">
+                    <div class="has-feedback">
+						<select name="act" id="act" class="form-control">
+							<option value="">Action</option>
+							<option value="export">Export Excell</option>
+						</select>
+                    </div>
+                  </div>
+				</div>
+				<div class="box-body no-padding">
+					<div class="mailbox-controls">
+						<div class="pull-left">
+							<div class="form-inline" style="float:left;padding-top:5px">
+								<a href="javascript:;" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
+							</div>
+							<ul class="nav nav-pills pull-right">
+								<li class="dropdown">
+							    	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							            Sort by
+							            <b class="caret"></b>
+							        </a>
+							    	<ul class="dropdown-menu">
+							            <li><a href="<?php echo $this->this_url; ?>&sort=score&order=<?php echo $this->order; ?>">Referensi</a></li>
+							            <li><a href="<?php echo $this->this_url; ?>&sort=title&order=<?php echo $this->order; ?>">Judul</a></li>
+							            <li><a href="<?php echo $this->this_url; ?>&sort=publishedDate&order=<?php echo $this->order; ?>">Tanggal Diterbitkan</a></li>
+							            <li><a href="<?php echo $this->this_url; ?>&sort=fixedDate&order=<?php echo $this->order; ?>">Tanggal Ditetapkan</a></li>
+							     	</ul>
+								</li>
+								<li><a href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->sorder; ?>&page=<?php echo $this->pageIndex; ?>">Sorting by <b><?php echo $this->tsort; ?></b>, <?php echo $this->torder; ?></a></li>
+							</ul>
+							<div class="form-inline" style="float:left;padding-top:5px;padding-left:5px">
+			                	<div class="btn-group">
+			                    	<label class="inline grey smaller-90">Show
+				                    	<select name="showperpage" id="showperpage" class="form-control" onchange="this.form.submit()">
+											<?php if ($this->totalItems < 11) { ?>
+											<option value="10">10 rows</option>
+											<?php } else if ($this->totalItems < 26) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<?php } else if ($this->totalItems < 51) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<?php } else if ($this->totalItems < 101) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<option value="100">100 rows</option>
+											<?php } else if ($this->totalItems < 251) { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<option value="100">100 rows</option>
+											<option value="250">250 rows</option>
+											<?php } else { ?>
+											<option value="10">10 rows</option>
+											<option value="25">25 rows</option>
+											<option value="50">50 rows</option>
+											<option value="100">100 rows</option>
+											<option value="250">250 rows</option>
+											<option value="500">500 rows</option>
+											<?php } ?>
+										</select>
+									</label>
+								</div>
+							</div>
+                  		</div>
+						<div class="pull-right" style="padding-top:5px">
+							<?php
+							$start=($this->paginator['current']-1)*$this->layout()->showperpage;
+							$s1=$start+1;
+							$position = $this->paginator['current'] * $this->layout()->showperpage;
+							?>
+							<?php echo $s1.'-'.$position; ?>/<?php echo $this->totalItems; ?>
+							<div class="btn-group">
+							<?php if(isset($this->paginator['previous'])): ?>
+							<a class="btn btn-default btn-sm" href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->order; ?>&page=<?php echo $this->paginator['previous']; ?>&showperpage=<?php echo $this->layout()->showperpage; ?>&status=<?php echo $this->layout()->status; ?>"><i class="fa fa-chevron-left"></i></a>
+							<?php else: ?>
+							<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-left"></i></a>
+							<?php endif; ?>
+							
+							<?php if(isset($this->paginator['next'])): ?>
+							<a class="btn btn-default btn-sm" href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->order; ?>&page=<?php echo $this->paginator['next']; ?>&showperpage=<?php echo $this->layout()->showperpage; ?>&status=<?php echo $this->layout()->status; ?>"><i class="fa fa-chevron-right"></i></a>
+							<?php else: ?>
+							<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-right"></i></a>
+							<?php endif; ?>
+							</div>
+						</div>
+					</div>
+					<div style="clear: both;padding-top:5px"></div>
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped">
+						<tbody>
+						<?php $now = date('Y-m-d H:i:s'); ?>
+						<?php for ($i=0;$i<$this->numberOfRows;$i++) : ?>
+						<tr>
+							<td><input type="checkbox" name='catalogGuid[]' id='catalogGuid' value='<?php echo $this->data[$i]['id']; ?>'></td>
+							<td class="mailbox-subject">
+								<div style="float:left">
+								<?php if (isset($this->data[$i]['subTitle'])) : ?>
+								<code>
+									<?php echo $this->data[$i]['subTitle']; ?>
+								</code>
+								<?php endif; ?>
+								<h4><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $this->data[$i]['id']; ?>/node/<?php echo $this->data[$i]['node']; ?>"><i class="fa fa-file"></i> <?php echo $this->data[$i]['title']; ?></a></h4>
+								<?php if (isset($this->data[$i]['description'])) : ?><small class="text-muted"><?php echo $this->data[$i]['description']; ?></small><?php endif; ?>
+								</div>
+								<small style="float:right;vertical-align:top"><?php echo $this->data[$i]['profile']; ?></small>
+								<div style="clear: both"></div>
+								<span style="padding-top:2px"><i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?></span>
+							</td>
+						</tr>
+						<?php endfor; ?>
+						</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="box-footer no-padding">
+					<div class="mailbox-controls">
+						<div class="form-inline" style="float:left">
+							<div class="btn-group">
+								<label>
+									<?php echo $this->catalogStatus(array('id' => 'status', 'name' => 'status', 'class' => 'form-control')); ?>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="querySearch" id="querySearch" />
+				<input type="hidden" name="dateRange" id="dateRange" />
+				<input type="hidden" name="sort" id="sort" />
+				<input type="hidden" name="q" id="q" />
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+<?php $this->headScript()->captureStart(); ?>
+$(function () {
+	$("#showperpage").val('<?php echo $this->layout()->showperpage; ?>');
+	$("#status").val('<?php echo $this->layout()->status; ?>');
+	$("#sort").val('<?php echo $this->sort; ?>');
+	$("#q").val('<?php echo $this->layout()->searchQuery; ?>');
+	
+	$('.mailbox-messages input[type="checkbox"]').iCheck({
+		checkboxClass: 'icheckbox_flat-blue',
+		radioClass: 'iradio_flat-blue'
+	});
 
-<!-- Right column/section -->
-<aside class="column width2">
-    <div id="rightmenu">
-        <?php echo $this->action('sidebar','user','customer'); ?>
-    </div>
-    <?php if ($this->totalItems > 0) { ?>
-        <?php echo $this->action('fprofile','widgets_search','search',array('query'=>$this->query)); ?>
-        <?php echo $this->action('fclinic','widgets_search','search',array('query'=>$this->query)); ?>
-        <?php echo $this->action('fhold','widgets_search','search',array('query'=>$this->query)); ?>
-        <?php echo $this->action('fcreate','widgets_search','search',array('query'=>$this->query)); ?>
-    <?php } ?>
-</aside>
-<!-- End of Right column/section -->
+	//Enable check and uncheck all functionality
+	$(".checkbox-toggle").click(function () {
+		var clicks = $(this).data('clicks');
+		if (clicks) {
+			//Uncheck all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+			$(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+		} else {
+			//Check all checkboxes
+			$(".mailbox-messages input[type='checkbox']").iCheck("check");
+			$(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+		}
+		$(this).data("clicks", !clicks);
+	});
+	
+	$('#act').change(function(){
+		var selval = $(this).find("option:selected").attr('value'),
+		    ids = new Array();
+		$('input[type="checkbox"]:checked').each(function() {
+			ids.push($(this).val());
+		});
+		if(ids.length==0)
+        {
+        	alert('NO CATALOG SELECTED');
+        	$("#act").val("");
+            return false;
+        }
+        
+        if (selval == "export") {
+        	var array = $.toJSON(ids);
+        	$("#dateRange").val('<?php echo $this->bysortings; ?>');
+        	$("#querySearch").val(array);
+        	var form = $("#frmsearch");
+        	form.attr("method","post");
+        	form.attr("action","<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/api/export/reportsearch.by.selection/format/excel");
+        	form.submit();
+        }
+        
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>

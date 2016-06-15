@@ -11,7 +11,8 @@ class Search_DmsController extends Zend_Controller_Action
 
     function  preDispatch()
     {
-        $this->_helper->layout->setLayout('layout-paging-search');
+        //$this->_helper->layout->setLayout('layout-paging-search');
+        $this->_helper->layout->setLayout('layout-paging-newsearch');
 
         $auth = Zend_Auth::getInstance();
         
@@ -98,7 +99,278 @@ class Search_DmsController extends Zend_Controller_Action
 			*/
         }
     }
-    function browseAction()
+    
+    public function browseAction()
+    {
+    	$time_start = microtime(true);
+    	
+    	$request = $this->getRequest();
+    	$query = $xq = $request->getParam('q');
+    	$category = $request->getParam('category');
+    	$kategoriklinik = $request->getParam('kategoriklinik');
+    	$clinic_selected = $request->getParam('clinic_selected');
+    	$regulationType = $request->getParam('regulationType');
+    	$regulationSelected = $request->getParam('regulationSelected');
+    	$putusanSelected = $request->getParam('putusanSelected');
+    	$status = $request->getParam('status');
+    	$sort = $request->getParam('sort','publishedDate');
+    	$order = $request->getParam('order','desc');
+    	$pageIndex = $request->getParam('page',1);
+    	$perpage = $request->getParam('showperpage',25);
+    	
+    	$offset = ($pageIndex > 0) ? ($pageIndex - 1) * $perpage : 0;
+    	
+    	$modDir = $this->getFrontController()->getModuleDirectory('dms');
+    	require_once($modDir.'/components/Menu/FolderBreadcrumbs2.php');
+    	$w = new Dms_Menu_FolderBreadcrumbs2('root');
+    	$this->view->assign('breadcrumbs', $w);
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+    	if ($query == '*' || $query == '') {
+    		$query = '*:*';
+    	}
+    	
+    	if ($status) {
+    		$query = $query." status:".$status;
+    	}
+    	
+    	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
+    		$query = $query." kategori:".$kategoriklinik;
+    	
+    	if ($regulationSelected == 1 or $putusanSelected == 1)
+    		$query = $query." regulationType:".$regulationType;
+    	
+    	if ($category) 
+    		$query = $query.' profile:'.$category;
+    	
+    	
+    	$hits = $indexingEngine->find($query, $offset, $perpage,$sort." ".$order);
+    	
+    	$solrNumFound = count($hits->response->docs);
+    	
+    	$data = array();
+    	
+    	if($solrNumFound>$perpage)
+    		$numRowset = $perpage ;
+    	else
+    		$numRowset = $solrNumFound;
+    	
+    	for ($i=0;$i<$numRowset;$i++) {
+    		$row = $hits->response->docs[$i];
+    		$data[$i]['id'] = $row->id;
+    		
+    		if (isset($hits->highlighting->{$row->id}->title[0]))
+    			$data[$i]['title'] = $hits->highlighting->{$row->id}->title[0];
+    		else
+    			$data[$i]['title'] = $row->title;
+    		
+    		if (is_array($row->kategoriId))
+				$kid = $row->kategoriId[0];
+			else
+				$kid = $row->kategoriId;
+    		
+    		$data[$i]['node'] = $kid;
+    		
+    		$profile = str_replace(array('kutu_'), "", $row->profile);
+    		$profile = str_replace(array('peraturan_kolonial'), "kolonial", $profile);
+    		$data[$i]['profile'] = ucfirst($profile);
+    		
+    		if (isset($hits->highlighting->{$row->id}->subTitle[0]))
+    			$subTitle = $hits->highlighting->{$row->id}->subTitle[0];
+    		else
+    			$subTitle = $row->subTitle;
+    		
+    		$data[$i]['subTitle'] = $subTitle;
+    		$data[$i]['description'] = $row->description;
+    		
+    		$array_hari = array(1=>"Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu");
+    		$pdate = $indexingEngine->translateSolrDate($row->publishedDate);
+    		$hari = $array_hari[date("N",strtotime($pdate))];
+    		
+    		$data[$i]['publishedDate'] = $hari . ', '. date("d F Y",strtotime($pdate));
+    	}
+    	
+    	$num_rows = $hits->response->numFound;
+    	
+    	$this_url = $this->getRequest()->getRequestUri();
+    	$this_url = str_replace("&page=$pageIndex", "", $this_url);
+    	$this_url = str_replace("&showperpage=$perpage", "", $this_url);
+    	$this_url = str_replace("&status=$status", "", $this_url);
+    	$this_url = str_replace("&sort=$sort", "", $this_url);
+    	$this_url = str_replace("&order=$order", "", $this_url);
+    	$this->view->assign('this_url',$this_url);
+    	
+    	$bysorting = explode("[", $query);
+    	if (isset($bysorting[1])) {
+    		$bysorting = str_replace("]", "", $bysorting[1]);
+    		$this->view->assign('bysortings',$bysorting);
+    	}
+    	
+    	$paginator = Zend_Paginator::factory($num_rows);
+    	$paginator->setCurrentPageNumber($pageIndex);
+    	$paginator->setItemCountPerPage($perpage);
+    	$paginator = get_object_vars($paginator->getPages('Sliding'));
+    	
+    	$this->view->assign('paginator',$paginator);
+    	$this->view->assign('data',$data);
+    	$this->view->assign('numberOfRows',$numRowset);
+    	$this->view->assign('totalItems',$num_rows);
+    	$this->view->assign('query',$query);
+    	$this->view->assign('sort',$sort);
+    	$this->view->assign('order',$order);
+    	$this->view->assign('tsort',($sort=='score')? 'Relevance' : $sort);
+    	$this->view->assign('torder',($order=='desc')? 'Ascending' : 'Descending');
+    	$this->view->assign('sorder',($order=='desc')? 'asc' : 'desc');
+    	
+    	$this->_helper->layout()->searchQuery = $xq;
+    	$this->_helper->layout()->kategoriklinik = $kategoriklinik;
+    	$this->_helper->layout()->category = $category;
+    	$this->_helper->layout()->clinicSelected = $clinic_selected;
+    	$this->_helper->layout()->putusanSelected = $putusanSelected;
+    	$this->_helper->layout()->showperpage = $perpage;
+    	$this->_helper->layout()->status = $status;
+    	
+    	$time_end = microtime(true);
+    	$time = $time_end - $time_start;
+    	
+    	$this->view->assign('time',round($time,2));
+    }
+    
+    public function facetcatclinicAction()
+    {
+    	$request = $this->getRequest();
+    	$q = $wq = $request->getParam('q');
+    	$kategoriklinik = $request->getParam('kategoriklinik');
+    	$zl = Zend_Registry::get('Zend_Locale');
+    	if (($q) && ($zl->getLanguage() !== 'ha')) {
+    		if(!preg_match("/(id:|shortTitle:|profile:|publishedDate:|expiredDate:|createdDate:|modifiedDate:|createdBy:|modifiedBy:|status:|author:|fixedDate:|regulationType:|regulationOrder:|kategori:|kategoriklinik:|kontributor:|sumber:|year:|number:|title:)/i", $q))
+    		{
+    			require_once( 'Apache/Solr/Service.php' );
+    			$q = Apache_Solr_Service::escape($q);
+    		}
+    		
+    		$query = $q;
+    	}
+    	else
+    	{
+    		$query = "";
+    	}
+    	
+    	$query = str_replace('\\', '', $query);
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+    	$hits = $indexingEngine->find($query,0,1);
+    	
+    	if (isset($hits->response->docs[0])) {
+    		$content = 0;
+    		$data = array();
+    		
+    		foreach ($hits->facet_counts->facet_fields->kategoriklinik as $facet => $count)
+    		{
+    			if ($count == 0)
+    			{
+    				continue;
+    			}
+    			else
+    			{
+    				$data[$content]['profile'] = $facet;
+    				$data[$content]['count'] = $count;
+    			}
+    		
+    			$content++;
+    		}
+    		
+    		$this->view->assign('aData', $data);
+    		$this->view->assign('query', urlencode($wq));
+    		$this->view->assign('kategoriklinik', $kategoriklinik);
+    	}
+    }
+    
+    public function facetprofileAction()
+    {
+    	$request = $this->getRequest();
+    	$q = $wq = $request->getParam('q');
+    	$category = $request->getParam('category');
+    	$clinic_selected = $request->getParam('clinic_selected');
+    	$putusanselected = $request->getParam('putusanSelected');
+    	
+    	if ($q) {
+    		if(!preg_match("/(id:|shortTitle:|profile:|publishedDate:|expiredDate:|createdDate:|modifiedDate:|createdBy:|modifiedBy:|status:|author:|fixedDate:|regulationType:|regulationOrder:|kategori:|kategoriklinik:|kontributor:|sumber:|year:|number:|title:)/i", $q))
+    		{
+    			require_once( 'Apache/Solr/Service.php' );
+    			$q = Apache_Solr_Service::escape($q);
+    		}
+    		
+    		$query = $q;
+    	}
+    	else
+    	{
+    		$query = "";
+    	}
+    	
+    	$query = str_replace('\\', '', $query);
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+    	$hits = $indexingEngine->find($query,0,1);
+    	
+    	if (isset($hits->response->docs[0])) {
+    		$content = 0;
+    		$data = array();
+    		
+    		foreach ($hits->facet_counts->facet_fields->profile as $facet => $count)
+    		{
+    			if ($count == 0 || in_array($facet, array('comment','partner','kategoriklinik','kutu_signup')))
+    			{
+    				continue;
+    			}
+    			else
+    			{
+    				$f = str_replace(array('kutu_'), "", $facet);
+    				$f = str_replace("peraturan_kolonial","peraturan kolonial",$f);
+    				$f = str_replace("rancangan_peraturan","rancangan peraturan",$f);
+    				$f = str_replace("about_us","tentang kami",$f);
+    				$f = str_replace("kotik","kode etik jurnalis",$f);
+    				$f = str_replace("kategoriklinik","kategori klinik",$f);
+    				$f = str_replace("mitra","mitra hukumonline",$f);
+    				$f = str_replace("partner","mitra klinik",$f);
+    				$f = str_replace("author","penjawab klinik",$f);
+    				//$f = str_replace("article","artikel",$f);
+    				$f = str_replace("comment","komentar",$f);
+    				$f = str_replace("doc","pelengkap",$f);
+    				$f = str_replace("signup","pendaftaran",$f);
+    				$f = str_replace("financial_services","financial services",$f);
+    				$f = str_replace("general_corporate","general corporate",$f);
+    				$f = str_replace("oil_and_gas","oil and gas",$f);
+    				$f = str_replace("executive_alert","executive alert",$f);
+    				$f = str_replace("manufacturing_&_industry","manufacturing & industry",$f);
+    				$f = str_replace("consumer_goods","consumer goods",$f);
+    				$f = str_replace("telecommunications_and_media","telecommunications and media",$f);
+    				$f = str_replace("executive_summary","executive summary",$f);
+    				$f = str_replace("hot_news","hot news",$f);
+    				$f = str_replace("hot_issue_ile","hot issue ILE",$f);
+    				$f = str_replace("hot_issue_ild","hot issue ILD",$f);
+    				$f = str_replace("hot_issue_ilb","hot issue ILB",$f);
+    				
+    				$data[$content]['facet'] = $f;
+    				$data[$content]['profile'] = $facet;
+    				$data[$content]['count'] = $count;
+    			}
+    			
+    			$content++;
+    		}
+    		
+    		$this->view->assign('aData', $data);
+    		$this->view->assign('category', $category);
+    		$this->view->assign('clinic_selected', $clinic_selected);
+    		$this->view->assign('putusanSelected', $putusanselected);
+    		$this->view->assign('query', urlencode($wq));
+    	}
+    }
+    
+    function _browseAction()
     {
         $r = $this->getRequest();
         $sOffset = ($r->getParam('sOffset'))? $r->getParam('sOffset') : 0;
