@@ -1,0 +1,19 @@
+<?php if (count($this->aData) > 0) : ?>
+<li class="treeview active">
+	<a href="#">
+		<i class="fa fa-files-o"></i>
+		<span>
+		JENIS PERATURAN
+		</span>
+		<i class="fa fa-angle-left pull-right"></i>
+	</a>
+	<ul class="treeview-menu">
+		<?php for($i=0; $i<count($this->aData);$i++) : ?>
+		<li <?php if($this->regulationType=="\"".$this->aData[$i]['profile']."\""){ ?> class="active" <?php } ?>>
+			<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=<?php echo str_replace(" ", "+", $this->query); ?>&regulationType=%22<?php echo str_replace("&", "%26", $this->aData[$i]['profile']);?>%22&category=(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan)&regulationSelected=1&sort=fixedDate&order=desc" id="fcHold"><?php echo $this->aData[$i]['profile']; ?>
+			&nbsp;<small class="label pull-right bg-yellow"><?php echo $this->aData[$i]['count']; ?></small></a>
+		</li>
+		<?php endfor; ?>
+	</ul>
+</li>
+<?php endif; ?>

@@ -25,6 +25,10 @@
 				]); ?>
 			<?php echo $this->action('facetcatclinic','dms','search',['q'=>$this->layout()->searchQuery,
 					'kategoriklinik'=>$this->layout()->kategoriklinik]); ?>
+			<?php echo $this->action('facetlp','dms','search',['q'=>$this->layout()->searchQuery,
+					'regulationType'=>$this->layout()->regulationType]); ?>
+			<?php echo $this->action('facetjp','dms','search',['q'=>$this->layout()->searchQuery,
+					'regulationType'=>$this->layout()->regulationType]); ?>
 		</ul>
 				
 	</section>

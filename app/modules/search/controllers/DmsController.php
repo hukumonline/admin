@@ -228,6 +228,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$this->_helper->layout()->category = $category;
     	$this->_helper->layout()->clinicSelected = $clinic_selected;
     	$this->_helper->layout()->putusanSelected = $putusanSelected;
+    	$this->_helper->layout()->regulationType = $regulationType;
     	$this->_helper->layout()->showperpage = $perpage;
     	$this->_helper->layout()->status = $status;
     	
@@ -235,6 +236,118 @@ class Search_DmsController extends Zend_Controller_Action
     	$time = $time_end - $time_start;
     	
     	$this->view->assign('time',round($time,2));
+    }
+    
+    public function facetjpAction()
+    {
+    	$request = $this->getRequest();
+    	$q = $wq = $request->getParam('q');
+    	$regulationType = $request->getParam('regulationType');
+    	$zl = Zend_Registry::get('Zend_Locale');
+    	if (($q) && ($zl->getLanguage() !== 'ha')) {
+    		if(!preg_match("/(id:|shortTitle:|profile:|publishedDate:|expiredDate:|createdDate:|modifiedDate:|createdBy:|modifiedBy:|status:|author:|fixedDate:|regulationType:|regulationOrder:|kategori:|kategoriklinik:|kontributor:|sumber:|year:|number:|title:)/i", $q))
+    		{
+    			require_once( 'Apache/Solr/Service.php' );
+    			$q = Apache_Solr_Service::escape($q);
+    		}
+    		
+    		if ($zl->getLanguage() == 'id'){
+    			$query = $q . ' profile:(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan) -profile:kutu_putusan -profile:kutu_contact -profile:kutu_doc -profile:comment -profile:isuhangat -profile:partner -profile:author -profile:about_us -profile:kategoriklinik -profile:kutu_email -profile:kutu_kotik -profile:kutu_mitra profile:[" " TO *] title:[" " TO *]';
+    		}
+    		else
+    		{
+    			$query = $q . ' -profile:kategoriklinik -profile:kutu_doc -profile:trial_periods -profile:about_us -profile:signin -profile:manual -profile:contact -profile:career -profile:kutu_contentjp -profile:comments -profile:hot_issue_ile -profile:hot_issue_ilb -profile:hot_issue_ild -profile:executive_alert -profile:executive_alert -profile:banner -profile:products -profile:partner -profile:hot_news profile:[" " TO *] title:[" " TO *]';
+    		}
+    	}
+    	else
+    	{
+    		$query = "";
+    	}
+    	$query = str_replace('\\', '', $query);
+    	 
+    	$indexingEngine = Pandamp_Search::manager();
+    	 
+    	$hits = $indexingEngine->find($query,0,1,"regulationType asc");
+    	 
+    	if (isset($hits->response->docs[0])) {
+    		$content = 0;
+    		$data = array();
+    	
+    		foreach ($hits->facet_counts->facet_fields->regulationType as $facet => $count)
+    		{
+    			if ($count == 0 || in_array($facet, array('0','_empty_')))
+    			{
+    				continue;
+    			}
+    			else
+    			{
+    				$data[$content]['profile'] = $facet;
+    				$data[$content]['count'] = $count;
+    			}
+    	
+    			$content++;
+    		}
+    	
+    		$this->view->assign('aData', $data);
+    		$this->view->assign('query', urlencode($wq));
+    		$this->view->assign('regulationType', $regulationType);
+    	}
+    }
+    
+    public function facetlpAction()
+    {
+    	$request = $this->getRequest();
+    	$q = $wq = $request->getParam('q');
+    	$regulationType = $request->getParam('regulationType');
+    	$zl = Zend_Registry::get('Zend_Locale');
+    	if (($q) && ($zl->getLanguage() !== 'ha')) {
+    		if(!preg_match("/(id:|shortTitle:|profile:|publishedDate:|expiredDate:|createdDate:|modifiedDate:|createdBy:|modifiedBy:|status:|author:|fixedDate:|regulationType:|regulationOrder:|kategori:|kategoriklinik:|kontributor:|sumber:|year:|number:|title:)/i", $q))
+    		{
+    			require_once( 'Apache/Solr/Service.php' );
+    			$q = Apache_Solr_Service::escape($q);
+    		}
+    	
+	    	if ($zl->getLanguage() == 'id'){
+				$query = $q . ' profile:kutu_putusan -profile:(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan) -profile:kutu_contact -profile:kutu_doc -profile:comment -profile:isuhangat -profile:partner -profile:author -profile:about_us -profile:kategoriklinik -profile:kutu_email -profile:kutu_kotik -profile:kutu_mitra profile:[" " TO *] title:[" " TO *]';	
+			}
+			else
+			{
+				$query = $q . ' -profile:kategoriklinik -profile:kutu_doc -profile:trial_periods -profile:about_us -profile:signin -profile:manual -profile:contact -profile:career -profile:kutu_contentjp -profile:comments -profile:hot_issue_ile -profile:hot_issue_ilb -profile:hot_issue_ild -profile:executive_alert -profile:executive_alert -profile:banner -profile:products -profile:partner -profile:hot_news profile:[" " TO *] title:[" " TO *]';
+			}
+    	}
+    	else
+    	{
+    		$query = "";
+    	}
+    	$query = str_replace('\\', '', $query);
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+    	$hits = $indexingEngine->find($query,0,1);
+    	
+    	if (isset($hits->response->docs[0])) {
+    		$content = 0;
+    		$data = array();
+    		
+    		foreach ($hits->facet_counts->facet_fields->regulationType as $facet => $count)
+    		{
+    			if ($count == 0 || in_array($facet, array('0')))
+    			{
+    				continue;
+    			}
+    			else
+    			{
+    				$data[$content]['profile'] = $facet;
+    				$data[$content]['count'] = $count;
+    			}
+    		
+    			$content++;
+    		}
+    		
+    		$this->view->assign('aData', $data);
+    		$this->view->assign('query', urlencode($wq));
+    		$this->view->assign('regulationType', $regulationType);
+    	}
     }
     
     public function facetcatclinicAction()
