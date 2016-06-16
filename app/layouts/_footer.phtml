@@ -136,7 +136,7 @@ $(function () {
 			stat = '&status=' + cekstatus;
 		}
 		if (drp1 !== '' && drp2 !== '') {
-			if ((query !== '') || (cekstatus !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
+			if ((query !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
 				selq += ' <?php echo $this->layout()->sort; ?>:[' + drp1 + 'Z TO ' + drp2 + 'Z]';
 			}
 			else 
