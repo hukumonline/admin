@@ -118,8 +118,7 @@ $(function () {
 			drp2 = $("input[name='daterangepicker_end']").val(); 
 			
 		var selq='',
-			stat='',
-			ord='';
+			stat='';
 		if (query !== '') {
 			selq = query;
 		}
@@ -146,16 +145,9 @@ $(function () {
 			}
 			
 		}
-		if (cekstatus == 0) {
-			ord = '&sort=createdDate&order=desc';
-		}
-		else
-		{
-			ord = '&sort=<?php echo $this->layout()->sort; ?>&order=<?php echo $this->layout()->order; ?>';
-		}
 		
 		
-		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=" + encodeURIComponent(selq).replace(/%20/g,'+')+stat+ord;
+		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=" + encodeURIComponent(selq).replace(/%20/g,'+')+stat;
 	});
 });
 <?php $this->headScript()->captureEnd(); ?>
