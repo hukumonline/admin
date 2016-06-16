@@ -1,15 +1,14 @@
 <?php 
 $this->headScript()
-	->appendFile('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js')
-	->appendFile($this->cdn('scripts') . '/plugins/daterangepicker/daterangepicker.js')
-	->appendFile($this->cdn('scripts') . '/plugins/timepicker/bootstrap-timepicker.min.js');
+	->appendFile($this->cdn('scripts') . '/plugins/daterangepicker/moment.js')
+	->appendFile($this->cdn('scripts') . '/plugins/daterangepicker/daterangepicker.js');
 
 ?>
 <?php 
 if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
 ?>
 <!-- Advanced Search -->
-<div id="advs-modal-form" class="modal fade" tabindex="-1">
+<div id="advs-modal-form" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -34,36 +33,17 @@ if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
 					<tr>
 						<td>Tanggal</td>
 						<td>
-							<div class="input-group">
-								<button class="btn btn-default pull-right" id="drp">
-                        			<i class="fa fa-calendar"></i> Date range picker
-                        			<i class="fa fa-caret-down"></i>
-                      			</button>
+							<div id="drp" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+    							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+    							<span></span> <b class="caret"></b>
 							</div>
 						
 						</td>
 					</tr>
 					<tr>
-						<td>Start Time</td>
+						<td>Status</td>
 						<td>
-							<div class="input-group bootstrap-timepicker" style="width: 180px">
-								<input id="timepicker1" type="text" class="form-control" />
-								<span class="input-group-addon">
-									<i class="fa fa-clock-o"></i>
-								</span>
-							</div>
-						
-						</td>
-					</tr>
-					<tr>
-						<td>End Time</td>
-						<td>
-							<div class="input-group bootstrap-timepicker" style="width: 180px">
-								<input id="timepicker2" type="text" class="form-control" />
-								<span class="input-group-addon">
-									<i class="fa fa-clock-o"></i>
-								</span>
-							</div>
+							<?php echo $this->catalogStatus(array('id' => 'status', 'name' => 'status', 'class' => 'form-control')); ?>
 						
 						</td>
 					</tr>
@@ -96,9 +76,15 @@ if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
 <div style="position: fixed; height: auto;" class="control-sidebar-bg"></div>
 <?php $this->headScript()->captureStart(); ?>
 $(function () {
+	function cb(start, end) {
+        $('#drp span').html(start.format('MMMM D, YYYY HH:mm:ss') + ' - ' + end.format('MMMM D, YYYY HH:mm:ss'));
+    }
+    cb(moment().subtract(29, 'days'), moment());
 	$('#drp').daterangepicker(
             {
-              format: 'YYYY-MM-DD',	
+              locale: {
+              	format: 'YYYY-MM-DDTHH:mm:ss',
+              },	
               ranges: {
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -107,40 +93,25 @@ $(function () {
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
               },
+              timePicker: true,
+              timePicker24Hour: true,
+              timePickerSeconds: true,
               startDate: moment().subtract(29, 'days'),
               endDate: moment()
-            },
-        function (start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
+            }, cb
+        
 	);
-	
-	$('#timepicker1').timepicker({
-		defaultTime:'0',
-		minuteStep: 1,
-		showSeconds: true,
-		showMeridian: false
-	}).next().on('click', function(){
-		$(this).prev().focus();
-	});
-	
-	$('#timepicker2').timepicker({
-		minuteStep: 1,
-		showSeconds: true,
-		showMeridian: false
-	}).next().on('click', function(){
-		$(this).prev().focus();
-	});
 	
 	$("#goadv").click(function(){
 		var query = $("#modal-search-input").val(),
 			profile = $("#advs-modal-form select[name=pg] option:selected").val(), 
+			status = $("#advs-modal-form select[name=status] option:selected").val(), 
 			drp1 = $("input[name='daterangepicker_start']").val(), 
-			drp2 = $("input[name='daterangepicker_end']").val(), 
-			tp1 = $("#timepicker1").val(), 
-			tp2 = $("#timepicker2").val();
+			drp2 = $("input[name='daterangepicker_end']").val(); 
 			
-		var selq='';
+		var selq='',
+			stat='',
+			ord='';
 		if (query !== '') {
 			selq = query;
 		}
@@ -154,18 +125,29 @@ $(function () {
 			}
 			
 		}
+		if ($("#advs-modal-form #status option:selected").val() !== '') {
+			stat = '&status=' + status;
+		}
 		if (drp1 !== '' && drp2 !== '') {
-			if ((query !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
-				selq += ' <?php echo $this->layout()->sort; ?>:[' + drp1 + 'T' + tp1 + 'Z TO ' + drp2 + 'T' + tp2 + 'Z]';
+			if ((query !== '') || (status !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
+				selq += ' <?php echo $this->layout()->sort; ?>:[' + drp1 + 'Z TO ' + drp2 + 'Z]';
 			}
 			else 
 			{
-				selq += '<?php echo $this->layout()->sort; ?>:[' + drp1 + 'T' + tp1 + 'Z TO ' + drp2 + 'T' + tp2 + 'Z]';
+				selq += '<?php echo $this->layout()->sort; ?>:[' + drp1 + 'Z TO ' + drp2 + 'Z]';
 			}
 			
 		}
-
-		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=" + encodeURIComponent(selq).replace(/%20/g,'+');
+		if (status != 99) {
+			ord = '&sort=createdDate&order=desc';
+		}
+		else
+		{
+			ord = '&sort=<?php echo $this->layout()->sort; ?>&order=<?php echo $this->layout()->order; ?>';
+		}
+		
+		
+		window.location.href = "<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/search/dms/browse?q=" + encodeURIComponent(selq).replace(/%20/g,'+')+stat+ord;
 	});
 });
 <?php $this->headScript()->captureEnd(); ?>

@@ -136,10 +136,10 @@ class Search_DmsController extends Zend_Controller_Action
     		$query = $query." status:$status";
     		
     		// jika status=draft
-    		if ($status == 0) {
+    		/*if ($status == 0) {
     			$sort = "createdDate";
     			$order = "desc";
-    		}
+    		}*/
     	}
 
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
@@ -240,7 +240,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$this->view->assign('torder',($order=='desc')? 'Ascending' : 'Descending');
     	$this->view->assign('sorder',($order=='desc')? 'asc' : 'desc');
     	
-    	$this->_helper->layout()->searchQuery = $xq;
+    	$this->_helper->layout()->searchQuery = $query;
     	$this->_helper->layout()->kategoriklinik = $kategoriklinik;
     	$this->_helper->layout()->createdBy = $createdBy;
     	$this->_helper->layout()->category = $category;
@@ -249,6 +249,8 @@ class Search_DmsController extends Zend_Controller_Action
     	$this->_helper->layout()->regulationType = $regulationType;
     	$this->_helper->layout()->showperpage = $perpage;
     	$this->_helper->layout()->status = $status;
+    	$this->_helper->layout()->sort = $sort;
+    	$this->_helper->layout()->order = $order;
     	
     	$time_end = microtime(true);
     	$time = $time_end - $time_start;
