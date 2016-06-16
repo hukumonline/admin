@@ -193,14 +193,16 @@ class Search_DmsController extends Zend_Controller_Action
     		$data[$i]['subTitle'] = $subTitle;
     		$data[$i]['description'] = $row->description;
     		
-    		$array_hari = array(1=>"Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu");
+    		/*$array_hari = array(1=>"Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu");
     		$pdate = $indexingEngine->translateSolrDate($row->publishedDate);
     		$hari = $array_hari[date("N",strtotime($pdate))];
-    		$cdate = $indexingEngine->translateSolrDate($row->modifiedDate);
-    		$chari = $array_hari[date("N",strtotime($cdate))];
+    		$cdate = $indexingEngine->translateSolrDate($row->createdDate);
+    		$chari = $array_hari[date("N",strtotime($cdate))];*/
     		
-    		$data[$i]['publishedDate'] = $hari . ', '. date("d F Y",strtotime($pdate));
-    		$data[$i]['createdDate'] = $chari . ', '. date("d F Y",strtotime($cdate));
+    		$data[$i]['publishedDate'] = $row->publishedDate;
+    		$data[$i]['createdDate'] = $row->createdDate;
+    		$data[$i]['modifiedDate'] = $row->modifiedDate;
+    		$data[$i]['deletedDate'] = $row->deletedDate;
     	}
     	
     	$num_rows = $hits->response->numFound;

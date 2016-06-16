@@ -129,8 +129,14 @@ $this->headScript()
 								<small style="float:right;vertical-align:top"><?php echo $this->data[$i]['profile']; ?></small>
 								<div style="clear: both"></div>
 								<span style="padding-top:2px">
-									<small>publish:</small><i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?>
-									<small>create:</small><i class="fa fa-calendar"></i> <?php echo $this->data[$i]['createdDate']; ?>
+									<small class="text-green">publish:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?>
+									<small class="text-green">create:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['createdDate']; ?>
+									<?php if ($this->data[$i]['modifiedDate'] != $this->data[$i]['createdDate']) : ?>
+									<small class="text-red">modify:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['modifiedDate']; ?>
+									<?php endif; ?>
+									<?php if ($this->data[$i]['deletedDate'] !== "1999-12-31T23:59:59Z") : ?>
+									<small class="text-red">delete:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['deletedDate']; ?>
+									<?php endif; ?>
 								</span>
 							</td>
 						</tr>
