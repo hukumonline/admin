@@ -57,7 +57,7 @@ class Dms_ExplorerController extends Zend_Controller_Action
 		$node = $request->getParam('node','root');
 		$limit = $request->getParam('showperpage',25);
 		$status = $request->getParam('status');
-		$sortby = $request->getParam('sortby','createdDate desc');
+		$sortby = $request->getParam('sortby','publishedDate desc');
 		
 		$offset = ($pageIndex > 0) ? ($pageIndex - 1) * $limit : 0;
 		
