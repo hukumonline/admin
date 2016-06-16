@@ -43,7 +43,14 @@ if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
 					<tr>
 						<td>Status</td>
 						<td>
-							<?php echo $this->catalogStatus(array('id' => 'cekstatus', 'name' => 'cekstatus', 'class' => 'form-control')); ?>
+							<select name="cekstatus" id="cekstatus">
+								<option value="-1">Archived</option>
+								<option value="-2">Deleted</option>
+								<option value="0">Draft</option>
+								<option value="1">Not Applicable</option>
+								<option value="2">UnPublished</option>
+								<option value="99">Published</option>
+							</select>
 						
 						</td>
 					</tr>
