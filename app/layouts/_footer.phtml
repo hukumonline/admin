@@ -43,7 +43,8 @@ if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
 					<tr>
 						<td>Status</td>
 						<td>
-							<select name="cekstatus" id="cekstatus">
+							<select name="cekstatus" id="cekstatus" class="form-control">
+								<option value="">---</option>
 								<option value="-1">Archived</option>
 								<option value="-2">Deleted</option>
 								<option value="0">Draft</option>
