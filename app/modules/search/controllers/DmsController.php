@@ -136,10 +136,10 @@ class Search_DmsController extends Zend_Controller_Action
     		$query = $query." status:$status";
     		
     		// jika status=draft
-    		/*if ($status == 0) {
+    		//if ($status == 0) {
     			$sort = "createdDate";
     			$order = "desc";
-    		}*/
+    		//}
     	}
 
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
@@ -206,6 +206,7 @@ class Search_DmsController extends Zend_Controller_Action
     		$data[$i]['deletedDate'] = $row->deletedDate;
     		$data[$i]['createdBy'] = $row->createdBy;
     		$data[$i]['modifiedBy'] = $row->modifiedBy;
+    		$data[$i]['status'] = $row->status;
     	}
     	
     	$num_rows = $hits->response->numFound;
