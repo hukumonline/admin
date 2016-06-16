@@ -134,7 +134,7 @@ $this->headScript()
 									<?php if ($this->data[$i]['modifiedDate'] != $this->data[$i]['createdDate']) : ?>
 									<small class="text-red">modify:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['modifiedDate']; ?>
 									<?php endif; ?>
-									<?php if ($this->data[$i]['deletedDate'] !== "1999-12-31T23:59:59Z") : ?>
+									<?php if (isset($this->data[$i]['deletedDate']) && $this->data[$i]['deletedDate'] !== "1999-12-31T23:59:59Z") : ?>
 									<small class="text-red">delete:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['deletedDate']; ?>
 									<?php endif; ?>
 								</span>
