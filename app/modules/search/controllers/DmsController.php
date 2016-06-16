@@ -132,10 +132,10 @@ class Search_DmsController extends Zend_Controller_Action
     		$query = '*:*';
     	}
     	
-    	if ($status) {
-    		$query = $query." status:".$status;
+    	if (isset($status)) {
+    		$query = $query." status:$status";
     	}
-    	
+
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
     		$query = $query." kategori:".$kategoriklinik;
     	
