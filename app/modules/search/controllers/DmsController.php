@@ -203,6 +203,8 @@ class Search_DmsController extends Zend_Controller_Action
     		$data[$i]['createdDate'] = $row->createdDate;
     		$data[$i]['modifiedDate'] = $row->modifiedDate;
     		$data[$i]['deletedDate'] = $row->deletedDate;
+    		$data[$i]['createdBy'] = $row->createdBy;
+    		$data[$i]['modifiedBy'] = $row->modifiedBy;
     	}
     	
     	$num_rows = $hits->response->numFound;

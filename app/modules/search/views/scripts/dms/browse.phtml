@@ -128,7 +128,7 @@ $this->headScript()
 								</div>
 								<small style="float:right;vertical-align:top"><?php echo $this->data[$i]['profile']; ?></small>
 								<div style="clear: both"></div>
-								<span style="padding-top:2px">
+								<span style="padding:5px">
 									<small class="text-green">publish:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?>
 									<small class="text-green">create:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['createdDate']; ?>
 									<?php if ($this->data[$i]['modifiedDate'] != $this->data[$i]['createdDate']) : ?>
@@ -137,7 +137,9 @@ $this->headScript()
 									<?php if (isset($this->data[$i]['deletedDate']) && $this->data[$i]['deletedDate'] !== "1999-12-31T23:59:59Z") : ?>
 									<small class="text-red">delete:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['deletedDate']; ?>
 									<?php endif; ?>
+									<small class="text-yellow" style="padding-top: 5px">oleh:</small> <i class="fa fa-user"></i> <?php echo $this->data[$i]['createdBy']; ?>
 								</span>
+									
 							</td>
 						</tr>
 						<?php endfor; ?>
