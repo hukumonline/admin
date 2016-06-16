@@ -134,6 +134,11 @@ class Search_DmsController extends Zend_Controller_Action
     	
     	if (isset($status)) {
     		$query = $query." status:$status";
+    		
+    		if ($status == 0) {
+    			$sort = "createdDate";
+    			$order = "desc";
+    		}
     	}
 
     	if ($clinic_selected == 1 and $kategoriklinik!='no_categori')
@@ -191,8 +196,11 @@ class Search_DmsController extends Zend_Controller_Action
     		$array_hari = array(1=>"Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu");
     		$pdate = $indexingEngine->translateSolrDate($row->publishedDate);
     		$hari = $array_hari[date("N",strtotime($pdate))];
+    		$cdate = $indexingEngine->translateSolrDate($row->modifiedDate);
+    		$chari = $array_hari[date("N",strtotime($cdate))];
     		
     		$data[$i]['publishedDate'] = $hari . ', '. date("d F Y",strtotime($pdate));
+    		$data[$i]['createdDate'] = $chari . ', '. date("d F Y",strtotime($cdate));
     	}
     	
     	$num_rows = $hits->response->numFound;

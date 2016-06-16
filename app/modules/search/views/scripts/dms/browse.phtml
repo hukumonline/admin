@@ -128,7 +128,10 @@ $this->headScript()
 								</div>
 								<small style="float:right;vertical-align:top"><?php echo $this->data[$i]['profile']; ?></small>
 								<div style="clear: both"></div>
-								<span style="padding-top:2px"><i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?></span>
+								<span style="padding-top:2px">
+									<small>publish:</small><i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?>
+									<small>create:</small><i class="fa fa-calendar"></i> <?php echo $this->data[$i]['createdDate']; ?>
+								</span>
 							</td>
 						</tr>
 						<?php endfor; ?>
