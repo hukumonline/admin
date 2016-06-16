@@ -43,7 +43,7 @@ if (empty($this->layout()->sort)) $this->layout()->sort = "publishedDate";
 					<tr>
 						<td>Status</td>
 						<td>
-							<?php echo $this->catalogStatus(array('id' => 'status', 'name' => 'status', 'class' => 'form-control')); ?>
+							<?php echo $this->catalogStatus(array('id' => 'cekstatus', 'name' => 'cekstatus', 'class' => 'form-control')); ?>
 						
 						</td>
 					</tr>
@@ -105,7 +105,7 @@ $(function () {
 	$("#goadv").click(function(){
 		var query = $("#modal-search-input").val(),
 			profile = $("#advs-modal-form select[name=pg] option:selected").val(), 
-			status = $("#advs-modal-form select[name=status] option:selected").val(), 
+			cekstatus = $("#advs-modal-form select[name=cekstatus] option:selected").val(), 
 			drp1 = $("input[name='daterangepicker_start']").val(), 
 			drp2 = $("input[name='daterangepicker_end']").val(); 
 			
@@ -125,11 +125,11 @@ $(function () {
 			}
 			
 		}
-		if ($("#advs-modal-form #status option:selected").val() !== '') {
-			stat = '&status=' + status;
+		if ($("#advs-modal-form #cekstatus option:selected").val() !== '') {
+			stat = '&status=' + cekstatus;
 		}
 		if (drp1 !== '' && drp2 !== '') {
-			if ((query !== '') || (status !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
+			if ((query !== '') || (cekstatus !== '') || ($("#advs-modal-form #pg option:selected").val() !== '')) {
 				selq += ' <?php echo $this->layout()->sort; ?>:[' + drp1 + 'Z TO ' + drp2 + 'Z]';
 			}
 			else 
@@ -138,7 +138,7 @@ $(function () {
 			}
 			
 		}
-		if (status != 99) {
+		if (cekstatus != 99) {
 			ord = '&sort=createdDate&order=desc';
 		}
 		else
