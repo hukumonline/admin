@@ -135,6 +135,7 @@ class Search_DmsController extends Zend_Controller_Action
     	if (isset($status)) {
     		$query = $query." status:$status";
     		
+    		// jika status=draft
     		if ($status == 0) {
     			$sort = "createdDate";
     			$order = "desc";

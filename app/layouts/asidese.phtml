@@ -29,6 +29,8 @@
 					'regulationType'=>$this->layout()->regulationType]); ?>
 			<?php echo $this->action('facetjp','dms','search',['q'=>$this->layout()->searchQuery,
 					'regulationType'=>$this->layout()->regulationType]); ?>
+			<?php echo $this->action('facetauthor','dms','search',['q'=>$this->layout()->searchQuery,
+					'createdBy'=>$this->layout()->createdBy]); ?>
 		</ul>
 				
 	</section>
