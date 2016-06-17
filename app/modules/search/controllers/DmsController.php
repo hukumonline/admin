@@ -126,6 +126,8 @@ class Search_DmsController extends Zend_Controller_Action
     	$w = new Dms_Menu_FolderBreadcrumbs2('root');
     	$this->view->assign('breadcrumbs', $w);
     	
+    	$zl = Zend_Registry::get('Zend_Locale');
+    	
     	$indexingEngine = Pandamp_Search::manager();
     	
     	if ($query == '*' || $query == '') {
@@ -175,10 +177,25 @@ class Search_DmsController extends Zend_Controller_Action
     		else
     			$data[$i]['title'] = $row->title;
     		
-    		if (is_array($row->kategoriId))
+    		$kid=$cat='';
+    		if (is_array($row->kategoriId)) {
 				$kid = $row->kategoriId[0];
-			else
-				$kid = $row->kategoriId;
+				$loc = array();
+				foreach ($row->kategoriId as $katId) {
+					if ($this->getPermissionContent($katId)) {
+						$loc[] = '<a href="'.ROOT_URL.'/'.$zl->getLanguage().'/dms/catalog/edit/guid/'.$row->id.'/node/'.$katId.'"><u>'.trim($this->view->getFolder($katId)->title).'</u></a>';
+					}
+				}
+				if (isset($loc))
+					$cat = implode(', ', $loc);
+    		} 
+    		else
+    		{
+    			if (isset($row->kategoriId) && $this->getPermissionContent($row->kategoriId)) {
+					$kid = $row->kategoriId;
+					$cat = '<a href="'.ROOT_URL.'/'.$zl->getLanguage().'/dms/catalog/edit/guid/'.$row->id.'/node/'.$kid.'"><u>'.$this->view->getFolder($kid)->title.'</u></a>';
+    			}
+    		}
     		
     		$data[$i]['node'] = $kid;
     		
@@ -207,6 +224,7 @@ class Search_DmsController extends Zend_Controller_Action
     		$data[$i]['createdBy'] = $row->createdBy;
     		$data[$i]['modifiedBy'] = $row->modifiedBy;
     		$data[$i]['status'] = $row->status;
+    		$data[$i]['category'] = $cat;
     	}
     	
     	$num_rows = $hits->response->numFound;
@@ -257,6 +275,25 @@ class Search_DmsController extends Zend_Controller_Action
     	$time = $time_end - $time_start;
     	
     	$this->view->assign('time',round($time,2));
+    }
+    
+    public function getPermissionContent($catId)
+    {
+    	$category = $this->view->getFolder($catId);
+    	
+    	$auth = Zend_Auth::getInstance();
+    	
+    	if (($auth->getIdentity()->name == "Master") || ($auth->getIdentity()->name == "Super Admin"))
+    		$content = 'all-access';
+    	else
+    		$content = $category->type;
+    	
+    	$acl = Pandamp_Acl::manager();
+    	if ($acl->getPermissionsOnContent('', $auth->getIdentity()->name, $content))
+    	{
+    		return true;
+    	}
+    	return false;
     }
     
     public function facetauthorAction()

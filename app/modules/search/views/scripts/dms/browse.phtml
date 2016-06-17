@@ -95,13 +95,13 @@ $this->headScript()
 							<?php echo $s1.'-'.$position; ?>/<?php echo $this->totalItems; ?>
 							<div class="btn-group">
 							<?php if(isset($this->paginator['previous'])): ?>
-							<a class="btn btn-default btn-sm" href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->order; ?>&page=<?php echo $this->paginator['previous']; ?>&showperpage=<?php echo $this->layout()->showperpage; ?>&status=<?php echo $this->layout()->status; ?>"><i class="fa fa-chevron-left"></i></a>
+							<a class="btn btn-default btn-sm" href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->order; ?>&page=<?php echo $this->paginator['previous']; ?>&showperpage=<?php echo $this->layout()->showperpage; if (!empty($this->layout()->status)) : ?>&status=<?php echo $this->layout()->status; endif; ?>"><i class="fa fa-chevron-left"></i></a>
 							<?php else: ?>
 							<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-left"></i></a>
 							<?php endif; ?>
 							
 							<?php if(isset($this->paginator['next'])): ?>
-							<a class="btn btn-default btn-sm" href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->order; ?>&page=<?php echo $this->paginator['next']; ?>&showperpage=<?php echo $this->layout()->showperpage; ?>&status=<?php echo $this->layout()->status; ?>"><i class="fa fa-chevron-right"></i></a>
+							<a class="btn btn-default btn-sm" href="<?php echo $this->this_url; ?>&sort=<?php echo $this->sort; ?>&order=<?php echo $this->order; ?>&page=<?php echo $this->paginator['next']; ?>&showperpage=<?php echo $this->layout()->showperpage; if (!empty($this->layout()->status)) : ?>&status=<?php echo $this->layout()->status; endif; ?>"><i class="fa fa-chevron-right"></i></a>
 							<?php else: ?>
 							<a class="btn btn-default btn-sm disabled"><i class="fa fa-chevron-right"></i></a>
 							<?php endif; ?>
@@ -129,18 +129,47 @@ $this->headScript()
 								<small style="float:right;vertical-align:top"><?php echo $this->data[$i]['profile']; ?></small>
 								<div style="clear: both"></div>
 								<div style="padding:5px">
-									<small class="text-green">publish:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['publishedDate']; ?>
-									<small class="text-green">create:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['createdDate']; ?>
+									<small class="text-green">publish:</small> <i class="fa fa-calendar-check-o"></i> <?php echo $this->data[$i]['publishedDate']; ?>
+									<small class="text-green">create:</small> <i class="fa fa-calendar-plus-o"></i> <?php echo $this->data[$i]['createdDate']; ?>
 									<?php if ($this->data[$i]['modifiedDate'] != $this->data[$i]['createdDate']) : ?>
-									<small class="text-red">modify:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['modifiedDate']; ?>
+									<small class="text-red">modify:</small> <i class="fa  fa-calendar-minus-o"></i> <?php echo $this->data[$i]['modifiedDate']; ?>
 									<?php endif; ?>
 									<?php if (isset($this->data[$i]['deletedDate']) && $this->data[$i]['deletedDate'] !== "1999-12-31T23:59:59Z") : ?>
-									<small class="text-red">delete:</small> <i class="fa fa-calendar"></i> <?php echo $this->data[$i]['deletedDate']; ?>
+									<small class="text-red">delete:</small> <i class="fa fa-calendar-times-o"></i> <?php echo $this->data[$i]['deletedDate']; ?>
 									<?php endif; ?>
 									<div style="padding-top: 2px"></div>
 									<small class="text-yellow">oleh:</small> <i class="fa fa-user"></i> <?php echo $this->data[$i]['createdBy']; ?>
 									<?php if ($this->data[$i]['createdBy'] != $this->data[$i]['modifiedBy']) : ?>
-									<small class="text-aqua">diubah:</small> <i class="fa fa-user"></i> <?php echo $this->data[$i]['modifiedBy']; ?>
+									<small class="text-aqua">diubah:</small> <i class="fa fa-user-md"></i> <?php echo $this->data[$i]['modifiedBy']; ?>
+									<?php endif; ?>
+									<?php 
+									if ($this->data[$i]['status'] == 99) {
+										$status = "Publish";
+									}
+									else if ($this->data[$i]['status'] == 0) {
+										$status = "Draft";
+									}
+									else if ($this->data[$i]['status'] == -1) {
+										$status = "Archived";
+									}
+									else if ($this->data[$i]['status'] == 2) {
+										$status = "UnPublished";
+									}
+									else if ($this->data[$i]['status'] == 1) {
+										$status = "Not Applicable";
+									}
+									else if ($this->data[$i]['status'] == -2) {
+										$status = "Deleted";
+									}
+										
+									?>
+									<?php if (isset($status)) : ?>
+									<cite>|</cite>
+									<small class="text-muted">status: <i class="fa fa-archive"></i> <?php echo $status; ?></small>
+									<?php endif; ?>
+									<?php if (isset($this->data[$i]['category']) && !empty($this->data[$i]['category'])) : ?>
+									<cite>|</cite>
+									<small class="text-light-blue">lokasi: <i class="fa fa-cog"></i> <?php echo $this->data[$i]['category']; ?></small>
 									<?php endif; ?>
 								</div>
 									
