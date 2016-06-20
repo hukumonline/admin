@@ -114,6 +114,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$putusanSelected = $request->getParam('putusanSelected');
     	$createdBy = $request->getParam('createdBy');
     	$status = $request->getParam('status');
+    	$year = $request->getParam('year');
     	$sort = $request->getParam('sort','publishedDate');
     	$order = $request->getParam('order','desc');
     	$pageIndex = $request->getParam('page',1);
@@ -152,6 +153,9 @@ class Search_DmsController extends Zend_Controller_Action
     	
     	if ($category) 
     		$query = $query.' profile:'.$category;
+    	
+    	if ($year) 
+    		$query = $query.' year:'.$year;
     	
     	if ($createdBy)
     		$query = $query.' createdBy:'.$createdBy;
@@ -259,7 +263,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$this->view->assign('torder',($order=='desc')? 'Ascending' : 'Descending');
     	$this->view->assign('sorder',($order=='desc')? 'asc' : 'desc');
     	
-    	$this->_helper->layout()->searchQuery = $query;
+    	$this->_helper->layout()->searchQuery = $xq;
     	$this->_helper->layout()->kategoriklinik = $kategoriklinik;
     	$this->_helper->layout()->createdBy = $createdBy;
     	$this->_helper->layout()->category = $category;
@@ -268,6 +272,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$this->_helper->layout()->regulationType = $regulationType;
     	$this->_helper->layout()->showperpage = $perpage;
     	$this->_helper->layout()->status = $status;
+    	$this->_helper->layout()->year = $year;
     	$this->_helper->layout()->sort = $sort;
     	$this->_helper->layout()->order = $order;
     	
@@ -295,6 +300,75 @@ class Search_DmsController extends Zend_Controller_Action
     	}
     	return false;
     }
+    
+    public function facetyearAction()
+    {
+    	$request = $this->getRequest();
+    	$q = $wq = $request->getParam('q');
+    	$year = $request->getParam('year');
+    	$zl = Zend_Registry::get('Zend_Locale');
+    	if (($q) && ($zl->getLanguage() !== 'ha')) {
+    		if(!preg_match("/(id:|shortTitle:|profile:|publishedDate:|expiredDate:|createdDate:|modifiedDate:|createdBy:|modifiedBy:|status:|author:|fixedDate:|regulationType:|regulationOrder:|kategori:|kategoriklinik:|kontributor:|sumber:|year:|number:|title:)/i", $q))
+    		{
+    			require_once( 'Apache/Solr/Service.php' );
+    			$q = Apache_Solr_Service::escape($q);
+    		}
+    	
+    		if ($zl->getLanguage() == 'id'){
+    			$query = $q . ' profile:(kutu_peraturan_kolonial OR kutu_rancangan_peraturan OR kutu_peraturan) -profile:kutu_putusan -profile:kutu_contact -profile:kutu_doc -profile:comment -profile:isuhangat -profile:partner -profile:author -profile:about_us -profile:kategoriklinik -profile:kutu_email -profile:kutu_kotik -profile:kutu_mitra profile:[" " TO *] title:[" " TO *]';
+    		}
+    		else
+    		{
+    			$query = $q . ' -profile:kategoriklinik -profile:kutu_doc -profile:trial_periods -profile:about_us -profile:signin -profile:manual -profile:contact -profile:career -profile:kutu_contentjp -profile:comments -profile:hot_issue_ile -profile:hot_issue_ilb -profile:hot_issue_ild -profile:executive_alert -profile:executive_alert -profile:banner -profile:products -profile:partner -profile:hot_news profile:[" " TO *] title:[" " TO *]';
+    		}
+    	}
+    	else
+    	{
+    		$query = "";
+    	}
+    	$query = str_replace('\\', '', $query);
+    	
+    	$indexingEngine = Pandamp_Search::manager();
+    	
+    	$hits = $indexingEngine->find($query,0,1,"year desc");
+    	
+    	if (isset($hits->response->docs[0])) {
+    		$content = 0;
+    		$data = array();
+    		 
+    		foreach ($hits->facet_counts->facet_fields->year as $facet => $count)
+    		{
+    			if ($count == 0 || in_array($facet, array('0','_empty_')))
+    			{
+    				continue;
+    			}
+    			else
+    			{
+    				$data[$content]['profile'] = $facet;
+    				$data[$content]['count'] = $count;
+    			}
+    			 
+    			$content++;
+    		}
+    		
+    		$profile = array();
+    		foreach ($data as $key => $row)
+    		{
+    			$profile[$key] = $row['profile'];
+    		}
+    		
+    		usort($data, function ($item1, $item2) {
+			    if ($item1['profile'] == $item2['profile']) return 0;
+			    return $item1['profile'] < $item2['profile'] ? 1 : -1;
+			});
+    		 
+    		$this->view->assign('aData', $data);
+    		$this->view->assign('query', urlencode($wq));
+    		$this->view->assign('year', $year);
+    	}
+    }
+    
+
     
     public function facetauthorAction()
     {

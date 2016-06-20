@@ -23,6 +23,8 @@
 					'clinic_selected'=>$this->layout()->clinicSelected,
 					'putusanSelected'=>$this->layout()->putusanSelected
 				]); ?>
+			<?php echo $this->action('facetyear','dms','search',['q'=>$this->layout()->searchQuery,
+					'year'=>$this->layout()->year]); ?>
 			<?php echo $this->action('facetcatclinic','dms','search',['q'=>$this->layout()->searchQuery,
 					'kategoriklinik'=>$this->layout()->kategoriklinik]); ?>
 			<?php echo $this->action('facetlp','dms','search',['q'=>$this->layout()->searchQuery,

@@ -1756,7 +1756,7 @@ class Pandamp_Search_Adapter_Solr extends Pandamp_Search_Adapter_Abstract
                 'hl.fl' =>'question,kategori,description,title,subTitle',
                 'fl'=>'*,score',
                 'facet'=>'true',
-                'facet.field'=>array('profile','kategoriklinik','regulationType','createdBy','modifiedBy'),
+                'facet.field'=>array('profile','kategoriklinik','regulationType','createdBy','modifiedBy','year'),
                 'facet.sort'=>'true',
                 'facet.method'=>'enum',
                 'facet.limit'=>'-1',
