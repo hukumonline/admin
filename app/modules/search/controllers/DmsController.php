@@ -187,7 +187,12 @@ class Search_DmsController extends Zend_Controller_Action
 				$loc = array();
 				foreach ($row->kategoriId as $katId) {
 					if ($this->getPermissionContent($katId)) {
-						$loc[] = '<a href="'.ROOT_URL.'/'.$zl->getLanguage().'/dms/catalog/edit/guid/'.$row->id.'/node/'.$katId.'"><u>'.trim($this->view->getFolder($katId)->title).'</u></a>';
+						if (isset($this->view->getFolder($katId)->title)) 
+							$folderTitle = trim($this->view->getFolder($katId)->title);
+						else 
+							$folderTitle = "No-Title";
+						
+						$loc[] = '<a href="'.ROOT_URL.'/'.$zl->getLanguage().'/dms/catalog/edit/guid/'.$row->id.'/node/'.$katId.'"><u>'.$folderTitle.'</u></a>';
 					}
 				}
 				if (isset($loc))
