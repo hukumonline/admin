@@ -1510,7 +1510,7 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type:multipart/form-data'));
 						$result = curl_exec ($ch);*/
 						
-						$mapping_array = [
+						/*$mapping_array = [
 							"literal.id" => "$guid",
 							"fmap.content" => "content",
 							"commit" => "true"
@@ -1521,17 +1521,19 @@ class SolrController extends Application_Controller_Cli
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 						curl_setopt($ch, CURLOPT_URL, ($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')));
 						$cfile = curl_file_create($sDir);
-						//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));						
+												
 						curl_setopt($ch, CURLOPT_POSTFIELDS, array('myfile' => $cfile));
 						
-						//Execute curl.
 						if(!curl_exec($ch) == TRUE)
 						{
 							throw new Exception('Curl Error:' . curl_error($ch));
 							echo "<br/>Curl Error:<br/>" . curl_error($ch);
 						}
 						curl_close($ch);
-						die;
+						die;*/
+						
+						//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:multipart/form-data'));
+						
 						/*$cfile = $this->getCurlValue($sDir,'multipart/form-data',$fileName);
 						$data = array('file' => $cfile);
 						$ch = curl_init();
@@ -1555,7 +1557,7 @@ class SolrController extends Application_Controller_Cli
 						//system('curl "http://192.168.0.61:8983/solr/corehol/update/extract?literal.id="'.$guid.'"&fmap.content=content&commit=true" -F "myfile=@"'.$sDir);
 						//system('curl "'.($solr_extraction_endpoint . '?' . http_build_query($mapping_array,'','&')).'" -F "myfile=@"'.$sDir);
 						
-						/*$pdfExtractor = $this->_pdfExtractor;
+						$pdfExtractor = $this->_pdfExtractor;
 						system("$pdfExtractor ".$sDir.' '.$outpath, $ret);
 						if ($ret == 0)
 						{
@@ -1575,7 +1577,7 @@ class SolrController extends Application_Controller_Cli
 							return '';
 						if ($ret == 1)
 							print "Could not find pdf file.\n";
-							return '';*/
+							return '';
 						break;
 					case 'text/html':
 					case 'text/plain':
