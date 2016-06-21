@@ -138,9 +138,9 @@ foreach ($tmp as $course => $data){
 					$source = $rowsetCatalogAttribute->findByAttributeGuid('fixedSelectMitra');
 					$category = $rowsetCatalogAttribute->findByAttributeGuid('fixedKategoriKlinik');
 					
-					$penjawab = $catalogAttributeDb->getCatalogAttributeValue($author->value, "fixedTitle");
-					$mitra = $catalogAttributeDb->getCatalogAttributeValue($source->value, "fixedTitle");
-					$kategori = $catalogAttributeDb->getCatalogAttributeValue($category->value, "fixedTitle");
+					$penjawab = $this->getCatalogAttribute($author->value, "fixedTitle");
+					$mitra = $this->getCatalogAttribute($source->value, "fixedTitle");
+					$kategori = $this->getCatalogAttribute($category->value, "fixedTitle");
 					
 					$notes = "Kategori:$kategori - Mitra:$mitra - Penjawab:$penjawab - Penanya:$rowset->createdBy";
 					
