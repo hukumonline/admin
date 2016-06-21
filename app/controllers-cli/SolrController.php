@@ -34,6 +34,7 @@ class SolrController extends Application_Controller_Cli
 		$path = $request->getParam('path');
 		
 		$solr = &$this->_solr;
+		$solr->setPath('/solr/'.$path);
 		
 		if ( ! $solr->ping() ) {
 			echo "Solr service not responding.\n";
