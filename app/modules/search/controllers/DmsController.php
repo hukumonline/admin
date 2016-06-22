@@ -202,7 +202,12 @@ class Search_DmsController extends Zend_Controller_Action
     		{
     			if (isset($row->kategoriId) && $this->getPermissionContent($row->kategoriId)) {
 					$kid = $row->kategoriId;
-					$cat = '<a href="'.ROOT_URL.'/'.$zl->getLanguage().'/dms/catalog/edit/guid/'.$row->id.'/node/'.$kid.'"><u>'.$this->view->getFolder($kid)->title.'</u></a>';
+					if (isset($this->view->getFolder($kid)->title))
+						$folderTitle = trim($this->view->getFolder($kid)->title);
+					else
+						$folderTitle = "No-Title";
+					
+					$cat = '<a href="'.ROOT_URL.'/'.$zl->getLanguage().'/dms/catalog/edit/guid/'.$row->id.'/node/'.$kid.'"><u>'.$folderTitle.'</u></a>';
     			}
     		}
     		
