@@ -123,7 +123,28 @@ $this->headScript()
 									<?php echo $this->data[$i]['subTitle']; ?>
 								</code>
 								<?php endif; ?>
+								
+								<?php if ($this->data[$i]['profile'] == 'doc') { ?>
+								<?php
+								$relatedItemDb = new App_Model_Db_Table_RelatedItem();
+								$relItem = $relatedItemDb->fetchRow("itemGuid='".$this->data[$i]['id']."' AND relateAs='RELATED_FILE'");
+								?>
+								<?php if ($relItem) : ?>
+								<h4>
+									<a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/browser/download-file/guid/<?php echo $relItem->itemGuid; ?>/parent/<?php echo $relItem->relatedGuid; ?>">
+										<i class="fa fa-file"></i> FILE: <?php echo $this->data[$i]['title']; ?>
+									</a>
+								</h4>
+								<?php else : ?>
+								File: -
+								<?php endif; ?>
+								
+								<?php } else { ?>
+								
 								<h4><a href="<?php echo ROOT_URL; ?>/<?php echo $this->getLanguage(); ?>/dms/catalog/detail/guid/<?php echo $this->data[$i]['id']; ?>/node/<?php echo $this->data[$i]['node']; ?>"><i class="fa fa-file"></i> <?php echo $this->data[$i]['title']; ?></a></h4>
+								
+								<?php } ?>
+								
 								<?php if (isset($this->data[$i]['description'])) : ?><small class="text-muted"><?php echo $this->data[$i]['description']; ?></small><?php endif; ?>
 								</div>
 								<small style="float:right;vertical-align:top"><?php echo $this->data[$i]['profile']; ?></small>
