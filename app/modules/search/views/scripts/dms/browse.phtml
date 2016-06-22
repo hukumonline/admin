@@ -124,7 +124,7 @@ $this->headScript()
 								</code>
 								<?php endif; ?>
 								
-								<?php if ($this->data[$i]['profile'] == 'doc') { ?>
+								<?php if ($this->data[$i]['profile'] == 'Doc') { ?>
 								<?php
 								$relatedItemDb = new App_Model_Db_Table_RelatedItem();
 								$relItem = $relatedItemDb->fetchRow("itemGuid='".$this->data[$i]['id']."' AND relateAs='RELATED_FILE'");
