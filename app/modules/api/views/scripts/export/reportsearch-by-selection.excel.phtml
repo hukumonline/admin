@@ -177,6 +177,10 @@ foreach ($tmp as $course => $data){
 				} 
 				else
 				{
+					if (in_array($profileGuid, ['article','isuhangat'])) {
+						$url = $config->web->url->base.'/berita/baca/'.$rowset->guid.'/'.$rowset->shortTitle;
+					}
+					
 					$rowCatalogAttributeTitle = $rowsetCatalogAttribute->findByAttributeGuid('fixedTitle');
 					$rowCatalogAttributeAuthor = $rowsetCatalogAttribute->findByAttributeGuid('fixedAuthor');
 					
