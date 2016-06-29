@@ -104,6 +104,10 @@ $worksheet->writestring(2, 10, "Total FB",$judul1);
 $worksheet->writestring(3, 10, "",$judul7);
 $worksheet->mergecells(2,10,3,10);
 
+$worksheet->writestring(2, 11, "huku.mn",$judul1);
+$worksheet->writestring(3, 11, "",$judul7);
+$worksheet->mergecells(2,11,3,11);
+
 
 $i=4;
 foreach ($this->selectedRows as $guid)
@@ -167,9 +171,9 @@ foreach ($tmp as $course => $data){
 					
 					$worksheet->writeUrl($i, 2, '<a href="'.$url.'">'.strip_tags($rowCatalogAttributeTitle->value).'</a>', strip_tags($rowCatalogAttributeTitle->value),$judul3);
 					$worksheet->writestring($i, 3, $penjawab,$judul3);
-					$worksheet->writestring($i, 11, $mitra,$judul3);
-					$worksheet->writestring($i, 12, $kategori,$judul3);
-					$worksheet->writestring($i, 13, $rowset->createdBy,$judul3);
+					$worksheet->writestring($i, 12, $mitra,$judul3);
+					$worksheet->writestring($i, 13, $kategori,$judul3);
+					$worksheet->writestring($i, 14, $rowset->createdBy,$judul3);
 				} 
 				else
 				{
@@ -212,6 +216,7 @@ foreach ($tmp as $course => $data){
 					$worksheet->writestring($i, 10, $this->getFb($url)['total_count'],$judul3);
 				}
 				
+				$worksheet->writestring($i, 11, $this->getCountShortener($rowset->guid),$judul3);
 				
 			}
 			
