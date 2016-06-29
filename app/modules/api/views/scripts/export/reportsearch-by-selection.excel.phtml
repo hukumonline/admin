@@ -8,6 +8,8 @@ require_once("Spreadsheet/Excel/Writer/Workbook.php");
 require_once("Spreadsheet/Excel/Writer/Parser.php");
 require_once("Spreadsheet/Excel/Writer.php");
 
+$config = Pandamp_Config::getConfig();
+
 $workbook = new Spreadsheet_Excel_Writer_Workbook("-");
 $worksheet = &$workbook->addWorksheet('Article');
 
@@ -53,7 +55,7 @@ $sky =& $workbook->addformat();
 $sky->setsize(15);
 
 $worksheet->writestring(0, 0, "Review: ".$this->daterange,$judul);
-$worksheet->mergecells(0,0,0,5);
+$worksheet->mergecells(0,0,0,10);
 
 $worksheet->writestring(2, 0, "No.",$judul5);
 $worksheet->writestring(3, 0, "",$judul7);
@@ -85,6 +87,22 @@ $worksheet->mergecells(2,5,3,5);
 $worksheet->writestring(2, 6, "Total",$judul1);
 $worksheet->writestring(3, 6, "",$judul7);
 $worksheet->mergecells(2,6,3,6);
+
+$worksheet->writestring(2, 7, "Share",$judul1);
+$worksheet->writestring(3, 7, "",$judul7);
+$worksheet->mergecells(2,7,3,7);
+
+$worksheet->writestring(2, 8, "Like",$judul1);
+$worksheet->writestring(3, 8, "",$judul7);
+$worksheet->mergecells(2,8,3,8);
+
+$worksheet->writestring(2, 9, "Comment",$judul1);
+$worksheet->writestring(3, 9, "",$judul7);
+$worksheet->mergecells(2,9,3,9);
+
+$worksheet->writestring(2, 10, "Total FB",$judul1);
+$worksheet->writestring(3, 10, "",$judul7);
+$worksheet->mergecells(2,10,3,10);
 
 
 $i=4;
@@ -142,15 +160,16 @@ foreach ($tmp as $course => $data){
 					$mitra = $this->getCatalogAttribute($source->value, "fixedTitle");
 					$kategori = $this->getCatalogAttribute($category->value, "fixedTitle");
 					
-					$notes = "Kategori:$kategori - Mitra:$mitra - Penjawab:$penjawab - Penanya:$rowset->createdBy";
-					
+					//$notes = "Kategori:$kategori - Mitra:$mitra - Penjawab:$penjawab - Penanya:$rowset->createdBy";
 					//$worksheet->writenote($i, 2, $notes);
 					
-					$worksheet->writestring($i, 2, strip_tags($rowCatalogAttributeTitle->value),$judul3);
+					$url = $config->web->url->base.'/klinik/detail/'.$rowset->guid.'/'.$rowset->shortTitle;
+					
+					$worksheet->writeUrl($i, 2, '<a href="'.$url.'">'.strip_tags($rowCatalogAttributeTitle->value).'</a>', strip_tags($rowCatalogAttributeTitle->value),$judul3);
 					$worksheet->writestring($i, 3, $penjawab,$judul3);
-					$worksheet->writestring($i, 7, "Mitra:".$mitra,$judul3);
-					$worksheet->writestring($i, 8, "Kategori:".$kategori,$judul3);
-					$worksheet->writestring($i, 9, "Penanya:".$rowset->createdBy,$judul3);
+					$worksheet->writestring($i, 11, $mitra,$judul3);
+					$worksheet->writestring($i, 12, $kategori,$judul3);
+					$worksheet->writestring($i, 13, $rowset->createdBy,$judul3);
 				} 
 				else
 				{
@@ -176,6 +195,22 @@ foreach ($tmp as $course => $data){
 				$worksheet->writestring($i, 4, $mobile,$judul3);
 				$worksheet->writestring($i, 5, $desktop,$judul3);
 				$worksheet->writestring($i, 6, $mobile+$desktop,$judul3);
+				
+				if (isset($this->getFb($url)['share_count'])) {
+					$worksheet->writestring($i, 7, $this->getFb($url)['share_count'],$judul3);
+				}
+				
+				if (isset($this->getFb($url)['like_count'])) {
+					$worksheet->writestring($i, 8, $this->getFb($url)['like_count'],$judul3);
+				}
+				
+				if (isset($this->getFb($url)['comment_count'])) {
+					$worksheet->writestring($i, 9, $this->getFb($url)['comment_count'],$judul3);
+				}
+				
+				if (isset($this->getFb($url)['total_count'])) {
+					$worksheet->writestring($i, 10, $this->getFb($url)['total_count'],$judul3);
+				}
 				
 				
 			}
