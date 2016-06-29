@@ -12,7 +12,7 @@ class Pandamp_Controller_Action_Helper_GetFb
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$urlObject=curl_exec($ch);
-			$urlObject=json_decode($urlObject);
+			$urlObject=json_decode($urlObject,true);
 			curl_close ($ch);
 			$convert = (array)$urlObject[0];
 			
