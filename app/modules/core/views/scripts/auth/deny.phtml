@@ -1,0 +1,40 @@
+<?php 
+/**
+ * Pandamp
+ * 
+ * @author		2011-2018 Nihki Prihadi <nihki@madaniyah.com>
+ * @version		$Id: deny.phtml 1 2014-02-24 10:40Z $
+ */
+?>
+<?php $this->headTitle('Access Denied'); ?>
+<section class="content-header">
+	<h1>401 Access Denied</h1>
+	<ol class="breadcrumb">
+		<li><a href="<?php echo ROOT_URL; ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">401 error</li>
+	</ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	<div class="error-page">
+    	<h2 class="headline text-yellow"> 401</h2>
+        <div class="error-content">
+           	<h3><i class="fa fa-warning text-red"></i> Access Denied.</h3>
+           	<p>You are not allowed to access this page because you do not have permission to view it.</p>
+           	<div class="space"></div>
+			<div class="center">
+				<a href="javascript: history.go(-1);" class="btn btn-grey">
+					<i class="icon-arrow-left"></i>
+					Go Back
+				</a>
+
+				<a href="<?php echo ROOT_URL; ?>" class="btn btn-primary">
+					<i class="icon-dashboard"></i>
+					Dashboard
+				</a>
+			</div>
+		</div><!-- /.error-content -->
+		
+    </div><!-- /.error-page -->
+</section><!-- /.content -->
