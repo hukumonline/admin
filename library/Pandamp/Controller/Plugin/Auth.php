@@ -41,11 +41,11 @@ class Pandamp_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
 			$sReturn = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 			$sReturn = base64_encode($sReturn);
 			
-			$request->setModuleName('core')
+			/*$request->setModuleName('core')
 					->setControllerName('Auth')
 					->setActionName($forwardAction)
 					->setParam('returnUrl', $sReturn)
-					->setDispatched(true);
+					->setDispatched(true);*/
 		}
 	}
 }
