@@ -170,6 +170,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      *
      */
     
+    protected function _initPlugins()
+    {
+    	$this->bootstrap('FrontController');
+    	$front = $this->getResource('FrontController');
+    	$front->registerPlugin(new Pandamp_Controller_Plugin_Auth());
+    }
+    
     
 	/*
     protected function _initZIDS() {
