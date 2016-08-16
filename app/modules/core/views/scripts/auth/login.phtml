@@ -1,0 +1,110 @@
+<div class="login-box">
+	<div class="login-logo">
+		<a href="<?php echo ROOT_URL; ?>"><b>Hol</b>NP-BETA</a>
+	</div>
+	<div class="login-box-body">
+		<?php
+			$my_access = new Pandamp_Core_Hol_Auth();
+			$my_access->login_reader();
+		?>
+		<p class="login-box-msg">Sign in to start your session</p>
+		<form id="loginform">
+			<div class="form-group has-feedback">
+				<input name="username" id="username" class="form-control" placeholder="Username" tabindex="1" value="<?php echo $my_access->user; ?>" type="text">
+				<span class="fa fa-user form-control-feedback"></span>
+			</div>
+			<div class="form-group has-feedback">
+				<input id="password" name="password" class="form-control" placeholder="Password" tabindex="2" type="password" value="<?php echo $my_access->user_pw; ?>">
+				<span class="fa fa-lock form-control-feedback"></span>
+			</div>
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="checkbox icheck">
+						<label>
+							<input id="remember" name="remember" tabindex="3" type="checkbox" value="yes"<?php ($my_access->is_cookie == true) ? " checked" : ""; ?>> Remember Me
+						</label>
+					</div>
+				</div>
+				<div class="col-xs-4">
+					<input name="returnUrl" id="returnUrl" type="hidden" value="<?php echo $this->returnUrl; ?>" />
+					<button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+				</div>
+			</div>
+		</form>
+		
+	</div>
+</div>
+<?php $this->headScript()->captureStart(); ?>
+$(document).ready(function(){
+	var waitId		=	'#wait';							
+	var formId		=	'#loginform';						
+	var userId		=	'#username';						
+	var passId		=	'#password';						
+	var returnTo	=	'#returnUrl';						
+	var remember	=	'#remember:checked';						
+	
+	var waitNote	=	'Loading...';						
+	var jsErrMsg	=	'User or password is not valid';	
+	
+	var postFile	=	'<?php echo $this->url(array(), 'klogin'); ?>';
+	
+	var autoRedir	=	false;								
+	
+	// hide first
+	$(waitId).hide(); 
+
+	// FirstLoad
+	$(waitId).html(waitNote).fadeIn('fast',function(){
+		$(waitId).fadeOut('fast',function(){
+			$(formId).submit( function() {
+				$(waitId).html(waitNote).fadeIn();
+				
+				var _u = $(userId).val();
+				var _p = $(passId).val();
+				var _r = $(returnTo).val();
+				var _s = $(remember).val();
+				
+				if(_u.length<4) 
+				{
+					$(waitId).html(jsErrMsg).fadeIn('fast',function(){
+						$(userId).focus();
+					});
+				}
+				else
+				{
+					if(_p.length<4)
+					{
+						$(waitId).html(jsErrMsg).fadeIn('fast',function(){
+							$(passId).focus();
+						});
+					}
+					else
+					{
+						$.post(postFile, { u: _u, p: _p, r: _r, s: _s }, function(data) {
+							if(data.success==true) {
+								$(waitId).html(data.msg).slideDown('fast', function(){
+									//location.reload(true);
+									window.location = data.message;
+								});
+							}
+							else
+							{
+								$(waitId).html(data.error).slideDown('fast', function(){
+									$(userId).focus();
+								});
+							}
+						},'json');
+					}
+				}
+				return false;
+			});
+			$(userId).focus();
+		}).html();
+	});	
+	$('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' // optional
+      });
+});
+<?php $this->headScript()->captureEnd(); ?>

@@ -19,8 +19,7 @@ class Pandamp_Controller_Action_Helper_GetShareCount
 		$catalogs = App_Model_Show_Catalog::show()->getCatalogByGuid($catalogGuid);
 		
 		if (($catalogs) && (!in_array($catalogs['profileGuid'], array('partner','author','kategoriklinik')))) {
-			
-			if ($catalogs['profileGuid']=='article') {
+if (in_array($catalogs['profileGuid'],['article','isuhangat'])) {			
 				$uri = "berita/baca/".$catalogs['guid']."/".$catalogs['shortTitle'];
 			}
 			else if ($catalogs['profileGuid']=='klinik') {
