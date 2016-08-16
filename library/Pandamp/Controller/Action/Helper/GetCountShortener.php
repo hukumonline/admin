@@ -20,7 +20,7 @@ class Pandamp_Controller_Action_Helper_GetCountShortener
 		
 		if (($catalogs) && (!in_array($catalogs['profileGuid'], array('partner','author','kategoriklinik')))) {
 
-                        if (in_array($catalogs['profileGuid'],['article','isuhangat'])) {			
+         	if (in_array($catalogs['profileGuid'],['article','isuhangat'])) {			
 				$uri = "berita/baca/".$catalogs['guid']."/".$catalogs['shortTitle'];
 			}
 			else if ($catalogs['profileGuid']=='klinik') {
