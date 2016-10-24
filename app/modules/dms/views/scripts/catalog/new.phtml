@@ -452,7 +452,7 @@ $(function () {
     $('#fileupload').fileupload({
     	url: '<?php echo $this->url(['lang'=>$this->getLanguage()],'upload_file_upload'); ?>',
     	dataType: 'json',
-    	maxFileSize: 500000, 
+    	maxFileSize: 5242880, 
     	done: function (e, data) {
     		if(data.result) {
     			if (data.result.original.type == "file") {
@@ -512,7 +512,7 @@ $(function () {
     			type = $('select[name=fixedType]').val();
     		
     			
-    		if(type == 'image' && data.originalFiles[0]['size'] > 500000) {
+    		if(type == 'image' && data.originalFiles[0]['size'] > 5242880) {
     			uploadErrors.push('Filesize is too big');
     		}
     		if(uploadErrors.length > 0) {
@@ -532,7 +532,7 @@ $(function () {
     		guid = '<?php echo $this->guid; ?>';
     	data.formData = {type:type,guid:guid};
     	console.log(type + ' ' + data.originalFiles[0]['size']);
-    	if(type == 'image' && data.originalFiles[0]['size'] > 500000) {
+    	if(type == 'image' && data.originalFiles[0]['size'] > 5242880) {
     		alert('Filesize is too big');
     		data.context.find('button').prop('disabled', false);
 			return false;

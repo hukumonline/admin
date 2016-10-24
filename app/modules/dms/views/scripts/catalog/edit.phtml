@@ -1,3 +1,4 @@
+<?php if ($this->isAllowed($this->catalog['profileGuid'])) : ?>
 <?php 
 $this->headLink()
 	->appendStylesheet($this->cdn('scripts') . '/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css')
@@ -645,7 +646,7 @@ $(function () {
     			type = $('select[name=fixedType]').val();
     		
     		console.log(type + ' ' + data.originalFiles[0]['size']);	
-    		if(type == 'image' && data.originalFiles[0]['size'] > 500000) {
+    		if(type == 'image' && data.originalFiles[0]['size'] > 5242880) {
     			uploadErrors.push('Filesize is too big');
     		}
     		if(uploadErrors.length > 0) {
@@ -822,3 +823,9 @@ function addFormAttribute(v,fileId,name)
 	"</div>");
 }
 <?php $this->headScript()->captureEnd(); ?>
+
+<?php else : ?>
+
+<?php echo $this->action('deny','auth','core'); ?>
+
+<?php endif; ?>

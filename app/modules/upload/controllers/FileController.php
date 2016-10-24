@@ -119,7 +119,7 @@ class Upload_FileController extends Zend_Controller_Action
 		
 		$adapter->setDestination($dir . DS . $path);
 		$adapter->addValidator('Extension', false, 'jpg,png,gif');
-		$adapter->addValidator('Size', false, 500000);
+		$adapter->addValidator('Size', false, 5242880);
 		
 		$files = $adapter->getFileInfo();
 		foreach ($files as $file => $info) {
