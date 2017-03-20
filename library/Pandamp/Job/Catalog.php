@@ -12,42 +12,42 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$ip = (isset($this->params['ip']))? $this->params['ip'] : '';
 		$kopel = (isset($this->params['kopel']))? $this->params['kopel'] : '';
 		$lang = (isset($this->params['lang']))? $this->params['lang'] : 'id';
-		
+
 		if ($lang !== 'en') {
 			$this->toShortUrl($catalogGuid, $folderGuid, $ip, $kopel, $lang);
 		}
-		
+
 		$this->toSolr($catalogGuid, $lang);
 		$this->toDoc($catalogGuid, $lang);
-		
+
 		if ($folderGuid == 'lt4b11e8c86c8a4') // klinik > published
 			$folderGuid = 'lt4a0a533e31979';  // klinik
-		
+
 		$this->addCache($folderGuid);
-		
+
 		return true;
 	}
-	
+
 	public function addCache($folderGuid)
 	{
 		/**
 		 * aktual, utama, berita, klinik, editorial, fokus, after office, tajuk, tokoh, isu hangat, resensi, jeda, kolom, info, pojok peradilan, berita foto, talks, past event, gallery, komunitas, surat pembaca, RECHTSCHOOL
-		 * fb29, lt4aaa29322bdbb, fb16, lt4a0a533e31979, lt54b470ce7255c, fb4, lt51b824118f00d, fb18, fb12, lt4a6f7d5377193, fb17, fb14, fb7, fb9, lt55dd40da17f5c, lt4de5c32a53bd4, lt4c93230c9d0a5, lt4a607b5e3c2f2, lt4f0fefa26f140, fb19, fb8, lt51822eae8c808 
+		 * fb29, lt4aaa29322bdbb, fb16, lt4a0a533e31979, lt54b470ce7255c, fb4, lt51b824118f00d, fb18, fb12, lt4a6f7d5377193, fb17, fb14, fb7, fb9, lt55dd40da17f5c, lt4de5c32a53bd4, lt4c93230c9d0a5, lt4a607b5e3c2f2, lt4f0fefa26f140, fb19, fb8, lt51822eae8c808
 		 */
 		if (!in_array($folderGuid, ['fb29','lt4aaa29322bdbb','fb16','lt4a0a533e31979','lt54b470ce7255c','fb4','lt51b824118f00d','fb18','fb12','lt4a6f7d5377193','fb17','fb14','fb7','fb9','lt55dd40da17f5c','lt4de5c32a53bd4','lt4c93230c9d0a5','lt4a607b5e3c2f2','lt4f0fefa26f140','fb19','fb8','lt51822eae8c808'])) {
 			return;
 		}
-		
+
 		$db = $this->getDbHandler('hid');
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-		
+
 		$sql = $db->select();
-		
+
 		$sql->from('KutuSetting', ['dataCache']);
 		$sql->where('id=?',1);
-		
+
 		$row = $db->fetchRow($sql);
-		
+
 		$un = unserialize($row->dataCache);
 		if($un!="")
 		{
@@ -61,27 +61,27 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		{
 			$un = serialize([$folderGuid]);
 		}
-		
-		
+
+
 		$data = ['dataCache'=>$un];
 		$db->update('KutuSetting',$data,"id=1");
 	}
-	
+
 	public function toShortUrl($catalogGuid, $folderGuid = null, $ip = null, $kopel = null, $lang)
 	{
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
-		
+
 		$catalog = $this->getCatalog($catalogGuid, ['profileGuid','shortTitle'], $lang);
-		
+
 		if (!$catalog) {
 			return true;
 		}
-		
+
 		if ($catalog->profileGuid == 'kutu_doc') {
 			$this->log()->notice('guid: ' . $catalogGuid . ' adalah dokumen tidak perlu shortUrl');
 			return;
 		}
-		
+
 		if ($lang == 'id') {
 			if ($catalog->profileGuid == 'klinik')
 				$url_content = $web->url->base.'/klinik/detail/'.$catalogGuid.'/'.$catalog->shortTitle;
@@ -94,28 +94,28 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		{
 			$url_content = $web->en->url->base.'/pages/'.$catalogGuid.'/'.$catalog->shortTitle;
 		}
-		
+
 		$q = "url:\"".$url_content."\"";
-		
+
 		$data = array('url' => $url_content,
 				'createdate' => date("Y-m-d h:i:s"),
 				'remoteip' => $ip,
 				'kopel' => $kopel);
-		
-		
+
+
 		$db = $this->getDbHandler('sh');
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-		
+
 		$solr = $this->getSolrService('sh');
-		
+
 		if ( ! $solr->ping() ) {
 			$this->log()->err('Solr shortUrl service not responding');
-				
+
 			return;
 		}
 
 		$this->log()->info('start shortUrl id: ' . $catalogGuid);
-		
+
 		$hits = $solr->search($q,0,1,['fl'=>'id']);
 		if (isset($hits->response->docs[0])) {
 			$row = $hits->response->docs[0];
@@ -134,43 +134,43 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				}
 				$start = $v;
 			}
-			
+
 			if (isset($missing)) {
 				$numId = $missing;
-				
+
 				$recoveredArray[] = $missing;
 				sort($recoveredArray);
 				file_put_contents(ROOT_DIR.DS.'data'.DS.'datashorturl.txt', serialize($recoveredArray));
 			}
-			else 
+			else
 			{
 				$sm = $db->select();
 				$sm->from('shorturls',array(new Zend_Db_Expr('MAX(id)+1 as maxid')));
 				$rowMax = $db->fetchRow($sm);
 				$numId = $rowMax->maxid;
 			}
-			
+
 			$data['id'] = $numId;
-			
+
 			$insert = $db->insert('shorturls', $data);
-				
+
 			//$hid = $db->lastInsertId('shorturls', 'id');
 			$hid = $numId;
 		}
-		
-		
+
+
 		$select = $db->select();
 		$select->from('shorturls', '*');
 		$select->where("id='$hid'");
-		
+
 		$row = $db->fetchRow($select);
-		
+
 		if(isset($row) && ! empty($row))
 		{
 			$documents = array();
-			
+
 			$documents[] = $this->_createSolrShortUrlDocument($row);
-			
+
 			try {
 				$solr->addDocuments( $documents );
 				$solr->commit();
@@ -180,7 +180,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			}
 		}
 	}
-	
+
 	public function toDoc($catalogGuid, $lang)
 	{
 		$relateAs = array('RELATED_FILE','RELATED_IMAGE');
@@ -193,34 +193,34 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			}
 		}
 	}
-	
+
 	public function toSolr($catalogGuid, $lang)
 	{
 		$solr = $this->getSolrService($lang);
-		
+
 		if ( ! $solr->ping() ) {
 			$this->log()->err('Solr service not responding');
-			
+
 			return;
 		}
 
 		$this->log()->info('index guid: ' . $catalogGuid);
-		
+
 		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-		
+
 		$select = $db->select();
 		$select->from('KutuCatalog', '*');
 		$select->where("guid='$catalogGuid'");
-		
+
 		$row = $db->fetchRow($select);
-		
+
 		if(isset($row) && ! empty($row))
 		{
 			$documents = array();
-				
+
 			$documents[] = $this->_createSolrDocument($row, $lang);
-				
+
 			try {
 				$solr->addDocuments( $documents );
 				$solr->commit();
@@ -231,7 +231,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			}
 		}
 	}
-	
+
 	private function _createSolrShortUrlDocument(&$row)
 	{
 		$part = new Apache_Solr_Document();
@@ -240,10 +240,10 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$part->createdate = $this->getDateInSolrFormat($row->createdate);
 		$part->remoteip = $row->remoteip;
 		$part->kopel = (isset($row->kopel))? $row->kopel : '';
-	
+
 		return $part;
 	}
-	
+
 	private function _createSolrDocument(&$row, $lang)
 	{
 		$part = new Apache_Solr_Document();
@@ -261,18 +261,18 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$part->price = (!$row->price==null)? $row->price : 0;
 		$part->sticky = (!$row->sticky==null)? $row->sticky : 0;
 		$part->status = (!$row->status==null)? $row->status : 0;
-		
+
 		$db = $this->getDbHandler($lang);
-		
+
 		if ($row->profileGuid !== "kutu_doc") {
-		if ($lang !== 'en') {	
+		if ($lang !== 'en') {
 		$part->desktop = $this->getCountCatalog($row->guid, $row->profileGuid, $lang, 'desktop');
 		$part->mobile = $this->getCountCatalog($row->guid, $row->profileGuid, $lang, 'mobile');
 		}
-		
+
 		$related = null;
 		$cf = array();
-		
+
 		$queryCF = "SELECT * FROM KutuCatalogFolder where catalogGuid='".$row->guid."'";
 		$resultsCF = $db->query($queryCF);
 		$rowsetAttrCF = $resultsCF->fetchAll(PDO::FETCH_OBJ);
@@ -282,14 +282,14 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			$rowAttrCF = $rowsetAttrCF[$x];
 			$cf[] = $rowAttrCF->folderGuid;
 		}
-		
+
 		$part->kategoriId = $cf;
-		
+
 		$part->shortenerUrl = $this->generateShortener($row->shortTitle);
-		
-		
+
+
 		$part->fileImage = $this->fileImageUrl($row->guid, $lang);
-		
+
 		$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 		if ($row->profileGuid == "klinik") {
 			$rk = $this->getRelated($row->guid,"RELATED_Clinic",$lang,false,"relatedGuid desc");
@@ -303,10 +303,10 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedCommentTitle',$lang)));
 					$rowClinic[$v]['pageUrl'] = $web->url->base."/klinik/detail/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
-		
+
 				$related = Zend_Json::encode($rowClinic);
 			}
-		}		
+		}
 		if ($row->profileGuid == "article") {
 			$rk = $this->getRelated($row->guid,"RELATED_OTHER",$lang,false,"relatedGuid desc");
 			if ($rk)
@@ -319,7 +319,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					$rowClinic[$v]['title'] = strip_tags(trim($this->getCatalogAttribute($rowRelatedClinic->itemGuid, 'fixedTitle',$lang)));
 					$rowClinic[$v]['pageUrl'] = $web->url->base."/berita/baca/".$rowRelatedClinic->itemGuid."/".$catalogClinic->shortTitle;
 				}
-		
+
 				$related = Zend_Json::encode($rowClinic);
 			}
 		}
@@ -330,21 +330,21 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			if ($rk)
 			{
 				$grouped = $this->array_group_by($rk, 'relateAs');
-					
+
 				$related = Zend_Json::encode($grouped);
 			}
 		}
-		
+
 		if (null != $related) {
 		$part->relatedItem = $related;
 		}
-		
+
 		}
-		
+
 		$docSystemName = null;
 		$docOriginalName = null;
 		$docMimeType = null;
-		
+
 		$query="SELECT * FROM KutuCatalogAttribute where catalogGuid='".$row->guid."'";
 		$results = $db->query($query);
 		$rowsetAttr = $results->fetchAll(PDO::FETCH_OBJ);
@@ -485,15 +485,15 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 						break;
 					case 'fixedKategoriKlinik':
 						$part->kategoriklinik = $rowAttr->value;
-	
+
 						//$queryKK="SELECT value FROM KutuCatalogAttribute where catalogGuid='".$part->kategoriklinik."' AND attributeGuid='fixedTitle'";
 						//$resultsKK = $this->db->query($queryKK);
-	
+
 						//$rowsetAttrKK = $resultsKK->fetchAll(PDO::FETCH_OBJ);
-	
+
 						//$part->kategori = $rowsetAttrKK[0]->value;
 						$part->kategori = $this->getCatalogAttribute($rowAttr->value, 'fixedTitle',$lang);
-	
+
 						break;
 					case 'prtJenis':
 						$part->regulationType = $rowAttr->value;
@@ -830,8 +830,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				}
 				else
 					$sContent = '';
-								
-								
+
+
 				if(isset($part->content))
 				{
 					$part->content .= ' '.$sContent;
@@ -843,29 +843,29 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			}
 		}
 		return $part;
-		
+
 	}
-	
+
 	private function _extractText($guid, $systemName, $fileName, $mimeType, $lang)
 	{
 		$db = $this->getDbHandler($lang);
-		
+
 		$query="SELECT * FROM KutuRelatedItem where itemGuid='$guid' AND relateAs='RELATED_FILE'";
 		$results = $db->query($query);
-	
+
 		$rowset = $results->fetchAll(PDO::FETCH_OBJ);
-	
+
 		if(count($rowset))
 		{
 			$row = $rowset[0];
 			$parentCatalogGuid = $row->relatedGuid;
-	
+
 			if(!empty($systemName))
 				$fileName = $systemName;
-				
+
 			$sDir1 = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.$fileName;
 			$sDir2 = ROOT_DIR.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.$parentCatalogGuid.DIRECTORY_SEPARATOR.$fileName;
-				
+
 			$sDir = '';
 			if(file_exists($sDir1))
 			{
@@ -876,11 +876,11 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 				{
 					$sDir = $sDir2;
 				}
-	
+
 				if(!empty($sDir))
 				{
 					$outpath = $sDir.'.txt';
-	
+
 					switch ($mimeType)
 					{
 						case 'application/pdf':
@@ -943,10 +943,10 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					}
 				}
 		}
-	
+
 		return;
 	}
-	
+
 	private function getDateInSolrFormat($date) {
 		if($date=='0000-00-00 00:00:00' OR $date=='0000-00-00' OR $date=='' OR $date==NULL) {
 			//return '0000-00-00T00:00:00Z';
@@ -957,8 +957,8 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			return date("Y-m-d\\TH:i:s\\Z",strtotime($date));
 		}
 	}
-	
-	
+
+
 	private function fileImageUrl($guid, $lang)
 	{
 		$fileImage=null;
@@ -968,14 +968,14 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			foreach ($rowImage as $row)
 			{
 				$this->log()->info('RELATED_IMAGE itemGuid:'.$row->itemGuid);
-				
+
 				$rowDocSystemName = $this->getCatalogAttribute($row->itemGuid, 'docSystemName', $lang);
 				if ($rowDocSystemName)
 				{
 					$catalogGuid = pathinfo($rowDocSystemName,PATHINFO_FILENAME);
 					$ext = pathinfo($rowDocSystemName,PATHINFO_EXTENSION);
 					$ext = strtolower($ext);
-					
+
 					// @TODO query ke catalog
 					/*$catalog = $this->getCatalog($catalogGuid, ['createdBy','createdDate'], $lang);
 					if ($catalog) {
@@ -1000,43 +1000,43 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 							}
 						}
 					}*/
-					
+
 					if (substr($catalogGuid,0,2) !== 'lt') {
 						$catalogGuid = $row->itemGuid;
 					}
-						
+
 					$ig = $this->getItemRelated($catalogGuid,'RELATED_IMAGE',$lang);
 					if ($ig)
 						$guid = $ig->relatedGuid;
-					
-					
-					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
+
+
+					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "remote")) {
 						$fileImage[$i]['original'] = $ori;
 					}
 
-					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "remote")) {
 						$fileImage[$i]['thumbnail'] = $th;
 					}
-						
+
 					$file = new Zend_Config_Ini(APPLICATION_PATH . '/configs/image.ini','size');
 					$keys = array_keys($file->toArray());
 					foreach ($keys as $key)
 					{
-						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "local")) {
+						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "remote")) {
 							$fileImage[$i][$key] = $img;
 						}
 					}
-					
+
 
 					if ($caption = $this->getCatalogAttribute($catalogGuid, "fixedTitle", $lang))
 					{
 						$fileImage[$i]['caption'] = strip_tags(trim($caption));
 					}
-						
+
 				}
 				$i++;
 			}
-				
+
 			$this->log()->info('Guid:'.$guid.' imagenya adalah: ' . Zend_Json::encode($fileImage));
 			return Zend_Json::encode($fileImage);
 		}
@@ -1044,20 +1044,20 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		{
 			$this->log()->warn('RELATED_IMAGE untuk guid:'.$guid.' kosong');
 		}
-	
+
 		return;
 	}
-	
+
 	public function giu($guid, $itemguid, $ext, $prefix=null,$default="remote")
 	{
 		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','cdn');
-	
+
 		$imageDir = $config->static->dir->images;
 		$imageUrl = $config->static->url->images;
-	
+
 		$url1 = @getimagesize($imageUrl.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext);
 		$url2 = @getimagesize($imageUrl.'/'.$prefix.$itemguid.'.'.$ext);
-	
+
 		if ($default=="remote") {
 			$chkImg1 = is_array($url1);
 			$chkImg2 = is_array($url2);
@@ -1067,7 +1067,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			$chkImg1 = file_exists($imageDir.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext);
 			$chkImg2 = file_exists($imageDir.'/'.$prefix.$itemguid.'.'.$ext);
 		}
-	
+
 		if ($chkImg1) {
 			$image = $imageUrl.'/'.$guid.'/'.$prefix.$itemguid.'.'.$ext;
 		}
@@ -1079,53 +1079,53 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		{
 			$image = null;
 		}
-	
+
 		return $image;
-	}	
-	
+	}
+
 	private function getCatalog($catalogGuid, $field, $lang)
 	{
 		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-	
+
 		$sql = $db->select();
 		$sql->from('KutuCatalog', $field);
 		$sql->where('guid=?',$catalogGuid);
 		$sql->where('status!=?',-1); // not deleted
 		$row = $db->fetchRow($sql);
-	
+
 		return ($row) ? $row : '';
 	}
-	
+
 	private function getFolderByGuid($folderGuid, $lang)
 	{
 		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-	
+
 		$sql = $db->select();
 		$sql->from('KutuFolder', '*');
 		$sql->where('guid=?',$folderGuid);
 		$row = $db->fetchRow($sql);
-	
+
 		return ($row) ? $row : '';
 	}
-	
+
 	private function getCatalogAttribute($guid,$attributeGuid,$lang)
 	{
 		$db = $this->getDbHandler($lang);
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-	
+
 		$sql = $db->select();
 		$sql->from('KutuCatalogAttribute', ['value']);
 		$sql->where('catalogGuid=?',$guid);
 		$sql->where('attributeGuid=?',$attributeGuid);
 		$row = $db->fetchRow($sql);
-	
+
 		$sql = $sql->__toString();
-	
+
 		return ($row) ? $row->value : '';
 	}
-	
+
 	protected function getItemRelated($itemGuid,$relateAs,$lang)
 	{
 		$db = $this->getDbHandler($lang);
@@ -1136,45 +1136,45 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		$sql->where('relateAs=?',$relateAs);
 		return $db->fetchRow($sql);
 	}
-	
+
 	private function getRelated($relatedGuid,$relateAs,$lang,$asRow,$order=null,$multi=false)
 	{
 		$db = $this->getDbHandler($lang);
-	
+
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-	
+
 		$sql = $db->select();
-	
+
 		$sql->from('KutuRelatedItem', '*');
 		$sql->where('relatedGuid=?',$relatedGuid);
-	
+
 		if ($multi) {
 			$data = $this->implode_with_keys(", ", $relateAs, "'");
 			$sql->where("relateAs IN ($data)");
 		}
 		else
 			$sql->where('relateAs=?',$relateAs);
-	
-	
+
+
 		if ($order !== null) {
 			$sql->order($order);
 		}
-	
+
 		if ($asRow) {
 			return $db->fetchRow($sql);
 		}
-	
+
 		return $db->fetchAll($sql);
-	
+
 	}
-	
+
 	private function getCountCatalog($guid, $profileGuid, $lang, $type)
 	{
 		$valueText=null;
 		if (isset($profileGuid) && !in_array($profileGuid, array('partner','narsum','author','kategoriklinik','comment','about_us','kutu_contact','kutu_email','kutu_kotik','kutu_mitra','kutu_signup'))) {
 			switch ($type) {
 				case 'desktop':
-					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video','infografis'))) {
+					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video','infografis','products'))) {
 						$valueText = 'TICKER';
 					}
 					else if ($profileGuid=='klinik') {
@@ -1184,11 +1184,11 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					{
 						$valueText = 'pusatdata';
 					}
-	
+
 					break;
-	
+
 				case 'mobile':
-					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video','infografis'))) {
+					if (in_array($profileGuid, array('article','talks','isuhangat','kutu_agenda','video','infografis','products'))) {
 						$valueText = 'TICKER-MOBILE';
 					}
 					else if ($profileGuid=='klinik') {
@@ -1198,17 +1198,17 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 					{
 						$valueText = 'pusatdata-mobile';
 					}
-	
+
 					break;
 			}
-				
+
 			$db = $this->getDbHandler($lang);
 			$db->setFetchMode(Zend_Db::FETCH_OBJ);
-			
+
 			$sql = $db->select();
 			$sql->from('KutuAssetSetting', ['valueInt']);
 			$sql->where('guid=?',$guid);
-				
+
 			if ($profileGuid=='kutu_doc') {
 				$sql->where('application=?','kutu_doc');
 			}
@@ -1216,73 +1216,73 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			{
 				$sql->where('valueText=?',$valueText);
 			}
-				
-				
-				
+
+
+
 			$row = $db->fetchRow($sql);
-				
+
 			//$sql = $sql->__toString();
 			//print_r($sql);die;
-				
+
 			return ($row) ? $row->valueInt : 0;
-	
-				
-	
+
+
+
 		}
-	
+
 		return 0;
 	}
-	
+
 	private function generateShortener($shortTitle)
 	{
 		$shortUrl = null;
-	
+
 		$db = $this->getDbHandler('sh');
 		$db->setFetchMode(Zend_Db::FETCH_OBJ);
-	
+
 		$sql = $db->select();
-	
+
 		$sql->from('shorturls', ['id']);
 		$sql->where("url LIKE '%$shortTitle%'");
-	
+
 		$row = $db->fetchRow($sql);
-	
+
 		if (isset($row) && !empty($row))
 		{
 			$hex = dechex($row->id);
-				
+
 			$web = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','web');
 			$shortUrl = $web->url->short.'/'.$hex;
 		}
-	
+
 		return $shortUrl;
 	}
-	
+
 	private function log()
 	{
 		$logger = new Zend_Log();
-		
+
 		$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH . "/../temp/log/application.log");
-		
+
 		// @TODO Filter only Log::CRIT
 		//$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
 		//$writer->addFilter($filter);
-		
+
 		$logger->addWriter($writer);
-		
+
 		return $logger;
 	}
-	
+
 	private function getDbHandler($lang)
 	{
 		$multidb = Pandamp_Application::getResource('multidb');
 		$multidb->init();
-		
+
 		$this->db = $multidb->getDb('db1');		//id
 		$this->db2 = $multidb->getDb('db2');	//hid
 		$this->db4 = $multidb->getDb('db4');	//en
 		$this->db3 = $multidb->getDb('db3');	//shortUrl
-		
+
 		if ($lang == "id")
 			return $this->db;
 		elseif ($lang == "hid")
@@ -1292,40 +1292,40 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		else
 			return $this->db3;
 	}
-	
+
 	private function getSolrService($lang)
 	{
 		$indexing = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application-cli.ini','indexing');
 
 		$host = $indexing->solr->write->host;
 		$port = $indexing->solr->write->port;
-		
+
 		if ($lang == "id")
 			$path = $indexing->solr->write->dir1;
-		elseif ($lang == "en") 
+		elseif ($lang == "en")
 			$path = $indexing->solr->write->dir2;
 		else
 			$path = $indexing->solr->write->dir3;
-		
-		
+
+
 		$solr = new Apache_Solr_Service( $host, $port, $path );
-		
+
 		return $solr;
 	}
-	
+
 	private function debug($data, $q=true)
 	{
 		echo '<pre>';
 		print_r($data);
 		echo '</pre>';
-		
+
 		echo "\n";
-		
+
 		if ($q) {
 			die;
 		}
 	}
-	
+
 	private function implode_with_keys($glue, $array, $valwrap)
 	{
 		if (is_array($array)) {
@@ -1335,7 +1335,7 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 			return implode($glue,$ret);
 		}
 	}
-	
+
 	private function array_group_by($arr, $key)
 	{
 		if (!is_array($arr)) {
@@ -1344,27 +1344,27 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		if (!is_string($key) && !is_int($key) && !is_float($key)) {
 			trigger_error('array_group_by(): The key should be a string or an integer', E_USER_ERROR);
 		}
-	
+
 		// Load the new array, splitting by the target key
 		$grouped = array();
 		foreach ($arr as $value) {
 			$grouped[$value->$key][] = $value;
 		}
-	
+
 		// Recursively build a nested grouping if more parameters are supplied
 		// Each grouped array value is grouped according to the next sequential key
 		if (func_num_args() > 2) {
 			$args = func_get_args();
-	
+
 			foreach ($grouped as $key => $value) {
 				$parms = array_merge(array($value), array_slice($args, 2, func_num_args()));
 				$grouped[$key] = call_user_func_array('array_group_by', $parms);
 			}
 		}
-	
+
 		return $grouped;
 	}
-	
+
 	private function getLabelNode($folderGuid, $lang)
 	{
 		$rowFolder = $this->getFolderByGuid($folderGuid,$lang);
@@ -1400,6 +1400,6 @@ class Pandamp_Job_Catalog extends Pandamp_Job_Base
 		{
 			return "node";
 		}
-	
+
 	}
 }
