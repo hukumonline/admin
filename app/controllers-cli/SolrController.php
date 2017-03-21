@@ -1176,11 +1176,11 @@ class SolrController extends Application_Controller_Cli
 						$guid = $ig->relatedGuid;
 					 
 					
-					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "local")) {
+					if ($ori = $this->giu($guid, $catalogGuid, $ext, null, "remote")) {
 						$fileImage[$i]['original'] = $ori;
 					}
 					
-					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "local")) {
+					if ($th = $this->giu($guid, $catalogGuid, $ext, "tn_", "remote")) {
 						$fileImage[$i]['thumbnail'] = $th;
 					}
 						
@@ -1188,7 +1188,7 @@ class SolrController extends Application_Controller_Cli
 					$keys = array_keys($file->toArray());
 					foreach ($keys as $key)
 					{
-						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "local")) {
+						if ($img = $this->giu($guid, $catalogGuid, $ext, $key.'_', "remote")) {
 							$fileImage[$i][$key] = $img;
 						}
 					}
