@@ -339,7 +339,7 @@ class Search_DmsController extends Zend_Controller_Action
     	$query = str_replace('\\', '', $query);
     	
     	$indexingEngine = Pandamp_Search::manager();
-    	
+    	try {
     	$hits = $indexingEngine->find($query,0,1,"year desc");
     	
     	if (isset($hits->response->docs[0])) {
@@ -375,6 +375,11 @@ class Search_DmsController extends Zend_Controller_Action
     		$this->view->assign('aData', $data);
     		$this->view->assign('query', urlencode($wq));
     		$this->view->assign('year', $year);
+    	}
+    	}
+    	catch (Exception $e)
+    	{
+    		
     	}
     }
     
